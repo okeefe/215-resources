@@ -1,0 +1,30 @@
+/*
+Copyright: 2005, All rights reserved.
+Program: myname
+Version: 1.1
+Created: 9/6/05
+Revised: 1/22/09
+Files: name.cpp, name.h, main.cpp, Makefile
+Programmer: Patrick O'Keefe who gratefully acknowledges Dr. Jason Bakos's kind assistance.
+Course: CSCE-215
+Assignment: Class Project
+Compiler: GNU Gcc version 4.2.3
+Target: Linux
+
+Description:
+
+  This program attempts string assigment. and other stuff....
+
+Revisions:
+
+  There have been no major revisions of this program.
+
+Constants and Variables:
+
+  See code for constant and variable descriptions. 
+  or
+  you could put that kind of info here. Like:
+	FIRST -> your first name
+	MIDDLE -> ditto
+	LAST  -> and ditto.
+

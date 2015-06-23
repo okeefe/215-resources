@@ -1,0 +1,221 @@
+;; Update the Emacs load-path to include the path to
+;; the JDE and its require packages. This code assumes
+;; that you have installed the packages in the emacs/site
+;; subdirectory of your home directory.
+(add-to-list 'load-path (expand-file-name "/usr/local/3rdparty/emacs/site/jde-2.2.5/lisp"))
+(add-to-list 'load-path (expand-file-name "/usr/local/3rdparty/emacs/site/semantic-1.3.2"))
+(add-to-list 'load-path (expand-file-name "/usr/local/3rdparty/emacs/site/speedbar-0.13a"))
+(add-to-list 'load-path (expand-file-name "/usr/local/3rdparty/emacs/site/elib-1.0"))
+
+;; set default basic indentation witdth to 2
+(setq-default c-basic-offset 2)
+
+
+;; add some load path info for Linux jde
+(add-to-list 'load-path (expand-file-name "/usr/lib/java"))
+
+;; If you want Emacs to defer loading the JDE until you open a 
+;; Java file, edit the following line
+;;(setq defer-loading-jde nil)
+;; to read:
+;;
+  (setq defer-loading-jde t)
+;;
+
+(if defer-loading-jde
+    (progn
+      (autoload 'jde-mode "jde" "JDE mode." t)
+      (setq auto-mode-alist
+            (append
+             '(("\\.java\\'" . jde-mode))
+             auto-mode-alist)))
+  (require 'jde))
+
+
+;; Sets the basic indentation for Java source files
+;; to two spaces.
+(defun my-jde-mode-hook ()
+  (setq c-basic-offset 2))
+
+(add-hook 'jde-mode-hook 'my-jde-mode-hook)
+
+;;; Set up PSGML
+
+; Add PSGML to load-path so Emacs can find it.
+(setq load-path (append (list nil "/usr/local/3rdparty/emacs/site/psgml-1.2.5") load-path))
+
+; Use PSGML for sgml and xml major modes.
+(autoload 'sgml-mode "psgml" "Major mode to edit SGML files." t)
+(autoload 'xml-mode "psgml" "Major mode to edit XML files." t)
+
+;;; Set up file-extension/mode associations.
+; Note that I use xml-mode for html... that's because i'm writing
+; XHTML and I want my html to conform to XML.
+(setq auto-mode-alist
+      (append '(
+                ("\\.sgml" . sgml-mode)
+                ("\\.idd" . sgml-mode)
+                ("\\.ide" . sgml-mode)
+                ("\\.htm" . xml-mode)
+                ("\\.html" . xml-mode)
+                ("\\.xml" . xml-mode)
+                ("\\.xsl" . xml-mode)
+                ("\\.fo" . xml-mode)
+                )
+              auto-mode-alist
+              )
+      )
+
+;;; Set up and enable syntax coloring.
+; Create faces  to assign markup categories.
+(make-face 'sgml-doctype-face)
+(make-face 'sgml-pi-face)
+(make-face 'sgml-comment-face)
+(make-face 'sgml-sgml-face)
+(make-face 'sgml-start-tag-face)
+(make-face 'sgml-end-tag-face)
+(make-face 'sgml-entity-face)
+
+; Assign attributes to faces. Background of white assumed.
+(set-face-foreground 'sgml-doctype-face "blue1")
+(set-face-foreground 'sgml-sgml-face "cyan1")
+(set-face-foreground 'sgml-pi-face "magenta")
+(set-face-foreground 'sgml-comment-face "purple")
+(set-face-foreground 'sgml-start-tag-face "Red")
+(set-face-foreground 'sgml-end-tag-face "Red")
+(set-face-foreground 'sgml-entity-face "Blue")
+
+; Assign faces to markup categories.
+(setq sgml-markup-faces
+      '((doctype        . sgml-doctype-face)
+        (pi             . sgml-pi-face)
+        (comment        . sgml-comment-face)
+        (sgml   . sgml-sgml-face)
+        (comment        . sgml-comment-face)
+        (start-tag      . sgml-start-tag-face)
+        (end-tag        . sgml-end-tag-face)
+        (entity . sgml-entity-face)))
+
+
+; PSGML - enable face settings
+(setq sgml-set-face t)
+
+; Auto-activate parsing the DTD when a document is loaded.
+; If this isn't enabled, syntax coloring won't take affect until
+; you manually invoke "DTD->Parse DTD"
+(setq sgml-auto-activate-dtd t)
+
+
+;;; Set up my "DTD->Insert DTD" menu.
+
+(setq sgml-custom-dtd '
+      (
+       ( "DITA concept"
+         "<?xml version=\"1.0\"?>\n<!DOCTYPE concept SYSTEM \"concept.dtd\">" )
+       ( "DITA task"
+         "<?xml version=\"1.0\"?>\n<!DOCTYPE task SYSTEM \"task.dtd\">" )
+       ( "DITA reftopic"
+         "<?xml version=\"1.0\"?>\n<!DOCTYPE reftopic SYSTEM \"reftopic.dtd\">"
+)
+       ( "DITA APIdesc"
+         "<?xml version=\"1.0\"?>\n<!DOCTYPE APIdesc SYSTEM \"apidesc.dtd\">" )
+       ( "DITA topic"
+         "<?xml version=\"1.0\"?>\n<!DOCTYPE topic SYSTEM \"ditabase.dtd\">" )
+       ( "HOD Script"
+         "<?xml version=\"1.0\"?>\n<!DOCTYPE HASCRIPT SYSTEM \"HAScript.dtd\">"
+)
+       ( "XHTML 1.0 Strict"
+         "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0
+ Strict//EN\" \"xhtml1-strict.dtd\">" )
+       ( "XHTML 1.0 Transitional"
+         "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0
+ Transitional//EN\" \"xhtml1-transitional.dtd\">" )
+       ( "XHTML 1.0 Frameset"
+         "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0
+ Frameset//EN\" \"xhtml1-frameset.dtd\">" )
+       ( "HTML 4.01 Transitional"
+         "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">" )
+       ( "HTML 4.01 Strict"
+         "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\">" )
+       ( "HTML 4.01 Frameset"
+         "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\">" )
+       ( "IBMIDDoc"
+         "<!DOCTYPE ibmiddoc PUBLIC \"+//ISBN 0-933186::IBM//DTD IBMIDDoc//EN\"
+[\n]>")
+       ( "DOCBOOK XML 4.1.2"
+         "<?xml version=\"1.0\"?>\n<!DOCTYPE book PUBLIC \"-//OASIS//DTD DocBook
+ XML V4.1.2//EN\" \"http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd\" [\n
+]>")
+       )
+)
+
+; From Lennart Staflin - re-enabling launch of browser (from original HTML mode)
+
+(defun my-psgml-hook ()
+  (local-set-key "\C-c\C-b" 'browse-url-of-buffer)
+  )
+
+(add-hook 'sgml-mode-hook 'my-psgml-hook)
+
+;;; Set up Validation support
+; First, for sgml-mode, if you always use the same declaration, uncomment
+; the following line and set the path to your declaration. If you use
+; more than one SGML declaration, leave it unset and use OpenSP as your
+; validator and include DTDDECL entries in your catalog files.
+; (setq sgml-declaration "<path to your SGML declaration>")
+
+(setq sgml-validate-command "onsgmls -s %s %s")
+
+; For xml-mode, override the default validate command by providing a
+; mode-hook and setting the SGML declaration to the one
+; provided with either SP or OpenSP.
+(defun my-psgml-xml-hook ()
+  (setq sgml-validate-command "onsgmls -s %s %s")
+;  (setq sgml-declaration "d:/SP/pubtext/xml.dcl")
+  (setq sgml-declaration "d:/OpenSP/pubtext/xml.dcl")
+  )
+(add-hook 'xml-mode-hook 'my-psgml-xml-hook)
+
+
+
+;; Include the following only if you want to run
+;; bash as your shell.
+
+;; Setup Emacs to run bash as its primary shell.
+;; (setq shell-file-name "bash")
+;; (setq shell-command-switch "-c")
+;; (setq explicit-shell-file-name shell-file-name)
+;; (setenv "SHELL" shell-file-name)
+;; (setq explicit-sh-args '("-login" "-i"))
+;; (if (boundp 'w32-quote-process-args)
+;; (setq w32-quote-process-args ?\")) 
+;; Include only for MS Windows.
+
+;; Syntax highlighting. Makes the code much easier to read.
+;;(setq font-lock-maximum-decoration t)
+
+;; Call make inside emacs. 
+;; Connect this to a function key for the easiest handling of make. The
+;; following code connect the F5 key to call make. 
+(global-set-key (quote [f5]) 'compile)
+
+;; Execute gdb from inside emacs with this neat mode. You can follow the execution in the source code automatically. The code binds F6 to call gdb.
+(global-set-key (quote [f6]) 'gdb)
+
+;; Inserts the current line number in the modeline. 
+(setq line-number-mode t) 
+
+;; Completes text in the minibuffer. Very useful
+;;(load-library "completer")
+
+;; Dont ring the bell on errors
+(setq visible-bell t)
+
+;; Display the current time in the modeline
+(display-time)
+
+;;resize-minibuffer-mode makes the minibuffer automatically
+
+
+
+
