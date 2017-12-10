@@ -1,0 +1,8 @@
+Homepage:
+https://cse.sc.edu/~pokeefe/unix-linux/
+
+More resources:
+https://github.com/okeefe/215-resources
+
+Student success center:
+http://sc.edu/success/index.htm
