@@ -41,8 +41,8 @@ int main()
   */
 
   *(ptr1+0) = 2;
-  *(ptr1+1) = 4;
-  ptr1[2]   = 6;
+  *(1 + ptr1) = 4;
+  2[ptr1]   = 6;
 
   cout << "Printing array of Pointers: \n";
   for (i=0; i<3; i=i+1)

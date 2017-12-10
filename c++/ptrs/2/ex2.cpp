@@ -26,6 +26,7 @@ int main()
   *ptr[1] = 'y';
   
   cout << "Final characters stored in ptr[0] and ptr[1]: " << *ptr[0] <<" " << *ptr[1] << "\n";
+  cout << "Same as ch1 and ch2: " << ch1 << " " << ch2 << endl; 
 
   return(0);
 }
