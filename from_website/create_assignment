@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# Test script - written by Nick Stiffler
+# Entry level script to be used by csce215 students.
+
+if [ $# -eq 1 ]; then
+   STUDENTNAME=$USER
+   ASSIGNMENT=$1
+else
+   echo "usage: `basename $0` [assignment]"
+   exit 1
+fi
+
+if [ ! -d "$ASSIGNMENT" ]; then
+  # Control will enter here if $ASSIGNMENT doesn't exist.
+  mkdir $ASSIGNMENT
+fi
+
+# Move into the directory
+cd $ASSIGNMENT
+
+# Variable for the filename
+FILENAME=$USER\_$ASSIGNMENT.txt
+
+HOST=$(hostname)
+
+DATE=$(date +"%m-%d-%Y")
+TIME=$(date +"%r")
+
+if [ -f "$FILENAME" ]; then
+	sed -i "2s/.*/$HOST/g" "$FILENAME"
+	sed -i "3s/.*/$DATE - $TIME/g" "$FILENAME"
+else 
+	printf "%s\n" "$USER" > $FILENAME
+	printf "%s\n" "$HOST" >> $FILENAME
+	printf "%s" "$DATE" >> $FILENAME
+	printf " - %s\n" "$TIME" >> $FILENAME
+fi
