@@ -1,0 +1,94 @@
+<html>
+<body bgcolor=#EEEEE1>
+
+<p align=center><font color=darkblue size=5><b>101-102 Lab Related How To's</b></p>
+<center>by Maryam Jafari-Latfi</font></center></p><br><br>
+
+<p><font color=red><b>Uploading Files</b></font><br><br>
+
+The following is a set of instructions on how to upload files using the digital drop box.<br>
+
+<ol>
+<li>Go to the secure digital drop box site at https://www.cse.sc.edu.<br><br> 
+<li>Accept the security certificate warning and log in using the same username and password that you use in lab.<br><br> 
+<li>Once you are in the main page, click on "Drop Box - Student". You will see all drop boxes for previous assignments or any currently open assignments.<br><br> 
+<li>Click on "Upload" for the specific assignment box you want to submit documents to.<br><br> 
+<li>You will get a screen that has three boxes with a "Browse" button located next to each. Pay attention to the notes on that page pertaining to file naming conventions and uploading limits.<br><br> 
+<li>Press the "Browse" button. You will get one of two windows: "Choose File" or "Browse". You should be in a folder which has the path similar to this "/acct/s2/(your username)/". This is your Home Folder which should contain your documents. The layout of the browse window might be somewhat different depending on your web browser. For example in Internet Explorer you may see a directory tree. In that case make sure you click on the folder which has your username as its name.<br><br> 
+<li>Click on the file to be uploaded. Make sure you see the complete file path in the "File Name" box at the bottom of the window. Press "OK".<br><br> 
+<li>Now you should see the path to the file you uploaded in the appropriate box on the upload page. DO NOT alter the file path manually. This will result in uploading an empty file.<br><br> 
+<li>Press "Upload Files" followed by "Done".<br><br> 
+<li>Now you should see the files you under the "Drop Box Contents" section. If you have uploaded the wrong file or an old version of it, press "Delete" to remove it from your drop box.<br><br> 
+</ol>
+<hr width=50% align=center>
+</p>
+
+<p><font color=red><b>Transferring Files from a Floppy to Your StarOffice Work Folder</b></font><br><br>
+
+<ol>
+<li>Logon on the front computer in either of the Sumwalt computer labs.<br><br> 
+<li>Insert the floppy disk in the floppy drive.<br><br> 
+<li>Click on the arrow above the folders image on the toolbar at the bottom of your desktop.<br><br> 
+<li>Select Open floppy and wait until the contents of your floppy are displayed in a window.<br><br> 
+<li>Repeat the same process this time selecting StarOffice work folder. Now you have both the floppy and the work folder windows open.<br><br> 
+<li>From the floppy window drag and drop the icon for the desired file into the work folder. You may do the reverse if you wish to transfer a file from the work folder to a floppy.<br><br> 
+<li>You must eject the floppy properly otherwise the next floppy inserted in the drive will be corrupted and could not be used. To eject properly, in the floppy window click on File and the Eject.<br><br> 
+<li>Close both windows.<br><br> 
+</ol>
+<hr width=50% align=center>
+</p>
+
+<p><font color=red><b>Converting File Types</b></font><br><br>
+
+<ol>
+<li>To do this, you simply open the file to be converted.<br><br> 
+<li>Click Save As. When the Save window opens, leave the file name as is and select the desired file type you want to convert to.<br><br> 
+<li>Example: If you want to convert a MS Word document (.doc extension) to StarWriter document (.sxw extenstion), open the Word document, click Save As, and choose StarWriter 6.0/7 for the file type. This will result in retaining your original Word document and creating a StarWriter version of it additionally.<br><br>  
+</ol>
+<hr width=50% align=center>
+</p>
+
+<p><font color=red><b>Terminating a Frozen Application (e.g. StarOffice, Netscape)</b></font><br><br>
+
+<ol>
+<li>From your desktop, click on the arrow above the icon that resembles two colored columns. Click on "This Host".<br><br>
+<li>Type the following at the command prompt: ps -Uusername. Enter your own username in place of "username" in this command.<br><br>
+<li>You will see the list of processes you are currently running on your machine. Observe the PID of the application you want to terminate.<br><br>
+<li>Type at the following at the command prompt: kill -9 PID. The PID in this command is the PID number you observed for the application you want to kill.<br><br>
+<li>Now you may start the application.<br><br>
+<li>Alternatively, from the toolbar on your main desktop click on the arrow above the fourth icon from the right. Click on Find Process. In the window opened you will see a box called Filter. Type in your username in the Filter box. This will display the process you are running. Find the frozen process by looking under the Name column  (e.g. netscape if your Netscape window is frozen or soffice for Staroffice). Click on it, then right click, and select kill. This should terminate the process.<br><br>
+</ol>
+<hr width=50% align=center>
+</p>
+
+<p><font color=red><b>How to Display Web Pages Using Your USC Web Space</b></font><br><br>
+
+The following is a set of instructions/ requirements that must be fulfilled in order to view web pages on the USC network.<br>
+
+<ol>
+<li>Move all your HTML pages (.html extension) in addition to all images you used to your public_html folder. To do this open your home folder. You will see a folder icon named public_html. Drag and drop the desired files onto the public_html folder icon. Do not transfer the files that have .html extension followed by additional ~ characters.<br><br>  
+
+<li>Open the public_html folder (double click on it) from the home folder window. If you have not already saved your main page as index.html, you will see that there is a default index.html file there, delete it (right-click, choose put in trash). Now click on the icon of your main page once and click on the name part to get a cursor in the name. Change the file name to index.html.<br><br>
+
+<li>index.html is the first (or main) page that others will see when they type in your URL. In order for them to see your other pages, you MUST provide links on the first page to the other pages. In other words, you should have hyper links to each of the other pages.<br><br> 
+
+<li>Next, you should check your URL to make sure that everything can be viewed OK. Your USC network URL is cl.cse.sc.edu/~username. Make sure you put your own username there.<br><br> 
+
+<li>If any of the images that used to show up before is not showing now, you must check three things:
+
+<ul>
+<li>Go to the public_html folder and make sure that the image file is there.<br><br>
+<li>If the image is there, right-click on it, select "Properties". You should have the Read attribute checked for Owner, Group, and Other.<br><br>
+
+<li>One other possible problem if the above two are not an issue is .tiff files. If your Tiff image is not showing, open the image and do "Save As", and save it with a .jpg extension. Remember that this means you should modify the filename in your code accordingly.<br><br>
+<li>Go back and check Reload (Refresh) your page and see if the images show.<br><br> 
+</ul>
+</ol><br>
+
+</body>
+</html>
+
+
+
+
+

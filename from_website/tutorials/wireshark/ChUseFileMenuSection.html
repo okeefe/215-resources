@@ -1,0 +1,99 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>3.5. The "File" menu</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="ChapterUsing.html" title="Chapter 3. User Interface"><link rel="prev" href="ChUseMenuSection.html" title="3.4. The Menu"><link rel="next" href="ChUseEditMenuSection.html" title='3.6. The "Edit" menu'></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.5. The "File" menu</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChUseMenuSection.html">Prev</a> </td><th width="60%" align="center">Chapter 3. User Interface</th><td width="20%" align="right"> <a accesskey="n" href="ChUseEditMenuSection.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChUseFileMenuSection"></a>3.5. The "File" menu</h2></div></div></div><p>
+      The Wireshark file menu contains the fields shown in
+      <a href="ChUseFileMenuSection.html#ChUseTabFile" title="Table 3.2. File menu items">Table 3.2, &#8220;File menu items&#8221;</a>.
+    </p><div class="figure"><a name="ChUseWiresharkFileMenu"></a><p class="title"><b>Figure 3.3. The "File" Menu</b></p><div><img src="wsug_graphics/ws-file-menu.png" alt='The "File" Menu'></div></div><div class="table"><a name="ChUseTabFile"></a><p class="title"><b>Table 3.2. File menu items</b></p><table summary="File menu items" border="0"><colgroup><col><col><col></colgroup><thead><tr><th>Menu Item</th><th>Accelerator</th><th>Description</th></tr></thead><tbody><tr><td><span><strong class="command">Open...</strong></span></td><td>Ctrl+O</td><td><p>
+		    This menu item brings up the file open dialog box that
+		    allows you to load a capture file for viewing. It is
+		    discussed in more detail in <a href="ChIOOpenSection.html#ChIOOpen" title='5.2.1. The "Open Capture File" dialog box'>Section 5.2.1, &#8220;The "Open Capture File" dialog box&#8221;</a>.
+		  </p></td></tr><tr><td><span><strong class="command">Open Recent</strong></span></td><td> </td><td><p>
+		    This menu item shows a submenu containing the recently opened
+			capture files. Clicking on one of the submenu items will open the
+			corresponding capture file directly.
+		  </p></td></tr><tr><td><span><strong class="command">Merge...</strong></span></td><td> </td><td><p>
+		    This menu item brings up the merge file dialog box that
+		    allows you to merge a capture file into the currently loaded one.
+			It is discussed in more detail in <a href="ChIOMergeSection.html" title="5.4. Merging capture files">Section 5.4, &#8220;Merging capture files&#8221;</a>.
+		  </p></td></tr><tr><td><span><strong class="command">Close</strong></span></td><td>Ctrl+W</td><td><p>
+		    This menu item closes the current capture. If you
+		    haven't saved the capture, you will be asked to do so first
+			 (this can be disabled by a preference setting).
+		  </p></td></tr><tr><td><span><strong class="command">------</strong></span></td><td> </td><td> </td></tr><tr><td><span><strong class="command">Save</strong></span></td><td>Ctrl+S</td><td><p>
+		    This menu item saves the current capture. If you
+		    have not set a default capture file name (perhaps with
+		    the -w &lt;capfile&gt; option), Wireshark pops up the
+		    Save Capture File As dialog box (which is discussed
+		    further in <a href="ChIOSaveSection.html#ChIOSaveAs" title='5.3.1. The "Save Capture File As" dialog box'>Section 5.3.1, &#8220;The "Save Capture File As" dialog box&#8221;</a>).
+		  </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: Note!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="wsug_graphics/note.png"></td><th align="left">Note!</th></tr><tr><td align="left" valign="top"><p>
+		      If you have already saved the current capture, this
+		      menu item will be greyed out.
+		    </p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: Note!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="wsug_graphics/note.png"></td><th align="left">Note!</th></tr><tr><td align="left" valign="top"><p>
+		      You cannot save a live capture while it is in
+		      progress.  You must stop the capture in order to
+		      save.
+		    </p></td></tr></table></div></td></tr><tr><td><span><strong class="command">Save As...</strong></span></td><td>Shift+Ctrl+S</td><td><p>
+		    This menu item allows you to save the current capture
+		    file to whatever file you would like. It pops up the
+		    Save Capture File As dialog box (which is discussed
+		    further in <a href="ChIOSaveSection.html#ChIOSaveAs" title='5.3.1. The "Save Capture File As" dialog box'>Section 5.3.1, &#8220;The "Save Capture File As" dialog box&#8221;</a>).
+		  </p></td></tr><tr><td><span><strong class="command">------</strong></span></td><td> </td><td> </td></tr><tr><td><span><strong class="command">File Set &gt; List Files</strong></span></td><td> </td><td><p>
+			This menu item allows you to show a list of files in a file set.
+			It pops up the Wireshark List File Set dialog box (which is
+			discussed further in <a href="ChIOFileSetSection.html" title="5.5. File Sets">Section 5.5, &#8220;File Sets&#8221;</a>).
+		  </p></td></tr><tr><td><span><strong class="command">File Set &gt; Next File</strong></span></td><td> </td><td><p>
+			If the currently loaded file is part of a file set, jump to the
+			next file in the set. If it isn't part of a file set or just the
+			last file in that set, this item is greyed out.
+		  </p></td></tr><tr><td><span><strong class="command">File Set &gt; Previous File</strong></span></td><td> </td><td><p>
+			If the currently loaded file is part of a file set, jump to the
+			previous file in the set. If it isn't part of a file set or just
+			the first file in that set, this item is greyed out.
+		  </p></td></tr><tr><td><span><strong class="command">------</strong></span></td><td> </td><td> </td></tr><tr><td><span><strong class="command">Export &gt; as "Plain Text" file...</strong></span></td><td> </td><td><p>
+		    This menu item allows you to export all (or some) of the packets in
+		    the capture file to a plain ASCII text file.
+			It pops up the Wireshark Export dialog box (which is discussed further in
+		    <a href="ChIOExportSection.html#ChIOExportPlainDialog" title='5.6.1. The "Export as Plain Text File" dialog box'>Section 5.6.1, &#8220;The "Export as Plain Text File" dialog box&#8221;</a>).
+		  </p></td></tr><tr><td><span><strong class="command">Export &gt; as "PostScript" file...</strong></span></td><td> </td><td><p>
+		    This menu item allows you to export all (or some) of the packets in
+		    the capture file to a PostScript file.
+			It pops up the Wireshark Export dialog box (which is discussed further in
+		    <a href="ChIOExportSection.html#ChIOExportPSDialog" title='5.6.2. The "Export as PostScript File" dialog box'>Section 5.6.2, &#8220;The "Export as PostScript File" dialog box&#8221;</a>).
+		  </p></td></tr><tr><td><span><strong class="command">Export &gt; as "CSV" (Comma Separated Values packet summary) file...</strong></span></td><td> </td><td><p>
+		    This menu item allows you to export all (or some) of the packet summaries in
+		    the capture file to a .csv file (e.g. used by spreadsheet programs).
+			It pops up the Wireshark Export dialog box (which is discussed further in
+		    <a href="ChIOExportSection.html#ChIOExportCSVDialog" title='5.6.3. The "Export as CSV (Comma Separated Values) File" dialog box'>Section 5.6.3, &#8220;The "Export as CSV (Comma Separated Values) File" dialog box&#8221;</a>).
+		  </p></td></tr><tr><td><span><strong class="command">Export &gt; as "C Arrays" (packet bytes) file...</strong></span></td><td> </td><td><p>
+		      This menu item allows you to export all (or some) of the packet bytes in 
+		      the capture file to a .c file so you can import the stream data into your
+		      own C program.
+			It pops up the Wireshark Export dialog box (which is discussed further in
+		    <a href="ChIOExportSection.html#ChIOExportCArraysDialog" title='5.6.4. The "Export as C Arrays (packet bytes) file" dialog box'>Section 5.6.4, &#8220;The "Export as C Arrays (packet bytes) file" dialog box&#8221;</a>).
+		</p></td></tr><tr><td><span><strong class="command">------</strong></span></td><td> </td><td> </td></tr><tr><td><span><strong class="command">Export &gt; as "PSML" file...</strong></span></td><td> </td><td><p>
+		    This menu item allows you to export all (or some) of the packets in
+		    the capture file to a PSML (packet summary markup language) XML file.
+			It pops up the Wireshark Export dialog box (which is discussed further in
+		    <a href="ChIOExportSection.html#ChIOExportPSMLDialog" title='5.6.5. The "Export as PSML File" dialog box'>Section 5.6.5, &#8220;The "Export as PSML File" dialog box&#8221;</a>).
+		  </p></td></tr><tr><td><span><strong class="command">Export &gt; as "PDML" file...</strong></span></td><td> </td><td><p>
+		    This menu item allows you to export all (or some) of the packets in
+		    the capture file to a PDML (packet details markup language) XML file.
+			It pops up the Wireshark Export dialog box (which is discussed further in
+		    <a href="ChIOExportSection.html#ChIOExportPDMLDialog" title='5.6.6. The "Export as PDML File" dialog box'>Section 5.6.6, &#8220;The "Export as PDML File" dialog box&#8221;</a>).
+		  </p></td></tr><tr><td><span><strong class="command">------</strong></span></td><td> </td><td> </td></tr><tr><td><span><strong class="command">Export &gt; Selected Packet Bytes...</strong></span></td><td>Ctrl+H</td><td><p>
+		    This menu item allows you to export the currently selected bytes
+			in the packet bytes pane to a binary file. It pops up the
+			Wireshark Export dialog box (which is discussed further in
+		    <a href="ChIOExportSection.html#ChIOExportSelectedDialog" title='5.6.7. The "Export selected packet bytes" dialog box'>Section 5.6.7, &#8220;The "Export selected packet bytes" dialog box&#8221;</a>)
+		  </p></td></tr><tr><td><span><strong class="command">Objects &gt; HTTP</strong></span></td><td> </td><td><p>
+		    This menu item allows you to export all or some of the captured HTTP objects
+		    into local files. It pops up the Wireshark HTTP object list (which is discussed
+		    further in <a href="ChIOExportSection.html#ChIOExportObjectsDialog" title='5.6.8. The "Export Objects" dialog box'>Section 5.6.8, &#8220;The "Export Objects" dialog box&#8221;</a>)
+		</p></td></tr><tr><td><span><strong class="command">------</strong></span></td><td> </td><td> </td></tr><tr><td><span><strong class="command">Print...</strong></span></td><td>Ctrl+P</td><td><p>
+		    This menu item allows you to print all (or some) of the packets in
+		    the capture file. It pops up the Wireshark Print dialog
+		    box (which is discussed further in
+		    <a href="ChIOPrintSection.html" title="5.7. Printing packets">Section 5.7, &#8220;Printing packets&#8221;</a>).
+		  </p></td></tr><tr><td><span><strong class="command">------</strong></span></td><td> </td><td> </td></tr><tr><td><span><strong class="command">Quit</strong></span></td><td>Ctrl+Q</td><td><p>
+		    This menu item allows you to quit from Wireshark.
+			Wireshark will ask to save your capture file if you haven't saved
+			it before (this can be disabled by a preference setting).
+		  </p></td></tr></tbody></table></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChUseMenuSection.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ChapterUsing.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ChUseEditMenuSection.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.4. The Menu </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 3.6. The "Edit" menu</td></tr></table></div></body></html>

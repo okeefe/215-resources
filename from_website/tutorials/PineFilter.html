@@ -1,0 +1,121 @@
+<HTML>
+	<HEAD>
+		<TITLE>Spam Filter for Pine | CSE</TITLE>
+</head>
+
+<body bgcolor="#ffffff" vlink="#660066" alink="#CC0000" link="#330099" MARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0" RIGHTMARGIN="0">
+<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+
+</table>
+
+<CENTER>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><table width="600" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td valign="top" width="40">&nbsp;</td>
+    <td valign="top" colspan="3"><h2>Creating a Spam Filter Rule in Pine<br>
+        <br>
+      </h2></td>
+  </tr>
+  <tr> 
+    <td valign="top" align="left" width="40">&nbsp;</td>
+    <td valign="top" align="left" width="410"> <p>CSD has implemented a new way 
+        of marking spam messages. Potential spam or junk mail messages are flagged 
+        in the subject line of each message with a "SpamScore". This allows USC
+        e-mail users to filter spam and junk mail messages away from their inbox. 
+        For more information about CSD's effort against spam go to <a href="http://www.csd.sc.edu/emailservices/spam.shtml">www.csd.sc.edu/emailservices/spam.shtml</a></p>
+      <p><strong>Creating a Spam Filter</strong></p>
+      <p>Pine's built-in filter function is the natural solution for Pine users
+        since it is readily available, easy to use and offers more customization 
+        options than most clients. </p>
+      <p>1. To set up a filter, type the first letter of each command below: 
+      <blockquote> 
+        <p>(M)ain<br>
+          (S)etup<br>
+          (R)ules<br>
+          (F)ilter<br>
+          (A)dd </p>
+      </blockquote>
+      <p>2. Then hit <strong>enter</strong> and name your filter. Something like 
+        &quot;possible spam&quot; is a good descriptive name.  <strong>Enter</strong> 
+	again to save the name.
+      <p>3. Now scroll down to just below <strong>FILTERED MESSAGE CONDITIONS 
+        BEGIN HERE</strong> and place  your cursor on<strong> Subject pattern </strong> and hit <strong>Enter</strong>.
+<p>4. In the space provided, enter the following, exactly as it 
+	reads here (and then <strong>enter</strong>): 
+      <blockquote> 
+        <p><strong>{SpamScore: sss</strong></p>
+      </blockquote>
+      <p>5. Scroll down to <strong>Message is New?</strong> and type a <strong>*</strong> 
+        on <strong>Yes</strong>. 
+      <p>6. Scroll down to <strong>ACTIONS BEGIN HERE</strong>. Under <strong>
+	Filter Action </strong> put the cursor on <strong>Folder List =</strong> 	and hit <strong>enter</strong>. 
+        Enter the name of the folder where you want to put possible spam, such 
+        as &quot;spam&quot; or &quot;potential-spam&quot; to remind 
+	yourself that it could contain <a href= "http://www.clickz.com/news/article.php/3315541">false positives</a>. 
+      <p>7. Then, to save: 
+      <blockquote> 
+        <p>(E)xit Setup<br>
+          (Y)es -- to save<br>
+          (Y)es -- to create new folder<br>
+          (E)xit Setup<br>
+          (Y)es -- to save</p>
+      </blockquote>
+      <p>8. Your new spam filter rule is saved. </p>
+      <p>9. Remember to check this <strong>spam</strong> or <strong>potential-spam</strong> 
+        folder regularly to catch any legitimate mail incorrectly marked as spam. 
+        Also be sure to delete the rest of the spam which collects there, so your 
+        quota is not exceeded.</p> 
+
+
+      <h3><strong>Using Procmail Instead of Pine</strong></h3>
+      <p>If you already have a procmail filter and would rather use that for
+        filtering potential spam, simply add some recipes to your procmailrc&#8212; 
+        see the examples below. However, if you prefer to use Pine's filter, you 
+        can do so without changing anything in procmail.</p>
+      <p> <strong>.procmailrc example </strong></p>
+      <p><tt># Comments begin with # <br>
+	     # Messages with a score of 5 or <br>
+	     # higher are almost certainly spam. <br>
+             # Send to almost-certainly-spam folder.</p>
+      <p>    :0:<br>
+             * ^{SpamScore: sssss<br>
+             almost-certainly-spam</p>
+      <p><strong>end .procmailrc example</strong><br>
+        <br>
+        As above with Pine filtering, you can use either or both of these filtering 
+        rules. For both, be sure to keep them in the order shown, or the X-Spam-Level 
+        rule will not be applied. </p>
+      <p><strong>For more information about spam </strong>go to <a href="http://spam.abuse.net">spam.abuse.net</a></p>
+      Which should not be confused with <a href="http://www.spam.com/">www.spam.com</a></p></td>
+    <td width="20">&nbsp;</td>
+    <td width="130" align="left" valign="top"> 
+    
+ 
+
+ 
+      <p>&nbsp;</p>
+      
+ </td>
+  </tr>
+  <tr> 
+    <td width="40">&nbsp;</td>
+    <td width="410">&nbsp;</td>
+    <td width="20">&nbsp;</td>
+    <td width="130">&nbsp;</td>
+  </tr>
+</table>
+
+            Last reviewed: 
+            
+            June 30, 2004
+            </font></td>
+        </tr>
+      </table>
+      <font face="Arial, Helvetica, sans-serif" size="-3"><br>
+      </font> </td>
+  </tr>
+</table>
+
+</BODY></HTML>
+
+

@@ -1,0 +1,101 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 1. Introduction</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="index.html" title="Wireshark User's Guide"><link rel="prev" href="PreFeedback.html" title="6. Providing feedback about this document"><link rel="next" href="ChIntroPlatforms.html" title="1.2. System Requirements"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 1. Introduction</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="PreFeedback.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ChIntroPlatforms.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="ChapterIntroduction"></a>Chapter 1. Introduction</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ChapterIntroduction.html#ChIntroWhatIs">1.1. What is <span class="application">Wireshark?</span></a></span></dt><dd><dl><dt><span class="section"><a href="ChapterIntroduction.html#ChIntroPurposes">1.1.1. Some intended purposes</a></span></dt><dt><span class="section"><a href="ChapterIntroduction.html#ChIntroFeatures">1.1.2. Features</a></span></dt><dt><span class="section"><a href="ChapterIntroduction.html#id4732090">1.1.3. Live capture from many different network media</a></span></dt><dt><span class="section"><a href="ChapterIntroduction.html#id4732111">1.1.4. Import files from many other capture programs</a></span></dt><dt><span class="section"><a href="ChapterIntroduction.html#id4732127">1.1.5. Export files for many other capture programs</a></span></dt><dt><span class="section"><a href="ChapterIntroduction.html#id4732144">1.1.6. Many protocol decoders</a></span></dt><dt><span class="section"><a href="ChapterIntroduction.html#id4732161">1.1.7. Open Source Software</a></span></dt><dt><span class="section"><a href="ChapterIntroduction.html#ChIntroNoFeatures">1.1.8. What Wireshark is not</a></span></dt></dl></dd><dt><span class="section"><a href="ChIntroPlatforms.html">1.2. System Requirements</a></span></dt><dd><dl><dt><span class="section"><a href="ChIntroPlatforms.html#id4732231">1.2.1. General Remarks</a></span></dt><dt><span class="section"><a href="ChIntroPlatforms.html#id4732280">1.2.2. Microsoft Windows</a></span></dt><dt><span class="section"><a href="ChIntroPlatforms.html#id4732427">1.2.3. Unix / Linux</a></span></dt></dl></dd><dt><span class="section"><a href="ChIntroDownload.html">1.3. Where to get Wireshark?</a></span></dt><dt><span class="section"><a href="ChIntroHistory.html">1.4. A brief history of Wireshark</a></span></dt><dt><span class="section"><a href="ChIntroMaintenance.html">1.5. 
+      Development and maintenance of <span class="application">Wireshark</span>
+    </a></span></dt><dt><span class="section"><a href="ChIntroHelp.html">1.6. Reporting problems and getting help</a></span></dt><dd><dl><dt><span class="section"><a href="ChIntroHelp.html#ChIntroHomepage">1.6.1. Website</a></span></dt><dt><span class="section"><a href="ChIntroHelp.html#ChIntroWiki">1.6.2. Wiki</a></span></dt><dt><span class="section"><a href="ChIntroHelp.html#ChIntroFAQ">1.6.3. FAQ</a></span></dt><dt><span class="section"><a href="ChIntroHelp.html#ChIntroMailingLists">1.6.4. Mailing Lists</a></span></dt><dt><span class="section"><a href="ChIntroHelp.html#id4732926">1.6.5. Reporting Problems</a></span></dt><dt><span class="section"><a href="ChIntroHelp.html#id4733016">1.6.6. Reporting Crashes on UNIX/Linux platforms</a></span></dt><dt><span class="section"><a href="ChIntroHelp.html#id4733093">1.6.7. Reporting Crashes on Windows platforms</a></span></dt></dl></dd></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChIntroWhatIs"></a>1.1. What is <span class="application">Wireshark?</span></h2></div></div></div><p>
+	Wireshark is a network packet analyzer. A network packet
+	analyzer will try to capture network packets and tries to display
+	that packet data as detailed as possible.
+    </p><p>
+	You could think of a network packet analyzer as a measuring device used to
+	examine what's going on inside a network cable, just like a voltmeter is
+	used by an electrician to examine what's going on inside an electric cable
+	(but at a higher level, of course).
+    </p><p>
+	In the past, such tools were either very expensive, proprietary, or both.
+	However, with the advent of Wireshark, all that has changed.
+    </p><p>
+	<span class="application">Wireshark</span> is perhaps one of the best open
+	source packet analyzers available today.
+	</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ChIntroPurposes"></a>1.1.1. Some intended purposes</h3></div></div></div><p>
+	Here are some examples people use Wireshark for:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+	  network administrators use it to <span><strong class="command">troubleshoot network
+	   problems</strong></span>
+	</p></li><li><p>
+	  network security engineers use it to <span><strong class="command">examine security
+	  problems</strong></span>
+	</p></li><li><p>
+	  developers use it to <span><strong class="command">debug protocol implementations</strong></span>
+	</p></li><li><p>
+	  people use it to <span><strong class="command">learn network protocol</strong></span>
+	  internals
+	</p></li></ul></div><p>
+	  Beside these examples, Wireshark can be helpful in many other situations
+	  too.
+	</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ChIntroFeatures"></a>1.1.2. Features</h3></div></div></div><p>
+	The following are some of the many features Wireshark provides:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>Available for <span><strong class="command">UNIX</strong></span> and <span><strong class="command">Windows</strong></span>.</p></li><li><p>
+	    <span><strong class="command">Capture</strong></span> live packet data from a network interface.
+	  </p></li><li><p>
+	    Display packets with <span><strong class="command">very detailed protocol information</strong></span>.
+	  </p></li><li><p>
+	    <span><strong class="command">Open and Save</strong></span> packet data captured.
+	  </p></li><li><p>
+	    <span><strong class="command">Import and Export</strong></span> packet data from and to a lot of
+		other capture programs.
+	  </p></li><li><p><span><strong class="command">Filter packets</strong></span> on many criteria.</p></li><li><p><span><strong class="command">Search</strong></span> for packets on many criteria.</p></li><li><p><span><strong class="command">Colorize</strong></span> packet display based on filters.</p></li><li><p>Create various <span><strong class="command">statistics</strong></span>.</p></li><li><p>... and <span><strong class="command">a lot more!</strong></span></p></li></ul></div><p>
+      However, to really appreciate its power, you have to start using it.
+    </p><p>
+      <a href="ChapterIntroduction.html#ChIntroFig1" title="Figure 1.1. 
+	    Wireshark captures packets and allows
+	    you to examine their content.
+	  ">Figure 1.1, &#8220;
+	    <span class="application">Wireshark</span> captures packets and allows
+	    you to examine their content.
+	  &#8221;</a> shows <span class="application">Wireshark</span>
+	having captured some packets and waiting for you to examine
+	them.
+	</p><div class="figure"><a name="ChIntroFig1"></a><p class="title"><b>Figure 1.1. 
+	    <span class="application">Wireshark</span> captures packets and allows
+	    you to examine their content.
+	  </b></p><div><img src="wsug_graphics/ws-main.png" alt="Wireshark captures packets and allows you to examine their content."></div></div><p>
+    </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4732090"></a>1.1.3. Live capture from many different network media</h3></div></div></div><p>
+	  Wireshark can capture traffic from many different network media types
+	  - and despite its name - including wireless LAN as well.
+	  Which media types are supported, depends on many things like the
+	  operating system you are using.
+	  An overview of the supported media types can be found at:
+	  <a href="http://wiki.wireshark.org/CaptureSetup/NetworkMedia" target="_top">http://wiki.wireshark.org/CaptureSetup/NetworkMedia</a>.
+	</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4732111"></a>1.1.4. Import files from many other capture programs</h3></div></div></div><p>
+	    Wireshark can open packets captured from a large number of
+		other capture programs. For a list of input formats see
+		<a href="ChIOOpenSection.html#ChIOInputFormatsSection" title="5.2.2. Input File Formats">Section 5.2.2, &#8220;Input File Formats&#8221;</a>.
+	</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4732127"></a>1.1.5. Export files for many other capture programs</h3></div></div></div><p>
+	    Wireshark can save packets captured in a large number of formats of
+		other capture programs. For a list of output formats see
+		<a href="ChIOSaveSection.html#ChIOOutputFormatsSection" title="5.3.2. Output File Formats">Section 5.3.2, &#8220;Output File Formats&#8221;</a>.
+	</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4732144"></a>1.1.6. Many protocol decoders</h3></div></div></div><p>
+      There are protocol decoders (or dissectors, as they are
+      known in Wireshark) for a great many protocols:
+	  see <a href="AppProtocols.html" title="Appendix B. Protocols and Protocol Fields">Appendix B, <i>Protocols and Protocol Fields</i></a>.
+	</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4732161"></a>1.1.7. Open Source Software</h3></div></div></div><p>
+      Wireshark is an open source software project, and is released under
+      the <a href="http://www.gnu.org/copyleft/gpl.html" target="_top">GNU General Public Licence</a> (GPL).
+	  You can freely use Wireshark on any number of computers you like, without
+	  worrying about license keys or fees or such. In addition, all source
+	  code is freely available under the GPL. Because of that, it is very easy
+	  for people to add new protocols to Wireshark, either as plugins, or built
+	  into the source, and they often do!
+    </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ChIntroNoFeatures"></a>1.1.8. What Wireshark is not</h3></div></div></div><p>
+	Here are some things Wireshark does not provide:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+	  Wireshark isn't an intrusion detection system.  It will not warn you when
+	  someone does strange things on your network that he/she isn't allowed to
+	  do. However, if strange things happen, Wireshark might help you figure
+	  out what is really going on.
+	</p></li><li><p>
+	  Wireshark will not manipulate things on the network, it will only
+	  "measure" things from it. Wireshark doesn't send packets on the network
+	  or do other active things (except for name resolutions, but even
+	  that can be disabled).
+	</p></li></ul></div><p>
+	</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="PreFeedback.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ChIntroPlatforms.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">6. Providing feedback about this document </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 1.2. System Requirements</td></tr></table></div></body></html>

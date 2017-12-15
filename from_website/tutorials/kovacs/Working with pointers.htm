@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Working with pointers</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+<META content="MSHTML 6.00.2800.1226" name=GENERATOR></HEAD>
+<BODY background="Working with pointers_files/whtgrain.jpg"> 
+
+<h1 align=center><b><c>Working with Pointers</b></h1>
+<H5 align=center>Written by and (C) 1999 Daniel Kovacs</H5>
+<P><U><I>Overview</I></U>
+<P>This document is designed to give the reader a basic understanding of 
+pointers, what they are and what they do. It is assumed that the reader has a 
+basic knowledge of C or C++, and access to a compiler.
+<P><U><I>What is a pointer?</U></I>
+<P>Variables in a program can be compared with boxes that are never empty. They 
+always contain some value, either values stored by the user or values from 
+initialization that the operating system did not clear. All variables have at 
+least 2 attributes: The value being stored in the variable and it's location in 
+memory. This content can be any datatype; int, char, long, float, double or 
+compound structures created by the programmer. Also, a variable can hold the 
+address of another variable. This is called a <STRONG>pointer</STRONG>. Pointers 
+are auxilliary variables that allow indirect access to other variables. Pointers 
+are analogous to road signs leading you to a location or to a slip of paper 
+which has an address written down. They are simply variables leading to 
+variables.
+<P><U><I>Pointer declaration:</I></U>
+<P>Let's declare some integer variables:
+<P><PRE>	int k, *p;
+</PRE>
+<P>Suppose we where to store the value 15 into k. The instruction looks like 
+this: k = 15. Now, if you look in k, you will find the following:
+<P>
+<CENTER><IMG src="Working with pointers_files/404.htm"></CENTER>
+<P>The declaration for *p might look a little strange. The asterisk (*) just 
+before p tells the compiler you want a "pointer to an integer". Now you have a 
+space to put <I>the address of an integer</I> into. The address operator in C 
+and C++ is the ampersand (&amp;). Let's put the address of K into P.
+<P><PRE>	p = &amp;k;
+</PRE>
+<P>Once this is done, p will point to the variable k. Anything you do to p you 
+will be doing to k. Now, suppose we execute the following code:
+<P><PRE>	*p = 20;
+</PRE>
+<P>Since p points to k, nothing in p was changed, rather k was set to the value 
+20. Pretty easy stuff, eh?
+<P><I><U>Pointer Arithemetic</U></I>
+<P>You can do arithmetic on pointers in the same way as you do arithmetic on 
+variables, the results will be a bit different. Incrementing pointers will 
+result in the pointer pointing to the next element in memory. Decrementing 
+pointers will do the opposite. This is really useful when you are working with 
+arrays. Suppose we have a vector of integers and a pointer to that vector:
+<P><PRE>	long numbers = {10, 20, 30, 40, 50};
+	long *pnum;
+
+	pnum = numbers;
+</PRE>
+<P>By default, pnum will point to the first element in the array (in this case 
+*pnum = 10). Incrementing pnum (pnum++ - without the pointer symbol) will result 
+in *pnum = 20. Do this again and *pnum = 30. Do it two more times and *pnum = 
+50. This is known as "indirect addressing". It is interesting to know that the 
+compiler will decide exactly how much is added to pnum - depending on the 
+compiler and type of system you are using (some systems define "long" numbers as 
+32-bit, others as 64-bit), different numbers will be added to increment the 
+address. You never have to worry about not moving the whole distance.
+<P>To access the value pointed at, you need to <STRONG>de-reference</STRONG> the 
+pointer. To do this, place the asterisk (*) in front of the pointer:
+<P><PRE>	*pnum = 12;
+</PRE>
+<P>Now, the location pointed to by pnum contains 12. If you don't use the 
+indirection operator, you can theoretically make pnum point to location 12 in 
+memory (worked on my Commodore 64). 
+<P><I><U>Conclusion</U></I>
+<P>- A pointer stores the <STRONG>location</STRONG> of a variable, not it's 
+value.<BR>- The asterisk (*) (called the 'indirection operator') is used to 
+declare a pointer and access it's contents.<BR>- The ampersand (&amp;) operator 
+(called the 'address operator') is used to retreive the address of a 
+variable<BR>- If you changed the contents of a variable through indirection, you 
+will actually be changing the contents of the variable itself.<BR>- With pointer 
+arithemetic, an increment adds the number of bytes of the datatype to the 
+pointer, causing it to point to the next location in memory.<BR>- Decrementing a 
+pointer causes the opposite effect of incrementing it. Be warned: you can 
+overshoot your target!
+<P>This should give you a good basic understanding of how pointers work. Now you 
+are ready to proceed to <A 
+href="Linked List Tutorial.htm">Singly 
+Linked Lists</A>. If you need more information, there are several good books I 
+can reccomend: The C Programming Language (Brian Kernigan and Dennis Ritche) and 
+ANSI C Compendium (a textbook I used in high-school). The first book was written 
+by the designers of the C language, and it is about the best. The second one is 
+good also; it contains a good introduction to object-oriented programming.
+<P><A href="index.htm">Back to 
+index</A><BR>
+<HR>
+
+<H6 align=center>Written by and (C) 1999 Daniel Kovacs<BR>
+</H6>
+
+</BODY></HTML>

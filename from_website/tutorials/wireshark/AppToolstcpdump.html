@@ -1,0 +1,30 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>D.3. tcpdump: Capturing with tcpdump for viewing
+	with Wireshark</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="AppTools.html" title="Appendix D. Related command line tools"><link rel="prev" href="AppToolstshark.html" title="D.2. tshark: Terminal-based Wireshark"><link rel="next" href="AppToolsdumpcap.html" title="D.4. dumpcap: Capturing with dumpcap for viewing
+	with Wireshark"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">D.3. <span><strong class="command">tcpdump</strong></span>: Capturing with tcpdump for viewing
+	with Wireshark</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="AppToolstshark.html">Prev</a> </td><th width="60%" align="center">Appendix D. Related command line tools</th><td width="20%" align="right"> <a accesskey="n" href="AppToolsdumpcap.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="AppToolstcpdump"></a>D.3. <span><strong class="command">tcpdump</strong></span>: Capturing with tcpdump for viewing
+	with Wireshark</h2></div></div></div><p>
+      There are occasions when you want to capture packets using
+      <span><strong class="command">tcpdump</strong></span> rather than <span><strong class="command">wireshark</strong></span>,
+      especially when you want to do a remote capture and do not want the
+      network load associated with running Wireshark remotely (not to
+      mention all the X traffic polluting your capture).
+    </p><p>
+      However, the default <span><strong class="command">tcpdump</strong></span> parameters result in a
+      capture file where each packet is truncated, because
+      <span><strong class="command">tcpdump</strong></span>, by default, only captures the first 68
+	  bytes of each packet.
+    </p><p>
+      To ensure that you capture complete packets, use the following command:
+      </p><pre class="programlisting">
+tcpdump -i &lt;interface&gt; -s 1500 -w &lt;some-file&gt;
+      </pre><p>
+      You will have to specify the correct <span><strong class="command">interface</strong></span> and
+      the name of a <span><strong class="command">file</strong></span> to save into. In addition,
+      you will have to terminate the capture with ^C when you believe you
+      have captured enough packets.
+    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: Note!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="wsug_graphics/note.png"></td><th align="left">Note!</th></tr><tr><td align="left" valign="top"><p>
+	tcpdump is not part of the Wireshark distribution. You can get it from:
+	<a href="http://www.tcpdump.org" target="_top">http://www.tcpdump.org</a> for various
+	platforms.
+	</p></td></tr></table></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="AppToolstshark.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="AppTools.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="AppToolsdumpcap.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">D.2. <span><strong class="command">tshark</strong></span>: Terminal-based Wireshark </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> D.4. <span><strong class="command">dumpcap</strong></span>: Capturing with dumpcap for viewing
+	with Wireshark</td></tr></table></div></body></html>

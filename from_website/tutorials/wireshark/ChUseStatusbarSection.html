@@ -1,0 +1,50 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>3.19. The Statusbar</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="ChapterUsing.html" title="Chapter 3. User Interface"><link rel="prev" href="ChUsePacketBytesPaneSection.html" title='3.18. The "Packet Bytes" pane'><link rel="next" href="ChapterCapture.html" title="Chapter 4. Capturing Live Network Data"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.19. The Statusbar</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChUsePacketBytesPaneSection.html">Prev</a> </td><th width="60%" align="center">Chapter 3. User Interface</th><td width="20%" align="right"> <a accesskey="n" href="ChapterCapture.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChUseStatusbarSection"></a>3.19. The Statusbar</h2></div></div></div><p>
+      The statusbar displays informational messages.
+    </p><p>
+      In general, the left side will show context related information, the
+      middle part will show the current number of packets, and the right side will
+      show the selected configuration profile.  Drag the handles between the text
+      areas to change the size.
+    </p><p>
+      </p><div class="figure"><a name="ChUseWiresharkStatusbarEmpty"></a><p class="title"><b>Figure 3.17. The initial Statusbar</b></p><div><img src="wsug_graphics/ws-statusbar-empty.png" alt="The initial Statusbar"></div></div><p>
+      This statusbar is shown while no capture file is loaded, e.g. when
+      Wireshark is started.
+    </p><p>
+      </p><div class="figure"><a name="ChUseWiresharkStatusbarLoaded"></a><p class="title"><b>Figure 3.18. The Statusbar with a loaded capture file</b></p><div><img src="wsug_graphics/ws-statusbar-loaded.png" alt="The Statusbar with a loaded capture file"></div></div><p>
+    </p><div class="itemizedlist"><ul type="disc"><li><p>
+	  <span><strong class="command">The colorized bullet</strong></span> on the left shows the highest expert
+	  info level found in the currently loaded capture file.  Hovering the mouse
+	  over this icon will show a textual description of the expert info level, 
+	  and clicking the icon will bring up the Expert Infos dialog box. 
+	  For a detailed description of expert info, see <a href="ChAdvExpert.html" title="7.3. Expert Infos">Section 7.3, &#8220;Expert Infos&#8221;</a>.
+	</p></li><li><p>
+	  <span><strong class="command">The left side</strong></span> shows information about the capture file, its
+	  name, its size and the elapsed time while it was being captured.
+	</p></li><li><p>
+	  <span><strong class="command">The middle part</strong></span> shows the current number of packets in the capture file. 
+	  The following values are displayed:
+	  </p><div class="itemizedlist"><ul type="bullet"><li style="list-style-type: disc"><p><span class="emphasis"><em>Packets:</em></span> the number of captured packets</p></li><li style="list-style-type: disc"><p><span class="emphasis"><em>Displayed:</em></span> the number of packets currently being
+	      displayed</p></li><li style="list-style-type: disc"><p><span class="emphasis"><em>Marked:</em></span> the number of marked packets</p></li><li style="list-style-type: disc"><p><span class="emphasis"><em>Dropped:</em></span> the number of dropped packets (only displayed
+	      if Wireshark was unable to capture all packets)</p></li></ul></div><p>
+	</p></li><li><p>
+	  <span><strong class="command">The left side</strong></span> shows the selected configuration profile.  
+	  Clicking in this part of the statusbar will bring up a menu with all available
+	  configuration profiles, and selecting from this list will change configuration profile.
+	</p></li></ul></div><p>
+      </p><div class="figure"><a name="ChUseWiresharkStatusbarProfile"></a><p class="title"><b>Figure 3.19. The Statusbar with a configuration profile menu</b></p><div><img src="wsug_graphics/ws-statusbar-profile.png" alt="The Statusbar with a configuration profile menu"></div></div><p>
+      For a detailed description of configuration profiles, see 
+      <a href="ChCustConfigProfilesSection.html" title="9.6. Configuration Profiles">Section 9.6, &#8220;Configuration Profiles&#8221;</a>.
+    </p><p>
+      </p><div class="figure"><a name="ChUseWiresharkStatusbarSelected"></a><p class="title"><b>Figure 3.20. The Statusbar with a selected protocol field</b></p><div><img src="wsug_graphics/ws-statusbar-selected.png" alt="The Statusbar with a selected protocol field"></div></div><p>
+      This is displayed if you have selected a protocol field from the
+      "Packet Details" pane.
+    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: Tip!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="wsug_graphics/tip.png"></td><th align="left">Tip!</th></tr><tr><td align="left" valign="top"><p>
+      The value between the brackets (in this example
+      <span><strong class="command">arp.opcode</strong></span>) can be used as a display filter string,
+      representing the selected protocol field.
+    </p></td></tr></table></div><p>
+      </p><div class="figure"><a name="ChUseWiresharkStatusbarFilter"></a><p class="title"><b>Figure 3.21. The Statusbar with a display filter message</b></p><div><img src="wsug_graphics/ws-statusbar-filter.png" alt="The Statusbar with a display filter message"></div></div><p>
+      This is displayed if you are trying to use a display filter with
+      unexpected results.  For a detailed description of the display filter,
+      see <a href="ChWorkBuildDisplayFilterSection.html" title="6.4. Building display filter expressions">Section 6.4, &#8220;Building display filter expressions&#8221;</a>.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChUsePacketBytesPaneSection.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ChapterUsing.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ChapterCapture.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.18. The "Packet Bytes" pane </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 4. Capturing Live Network Data</td></tr></table></div></body></html>

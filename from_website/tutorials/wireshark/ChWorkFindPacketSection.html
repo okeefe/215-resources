@@ -1,0 +1,45 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>6.8. Finding packets</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="ChapterWork.html" title="Chapter 6. Working with captured packets"><link rel="prev" href="ChWorkDefineFilterMacrosSection.html" title="6.7. Defining and saving filter macros"><link rel="next" href="ChWorkGoToPacketSection.html" title="6.9. Go to a specific packet"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6.8. Finding packets</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChWorkDefineFilterMacrosSection.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Working with captured packets</th><td width="20%" align="right"> <a accesskey="n" href="ChWorkGoToPacketSection.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChWorkFindPacketSection"></a>6.8. Finding packets</h2></div></div></div><p>
+      You can easily find packets once you have captured some packets or 
+      have read in a previously saved capture file. Simply select the 
+      <span><strong class="command">Find Packet...</strong></span> menu item from the 
+      <span><strong class="command">Edit</strong></span> menu.  Wireshark will pop up the dialog box 
+      shown in <a href="ChWorkFindPacketSection.html#ChWorkFindPacketDialog" title='Figure 6.8. The "Find Packet" dialog box'>Figure 6.8, &#8220;The "Find Packet" dialog box&#8221;</a>.
+    </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4763563"></a>6.8.1. The "Find Packet" dialog box</h3></div></div></div><div class="figure"><a name="ChWorkFindPacketDialog"></a><p class="title"><b>Figure 6.8. The "Find Packet" dialog box</b></p><div><img src="wsug_graphics/ws-find-packet.png" alt='The "Find Packet" dialog box'></div></div><p>
+	You might first select the kind of thing to search for:
+	</p><div class="itemizedlist"><ul type="disc"><li><p>
+    		<span><strong class="command">Display filter</strong></span>
+			</p><p>
+			Simply enter a display filter string into the 
+			<span><strong class="command">Filter:</strong></span> field, select a direction, and click on OK.
+			</p><p>
+			For example, to find the three way handshake for a connection from 
+			host 192.168.0.1, use the following filter string:
+			</p><pre class="programlisting">ip.src==192.168.0.1 and tcp.flags.syn==1</pre><p>
+			For more details on display filters, see <a href="ChWorkDisplayFilterSection.html" title="6.3. Filtering packets while viewing">Section 6.3, &#8220;Filtering packets while viewing&#8221;</a>
+			</p></li><li><p>
+    		<span><strong class="command">Hex Value</strong></span>
+			</p><p>
+			Search for a specific byte sequence in the packet data.
+			</p><p>
+			For example, use "00:00" to find the next packet including two 
+			null bytes in the packet data.
+			</p></li><li><p>
+    		<span><strong class="command">String</strong></span>
+			</p><p>
+			Find a string in the packet data, with various options.
+			</p></li></ul></div><p>
+    </p><p>
+	The value to be found will be syntax checked while you type it in. If the 
+	syntax check of your value succeeds, the background of the entry field 
+	will turn green, if it fails, it will turn red.
+	</p><p>
+	You can choose the search direction:
+	</p><div class="itemizedlist"><ul type="disc"><li><p><span><strong class="command">Up</strong></span></p><p>Search upwards in the packet list (decreasing packet numbers).</p></li></ul></div><p>
+	</p><div class="itemizedlist"><ul type="disc"><li><p><span><strong class="command">Down</strong></span></p><p>Search downwards in the packet list (increasing packet numbers).</p></li></ul></div><p>
+	</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4763701"></a>6.8.2. The "Find Next" command</h3></div></div></div><p>
+	"Find Next" will continue searching with the same options used in the last 
+	"Find Packet".
+	</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4763712"></a>6.8.3. The "Find Previous" command</h3></div></div></div><p>
+	"Find Previous" will do the same thing as "Find Next", but with reverse 
+	search direction.
+	</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChWorkDefineFilterMacrosSection.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ChapterWork.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ChWorkGoToPacketSection.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">6.7. Defining and saving filter macros </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 6.9. Go to a specific packet</td></tr></table></div></body></html>

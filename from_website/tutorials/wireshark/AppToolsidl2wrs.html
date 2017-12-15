@@ -1,0 +1,126 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>D.9. idl2wrs:
+      Creating dissectors from CORBA IDL files
+    </title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="AppTools.html" title="Appendix D. Related command line tools"><link rel="prev" href="AppToolstext2pcap.html" title="D.8. text2pcap: Converting ASCII hexdumps to network
+	captures
+    "><link rel="next" href="AppGPL.html" title="Appendix E. This Document's License (GPL)"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">D.9. <span><strong class="command">idl2wrs</strong></span>:
+      Creating dissectors from CORBA IDL files
+    </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="AppToolstext2pcap.html">Prev</a> </td><th width="60%" align="center">Appendix D. Related command line tools</th><td width="20%" align="right"> <a accesskey="n" href="AppGPL.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="AppToolsidl2wrs"></a>D.9. <span><strong class="command">idl2wrs</strong></span>:
+      Creating dissectors from CORBA IDL files
+    </h2></div></div></div><p>
+      In an ideal world idl2wrs would be mentioned in the users guide
+      in passing and documented in the developers guide.  As the
+      developers guide
+      has not yet been completed it will be documented here.
+    </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4813735"></a>D.9.1. What is it?</h3></div></div></div><p>
+	As you have probably guessed from the name,
+	<span><strong class="command">idl2wrs</strong></span> takes a
+	user specified IDL file and attempts to build a dissector that
+	can decode the IDL traffic over GIOP. The resulting file is
+	"C" code, that should compile okay as a Wireshark dissector.
+      </p><p>
+	<span><strong class="command">idl2wrs</strong></span> basically parses the data struct given to
+	it by the omniidl compiler, and using the GIOP API available in
+	packet-giop.[ch], generates  get_CDR_xxx calls to decode the
+	CORBA traffic on the wire.
+      </p><p>It consists of 4 main files.</p><div class="variablelist"><dl><dt><span class="term"><code class="filename">README.idl2wrs</code></span></dt><dd><p>This document</p></dd><dt><span class="term"><code class="filename">wireshark_be.py</code></span></dt><dd><p>The main compiler backend</p></dd><dt><span class="term"><code class="filename">wireshark_gen.py</code></span></dt><dd><p>A helper class, that generates the C code.</p></dd><dt><span class="term"><code class="filename">idl2wrs</code></span></dt><dd><p> A simple shell script wrapper that the end user should
+	      use to generate the dissector from the IDL file(s).</p></dd></dl></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4813827"></a>D.9.2. Why do this?</h3></div></div></div><p>
+	It is important to understand what CORBA traffic looks
+	like over GIOP/IIOP, and to help build a tool that can assist
+	in troubleshooting CORBA interworking. This was especially the
+	case after seeing a lot of discussions about how particular
+	IDL types are represented inside an octet stream.
+      </p><p>
+	I have also had comments/feedback that this tool would be good for say
+	a CORBA class when teaching students what CORBA traffic looks like
+	"on the wire".
+      </p><p>
+	It is also COOL to work on a great Open Source project such as
+	the case with "Wireshark" (
+	<a href="http://www.wireshark.org" target="_top">http://www.wireshark.org</a>
+	)
+      </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4813860"></a>D.9.3. How to use idl2wrs</h3></div></div></div><p>
+	To use the idl2wrs to generate Wireshark dissectors, you
+	need the following:
+      </p><div class="orderedlist"><p class="title"><b>Prerequisites to using idl2wrs</b></p><ol type="1"><li><p>
+	    Python must be installed.  See
+	    <a href="http://python.org/" target="_top">http://python.org/</a>
+	  </p></li><li><p>
+	    omniidl from the the omniORB package must be available. See
+	    <a href="http://omniorb.sourceforge.net/" target="_top">http://omniorb.sourceforge.net/</a>
+	  </p></li><li><p>
+	    Of course you need Wireshark installed to compile the
+	    code and tweak it if required. idl2wrs is part of the
+	    standard Wireshark distribution
+	  </p></li></ol></div><p>
+	To use idl2wrs to generate an Wireshark dissector from an idl file
+	use the following procedure:
+      </p><div class="orderedlist"><p class="title"><b>
+	  Procedure for converting a CORBA idl file into a Wireshark
+	  dissector
+	</b></p><ol type="1"><li><p>
+	    To write the C code to stdout.
+	    </p><pre class="programlisting">idl2wrs  &lt;your file.idl&gt;</pre><p>
+	    e.g.: </p><pre class="programlisting">idl2wrs echo.idl</pre><p>
+	  </p></li><li><p>
+	    To write to a file, just redirect the output.
+	    </p><pre class="programlisting">idl2wrs echo.idl &gt; packet-test-idl.c</pre><p>
+	    You may wish to comment out the register_giop_user_module() code
+	    and that will leave you with heuristic dissection.
+	  </p></li></ol></div><p>
+	If you don't want to use the shell script wrapper, then try
+	steps 3 or 4 instead.</p><div class="orderedlist"><ol start="3" type="1"><li><p>To write the C code to stdout.
+	    </p><pre class="programlisting">Usage: omniidl  -p ./ -b wireshark_be &lt;your file.idl&gt;</pre><p>
+	    e.g.:
+	    </p><pre class="programlisting">omniidl  -p ./ -b wireshark_be echo.idl</pre><p>
+	  </p></li><li><p>
+	    To write to a file, just redirect the output.
+	    </p><pre class="programlisting">omniidl  -p ./ -b wireshark_be echo.idl &gt; packet-test-idl.c</pre><p>
+	    You may wish to comment out the register_giop_user_module() code
+	    and that will leave you with heuristic dissection.
+	  </p></li><li><p>
+	    Copy the resulting C code to subdirectory epan/dissectors/ inside your
+	    Wireshark source directory.
+	    </p><pre class="programlisting">cp packet-test-idl.c /dir/where/wireshark/lives/epan/dissectors/</pre><p>
+	    The new dissector has to be added to Makefile.common in the same
+	    directory. Look for the declaration CLEAN_DISSECTOR_SRC and add
+	    the new dissector there. For example,
+	    </p><pre class="programlisting">
+CLEAN_DISSECTOR_SRC = \
+        packet-2dparityfec.c    \
+        packet-3com-njack.c     \
+        ...
+            </pre><p>
+            becomes
+	    </p><pre class="programlisting">
+CLEAN_DISSECTOR_SRC = \
+        packet-test-idl.c       \
+        packet-2dparityfec.c    \
+        packet-3com-njack.c     \
+        ...
+            </pre><p>
+	  </p><p>
+          For the next steps, go up to the top of your Wireshark source directory.
+          </p></li><li><p>Run configure
+	    </p><pre class="programlisting">./configure (or ./autogen.sh)</pre><p>
+	  </p></li><li><p> Compile the code
+	    </p><pre class="programlisting">make</pre><p>
+	  </p></li><li><p>Good Luck !!</p></li></ol></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4814054"></a>D.9.4. TODO</h3></div></div></div><div class="orderedlist"><ol type="1"><li><p>
+	    Exception code not generated  (yet), but can be added manually.
+	  </p></li><li><p>
+	    Enums not converted to symbolic values (yet), but can be added
+	    manually.
+	  </p></li><li><p>Add command line options etc</p></li><li><p>More I am sure :-)</p></li></ol></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4814093"></a>D.9.5. Limitations</h3></div></div></div><p>
+	See the TODO list inside <code class="filename">packet-giop.c</code>
+      </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4814106"></a>D.9.6. Notes</h3></div></div></div><div class="orderedlist"><ol type="1"><li><p>
+	    The "-p ./" option passed to omniidl indicates that the
+	    wireshark_be.py and wireshark_gen.py are residing in the
+	    current directory. This may need
+	    tweaking if you place these files somewhere else.
+	  </p></li><li><p>
+	    If it complains about being unable to find some modules
+	    (e.g. tempfile.py),
+	    you may want to check if PYTHONPATH is set correctly.
+	    On my Linux box, it is  PYTHONPATH=/usr/lib/python2.4/
+	  </p></li></ol></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="AppToolstext2pcap.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="AppTools.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="AppGPL.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">D.8. <span><strong class="command">text2pcap</strong></span>: Converting ASCII hexdumps to network
+	captures
+     </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Appendix E. This Document's License (GPL)</td></tr></table></div></body></html>

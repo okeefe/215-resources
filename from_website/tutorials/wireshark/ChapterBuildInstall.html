@@ -1,0 +1,31 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 2. Building and Installing Wireshark</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="index.html" title="Wireshark User's Guide"><link rel="prev" href="ChIntroHelp.html" title="1.6. Reporting problems and getting help"><link rel="next" href="ChBuildInstallDistro.html" title="2.2. Obtaining the source and binary distributions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 2. Building and Installing Wireshark</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChIntroHelp.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ChBuildInstallDistro.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="ChapterBuildInstall"></a>Chapter 2. Building and Installing Wireshark</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ChapterBuildInstall.html#ChBuildInstallIntro">2.1. Introduction</a></span></dt><dt><span class="section"><a href="ChBuildInstallDistro.html">2.2. Obtaining the source and binary distributions</a></span></dt><dt><span class="section"><a href="ChBuildInstallBeforeBuild.html">2.3. Before you build <span class="application">Wireshark</span> under UNIX</a></span></dt><dt><span class="section"><a href="ChBuildInstallUnixBuild.html">2.4. Building Wireshark from source under UNIX</a></span></dt><dt><span class="section"><a href="ChBuildInstallUnixInstallBins.html">2.5. Installing the binaries under UNIX</a></span></dt><dd><dl><dt><span class="section"><a href="ChBuildInstallUnixInstallBins.html#id4735085">2.5.1. Installing from rpm's under Red Hat and alike</a></span></dt><dt><span class="section"><a href="ChBuildInstallUnixInstallBins.html#id4735111">2.5.2. Installing from deb's under Debian</a></span></dt><dt><span class="section"><a href="ChBuildInstallUnixInstallBins.html#id4735128">2.5.3. Installing from portage under Gentoo Linux</a></span></dt><dt><span class="section"><a href="ChBuildInstallUnixInstallBins.html#id4735145">2.5.4. Installing from packages under FreeBSD</a></span></dt></dl></dd><dt><span class="section"><a href="ChBuildInstallUnixTrouble.html">2.6. Troubleshooting during the install on Unix</a></span></dt><dt><span class="section"><a href="ChBuildInstallWinBuild.html">2.7. Building from source under Windows</a></span></dt><dt><span class="section"><a href="ChBuildInstallWinInstall.html">2.8. Installing Wireshark under Windows</a></span></dt><dd><dl><dt><span class="section"><a href="ChBuildInstallWinInstall.html#ChBuildInstallWireshark">2.8.1. Install Wireshark</a></span></dt><dt><span class="section"><a href="ChBuildInstallWinInstall.html#ChBuildInstallWinPcapManually">2.8.2. Manual WinPcap Installation</a></span></dt><dt><span class="section"><a href="ChBuildInstallWinInstall.html#ChBuildInstallWinWiresharkUpdate">2.8.3. Update Wireshark</a></span></dt><dt><span class="section"><a href="ChBuildInstallWinInstall.html#ChBuildInstallWinPcapUpdate">2.8.4. Update WinPcap</a></span></dt><dt><span class="section"><a href="ChBuildInstallWinInstall.html#ChBuildInstallWinUninstall">2.8.5. Uninstall Wireshark</a></span></dt><dt><span class="section"><a href="ChBuildInstallWinInstall.html#ChBuildInstallWinPcapUninstall">2.8.6. Uninstall WinPcap</a></span></dt></dl></dd></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChBuildInstallIntro"></a>2.1. Introduction</h2></div></div></div><p>
+      As with all things, there must be a beginning, and so it is with 
+      Wireshark. To use Wireshark, you must:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+	    Obtain a binary package for your operating system, or
+	  </p></li><li><p>
+	    Obtain the source and build Wireshark for your operating system.
+	  </p></li></ul></div><p>
+    </p><p>
+      Currently, only two or three Linux distributions ship Wireshark, and 
+      they are commonly shipping an out-of-date version.  No other versions 
+      of UNIX ship Wireshark so far, and Microsoft does not ship it with any 
+      version of Windows.  For that reason, you will need to know where to 
+      get the latest version of Wireshark and how to install it.
+    </p><p>
+      This chapter shows you how to obtain source and binary packages, 
+      and how to build Wireshark from source, should you choose to do so.
+    </p><p>
+      The following are the general steps you would use:
+      </p><div class="orderedlist"><ol type="1"><li><p>
+	    Download the relevant package for your needs, e.g. source or 
+	    binary distribution.
+	  </p></li><li><p>
+	    Build the source into a binary, if you have downloaded the 
+	    source.
+	  </p><p>
+	    This may involve building and/or installing other necessary packages.
+	  </p></li><li><p>
+	    Install the binaries into their final destinations.
+	  </p></li></ol></div><p>
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChIntroHelp.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ChBuildInstallDistro.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">1.6. Reporting problems and getting help </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 2.2. Obtaining the source and binary distributions</td></tr></table></div></body></html>

@@ -1,0 +1,29 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>2.6. Troubleshooting during the install on Unix</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="ChapterBuildInstall.html" title="Chapter 2. Building and Installing Wireshark"><link rel="prev" href="ChBuildInstallUnixInstallBins.html" title="2.5. Installing the binaries under UNIX"><link rel="next" href="ChBuildInstallWinBuild.html" title="2.7. Building from source under Windows"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.6. Troubleshooting during the install on Unix</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChBuildInstallUnixInstallBins.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Building and Installing Wireshark</th><td width="20%" align="right"> <a accesskey="n" href="ChBuildInstallWinBuild.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChBuildInstallUnixTrouble"></a>2.6. Troubleshooting during the install on Unix</h2></div></div></div><p>
+      A number of errors can occur during the installation process.  
+      Some hints on solving these are provided here.
+    </p><p>
+      If the <span><strong class="command">configure</strong></span> stage fails, you will need to find 
+      out why. You can check the file <code class="filename">config.log</code> in the 
+      source directory to find out what failed. The last few lines of this 
+      file should help in determining the problem.
+    </p><p>
+      The standard problems are that you do not have GTK+ on your system, 
+      or you do not have a recent enough version of GTK+. The 
+      <span><strong class="command">configure</strong></span> will also fail if you do not have libpcap 
+      (at least the required include files) on your system.
+    </p><p>
+      Another common problem is for the final compile and link stage to 
+      terminate with a complaint of: <span class="errorname">Output too long.</span>  
+      This is likely to be caused by an antiquated <span><strong class="command">sed</strong></span> 
+      (such as the one shipped with Solaris).  Since <span><strong class="command">sed</strong></span> is 
+      used by the <span><strong class="command">libtool</strong></span> script to construct the final 
+      link command, this leads to mysterious problems.  This can be 
+      resolved by downloading a recent version of sed from 
+      <a href="http://directory.fsf.org/GNU/sed.html" target="_top">http://directory.fsf.org/GNU/sed.html</a>.
+    </p><p>
+      If you cannot determine what the problems are, send mail to the 
+      <span><strong class="command">wireshark-dev</strong></span> mailing list explaining your problem, 
+      and including the output from <code class="filename">config.log</code> and 
+      anything else you think is relevant, like a trace of the 
+      <span><strong class="command">make</strong></span> stage.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChBuildInstallUnixInstallBins.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ChapterBuildInstall.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ChBuildInstallWinBuild.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.5. Installing the binaries under UNIX </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 2.7. Building from source under Windows</td></tr></table></div></body></html>

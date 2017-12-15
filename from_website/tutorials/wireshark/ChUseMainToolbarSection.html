@@ -1,0 +1,112 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>3.14. The "Main" toolbar</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="ChapterUsing.html" title="Chapter 3. User Interface"><link rel="prev" href="ChUseHelpMenuSection.html" title='3.13. The "Help" menu'><link rel="next" href="ChUseFilterToolbarSection.html" title='3.15. The "Filter" toolbar'></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.14. The "Main" toolbar</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChUseHelpMenuSection.html">Prev</a> </td><th width="60%" align="center">Chapter 3. User Interface</th><td width="20%" align="right"> <a accesskey="n" href="ChUseFilterToolbarSection.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChUseMainToolbarSection"></a>3.14. The "Main" toolbar</h2></div></div></div><p>
+      The main toolbar provides quick access to frequently used items from the
+	  menu. This toolbar cannot be customized by the user, but it can be hidden
+	  using the View menu, if the space on the screen is needed to show even
+	  more packet data.
+    </p><p>
+	As in the menu, only the items useful in the current program state will
+	be available. The others will be greyed out (e.g. you cannot save a capture
+	file if you haven't loaded one).
+    </p><div class="figure"><a name="ChUseWiresharkMainToolbar"></a><p class="title"><b>Figure 3.11. The "Main" toolbar</b></p><div><img src="wsug_graphics/ws-main-toolbar.png" alt='The "Main" toolbar'></div></div><p>
+    </p><div class="table"><a name="ChUseMainToolbar"></a><p class="title"><b>Table 3.11. Main toolbar items</b></p><table summary="Main toolbar items" border="0"><colgroup><col><col><col><col></colgroup><thead><tr><th>Toolbar Icon</th><th>Toolbar Item</th><th>Corresponding Menu Item</th><th>Description</th></tr></thead><tbody><tr><td><div><img src="wsug_graphics/toolbar/capture_interfaces_24.png"></div></td><td><span><strong class="command">Interfaces...</strong></span></td><td>Capture/Interfaces...</td><td><p>
+		    This item brings up the Capture Interfaces List
+		    dialog box (discussed further in
+		    <a href="ChCapCapturingSection.html" title="4.3. Start Capturing">Section 4.3, &#8220;Start Capturing&#8221;</a>).
+		  </p>
+		  </td></tr><tr><td><div><img src="wsug_graphics/toolbar/capture_options_24.png"></div></td><td><span><strong class="command">Options...</strong></span></td><td>Capture/Options...</td><td><p>
+		    This item brings up the Capture Options
+		    dialog box (discussed further in
+		    <a href="ChCapCapturingSection.html" title="4.3. Start Capturing">Section 4.3, &#8220;Start Capturing&#8221;</a>) and allows you to
+		      start capturing packets.
+		  </p>
+		  </td></tr><tr><td><div><img src="wsug_graphics/toolbar/capture_start_24.png"></div></td><td><span><strong class="command">Start</strong></span></td><td>Capture/Start</td><td><p>
+		    This item starts capturing packets with the options form
+			the last time.
+		  </p>
+		  </td></tr><tr><td><div><img src="wsug_graphics/toolbar/capture_stop_24.png"></div></td><td><span><strong class="command">Stop</strong></span></td><td>Capture/Stop</td><td><p>
+		    This item stops the currently running live capture process
+			<a href="ChCapCapturingSection.html" title="4.3. Start Capturing">Section 4.3, &#8220;Start Capturing&#8221;</a>).
+		  </p>
+		  </td></tr><tr><td><div><img src="wsug_graphics/toolbar/capture_restart_24.png"></div></td><td><span><strong class="command">Restart</strong></span></td><td>Capture/Restart</td><td><p>
+		    This item stops the currently running live capture process
+			and restarts it again, for convenience.
+		  </p>
+		  </td></tr><tr><td><span><strong class="command">------</strong></span></td><td> </td><td> </td><td class="auto-generated"> </td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_open_24.png"></div></td><td><span><strong class="command">Open...</strong></span></td><td>File/Open...</td><td><p>
+		    This item brings up the file open dialog box that
+		    allows you to load a capture file for viewing. It is
+		    discussed in more detail in <a href="ChIOOpenSection.html#ChIOOpen" title='5.2.1. The "Open Capture File" dialog box'>Section 5.2.1, &#8220;The "Open Capture File" dialog box&#8221;</a>.
+		  </p></td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_save_as_24.png"></div></td><td><span><strong class="command">Save As...</strong></span></td><td>File/Save As...</td><td><p>
+		    This item allows you to save the current capture file to whatever
+			file you would like. It pops up the Save Capture File As dialog
+			box (which is discussed further in <a href="ChIOSaveSection.html#ChIOSaveAs" title='5.3.1. The "Save Capture File As" dialog box'>Section 5.3.1, &#8220;The "Save Capture File As" dialog box&#8221;</a>).
+			</p>
+			<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: Note!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="wsug_graphics/note.png"></td><th align="left">Note!</th></tr><tr><td align="left" valign="top"><p>
+			If you currently have a temporary capture file, the Save icon
+			<img src="wsug_graphics/toolbar/stock_save_24.png"> will be
+			shown instead.
+		  </p></td></tr></table></div>
+		  </td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_close_24.png"></div></td><td><span><strong class="command">Close</strong></span></td><td>File/Close</td><td><p>
+		    This item closes the current capture. If you
+		    have not saved the capture, you will be asked to save it first.
+		  </p></td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_refresh_24.png"></div></td><td><span><strong class="command">Reload</strong></span></td><td>View/Reload</td><td><p>
+		    This item allows you to reload the current capture file.
+		  </p></td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_print_24.png"></div></td><td><span><strong class="command">Print...</strong></span></td><td>File/Print...</td><td><p>
+		    This item allows you to print all (or some of) the packets in
+		    the capture file. It pops up the Wireshark Print dialog
+		    box (which is discussed further in
+		    <a href="ChIOPrintSection.html" title="5.7. Printing packets">Section 5.7, &#8220;Printing packets&#8221;</a>).
+		  </p></td></tr><tr><td><span><strong class="command">------</strong></span></td><td> </td><td> </td><td class="auto-generated"> </td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_search_24.png"></div></td><td><span><strong class="command">Find Packet...</strong></span></td><td>Edit/Find Packet...</td><td><p>
+		    This item brings up a dialog box that allows you
+		    to find a packet. There is further information on finding packets
+			in <a href="ChWorkFindPacketSection.html" title="6.8. Finding packets">Section 6.8, &#8220;Finding packets&#8221;</a>.
+		  </p></td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_left_arrow_24.png"></div></td><td><span><strong class="command">Go Back</strong></span></td><td>Go/Go Back</td><td><p>
+		    This item jumps back in the packet history.
+		  </p></td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_right_arrow_24.png"></div></td><td><span><strong class="command">Go Forward</strong></span></td><td>Go/Go Forward</td><td><p>
+		    This item jumps forward in the packet history.
+		  </p></td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_jump_to_24.png"></div></td><td><span><strong class="command">Go to Packet...</strong></span></td><td>Go/Go to Packet...</td><td><p>
+		    This item brings up a dialog box that allows you
+		    to specify a packet number to go to that packet.
+		  </p></td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_top_24.png"></div></td><td><span><strong class="command">Go To First Packet</strong></span></td><td>Go/First Packet</td><td><p>
+		    This item jumps to the first packet of the capture file.
+		  </p></td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_bottom_24.png"></div></td><td><span><strong class="command">Go To Last Packet</strong></span></td><td>Go/Last Packet</td><td><p>
+		    This item jumps to the last packet of the capture file.
+		  </p></td></tr><tr><td><span><strong class="command">------</strong></span></td><td> </td><td> </td><td class="auto-generated"> </td></tr><tr><td><div><img src="wsug_graphics/toolbar/colorize_24.png"></div></td><td><span><strong class="command">Colorize</strong></span></td><td>View/Colorize</td><td><p>
+		  Colorize the packet list (or not).
+		  </p></td></tr><tr><td><div><img src="wsug_graphics/toolbar/autoscroll_24.png"></div></td><td><span><strong class="command">Auto Scroll in Live Capture</strong></span></td><td>View/Auto Scroll in Live Capture</td><td><p>
+		  Auto scroll packet list while doing a live capture (or not).
+		  </p></td></tr><tr><td><span><strong class="command">------</strong></span></td><td> </td><td> </td><td class="auto-generated"> </td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_zoom_in_24.png"></div></td><td><span><strong class="command">Zoom In</strong></span></td><td>View/Zoom In</td><td><p>
+		  Zoom into the packet data (increase the font size).
+		  </p></td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_zoom_out_24.png"></div></td><td><span><strong class="command">Zoom Out</strong></span></td><td>View/Zoom Out</td><td><p>
+		  Zoom out of the packet data (decrease the font size).
+		  </p></td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_zoom_1_24.png"></div></td><td><span><strong class="command">Normal Size</strong></span></td><td>View/Normal Size</td><td><p>
+		  Set zoom level back to 100%.
+		  </p></td></tr><tr><td><div><img src="wsug_graphics/toolbar/resize_columns_24.png"></div></td><td><span><strong class="command">Resize Columns</strong></span></td><td>View/Resize Columns</td><td><p>
+		  Resize columns, so the content fits into them.
+		  </p></td></tr><tr><td><span><strong class="command">------</strong></span></td><td> </td><td> </td><td class="auto-generated"> </td></tr><tr><td><div><img src="wsug_graphics/toolbar/capture_filter_24.png"></div></td><td><span><strong class="command">Capture Filters...</strong></span></td><td>Capture/Capture Filters...</td><td><p>
+		    This item brings up a dialog box that allows you to
+		    create and edit capture filters. You can name filters,
+		    and you can save them for future use. More detail on
+		    this subject is provided in
+		    <a href="ChWorkDefineFilterSection.html" title="6.6. Defining and saving filters">Section 6.6, &#8220;Defining and saving filters&#8221;</a>.
+		  </p></td></tr><tr><td><div><img src="wsug_graphics/toolbar/display_filter_24.png"></div></td><td><span><strong class="command">Display Filters...</strong></span></td><td>Analyze/Display Filters...</td><td><p>
+		    This item brings up a dialog box that allows you
+		    to create and edit display filters. You can name
+		    filters, and you can save them for future use. More
+		    detail on this subject is provided in
+		    <a href="ChWorkDefineFilterSection.html" title="6.6. Defining and saving filters">Section 6.6, &#8220;Defining and saving filters&#8221;</a>.
+		  </p></td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_colorselector_24.png"></div></td><td><span><strong class="command">Coloring Rules...</strong></span></td><td>View/Coloring Rules...</td><td><p>
+		    This item brings up a dialog box that allows you
+		    color packets in the packet list pane according to
+		    filter expressions you choose. It can be very useful
+		    for spotting certain types of packets. More
+		    detail on this subject is provided in
+		    <a href="ChCustColorizationSection.html" title="9.3. Packet colorization">Section 9.3, &#8220;Packet colorization&#8221;</a>.
+		  </p></td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_preferences_24.png"></div></td><td><span><strong class="command">Preferences...</strong></span></td><td>Edit/Preferences</td><td><p>
+		    This item brings up a dialog box that allows
+		    you to set preferences for many parameters that control
+		    Wireshark.  You can also save your preferences so Wireshark
+		    will use them the next time you start it. More detail
+		    is provided in <a href="ChCustPreferencesSection.html" title="9.5. Preferences">Section 9.5, &#8220;Preferences&#8221;</a>
+		  </p></td></tr><tr><td><span><strong class="command">------</strong></span></td><td> </td><td> </td><td class="auto-generated"> </td></tr><tr><td><div><img src="wsug_graphics/toolbar/stock_help_24.png"></div></td><td><span><strong class="command">Help</strong></span></td><td>Help/Contents</td><td><p>
+		    This item brings up help dialog box.
+		  </p></td></tr></tbody></table></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChUseHelpMenuSection.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ChapterUsing.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ChUseFilterToolbarSection.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.13. The "Help" menu </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 3.15. The "Filter" toolbar</td></tr></table></div></body></html>
