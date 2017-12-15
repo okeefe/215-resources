@@ -21,3 +21,10 @@ from http://www.catb.org/~esr/cookbook/.
 - 'template.makefile' is a sample makefile compiled by
 [Joshua Nelson](https://cse.sc.edu/~jynelson), a TA for CSCE 215 as
 of Spring 2018.
+
+## How to view markdown as html offline
+- [Grip](https://github.com/joeyespo/grip)
+- [One](https://chrome.google.com/webstore/detail/markdown-preview-plus/febilkbfcbhebfnokafefeacimjdckgl)
+of many chrome extensions
+- [Atom](https://atom.io/)
+- markdown_editor: run `pip install markdown_editor`
