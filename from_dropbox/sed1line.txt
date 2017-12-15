@@ -1,1 +1,1 @@
-../resources/sed1line.txt
+../sed1line.txt
