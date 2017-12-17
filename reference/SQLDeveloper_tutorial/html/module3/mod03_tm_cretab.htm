@@ -1,0 +1,140 @@
+<html lang="en"><!-- #BeginTemplate "/Templates/2tellme.dwt" --><!-- DW6 -->
+<head>
+<!-- #BeginEditable "doctitle" --> 
+<title>Creating Tables</title>
+<link rel="stylesheet" href="../../library/stylesheet.css" type="text/css">
+<link rel="stylesheet" href="../../library/stylesheet.css" type="text/css">
+<link rel="stylesheet" href="../../library/stylesheet.css" type="text/css">
+<link rel="stylesheet" href="../../library/stylesheet.css" type="text/css">
+<link rel="stylesheet" href="../../library/stylesheet.css" type="text/css">
+<link rel="stylesheet" href="../../library/stylesheet.css" type="text/css">
+<link rel="stylesheet" href="../../library/stylesheet.css" type="text/css">
+<style type="text/css">
+<!--
+.style3 {font-family: "Courier New", Courier, mono}
+-->
+</style>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_showHideLayers() { //v6.0
+  var i,p,v,obj,args=MM_showHideLayers.arguments;
+  for (i=0; i<(args.length-2); i+=3) if ((obj=MM_findObj(args[i]))!=null) { v=args[i+2];
+    if (obj.style) { obj=obj.style; v=(v=='show')?'visible':(v=='hide')?'hidden':v; }
+    obj.visibility=v; }
+}
+//-->
+</script>
+<!-- #EndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../../Library/styles2.css" type="text/css">
+<script language="JavaScript">
+<!--
+ 
+function printWindow() {
+bV = parseInt(navigator.appVersion);
+if (bV >= 4) window.print();
+}
+// -->
+<!--
+//-->
+</script></head>
+<body bgcolor="#FFFFFF" text="#000000" link="#663300" vlink="#996633" alink="#FF6600" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<noscript>The interactions in this eCourse require Javascript to be enabled.</noscript> 
+<img src="../../images/title-2tellme.gif" width="484" height="52" border="0" alt="Tell Me"> 
+<table summary="" width="465" border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <td width="10">&nbsp;</td>
+    <td><!-- #BeginEditable "topicheading" -->
+      <h3 class="topstoryhead">Creating Tables</h3>
+      <!-- #EndEditable --></td>
+    <td><!-- #BeginEditable "topicheading2" --> 
+      <div align="right"><img src="../../images/prev_arrow.gif" width="10" height="10" border="0" alt="Previous"> 
+        <font size="1" face="Verdana, Arial, Helvetica, sans-serif" color="#336699"><b><font size="2"><a href="mod03_wli_dbobj.htm">previous</a></font>|<font size="2"><a href="mod03_sm_cretab01.htm">next</a></font> 
+        <img src="../../images/next_arrow.gif" width="10" height="10" border="0" alt="Next Page"></b></font></div>
+     <!-- #EndEditable --></td>
+  </tr>
+  <tr> 
+<td width="10">    
+    <td colspan="4"><!-- #BeginEditable "text" --> 
+      <p><span class="bodycopy"><img src="images/les03_cre_tab01.gif" width="164" height="136" align="right">You create tables with the SQL 
+          <span class="style3">CREATE TABLE</span> statement. With Oracle SQL Developer, you have two options for 
+        creating tables. </span>
+      <ul>
+        <li class="bodycopy"><span class="bodycopy">Use the graphical interface 
+          that generates the SQL statement</span></li>
+        <li class="bodycopy"><span class="bodycopy">Enter the <span class="style3">CREATE TABLE</span> statement 
+          in the SQL Worksheet</span></li>
+      </ul>
+      <span class="navheader">When creating tables, you must provide: </span> 
+      <ul>
+        <li class="bodycopy"><span class="bodycopy">Table name</span></li>
+        <li class="bodycopy"><span class="bodycopy">Column name(s)</span></li>
+        <li class="bodycopy"><span class="bodycopy">Data type for each column</span></li>
+        <li class="bodycopy">Optionality of the column </li>
+      </ul>
+      <span class="bodycopy"><font face="Courier New, Courier, mono" class="navheader"></font></span><font face="Courier New, Courier, mono" class="navheader"><span class="navheader">Guidelines 
+      for creating tables:</span></font> 
+      <ul>
+        <li class="bodycopy"><span class="bodycopy"><a href="javascript:;" onMouseOver="MM_showHideLayers('Layer1','','show')" onMouseOut="MM_showHideLayers('Layer1','','hide')">Table 
+          and column naming rules</a></span> 
+          <div id="Layer1" style="position:absolute; width:200px; height:115px; z-index:2; left: 186px; top: 186px; visibility: hidden"> 
+            <table summary="" width="250" border="0" cellspacing="0" cellpadding="2">
+              <tr bgcolor="#999966"> 
+                <td> 
+                  <table summary="" width="100%" border="0" cellspacing="0" cellpadding="2" bgcolor="#FFFFFF">
+                    <tr> 
+                      <td> 
+                        <p class="bodycopy">Must start with a letter, which is followed 
+                          by a sequence of letters, numbers, _, #, or $</p>
+                        <p class="bodycopy">Must be 1 to 30 characters long</p>
+                        <p class="bodycopy">Must not be an Oracle server reserved 
+                          word</p>
+                        <p align="right">&nbsp;</p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </li>
+        <li class="bodycopy"><span class="bodycopy"><a href="javascript:;" onMouseOver="MM_showHideLayers('Layer2','','show')" onMouseOut="MM_showHideLayers('Layer2','','hide')">Most 
+          common data types</a></span> 
+          <div id="Layer2" style="position:absolute; width:122px; height:98px; z-index:3; left: 194px; top: 187px; visibility: hidden; background-color: #ECE9D8; layer-background-color: #ECE9D8; border: 1px none #000000;"> 
+            <table summary="" width="250" border="0" cellspacing="0" cellpadding="2">
+              <tr bgcolor="#999966"> 
+                <td> 
+                  <table summary="" width="100%" border="0" cellspacing="0" cellpadding="2" bgcolor="#FFFFFF">
+                    <tr> 
+                      <td> 
+                        <p class="bodycopy"><span class="style3">VARCHAR2</span><br>
+                          <span class="style3">NUMBER</span><br>
+                          <span class="style3">DATE</span><br>
+                          <span class="style3">TIMESTAMP</span></p>
+                        <p align="right">&nbsp;</p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <br>
+        </li>
+      </ul>
+      <p><span class="bodycopy">You can also set up constraints on your 
+        columns to control the data in them.<br>
+      </span>        </p>
+      <!-- #EndEditable --></td>
+  </tr>
+</table>
+</body>
+<!-- #EndTemplate --></html>

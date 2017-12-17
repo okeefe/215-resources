@@ -1,0 +1,30 @@
+how to create a package body and package specification. You will help Sheila create an HR package that contains a procedure and a function.
+
+drop statements:
+
+Because Sheila is creating a package to hold the RAISE_AMOUNT and GET_SAL code, she will delete these two stored routines.
+
+package create: 
+
+Sheila examines the package specification. The package specification identifies the names and parameters of the procedures and functions within the package.
+
+procedure raise_amount within package body:
+
+Sheila examines the package body. The package body identifies the implementation of routines named in the package specification. Sheila examines the procedure RAISE_AMOUNT that is defined in the package body.
+
+function GET_SAL
+
+Sheila examines the function GET_SAL that is defined in the package body.
+
+You want to change the values for P_ID and P_INCREMENT. These 2 paameters will determine how an Employees Salary will get adjusted.
+
+102, 1.2
+
+Run the package again and enter an invalid value to see what happens.
+
+This time, the P_INCREMENT is changed to 5 which is larger than the allowed increment so the error handling is invoked.
+
+5
+
+
+

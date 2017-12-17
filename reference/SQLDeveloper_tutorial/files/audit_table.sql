@@ -1,0 +1,1 @@
+create table audit_record_tb1 (user_value varchar2(25), date_recorded timestamp(6));

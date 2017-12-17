@@ -1,0 +1,83 @@
+<html lang="en"><!-- #BeginTemplate "/Templates/2tellme.dwt" --><!-- DW6 -->
+<head>
+<!-- #BeginEditable "doctitle" --> 
+<title>Building Simple Queries</title>
+<link href="../../library/stylesheet.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.style1 {font-family: "Courier New", Courier, mono}
+-->
+</style>
+<!-- #EndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../../tutorial/DBXETutorial/Library/styles2.css" type="text/css">
+<script language="JavaScript">
+<!--
+ 
+function printWindow() {
+bV = parseInt(navigator.appVersion);
+if (bV >= 4) window.print();
+}
+// -->
+<!--
+//-->
+</script>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#663300" vlink="#996633" alink="#FF6600" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<noscript>The interactions in this eCourse require Javascript to be enabled.</noscript> 
+<img src="../../images/title-2tellme.gif" width="484" height="52" border="0" alt="Tell Me"> 
+<table summary="" width="465" border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <td width="1">&nbsp;</td>
+    <td width="311"><!-- #BeginEditable "topicheading" --> 
+      <h3 class="topstoryhead"><b>Building Simple  Queries</b></h3>
+      <!-- #EndEditable --></td>
+    <td width="135"><!-- #BeginEditable "topicheading2" --> 
+      <div align="right"><img src="../../images/prev_arrow.gif" width="10" height="10" border="0" alt="Previous"> <font size="1" face="Verdana, Arial, Helvetica, sans-serif" color="#336699"><b><font size="2"><a href="mod04_wli_accessdata.htm">previous</a></font>|<font size="2"><a href="mod04_sm_retrievecol.htm">next</a></font> <img src="../../images/next_arrow.gif" width="10" height="10" border="0" alt="Next Page"></b></font></div>
+     <!-- #EndEditable --></td>
+  </tr>
+  <tr> 
+<td width="1">    
+    <td colspan="4"><!-- #BeginEditable "text" -->
+    <h4 class="navheader"><span class="style1"><span class="style2">Writing </span>SELECT</span> Statements </h4>
+      <p class="bodycopy">When Sheila writes  a basic query,  two mandatory clauses in the <span class="style1">SELECT</span> statement syntax are required: a <span class="style1">SELECT</span> clause and a <span class="style1">FROM</span> clause. </p>
+      <p class="bodycopy">The <span class="style1">SELECT</span> statement syntax is displayed. The <span class="style1">SELECT</span> clause specifies the columns that you want to display. The <span class="style1">FROM</span> clause specifies the tables that contain those columns. </p>
+      <p class="boldbodycopy">Syntax</p>
+      <pre class="bodycopy style1 style1">SELECT [DISTINCT] * | column [alias], ...
+ FROM table;</pre>
+      <p class="boldbodycopy">Example</p>
+      <div id="whereinfo" style="position:absolute; width:295px; height:235px; z-index:1; left: 163px; top: 1061px; background-color: #FFFF99; layer-background-color: #FFFF99; border: 1px none #000000; visibility: hidden;">
+        <p class="bodycopy"> <span class="navheader"><strong><span class="style1">WHERE</span> Clause Syntax</strong></span></p>
+        <p class="bodycopy"><span class="style1"><strong>SELECT [DISTINCT] * | column [alias], ... FROM table<br>
+        </strong></span><span class="style1"><strong><span class="style2">WHERE <em>condition </em></span>; </strong> </span></p>
+        <p class="bodycopy style1"> <span class="style1 style2"><em><strong>condition </strong></em><strong>: <br>
+    column operator column|constant|value </strong></span> </p>
+        <p class="bodycopy">The condition consists of three components:</p>
+        <ul>
+          <li class="bodycopy">Column name</li>
+          <li class="bodycopy">Comparison operator </li>
+          <li class="bodycopy">Element that can be another column name, constant, or list of values </li>
+        </ul>
+      </div>
+      <pre class="style1">select * from employees; </pre>
+      <p class="navheader">Retrieving Columns</p>
+      <p class="bodycopy">You can use the projection capability of SQL to choose the columns in a table that you want to retrieve. You can retrieve selected columns or all columns from a table. </p>
+      <p><img src="images/mod4projection.gif" width="347" height="196"></p>
+      <p class="navheader">Retrieving Rows </p>
+      <p class="bodycopy">You can use the selection capability of SQL to choose the rows that you want to retrieve from a table. You can specify various criteria to select the rows that you want to see. </p>
+      <p><img src="images/mod4selection.gif" width="347" height="163"></p>
+      <p> <span class="bodycopy">You can restrict the number of rows that are retrieved from the database by using a <span class="style1">WHERE</span> clause in a SQL statement. By inserting a <span class="style1">WHERE</span> clause into a SQL statement, you can specify a condition that must be met, and only the rows that meet the condition are returned.</span></p>
+      <p class="bodycopy">When using a <span class="style1">WHERE</span> clause:</p>
+      <ul>
+        <li> <span class="bodycopy">The <span class="style1">WHERE</span> clause directly follows the <span class="style1">FROM</span> clause in the SQL statement syntax </span></li>
+        <li class="bodycopy">The <span class="style1">WHERE</span> clause consists of the <span class="style1">WHERE</span> keyword and a condition or conditions. </li>
+        <li class="bodycopy"> The condition in a <span class="style1">WHERE</span> clause specifies a comparison of values that limits the rows that are returned by a query</li>
+      </ul>
+      <div align="right">
+        <p>&nbsp;</p>
+      </div>
+    <!-- #EndEditable --></td>
+  </tr>
+</table>
+</body>
+<!-- #EndTemplate --></html>

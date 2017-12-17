@@ -1,0 +1,117 @@
+<html lang="en"><!-- #BeginTemplate "/Templates/2tellme.dwt" --><!-- DW6 -->
+<head>
+<!-- #BeginEditable "doctitle" -->
+<title>Debugging PL/SQL</title>
+<link href="../../library/stylesheet.css" rel="stylesheet" type="text/css">
+<!-- #EndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../../tutorial/DBXETutorial/Library/styles2.css" type="text/css">
+<script language="JavaScript">
+<!--
+ 
+function printWindow() {
+bV = parseInt(navigator.appVersion);
+if (bV >= 4) window.print();
+}
+// -->
+<!--
+//-->
+</script>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#663300" vlink="#996633" alink="#FF6600" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<noscript>The interactions in this eCourse require Javascript to be enabled.</noscript> 
+<img src="../../images/title-2tellme.gif" width="484" height="52" border="0" alt="Tell Me"> 
+<table summary="" width="465" border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <td width="1">&nbsp;</td>
+    <td width="311"><!-- #BeginEditable "topicheading" --> 
+      <h3 class="topstoryhead"><b>Debugging PL/SQL</b></h3>
+      <!-- #EndEditable --></td>
+    <td width="135"><!-- #BeginEditable "topicheading2" --> 
+      <div align="right"><img src="../../images/prev_arrow.gif" width="10" height="10" border="0" alt="Previous"> <font size="1" face="Verdana, Arial, Helvetica, sans-serif" color="#336699"><b><font size="2"><a href="mod08_sm_except.htm">previous</a></font>|<font size="2"><a href="mod08_sm_debugger.htm">next</a></font> <img src="../../images/next_arrow.gif" width="10" height="10" border="0" alt="Next Page"></b></font></div>
+     <!-- #EndEditable --></td>
+  </tr>
+  <tr> 
+<td width="1">    
+    <td colspan="4"><!-- #BeginEditable "text" -->
+    <p class="bodycopy">You can use SQL Developer to run and debug PL/SQL functions and procedures. The PL/SQL Debugger contains the following capabilities:</p>
+    <TABLE cellSpacing=0 cellPadding=1 border=1>
+      <TBODY>
+        <TR vAlign=top>
+          <TD class="bodycopy"><strong>Control program execution</strong></TD>
+          <TD class="bodycopy">The PL/SQL debugger in SQL Developer supplies many commands to control program execution including Step Into,<br>
+Step Over, Step Out, Run to Cursor, Pause, Resume, and Terminate.</TD>
+        </TR>
+        <TR vAlign=top>
+          <TD class="bodycopy"><strong>View and modify variables</strong></TD>
+          <TD width=451 class="bodycopy"><!-- end cr piece: Course-2 -->
+        While the debugger is paused, you can examine 
+and modify the values of variables from the  Data, Watches or<br>
+Inspector windows.
+<!-- cr piece: Course-3 -->
+          </TD>
+        </TR>
+        <TR vAlign=top>
+          <TD class="bodycopy"><strong>Customizable breakpoints</strong></TD>
+          <TD width=451 class="bodycopy"><!-- end cr piece: Course-3 -->
+        SQL Developer breakpoints are highly
+configurable. For PL/SQL debugging, you can use source breakpoints
+(associated with a particular line of executable code in a particular program
+unit) and exception breakpoints (associated with any unhandled exception, or
+a specific Oracle exception). You can define conditional breakpoints for
+PL/SQL and customize the action of breakpoints, for example, pause the
+debugger (default), beep, log occurrence to a text file, or enable or disable
+other breakpoints.
+<!-- cr piece: Course-3 -->
+          </TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+    <p class="bodycopy">  PL/SQL debugging information is available from several windows in SQL<br>
+  Developer. The following list provides examples of the kind of information<br>
+  available during debugging.</p>
+    <TABLE cellSpacing=0 cellPadding=1 border=1>
+      <TBODY>
+        <TR vAlign=top>
+          <TD class="bodycopy"><strong>Code Editor</strong></TD>
+          <TD class="bodycopy">Shows the execution point. Flyover tool tips display the name
+and value of the variable under the pointer.</TD>
+        </TR>
+        <TR vAlign=top>
+          <TD class="bodycopy"><strong>Breakpoints window</strong></TD>
+          <TD width=451 class="bodycopy"><!-- end cr piece: Course-2 -->
+        Lists the defined breakpoints. You can use this window
+to add new breakpoints, or customize the behavior of existing breakpoints.
+<!-- cr piece: Course-3 -->
+          </TD>
+        </TR>
+        <TR vAlign=top>
+          <TD class="bodycopy"><strong>Data window</strong></TD>
+          <TD width=451 class="bodycopy"><!-- end cr piece: Course-3 -->
+        Displays all variables that are currently in scope, including<br>
+package variables, package body variables, variables declared in the current
+procedure or function, and local variables (such as those declared in a nested
+block or implicitly declared).
+<!-- cr piece: Course-3 -->
+          </TD>
+        </TR>
+        <TR vAlign=top>
+          <TD class="bodycopy"><strong>Watches window</strong></TD>
+          <TD class="bodycopy">Displays expressions or variables you've added to the
+Watches window by either selecting Add Watch from the context menu of<br>
+the window and entering the expression, or by dragging a variable from one
+of the other windows (such as the Data or Smart Data windows) to the
+watches window.</TD>
+        </TR>
+        <TR vAlign=top>
+          <TD class="bodycopy"><strong>Stack window</strong></TD>
+          <TD class="bodycopy">Shows the execution stack. Note that you can use the Stack<br>
+window to change the context in the debugger.</TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+    <!-- #EndEditable --></td>
+  </tr>
+</table>
+</body>
+<!-- #EndTemplate --></html>

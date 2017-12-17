@@ -1,0 +1,37 @@
+DROP PROCEDURE raise_amount;
+DROP FUNCTION get_sal;
+
+create or replace procedure "RAISE_AMOUNT"
+(p_id IN NUMBER,
+p_raise_amt IN NUMBER default 0)
+is
+begin
+UPDATE employees
+  SET salary = salary * (1+p_raise_amt)
+  WHERE employee_id = p_id;
+end;
+
+create or replace FUNCTION get_sal
+(p_id IN employees.employee_id%TYPE,
+ p_increment IN NUMBER := 1 )
+RETURN NUMBER
+IS
+  v_sal employees.salary%TYPE := 0;
+  e_toomuch EXCEPTION;
+BEGIN
+  IF p_increment < 1 or p_increment > 1.5 THEN
+    RAISE e_toomuch;
+  END IF; 
+  SELECT salary * p_increment
+    INTO v_sal
+    FROM employees
+    WHERE employee_id = p_id;
+  RETURN v_sal;
+   EXCEPTION
+      WHEN e_toomuch THEN
+        htp.print('Invalid increment amount');
+      WHEN NO_DATA_FOUND THEN
+        htp.print ('Invalid employee Id');
+      WHEN OTHERS THEN
+        htp.print ('Error occurred in processing');
+END get_sal;

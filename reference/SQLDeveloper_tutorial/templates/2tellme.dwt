@@ -1,0 +1,60 @@
+<html lang="en">
+<head>
+<!-- #BeginEditable "doctitle" -->
+<title>Tell Me</title>
+<!-- #EndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../tutorial/DBXETutorial/Library/styles2.css" type="text/css">
+<script language="JavaScript">
+<!--
+ 
+function printWindow() {
+bV = parseInt(navigator.appVersion);
+if (bV >= 4) window.print();
+}
+// -->
+<!--
+//-->
+</script>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#663300" vlink="#996633" alink="#FF6600" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<noscript>The interactions in this eCourse require Javascript to be enabled.</noscript> 
+<img src="../images/title-2tellme.gif" width="484" height="52" border="0" alt="Tell Me"> 
+<table summary="" width="465" border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <td width="1">&nbsp;</td>
+    <td width="311"><!-- #BeginEditable "topicheading" --> 
+      <h3><b>Topic Heading</b></h3>
+      <!-- #EndEditable --></td>
+    <td width="135"><!-- #BeginEditable "topicheading2" --> 
+      <div align="right"><img src="../images/prev_arrow.gif" width="10" height="10" border="0" alt="Previous"> <font size="1" face="Verdana, Arial, Helvetica, sans-serif" color="#336699"><b><font size="2"><a href="les02_access_whylearnit.htm">previous</a></font>|<font size="2"><a href="les02_creuser02_showme.htm">next</a></font> <img src="../images/next_arrow.gif" width="10" height="10" border="0" alt="Next Page"></b></font></div>
+    <!-- #EndEditable --></td>
+  </tr>
+  <tr> 
+<td width="1">    
+    <td colspan="4"><!-- #BeginEditable "text" --> 
+      <h4>Subtopic Title </h4>
+      <p>Insert text here.</p>
+      <p><font color="#FF0000">&lt;A Tell Me subtopic provides the background 
+        information or conceptual knowledge that you need to give the learner 
+        to scaffold them in solving a problem or completing a job task. </font></p>
+      <p><font color="#FF0000">Each Tell Me subtopic corresponds to one knowledge-based 
+        &quot;transfer of information&quot; objective. These objectives are listed 
+        on your WhyLearnIt page.</font></p>
+      <h4><font color="#FF0000">Describe/Add Graphics</font></h4>
+      <p><img src="../images/blankgraphic.gif" width="200" height="150" align="right" hspace="5" alt="Insert Graphic Here"><font color="#FF0000">Describe 
+        the graphic(s) that supports your subtopic objective. Replace the blank 
+        graphic on this template with your final graphic.</font></p>
+      <h4><font color="#FF0000">Describe/Add Interactive Components</font></h4>
+      <p><font color="#FF0000">Consider the interactive components that could 
+        illustrate the subtopic. The interactive components &quot;pop up&quot; 
+        on the page, adding interest, and highlighting or demonstrating key points. 
+        These can be animations, scenario examples, video clips, and so on. By 
+        default, this template includes a link to a dummy animation page. Replace 
+        it as necessary with other interactive components.&gt;</font></p>
+      <p align="right"><a href="javascript:printWindow()"><img src="../images/print.gif" width="29" height="28" border="0" alt="Print"></a></p>
+    <!-- #EndEditable --></td>
+  </tr>
+</table>
+</body>
+</html>

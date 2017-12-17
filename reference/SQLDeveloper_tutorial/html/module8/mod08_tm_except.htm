@@ -1,0 +1,126 @@
+<html lang="en"><!-- #BeginTemplate "/Templates/2tellme.dwt" --><!-- DW6 -->
+<head>
+<!-- #BeginEditable "doctitle" -->
+<title>Handling Exceptions</title>
+<link href="../../library/stylesheet.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_showHideLayers() { //v6.0
+  var i,p,v,obj,args=MM_showHideLayers.arguments;
+  for (i=0; i<(args.length-2); i+=3) if ((obj=MM_findObj(args[i]))!=null) { v=args[i+2];
+    if (obj.style) { obj=obj.style; v=(v=='show')?'visible':(v=='hide')?'hidden':v; }
+    obj.visibility=v; }
+}
+//-->
+</script>
+<!-- #EndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../../tutorial/DBXETutorial/Library/styles2.css" type="text/css">
+<script language="JavaScript">
+<!--
+ 
+function printWindow() {
+bV = parseInt(navigator.appVersion);
+if (bV >= 4) window.print();
+}
+// -->
+<!--
+//-->
+</script>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#663300" vlink="#996633" alink="#FF6600" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<noscript>The interactions in this eCourse require Javascript to be enabled.</noscript> 
+<img src="../../images/title-2tellme.gif" width="484" height="52" border="0" alt="Tell Me"> 
+<table summary="" width="465" border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <td width="1">&nbsp;</td>
+    <td width="311"><!-- #BeginEditable "topicheading" --> 
+      <h3 class="topstoryhead"><b>Handling Exceptions</b></h3>
+      <!-- #EndEditable --></td>
+    <td width="135"><!-- #BeginEditable "topicheading2" --> 
+      <div align="right"><img src="../../images/prev_arrow.gif" width="10" height="10" border="0" alt="Previous"> <font size="1" face="Verdana, Arial, Helvetica, sans-serif" color="#336699"><b><font size="2"><a href="mod08_sm_func_create.htm">previous</a></font>|<font size="2"><a href="mod08_tm_except2.htm">next</a></font> <img src="../../images/next_arrow.gif" width="10" height="10" border="0" alt="Next Page"></b></font></div>
+     <!-- #EndEditable --></td>
+  </tr>
+  <tr> 
+<td width="1">    
+    <td colspan="4"><!-- #BeginEditable "text" -->
+    <p class="bodycopy">A block 
+      always terminates when PL/SQL raises an exception, but  you can specify an exception 
+      handler to perform final actions before the block ends.</p>
+    <p class="navheader"><img src="images/except1.gif" width="298" height="219"></p>
+    <p class="navheader">Methods for Raising an Exception</p>
+    <ul>
+      <li class="bodycopy">An Oracle error occurs and the associated exception is raised automatically. For 
+          example, if the error <span class="style1">ORA-01403</span> occurs when no rows are retrieved from the 
+          database in a <span class="style1">SELECT</span> statement, then PL/SQL raises the exception 
+          <span class="style1">NO_DATA_FOUND</span>. These errors are converted into predefined exceptions.</li>
+      <li class="bodycopy">          Depending on the business functionality your program is implementing, you may have 
+          to explicitly raise an exception. You raise an exception explicitly by issuing the <span class="style1">RAISE</span> statement within the block. The exception being raised may be either userdefined or predefined.</li>
+      <li class="bodycopy">          There are some nonpredefined Oracle errors. These errors are any standard Oracle errors that are not predefined. You can explicitly declare exceptions and associate them with the not predefined Oracle errors. </li>
+      </ul>
+    <p class="navheader">Syntax</p>
+    <table width="439" border="1">
+      <tr>
+        <th bgcolor="#FFFF99" scope="col"><div align="left">
+            <pre font="courier new">EXCEPTION<br>  WHEN <a href="javascript:;" onMouseOver="MM_showHideLayers('exceptlayer1','','show')" onMouseOut="MM_showHideLayers('exceptlayer1','','hide')">exception1</a> [OR <a href="javascript:;" onMouseOver="MM_showHideLayers('exceptlayer1','','show')" onMouseOut="MM_showHideLayers('exceptlayer1','','hide')">exception2</a> . . .] THEN<br>    <a href="javascript:;" onMouseOver="MM_showHideLayers('exceptlayer2','','show')" onMouseOut="MM_showHideLayers('exceptlayer2','','hide')">statement1</a>;<br>    <a href="javascript:;" onMouseOver="MM_showHideLayers('exceptlayer2','','show')" onMouseOut="MM_showHideLayers('exceptlayer2','','hide')">statement2</a>; . . .</pre>
+            <div id="exceptlayer3" style="position:absolute; width:200px; height:91px; z-index:8; left: 229px; top: 276px; visibility: hidden;" onMouseOver="MM_showHideLayers('Layer9','','show')" onMouseOut="MM_showHideLayers('exceptlayer1','','hide')">
+              <table summary="" width="250" border="0" cellspacing="0" cellpadding="2">
+                <tr bgcolor="#999966">
+                  <td><table summary="" width="100%" border="0" cellspacing="0" cellpadding="2" bgcolor="#FFFFFF">
+                      <tr>
+                        <td><p class="bodycopy">Is an optional exception-handling clause that traps any exceptions<br>
+                        that have not been explicitly handled</p></td>
+                      </tr>
+                  </table></td>
+                </tr>
+              </table>
+            </div>
+            <pre font="courier new">  [WHEN <a href="javascript:;" onMouseOver="MM_showHideLayers('exceptlayer1','','show')" onMouseOut="MM_showHideLayers('exceptlayer1','','hide')">exception3</a> [OR <a href="javascript:;" onMouseOver="MM_showHideLayers('exceptlayer1','','show')" onMouseOut="MM_showHideLayers('exceptlayer1','','hide')">exception4</a>. . .] THEN<br>    <a href="javascript:;" onMouseOver="MM_showHideLayers('exceptlayer2','','show')" onMouseOut="MM_showHideLayers('exceptlayer2','','hide')">statement3</a>;<br>    <a href="javascript:;" onMouseOver="MM_showHideLayers('exceptlayer2','','show')" onMouseOut="MM_showHideLayers('exceptlayer2','','hide')">statement4</a>; . . .]<br>  [WHEN <a href="javascript:;" onMouseOver="MM_showHideLayers('exceptlayer3','','show')" onMouseOut="MM_showHideLayers('exceptlayer3','','hide')">OTHERS</a> THEN<br>    <a href="javascript:;" onMouseOver="MM_showHideLayers('exceptlayer2','','show')" onMouseOut="MM_showHideLayers('exceptlayer2','','hide')">statement5</a>;<br>    <a href="javascript:;" onMouseOver="MM_showHideLayers('exceptlayer2','','show')" onMouseOut="MM_showHideLayers('exceptlayer2','','hide')">statement6</a>; . . .]</pre>
+        </div></th>
+      </tr>
+    </table>
+    <p class="navheader">Guidelines for Trapping Exceptions</p>
+    <ul>
+      <li class="bodycopy"> Begin the exception-handling section of the block with the <span class="style1">EXCEPTION</span> keyword.</li>
+      <li class="bodycopy"> Define several exception handlers, each with its own set of actions, for the block.</li>
+      <li class="bodycopy"> When an exception occurs, PL/SQL processes only one handler before leaving the block.</li>
+      <li class="bodycopy"> Place the <span class="style1">OTHERS</span> clause after all other exception-handling clauses.</li>
+      <li class="bodycopy"> You can have only one <span class="style1">OTHERS</span> clause.</li>
+      <li class="bodycopy"> Exceptions cannot appear in assignment statements or SQL statements.</li>
+    </ul>
+    <div id="exceptlayer2" style="position:absolute; width:200px; height:91px; z-index:8; left: 248px; top: 265px; visibility: hidden;" onMouseOver="MM_showHideLayers('Layer9','','show')" onMouseOut="MM_showHideLayers('Layer9','','hide')">
+      <table summary="" width="250" border="0" cellspacing="0" cellpadding="2">
+        <tr bgcolor="#999966">
+          <td><table summary="" width="100%" border="0" cellspacing="0" cellpadding="2" bgcolor="#FFFFFF">
+              <tr>
+                <td><p class="bodycopy">Is one or more PL/SQL or SQL statements</p></td>
+              </tr>
+          </table></td>
+        </tr>
+      </table>
+    </div>
+    <div id="exceptlayer1" style="position:absolute; width:200px; height:91px; z-index:8; left: 229px; top: 276px; visibility: hidden;" onMouseOver="MM_showHideLayers('Layer9','','show')" onMouseOut="MM_showHideLayers('exceptlayer1','','hide')">
+      <table summary="" width="250" border="0" cellspacing="0" cellpadding="2">
+        <tr bgcolor="#999966">
+          <td><table summary="" width="100%" border="0" cellspacing="0" cellpadding="2" bgcolor="#FFFFFF">
+              <tr>
+                <td height="98"><p class="bodycopy">Is the standard name of a predefined exception or the name of a userdefined exception declared within the declarative section</p></td>
+              </tr>
+          </table></td>
+        </tr>
+      </table>
+    </div>
+    <p>&nbsp;</p>
+    <!-- #EndEditable --></td>
+  </tr>
+</table>
+</body>
+<!-- #EndTemplate --></html>

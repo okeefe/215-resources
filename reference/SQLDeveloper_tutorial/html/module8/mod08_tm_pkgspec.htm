@@ -1,0 +1,74 @@
+<html lang="en"><!-- #BeginTemplate "/Templates/2tellme.dwt" --><!-- DW6 -->
+<head>
+<!-- #BeginEditable "doctitle" -->
+<title>Creating the Package Specification</title>
+<link href="../../library/stylesheet.css" rel="stylesheet" type="text/css">
+<!-- #EndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../../tutorial/DBXETutorial/Library/styles2.css" type="text/css">
+<script language="JavaScript">
+<!--
+ 
+function printWindow() {
+bV = parseInt(navigator.appVersion);
+if (bV >= 4) window.print();
+}
+// -->
+<!--
+//-->
+</script>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#663300" vlink="#996633" alink="#FF6600" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<noscript>The interactions in this eCourse require Javascript to be enabled.</noscript> 
+<img src="../../images/title-2tellme.gif" width="484" height="52" border="0" alt="Tell Me"> 
+<table summary="" width="465" border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <td width="1">&nbsp;</td>
+    <td width="311"><!-- #BeginEditable "topicheading" --> 
+      <h3 class="topstoryhead"><b>Creating the Package Specification </b></h3>
+      <!-- #EndEditable --></td>
+    <td width="135"><!-- #BeginEditable "topicheading2" --> 
+      <div align="right"><img src="../../images/prev_arrow.gif" width="10" height="10" border="0" alt="Previous"> <font size="1" face="Verdana, Arial, Helvetica, sans-serif" color="#336699"><b><font size="2"><a href="mod08_wli_pkg.htm">previous</a></font>|<font size="2"><a href="mod08_tm_pkgbody.htm">next</a></font> <img src="../../images/next_arrow.gif" width="10" height="10" border="0" alt="Next Page"></b></font></div>
+     <!-- #EndEditable --></td>
+  </tr>
+  <tr> 
+<td width="1">    
+    <td colspan="4"><!-- #BeginEditable "text" -->
+    <p class="navheader">Package Specification Syntax </p>
+    <p class="bodycopy">To create packages, you declare all public constructs in the package specification.</p>
+    <ul>
+      <li class="bodycopy">          Specify the <span class="style1">OR REPLACE</span> option, if overwriting an existing package specification.</li>
+      <li class="bodycopy"> Initialize a variable with a constant value or formula within the declaration, if required; otherwise, the variable is initialized implicitly to NULL.</li>
+      <li class="bodycopy">The package specification should contain procedure and function headings terminated by a 
+        semicolon, without the <span class="style1">IS</span> (or <span class="style1">AS</span>) keyword and its PL/SQL block. The implementation of a 
+        procedure or function that is declared in a package specification is done in the package body.</li>
+    </ul>
+    <table width="439" border="1">
+      <tr>
+        <th bgcolor="#FFFF99" scope="col"><div align="left">
+            <pre font="courier new">CREATE [OR REPLACE] PACKAGE package_name 
+IS|AS<br>  public type and variable declarations<br>  subprogram specifications<br>END [package_name]</pre>
+            </div></th>
+      </tr>
+    </table>
+    <p class="navheader">Example</p>
+    <table width="439" border="1">
+      <tr>
+        <th bgcolor="#FFFF99" scope="col"><div align="left">
+            <pre font="courier new">CREATE OR REPLACE PACKAGE hr_pack 
+IS<br> PROCEDURE raise_salary<br>   (p_id IN employees.employee_id%TYPE,<br>    p_percent IN NUMBER);
+ FUNCTION get_sal
+  (p_id IN employees.employee_id%TYPE)
+   RETURN NUMBER;<br>END hr_pack;
+</pre>
+        </div></th>
+      </tr>
+    </table>
+    <p>&nbsp;</p>
+    <p class="navheader">&nbsp;</p>
+    <p class="bodycopy">&nbsp;</p>
+    <!-- #EndEditable --></td>
+  </tr>
+</table>
+</body>
+<!-- #EndTemplate --></html>

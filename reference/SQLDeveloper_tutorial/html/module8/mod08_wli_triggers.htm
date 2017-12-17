@@ -1,0 +1,154 @@
+<html lang="en"><!-- #BeginTemplate "/Templates/1whylearnit.dwt" --><!-- DW6 -->
+<head>
+<!-- #BeginEditable "doctitle" --> 
+<title>Using Triggers</title>
+<link rel="stylesheet" href="../../library/stylesheet.css" type="text/css">
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_showHideLayers() { //v6.0
+  var i,p,v,obj,args=MM_showHideLayers.arguments;
+  for (i=0; i<(args.length-2); i+=3) if ((obj=MM_findObj(args[i]))!=null) { v=args[i+2];
+    if (obj.style) { obj=obj.style; v=(v=='show')?'visible':(v=='hide')?'hidden':v; }
+    obj.visibility=v; }
+}
+//-->
+</script>
+<!-- #EndEditable --> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../../tutorial/DBXETutorial/Library/styles2.css" type="text/css">
+<script language="JavaScript">
+<!--
+ 
+function printWindow() {
+bV = parseInt(navigator.appVersion);
+if (bV >= 4) window.print();
+}
+// -->
+
+<!--
+//-->
+</script>
+<script language="JavaScript">
+<!--
+function MM_reloadPage(init) {  //reloads the window if Nav4 resized
+  if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
+    document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
+  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
+}
+MM_reloadPage(true);
+// -->
+</script>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#663300" vlink="#996633" alink="#FF6600" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<noscript>The interactions in this eCourse require Javascript to be enabled.</noscript> 
+<img src="../../images/title-1whylearnit.gif" width="484" height="52" usemap="#Map" border="0" alt="Why Learn It?"> 
+<map name="Map"> 
+  
+</map>
+<table summary="" width="465" border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <td width="10">&nbsp;</td>
+    <td width="302"><!-- #BeginEditable "topicheading" --> 
+      <h3><b class="topstoryhead">Using Triggers</b></h3>
+      <!-- #EndEditable --></td>
+    <td width="135"><!-- #BeginEditable "topicheading2" -->
+      <div align="right"><img src="../../images/prev_arrow.gif" width="10" height="10" border="0" alt="Previous"> 
+        <font size="1" face="Verdana, Arial, Helvetica, sans-serif" color="#336699"><b><font size="2"><a href="mod08_sm_crblock.htm">previous</a></font>|<font size="2"><a href="mod08_tm_dmltriggers.htm">next</a></font> 
+        <img src="../../images/next_arrow.gif" width="10" height="10" border="0" alt="Next Page"></b></font></div>
+    <!-- #EndEditable --></td>
+  </tr>
+  <tr>
+    <td width="10">
+    <td colspan="4"><!-- #BeginEditable "text" --> 
+      <p class="bodycopy"><img src="images/trigger.gif" width="347" height="156">        <br>
+        While working with a database application, you may want to add programmatic 
+        functionality that executes when specific operations occur in the database. 
+      For example, there may be typical scenarios such as the following: </p>
+      <ul>
+        <li class="bodycopy">Example 1: You may want to insert data into a table. 
+          You find that the new data is inconsistent with the existing data in 
+          the table. You may want the system to raise an error that will cause the 
+          transaction to be rolled back.<br>
+          <br>
+        </li>
+        <li class="bodycopy">Example 2: You may want the system to record information 
+          such as the timing and the details of the user modifying data in a table.</li>
+      </ul>
+      <p class="bodycopy">Triggers help the user deal with these and other complex situations. A trigger is a PL/SQL block or a PL/SQL procedure 
+        associated with a table, view, schema, or database. Triggers are used to 
+        ensure data integrity by checking on data in a consistent fashion. A trigger 
+      executes implicitly whenever a particular event takes place. </p>
+      <p class="navheader">You can use triggers for:</p>
+      <ul>
+        <li class="bodycopy"><a href="javascript:;onMouseOver="MM_showHideLayers('Layer1','','show onMouseOver="MM_showHideLayers('Layer1','','show')"')" onMouseOut="MM_showHideLayers('Layer1','','hide')">Improved 
+          data security </a> 
+          <div id="Layer1" style="position:absolute; width:200px; height:45px; z-index:2; left: 193px; top: 478px; visibility: hidden" onMouseOver="MM_showHideLayers('Layer1','','show')" onMouseOut="MM_showHideLayers('Layer2','','hide')"> 
+            <table summary="" width="250" border="0" cellspacing="0" cellpadding="2">
+              <tr bgcolor="#999966"> 
+                <td> 
+                  <table summary="" width="100%" border="0" cellspacing="0" cellpadding="2" bgcolor="#FFFFFF">
+                    <tr> 
+                      <td> 
+                        <p><span class="bodycopy">Triggers provide enhanced and 
+                          complex security checks, auditing</span>.</p>
+                        <p align="right">&nbsp;</p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </li>
+        <li class="bodycopy"><a href="javascript:;onMouseOver="MM_showHideLayers('Layer2','','show onMouseOver="MM_showHideLayers('Layer2','','show')"')" onMouseOut="MM_showHideLayers('Layer2','','hide')"">Improved 
+          data integrity</a> 
+          <div id="Layer2" style="position:absolute; width:200px; height:78px; z-index:3; left: 196px; top: 477px; visibility: hidden" onMouseOver="MM_showHideLayers('Layer2','','show')" onMouseOut="MM_showHideLayers('Layer2','','hide')"> 
+            <table summary="" width="250" border="0" cellspacing="0" cellpadding="2">
+              <tr bgcolor="#999966"> 
+                <td> 
+                  <table summary="" width="100%" border="0" cellspacing="0" cellpadding="2" bgcolor="#FFFFFF">
+                    <tr> 
+                      <td> 
+                        <p class="bodycopy">Triggers enforce dynamic data integrity 
+                          and complex referential integrity constraints. Triggers 
+                          ensure that related operations are performed together 
+                          implicitly.</p>
+                        <p align="right">&nbsp;</p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </li>
+      </ul>
+      <p><span class="navheader">Types of Triggers</span></p>
+      <p><span class="bodycopy">    Triggers can be either of the following:</span></p>
+      <ul>
+        <li class="bodycopy"><span class="boldbodycopy">Application trigger</span>: This trigger fires whenever an event occurs with a particular application</li>
+        <li class="bodycopy"><span class="boldbodycopy">Database trigger</span>: This trigger fires whenever a data event (such as DML) or system event (such as logon or shutdown) occurs on a schema or database.</li>
+      </ul>
+      <p><span class="navheader">Guidelines for Designing Triggers</span></p>
+      <ul>
+        <li class="bodycopy">You can design triggers to perform related actions and centralize global operations.</li>
+        <li class="bodycopy">You should not design triggers where functionality is already built in to the Oracle server.</li>
+        <li class="bodycopy">Avoid designing triggers that duplicate other triggers.</li>
+        <li class="bodycopy">You can create stored procedures and invoke them in a trigger if the PL/SQL code is very lengthy.</li>
+        <li class="bodycopy">Excessive use of triggers can result in complex interdependencies that may be difficult to maintain in large applications.</li>
+      </ul>
+      <!-- #EndEditable --></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+
+</body>
+<!-- #EndTemplate --></html>

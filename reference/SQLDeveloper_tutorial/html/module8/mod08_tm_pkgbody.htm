@@ -1,0 +1,134 @@
+<html lang="en"><!-- #BeginTemplate "/Templates/2tellme.dwt" --><!-- DW6 -->
+<head>
+<!-- #BeginEditable "doctitle" -->
+<title>Creating the Package Body</title>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_showHideLayers() { //v6.0
+  var i,p,v,obj,args=MM_showHideLayers.arguments;
+  for (i=0; i<(args.length-2); i+=3) if ((obj=MM_findObj(args[i]))!=null) { v=args[i+2];
+    if (obj.style) { obj=obj.style; v=(v=='show')?'visible':(v=='hide')?'hidden':v; }
+    obj.visibility=v; }
+}
+//-->
+</script>
+<link href="../../library/stylesheet.css" rel="stylesheet" type="text/css">
+<!-- #EndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../../tutorial/DBXETutorial/Library/styles2.css" type="text/css">
+<script language="JavaScript">
+<!--
+ 
+function printWindow() {
+bV = parseInt(navigator.appVersion);
+if (bV >= 4) window.print();
+}
+// -->
+<!--
+//-->
+</script>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#663300" vlink="#996633" alink="#FF6600" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<noscript>The interactions in this eCourse require Javascript to be enabled.</noscript> 
+<img src="../../images/title-2tellme.gif" width="484" height="52" border="0" alt="Tell Me"> 
+<table summary="" width="465" border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <td width="1">&nbsp;</td>
+    <td width="311"><!-- #BeginEditable "topicheading" --> 
+      <h3 class="topstoryhead"><b>Creating the Package Body </b></h3>
+      <!-- #EndEditable --></td>
+    <td width="135"><!-- #BeginEditable "topicheading2" --> 
+      <div align="right"><img src="../../images/prev_arrow.gif" width="10" height="10" border="0" alt="Previous"> <font size="1" face="Verdana, Arial, Helvetica, sans-serif" color="#336699"><b><font size="2"><a href="mod08_tm_pkgspec.htm">previous</a></font>|<font size="2"><a href="mod08_sm_implpkg.htm">next</a></font> <img src="../../images/next_arrow.gif" width="10" height="10" border="0" alt="Next Page"></b></font></div>
+     <!-- #EndEditable --></td>
+  </tr>
+  <tr> 
+<td width="1">    
+    <td colspan="4"><!-- #BeginEditable "text" -->
+    <p class="navheader">Package Body Syntax </p>
+    <p class="bodycopy">The package body must complete the implementation for all procedures or functions 
+      declared in the package specification.</p>
+    <ul>
+      <li class="bodycopy">          Specify the <span class="style1">OR REPLACE</span> option to overwrite an existing package body.</li>
+      <li class="bodycopy"> Define the subprograms in an appropriate order. The basic principle is that you must 
+          declare a variable or subprogram before it can be referenced by other components in the 
+          same package body. It is common to see all private variables and subprograms defined first 
+          and the public subprograms defined last in the package body.</li>
+    </ul>
+    <table width="439" border="1">
+      <tr>
+        <th bgcolor="#FFFF99" scope="col"><div align="left">
+            <pre font="courier new">CREATE [OR REPLACE] PACKAGE BODY <a href="javascript:;" onMouseOver="MM_showHideLayers('PackNameLayer','','show')" onMouseOut="MM_showHideLayers('PackNameLayer','','hide')">package_name</a> 
+IS|AS<br>  <a href="javascript:;" onMouseOver="MM_showHideLayers('PrivTypeLayer','','show')" onMouseOut="MM_showHideLayers('PrivTypeLayer','','hide')">private type and variable declarations</a><br>  <a href="javascript:;" onMouseOver="MM_showHideLayers('SubProgLayer','','show')" onMouseOut="MM_showHideLayers('SubProgLayer','','hide')">subprogram bodies</a><br>  <a href="javascript:;" onMouseOver="MM_showHideLayers('BeginInitLayer','','show')" onMouseOut="MM_showHideLayers('BeginInitLayer','','hide')">[BEGIN initialization statements]</a><br>END [package_name];</pre>
+        </div></th>
+      </tr>
+    </table>
+    <div id="SubProgLayer" style="position:absolute; width:297px; height:100px; z-index:4; left: 66px; top: 434px; visibility: hidden" onMouseOver="MM_showHideLayers('Layer2','','show')" onMouseOut="MM_showHideLayers('Layer2','','hide')">
+      <table summary="" width="287" border="0" cellspacing="0" cellpadding="2">
+        <tr bgcolor="#999966">
+          <td width="283">
+            <table summary="" width="100%" border="0" cellspacing="0" cellpadding="2" bgcolor="#FFFFFF">
+              <tr>
+                <td>
+                  <p class="bodycopy"><span class="style1">subprogram specification</span> specifies the full implementation of any private and/or 
+                  public procedures or functions.</p></td>
+              </tr>
+          </table></td>
+        </tr>
+      </table>
+    </div>
+    <div id="PrivTypeLayer" style="position:absolute; width:294px; height:91px; z-index:8; left: 164px; top: 423px; visibility: hidden" onMouseOver="MM_showHideLayers('Layer9','','show')" onMouseOut="MM_showHideLayers('Layer9','','hide')">
+      <table summary="" width="282" border="0" cellspacing="0" cellpadding="2">
+        <tr bgcolor="#999966">
+          <td width="278">
+            <table summary="" width="100%" border="0" cellspacing="0" cellpadding="2" bgcolor="#FFFFFF">
+              <tr>
+                <td>
+                  <p class="bodycopy"><span class="style1">private type</span> and<span class="style1"> variable declarations </span>declares private variables, 
+                  constants, cursors, exceptions, user-defined types, and subtypes.</p></td>
+              </tr>
+          </table></td>
+        </tr>
+      </table>
+    </div>
+    <p>&nbsp;</p>
+    <div id="BeginInitLayer" style="position:absolute; width:297px; height:100px; z-index:5; left: 170px; top: 435px; visibility: hidden;" onMouseOver="MM_showHideLayers('Layer2','','show')" onMouseOut="MM_showHideLayers('Layer2','','hide')">
+      <table summary="" width="287" border="0" cellspacing="0" cellpadding="2">
+        <tr bgcolor="#999966">
+          <td width="283">
+            <table summary="" width="100%" border="0" cellspacing="0" cellpadding="2" bgcolor="#FFFFFF">
+              <tr>
+                <td>
+                  <p class="bodycopy"><span class="style1">[BEGIN initialization statements]</span> is an optional block of initialization code 
+                  that executes when the package is first referenced.</p></td>
+              </tr>
+          </table></td>
+        </tr>
+      </table>
+    </div>
+    <div id="PackNameLayer" style="position:absolute; width:297px; height:100px; z-index:3; left: 170px; top: 435px; visibility: hidden" onMouseOver="MM_showHideLayers('Layer2','','show')" onMouseOut="MM_showHideLayers('Layer2','','hide')">
+      <table summary="" width="287" border="0" cellspacing="0" cellpadding="2">
+        <tr bgcolor="#999966">
+          <td width="283">
+            <table summary="" width="100%" border="0" cellspacing="0" cellpadding="2" bgcolor="#FFFFFF">
+              <tr>
+                <td>
+                  <p class="bodycopy"><span class="style1">package_name</span> specifies a name for the package that must be the same as its package specification. Using the package name after the END keyword is optional.</p></td>
+              </tr>
+          </table></td>
+        </tr>
+      </table>
+    </div>
+    <p>&nbsp;</p>
+    <!-- #EndEditable --></td>
+  </tr>
+</table>
+</body>
+<!-- #EndTemplate --></html>

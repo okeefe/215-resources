@@ -1,0 +1,66 @@
+<html lang="en"><!-- #BeginTemplate "/Templates/1whylearnit.dwt" --><!-- DW6 -->
+<head>
+<!-- #BeginEditable "doctitle" --> 
+<title>Accessing Multiple Tables</title>
+<link href="../../library/stylesheet.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.style1 {font-family: "Courier New", Courier, mono}
+-->
+</style>
+<!-- #EndEditable --> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../../tutorial/DBXETutorial/Library/styles2.css" type="text/css">
+<script language="JavaScript">
+<!--
+ 
+function printWindow() {
+bV = parseInt(navigator.appVersion);
+if (bV >= 4) window.print();
+}
+// -->
+
+<!--
+//-->
+</script>
+<script language="JavaScript">
+<!--
+function MM_reloadPage(init) {  //reloads the window if Nav4 resized
+  if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
+    document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
+  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
+}
+MM_reloadPage(true);
+// -->
+</script>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#663300" vlink="#996633" alink="#FF6600" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<noscript>The interactions in this eCourse require Javascript to be enabled.</noscript> 
+<img src="../../images/title-1whylearnit.gif" width="484" height="52" usemap="#Map" border="0" alt="Why Learn It?"> 
+<map name="Map"> 
+  
+</map>
+<table summary="" width="465" border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <td width="10">&nbsp;</td>
+    <td width="302"><!-- #BeginEditable "topicheading" --><strong class="topstoryhead">Accessing Multiple  Tables</strong><!-- #EndEditable --></td>
+    <td width="135"><!-- #BeginEditable "topicheading2" -->
+      <div align="right"><img src="../../images/prev_arrow.gif" width="10" height="10" border="0" alt="Previous"> <font size="1" face="Verdana, Arial, Helvetica, sans-serif" color="#336699"><b><font size="2"><a href="mod04_sm_retrieverows.htm">previous</a></font>|<font size="2"><a href="mod04_tm_simplejoin.htm">next</a></font> <img src="../../images/next_arrow.gif" width="10" height="10" border="0" alt="Next Page"></b></font></div>
+    <!-- #EndEditable --></td>
+  </tr>
+  <tr>
+    <td width="10">
+    <td colspan="4"><!-- #BeginEditable "text" --> 
+      <p class="navheader">Joining Tables </p>
+      <p class="bodycopy"> Sometimes you need to display data from more than one table. To do this, you use <span class="style1">SELECT</span> statements. The <span class="style1">FROM</span> clause of your query contains the names of the tables from which you are retrieving data. Because information comes from more than one table, this is called a JOIN between the tables involved.</p>
+      <p class="bodycopy">Note: Without the proper join, the result will be the Cartesian product of all records in both tables. </p>
+      <p class="bodycopy"><img src="images/mod4join.gif" width="251" height="117"></p>
+      <p class="bodycopy">For example, in the <span class="style1">EMPLOYEES</span> table, the <span class="style1">DEPARTMENT_ID</span> column represents the department number for an employee. In the <span class="style1">DEPARTMENTS</span> table, there is a <span class="style1">DEPARTMENT_ID</span> column as well as a <span class="style1">DEPARTMENT_NAME</span> column. You can join the <span class="style1">EMPLOYEES</span> and <span class="style1">DEPARTMENTS</span> tables by using the<span class="style1"> DEPARTMENT_ID</span> column to produce a report that shows the employees' names and the name of the department they belong to, rather than just the department id.</p>
+      <div align="right"></div>
+      <!-- #EndEditable --></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+
+</body>
+<!-- #EndTemplate --></html>

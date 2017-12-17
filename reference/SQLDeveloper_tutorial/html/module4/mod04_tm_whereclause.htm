@@ -1,0 +1,71 @@
+<html lang="en"><!-- #BeginTemplate "/Templates/2tellme.dwt" --><!-- DW6 -->
+<head>
+<!-- #BeginEditable "doctitle" -->
+<title>Applying Additional Conditions to a Join</title>
+<link href="../../library/stylesheet.css" rel="stylesheet" type="text/css">
+<!-- #EndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../../tutorial/DBXETutorial/Library/styles2.css" type="text/css">
+<script language="JavaScript">
+<!--
+ 
+function printWindow() {
+bV = parseInt(navigator.appVersion);
+if (bV >= 4) window.print();
+}
+// -->
+<!--
+//-->
+</script>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#663300" vlink="#996633" alink="#FF6600" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<noscript>The interactions in this eCourse require Javascript to be enabled.</noscript> 
+<img src="../../images/title-2tellme.gif" width="484" height="52" border="0" alt="Tell Me"> 
+<table summary="" width="465" border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <td width="1">&nbsp;</td>
+    <td width="311"><!-- #BeginEditable "topicheading" --><span class="topstoryhead">Applying Additional
+    Conditions to a Join</span><!-- #EndEditable --></td>
+    <td width="135"><!-- #BeginEditable "topicheading2" --> 
+      <div align="right"><img src="../../images/prev_arrow.gif" width="10" height="10" border="0" alt="Previous"> <font size="1" face="Verdana, Arial, Helvetica, sans-serif" color="#336699"><b><font size="2"><a href="mod04_sm_onclause.htm">previous</a></font>|<font size="2"><a href="mod04_sm_whereclause.htm">next</a></font> <img src="../../images/next_arrow.gif" width="10" height="10" border="0" alt="Next Page"></b></font></div>
+     <!-- #EndEditable --></td>
+  </tr>
+  <tr> 
+<td width="1">    
+    <td colspan="4"><!-- #BeginEditable "text" -->
+    <p class="bodycopy">You can apply additional conditions to the join. For example, you may want to join the <span class="style1">EMPLOYEES</span> and <span class="style1">DEPARTMENTS</span> tables and, in 
+      addition, display only employees who have a manager ID of 149. To add additional 
+      conditions to the <span class="style1">ON</span> clause, you can add <span class="style1">AND</span> clauses. Alternatively, you can use a <span class="style1">WHERE</span> 
+      clause to apply additional conditions.</p>
+    <p class="navheader">Using the <span class="style1">AND</span> Clause </p>
+    <table width="434" border="1">
+      <tr>
+        <td width="424" bgcolor="#FFCC97"><pre class="style7 style1 style5 style4 style3 style8"><strong>SELECT e.employee_id, e.last_name, e.department_id,
+       d.department_id, d.location_id
+FROM employees e JOIN departments d
+ON (e.department_id = d.department_id)
+<span class="style9">AND e.manager_id = 149</span></strong></pre>          </td>
+      </tr>
+    </table>
+    <p class="navheader">Using the <span class="style1">WHERE</span> clause</p>
+    <table width="434" border="1">
+      <tr>
+        <td width="424" bgcolor="#FFCC97"><pre class="style1 style5 style4 style3"><strong>SELECT e.employee_id, e.last_name, e.department_id,
+       d.department_id, d.location_id
+FROM employees e JOIN departments d
+ON (e.department_id = d.department_id)
+<span class="style9">WHERE e.manager_id = 149</span></strong></pre>
+          </td>
+      </tr>
+    </table>
+    <p class="navheader">Aliases</p>
+    <p class="bodycopy">In the examples shown, aliases are used to identify the table names. In the <span class="style1">FROM</span> clause, an abbreviation is provided after the table name. This is called an alias. After the alias is set up in the <span class="style1">FROM</span> clause, you can refer to it throughout the statement.
+    </p>
+    <div align="right">
+        <p>&nbsp;</p>
+      </div>
+    <!-- #EndEditable --></td>
+  </tr>
+</table>
+</body>
+<!-- #EndTemplate --></html>

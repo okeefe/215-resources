@@ -1,0 +1,56 @@
+<html lang="en">
+<head>
+<!-- #BeginEditable "doctitle" -->
+<title>Show Me</title>
+<!-- #EndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../tutorial/DBXETutorial/Library/styles2.css" type="text/css">
+<script language="JavaScript" type="text/JavaScript">
+<!-- 
+function printWindow() {
+bV = parseInt(navigator.appVersion);
+if (bV >= 4) window.print();
+}
+// -->
+
+<!--
+function MM_openBrWindow(theURL,winName,features) { //v2.0
+  window.open(theURL,winName,features);
+}
+//-->
+</script>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" link="#663300" vlink="#996633" alink="#FF6600">
+<noscript>The interactions in this eCourse require Javascript to be enabled.</noscript> 
+<img src="../images/title-3showme.gif" width="484" height="52" border="0" alt="Show Me"> 
+<table summary="" width="465" border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <td width="10">&nbsp;</td>
+    <td width="302"><!-- #BeginEditable "topicheading" -->
+      <h3><b>Topic Heading</b></h3>
+    <!-- #EndEditable --></td>
+    <td width="135"><!-- #BeginEditable "topicheading2" -->
+      <div align="right"><img src="../images/prev_arrow.gif" width="10" height="10" border="0" alt="Previous"> <font size="1" face="Verdana, Arial, Helvetica, sans-serif" color="#336699"><b><font size="2"><a href="previous.htm">previous</a></font>|<font size="2"><a href="next.htm">next</a></font> <img src="../images/next_arrow.gif" width="10" height="10" border="0" alt="Next Page"></b></font></div>
+    <!-- #EndEditable --></td>
+  </tr>
+  <tr>
+    <td width="10">
+    <td colspan="4"><!-- #BeginEditable "text" -->
+      <p>Insert text here.</p>
+      <p><font color="#FF0000">&lt;The showme page Introduces a scenario and then links to a captivate movie. </font></p>
+      <p><font color="#FF0000">The captivate movie can have one or more interactions. </font></p>
+      <table border="0" cellspacing="0" cellpadding="2">
+        <tr>
+          <td width="80" align="right"><a href="javascript:;" onClick="MM_openBrWindow('../tutorial/DBXETutorial/templates/xyz.htm','popup','scrollbars=yes,resizable=yes,width=800,height=600')"></a><img src="../images/demonstration.gif" width="42" height="31" border="0" alt="Animation"></td>
+          <td class="rightnav"><p class="rightnav"><a href="javascript:;" onClick="MM_openBrWindow('../tutorial/DBXETutorial/templates/animation.htm','popup','scrollbars=yes,resizable=yes,width=550,height=375')">Show Me and Try It!</a></p>
+          <p class="rightnav"><strong>Note</strong>: if there are no interactions, change the heading to Show Me! </p></td>
+        </tr>
+      </table>
+    <!-- #EndEditable --></td>
+  </tr>
+</table>
+<!-- #BeginEditable "print" --> 
+<div id="print" style="position:absolute; width:33px; height:39px; z-index:1; top: 355px; left: 452px; visibility: hidden"></div>
+<!-- #EndEditable -->
+</body>
+</html>
