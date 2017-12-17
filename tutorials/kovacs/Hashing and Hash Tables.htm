@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0057)http://www.fortunecity.com/skyscraper/false/780/hash.html -->
+<HTML><HEAD><TITLE>Hashing and Hash Tables</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+<META content="MSHTML 6.00.2800.1226" name=GENERATOR></HEAD>
+<BODY background="Hashing and Hash Tables_files/grygrain.jpg" 
+onunload=spawntopfivewindow();>
+<CENTER>
+
+
+<TABLE id=fcnavbartable style="VISIBILITY: hidden" cellSpacing=0 cellPadding=0 
+width=730 border=0>
+  <TBODY>
+  <TR id=fcnavbartablerow align=middle>
+    <TD>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <FORM name=searchForm 
+        onsubmit="return IsEmpty(document.searchForm.searchterm);" 
+        action=http://search.fortunecity.com:8080/findwhatSearchBox.jsp 
+        method=post target=_blank><INPUT type=hidden value=fc name=css> 
+        <TBODY>
+        <TR align=middle>
+          <TD width="3%"><A id=fcnavlogo href="http://www.fortunecity.com/" 
+            target=_new><IMG height=15 
+            alt="web hosting, domain name, free web site, email address" 
+            src="Hashing and Hash Tables_files/fclogo_inline_new.gif" width=120 
+            border=0></A></TD>
+          <TD width="22%"><A id=fcnavhosting 
+            style="FONT-SIZE: 11px; FONT-FAMILY: Verdana,sans-serif" 
+            href="http://www.fortunecity.com/" target=_new>web hosting</A></TD>
+          <TD width="24%"><A id=fcnavdomains 
+            style="FONT-SIZE: 11px; FONT-FAMILY: Verdana,sans-serif" 
+            href="http://www.fortunecity.com/" target=_new>domain names</A></TD>
+          <TD width="26%"><A id=fcnavemail 
+            style="FONT-SIZE: 11px; FONT-FAMILY: Verdana,sans-serif" 
+            href="http://home.v3.com/" target=_new>email addresses</A></TD>
+          <TD width="2%"><IMG id=fcnavsrchgif height=15 alt=search 
+            src="Hashing and Hash Tables_files/nb_search_new.gif" width=55 
+            border=0></TD>
+          <TD id=fcnavsearch width="21%"><INPUT 
+            style="BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; FONT-SIZE: 11px; BORDER-LEFT: #000000 1px solid; WIDTH: 100%; BORDER-BOTTOM: #000000 1px solid; FONT-FAMILY: Verdana, Arial, Helvetica, Sans-Serif; HEIGHT: 15px" 
+            onfocus="this.value=''; return true;" maxLength=100 
+            value="-enter search term-" name=searchterm></TD>
+          <TD id=fcnavsrchsub width="2%"><INPUT type=image height=15 alt=GO 
+            width=30 
+        src="Hashing and Hash Tables_files/nb_go_search.gif"></TD></TR></FORM></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<SCRIPT language=Javascript>
+<!-- hide
+
+FCLocale = 'unknown';
+
+DefineDefaultVars();
+
+
+DisplayFCAdBanner();
+
+// -->
+</SCRIPT>
+
+<TABLE id=fcnavbartable2 style="VISIBILITY: hidden" cellSpacing=0 cellPadding=0 
+width=730 border=0>
+  <TBODY>
+  <TR>
+    <TD><IFRAME id=fcpopular border=0 align=center marginWidth=0 
+      marginHeight=0 src="Hashing and Hash Tables_files/fcpopup.htm" 
+      frameBorder=no width="100%" scrolling=no 
+height=15></IFRAME></TD></TR></TBODY></TABLE></CENTER>
+<SCRIPT language=Javascript>
+<!--
+
+        fc_color_string = 'bgcolor=' + document.bgColor + '&' +
+        'fgcolor=' + document.fgColor + '&' +
+        'linkcolor=' + document.linkColor + '&' +
+        'alinkcolor=' + document.alinkColor + '&' +
+        'vlinkcolor=' + document.vlinkColor; 
+
+        document.getElementById('fcpopular').src = document.getElementById('fcpopular').src + '?' + escape(fc_color_string);
+
+        FCNavbarResize();
+
+// -->
+</SCRIPT>
+
+<H3 align=center><U>Hashing and Hash Tables</U></H3><FONT size=+1>
+<P><I>By <A href="mailto:dkovacs@adesso.com?subject=Hash Tables">Daniel 
+Kovacs</A></I><BR><I>Source: Dr. Binhai Zhu</I>
+<P><FONT size=+1>Our object is O(1) time, under reasonable conditions.<BR>A hash 
+table is a generalization of an array, in other words, direct addressing is 
+allowed.
+<P>
+<CENTER><I>U = Universe of keys</I><BR><IMG 
+src="Hashing and Hash Tables_files/hashd_1.gif">
+<P></CENTER><U><I>Hash Functions (in pseudocode)</I></U>
+<P><PRE>	Direct-Address-Search(T,k)
+		return(T[k]);
+
+	Direct-Address-Insert(T,x)
+		T[key[x]] = x;
+
+	Direct-Address-Delete(T,x)
+		T[key[x]] = NULL;
+</PRE>
+<P>If |U| is very large, storing such a table (T) is impossible. On the other 
+hand, the set K of keys actually stored may be small and most of the space 
+allocated for T would be wasted.
+<P><U><I>The Hash Table</U></I>
+<P>With direct addressing, an element is stored in slot K. With hashing, it is 
+stored in slot H(k). H() is called the hash-function. H maps the universe (U) of 
+keys into the slots of a hash-table (T[0 ... m-1]).
+<P><PRE>	h: U = {0, 1, 2 ... m-1}
+</PRE>
+<P>An element with key K hashes into slot H(k), also, H(k) is the hash value of 
+key K.
+<P>The hash functions is as follows: H(k) = k mod SIZE_OF_TABLE
+<P><I><U>Collision Resolution by Chaining</U></I>
+<P>
+<CENTER><IMG src="Hashing and Hash Tables_files/hashd_2.jpg">
+<P></CENTER>With chaining, all the elements that hash into the same slots are 
+put into a linked list.
+<P>
+<CENTER><IMG src="Hashing and Hash Tables_files/hashd_3.jpg">
+<P></CENTER><I><U>Chained Hash Functions (In pseudocode)</U></I>
+<P><PRE>	Chained-Hash-Insert(T,x)
+		insert x at the head of the list T[h(key[x])];
+		// Worst Case: O(n)
+	Chained-Hash-Search(T,k)
+		search for an element with a key K in list T[h(k)];
+		// Worst Case: O(length of list T[h(k)];
+		// Usually O(1)
+	Chained-Hash-Delete(T,x)
+		delete X from the list T[h(key[x])];
+		// Roughly O(n) time
+</PRE>
+<P>
+<CENTER><IMG src="Hashing and Hash Tables_files/hashd_4.jpg"></CENTER>
+<P><I><U>Folding</U></I>
+<P>A key is divided into several parts. These parts are combined or folded 
+together and are transformed in a certain way to create the target address 
+(index of hash-table).
+<P><I>Shift Folding</I>
+<P>Here is an example of what I mean by folding. Let's take a common item: A 
+social insurance number. It is made up of 9 digits, grouped in 3 sets of 3 
+digits.
+<P><PRE>	123 456 789
+</PRE>
+<P>We then break down this 9 digit number into it's parts, sum them and then mod 
+it by the size of the table (in this example, the table size is 1000)
+<P><PRE>	 123
+	 456
+	<U>+789</U>
+	1368 mod 1000 = 368
+</PRE><BR>As you can see, this element will hash into location 368. Ideally, we 
+would like to have the perfect hash, and you may notice that collisions are 
+possible. Use chaining to avoid any problems.
+<P><I><U>Notes:</I></U>
+<P>Assume that any given element is equally likely to hash into any one of the 
+m's slots (Simple Uniform Hashing).
+<P>Let |T| = M<SUB>t</SUB>, and we have n elements to be stored in T. We define 
+the load factor L=n/m.
+<P>Certainly, the worst case of hashing is 0(n).
+<P><I><U>Theorem 1</U></I>
+<P>In a hash table where collisions are resolved by chaining, an unsuccessful 
+search takes Big-Sigma (1+Load Factor) time, under the assumption of uniform 
+hashing.
+<P><I><U>Proof</U></I>
+<P>A key is equally likely to hash into any of the M slots. The average time to 
+search unsuccessfully for a key is the average time it takes to search to the 
+end of a linked list. The average length of the list is exactly the Load Factor 
+(L=n/m). Therefore, the expected number of elements examined in an unsuccessful 
+search is L and the total time is L+1, including the time to compute H(k).
+<P><I><U>Theorem 2</U></I>
+<P>In a hash table in which collisions are resolved by chaining, a successful 
+search takes O(1+Load Factor) time. Assuming, of course, we have Simple Uniform 
+Hashing.
+<P>To make this proof easier to understand, I am assuming that the 
+CHAINED-HASH-INSERT() function inserts a new element at the end of the list 
+instead of at the front. (*NB In theory, there is no difference. Some people 
+like it this way.)
+<P><I><U>Proof</U></I>
+<P>You have to assume that the key being searched for is equally likely to be 
+any of the N keys stored in the table. The expected number of elements inspected 
+during a successful search is 1 more than the length of the list when the 
+sought-for element was inserted.
+<P>To find the expected number of elements examined, you take the average over N 
+items in the of 1+the expected length of the linked list to which the I'th 
+element was added. The expected length of the list is (i-1)/m.
+<P>And, of course, here is the solution:
+<P>1+(n/2m)-(1/2m) = 1+(Load Factor/2)-(1/2m) = O(1+Load Factor)<BR>Therefore, 
+the total amount of time required for a successful search is:<BR>1+(Load 
+Factor/2)-(1/2m) = 2+(Load Factor/2) - (1/2m) = O(1+Load Factor)
+<P><U><I>Good Hash Functions</I></U>
+<P>A hash function that causes NO collisions is called a <I>Perfect Hash 
+Function</I> and a <I>Good Hash Function</I> is one that satisfies <U>Simple 
+Uniform Hashing</U>.
+<P><I><U>Guidelines for simple uniform hashing</I></U>
+<P>Assume all keys are natural numbers.<BR><PRE>	1. H(k) = k mod m
+	2. m should be a prime number close to some power of 2
+</PRE>
+<P><I><U>A working example of a hash table</I></U>
+<P>The following is an example of a hash table with <I>Simple Uniform 
+Hashing</I>. It uses a Linked List to resolve collissions. The example souce 
+code is included. Although developed on a Commodore Amiga, it will compile and 
+run under Windows 95 or 98. You need to compile linklist.cpp and hashtable.cpp 
+without linking it, then compile hashtest.cpp and link it with linklist.obj and 
+hashtable.obj.
+<P>
+<CENTER><IMG alt="Amiga Output of Hash Table" 
+src="Hashing and Hash Tables_files/hashtable.gif"> <BR>
+<H6>Sample output of hashtest.</H6></CENTER>
+<BLOCKQUOTE><A  
+  href="files/linklist.cpp">
+  LinkList.cpp</A><BR><A 
+  href="files/hashtable.cpp"> 
+  HashTable.cpp</A><BR><A 
+  href="files/hashtest.cpp">
+  HashTest.cpp</A><BR> 
+  </BLOCKQUOTE>
+<P>And there you have it, a simple guide for Hashing. I hope you have had as 
+much fun as I have with this. May all your days of making databases ect ... be 
+happy ones. Thanks to Dr. Zhu for the informaitve lecture. 
+<P><A href="index.htm">Back to 
+index</A> </FONT>
+<SCRIPT language=Javascript>
+<!--hide
+
+var my_clientip = '129.252.138.29';
+
+if (document.getElementById('userIP') != null) {               
+
+        document.getElementById('userIP').value = my_clientip;           
+}
+
+setonclickmethods();
+
+
+// -->   
+</SCRIPT>
+
+<CENTER>
+<DIV id=fclinkback style="VISIBILITY: hidden">
+<P><FONT face="Verdana, Helvetica, Arial, sans-serif" size=1><A id=fcfootergif 
+href="http://www.fortunecity.com/" target=_new><IMG 
+src="Hashing and Hash Tables_files/fc_logo_white122x30.gif" border=0></A><BR><A 
+id=fcfooterhosting href="http://www.fortunecity.com/" target=_new>web 
+hosting</A> • <A id=fcfooterdomains href="http://www.fortunecity.com/" 
+target=_new>domain names</A><BR>&nbsp;<BR></FONT></P></DIV></CENTER>
+<SCRIPT language=Javascript>
+<!--
+
+if(FrameisBigEnough == 1) {                                                       
+
+        document.getElementById('fclinkback').style.visibility = "visible";  
+	document.getElementById('fcfootergif').search = '?sid=fcfootergif';
+	document.getElementById('fcfooterhosting').search = '?sid=fcfooterhosting';
+	document.getElementById('fcfooterdomains').search = '?sid=fcfooterdomains';
+
+}
+
+// -->
+</SCRIPT>
+</FONT></BODY></HTML>

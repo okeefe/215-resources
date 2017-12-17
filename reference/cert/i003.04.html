@@ -1,0 +1,176 @@
+<HTML>
+<HEAD>
+
+<TITLE>  Inspecting the logs produced by TCP wrapper                                                                                                </TITLE>
+</HEAD>
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+
+<table border="0" width="100%" cellspacing="6" cellpadding="4">
+  <small><font face="Helvetica, Geneva, Arial"> 
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP" colspan="2"><b><font face="Arial">Implementation 
+      Details</font></b></td>
+    <td  align="LEFT"><b><font face="Arial" size=4> 
+      <p>Inspecting the logs produced by TCP wrapper on systems running Solaris 
+        2.x</p>
+      </font></b> </td>
+  </tr>
+  <tr> 
+    <td width="130" colspan="2">&nbsp;</td>
+    <td > 
+      <table border="1" width="75%" cellspacing="0" cellpadding="8">
+        <tr> 
+          <td bgcolor="#ccddff"> 
+            <p>Applies to the practices: "<a 
+href="../practices/p094.html">Monitor and inspect network activities for unexpected
+behavior</a>".</a></p>
+            <p>Applicable technologies: TCP wrapper; Solaris 2.x </p>
+          </td>
+        </tr>
+      </table>
+  <p>The TCP/IP daemon wrapper package sends logging information to the syslog 
+        daemon, which records the data in the appropriate place. These file entries 
+        should be inspected regularly.  </p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" colspan="3"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP" colspan="2"><b><font face="Arial">Why 
+      this is important</font></b></td>
+    <td  align="LEFT" valign="TOP"> 
+      
+    
+      <p>The wrapper program logs may contain information about where a connection 
+        (or attempted connection) originated which can be useful when looking 
+        for signs of intrusion. </p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" colspan="3"> 
+      <hr size="1">
+    </td>
+  </tr>
+  </font></small>
+  <tr><small><font face="Helvetica, Geneva, Arial"> 
+    <td width="110" align="Left" valign="TOP"> <font color="#000000" face="Arial"><b>How 
+      to do it </b> </font> </td>
+    <td width="10" align="right" valign="TOP"><font face="Helvetica, Geneva, Arial" color="#000000"><b></b></font></td>
+    </font></small><small> 
+    <td  align="LEFT" valign="TOP"> 
+      <p><font color="#008000" face="Arial, Helvetica, sans-serif" size="3"><b>Inspect 
+        each log file at its predetermined time interval. We recommend that each 
+        file be inspected daily. </b></font></p>
+    </td>
+    </small></tr>
+  <tr> 
+    <td width="130" align="right" valign="TOP" height="3" colspan="2"> 
+    </td>
+    <td  align="LEFT" valign="TOP" height="35"> 
+      <p><font color="#008000" face="Arial, Helvetica, sans-serif" size="3"><b>Document 
+        any unusual entries that you discover. </b></font></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="right" valign="TOP" colspan="2"> 
+    </td>
+    <td  align="LEFT" valign="TOP" height="125"> 
+      <p><font color="#008000" size="3" face="Arial, Helvetica, sans-serif"><b>Investigate 
+        each documented abnormality identified.</b></font></p>
+      <ul>
+        <li>Can it be explained by an authorized user? </li>
+        <li>Can it be explained by known system activity? (e.g., the server was 
+          stopped for maintenance purposes.) </li>
+        <li>Can it be explained by known changes to programs (e.g., the server 
+          software was modified causing changes to the log files.) </li>
+      </ul>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="right" valign="TOP" colspan="2"> 
+    </td>
+    <td  align="LEFT" valign="TOP" > 
+      <p><font color="#008000" face="Arial, Helvetica, sans-serif" size="3"><b>Report 
+        all confirmed evidences of intursion and misuse (or attempted intrusion 
+        or misuse) to your internal security point of contact.</b> </font></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" colspan="3"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP" colspan="2"> 
+      <p></p>
+      <b><font face="Arial"> 
+      <p>Specific log file contents </p>
+      </font></b></td>
+    <td  align="LEFT" valign="TOP" height="66"> 
+      <p></p>
+      <p>By default, the <font face="Courier New" size=3>syslog</font> daemon 
+        will record all TCP/IP daemon wrapper logging to the</p>
+      <p><font face="Courier New" size=3>/var/adm/messages</font> file (unless 
+        you have modified the <font face="Courier New" size=3>syslog.conf</font> 
+        file that comes with Solaris 2.x).</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="right" valign="TOP" colspan="2">
+    </td>
+    <td  align="LEFT" valign="TOP" height="474"> 
+      <p> </p>
+      <b><font face="Arial" size=3 color="#008000"> 
+      <p> /var/adm/messages</p>
+      </font></b> 
+      <p>This log records system console output and <font face="Courier New" size=3>syslog</font> 
+        messages. Each successful or failed attempt to connect to a service will 
+        be recorded. The general syntax for these messages is as follows:</p>
+      <p><font face="Courier New" size="2"><i>datetime hostname service[process 
+        id</i>]: connect from <i>hostname<br>
+        </i></font><font face="Courier New" size="2"><i>datetime hostname service[process 
+        id</i>]: refused connect from <i>hostname</i></font></p>
+      <p>The following example shows a successful telnet connection: </p>
+      <p> </p>
+      <p><font face="Courier New" size="2">Apr 15 14:52:51 nohost.domain.com in.telnetd[23715]: 
+        connect from ahost.domain.com</font></p>
+      <p> </p>
+      <p>This example shows a failed telnet connection: </p>
+      <p> </p>
+      <p><font face="Courier New" size="2">Apr 15 14:53:38 nohost.domain.com in.telnetd[24390]: 
+        refused connect from ahost.domain.com</font></p>
+      <p> </p>
+      <p>The TCP/IP wrappers can be configured to also record user-name information 
+        via the use of the <font face="Courier New" size=3>identd</font> protocol. 
+        If your site has configured the wrappers to record this additional information, 
+        the syntax of the log entries will be as follows:</p>
+      <p><font face="Courier New" size=2><i>datetime hostname service[process 
+        id</i></font><font face="Courier New" size=2>]: connect from <i>username@hostname</i></font></p>
+      <p>The following example shows a successful telnet connection: </p>
+      <p> </p>
+      <p><font face="Courier New" size="2">Apr 15 14:51:30 nohost.domain.com in.telnetd[22552]: 
+        connect from [auser]@ahost.domain.com</font></p>
+    </td>
+  </tr>
+  <tr> 
+    <td  colspan="3"> 
+      <hr size="1">
+    </td>
+  </tr>
+</table>
+
+
+
+
+</BODY>
+</HTML>
+
+
+
+

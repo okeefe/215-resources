@@ -1,0 +1,762 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Generator" content="Microsoft Word 97">
+   <meta name="GENERATOR" content="Mozilla/4.51 [en] (WinNT; U) [Netscape]">
+   <title>Installing, configuring, and operating the secure shell (SSH) on systems running Solarix 2.x</title>
+</head>
+
+
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+
+<table ALIGN=LEFT BORDER=0 CELLSPACING=0 CELLPADDING=0>
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial,Helvetica">Implementation
+Details</font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font face="Arial"><h2>Installing,
+configuring, and operating the secure shell (SSH) on systems running Solaris
+2.x</h2></font></font></b></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">&nbsp;</td>
+
+<td ALIGN=LEFT VALIGN=TOP>
+<table BORDER CELLSPACING=0 CELLPADDING=4 WIDTH="75%" BGCOLOR="#CCDDFF" >
+<tr>
+<td>Applies to the practices:<a href="/security-improvement/practices/p073.html">"Configure computers for secure remote administration"</a>
+<br><a href="/security-improvement/practices/p068.html">"Offer
+only essential network services and operating system services on the server
+host machine"</a>
+<br><a href="/security-improvement/practices/p067.html">"Keep operating systems and applications software up to date"</a>
+<br><a href="/security-improvement/practices/p071.html">"Configure computers for file backups"</a>
+
+<p>Applicable technologies: Solaris 2.x&nbsp;</td>
+</tr>
+</table>
+<p><br>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="150">&nbsp;</td>
+
+<td ALIGN=LEFT VALIGN=TOP>This implementation describes the steps necessary to install and operate the SSH suite of security tools in the Solaris 2.x environment. 
+
+<p>Most UNIX systems provide the Berkeley r-commands (<font face="courier new"><small>rlogin</small></font>, <font face="courier new"><small>rsh</small></font>, and <font face="courier new"><small>rcp</small></font>) and the telnet program for establishing sessions between two networked hosts. These programs rely on the Domain Name Service (DNS) for host level authentication, and either a login/password or DNS-based trust for user level authentication. Intruders can easily fabricate the information necessary to gain access to resources to which they should not have access. In addition, all network traffic between hosts connected with any of these programs is entirely in the clear, including the user name and password exchange. Therefore intruders can sniff the network and view or copy the traffic exchanged between hosts including but not limited to abuse of any user name and password combination to log in to a networked host. 
+
+<p>The SSH suite of security enhancing tools addresses the problem of host and user authentication by using strong public key cryptography, and the problem of clear text data transmission by using strong data encryption. 
+
+<p>There will come a time when all network traffic is encrypted and strong DNS and IP security is widespread, eliminating the need for security tools like SSH. Until that time comes, SSH is a strong defense against network sniffing, DNS spoofing, and IP spoofing.
+<p>
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr valign=top>
+<td ALIGN=LEFT WIDTH="130"><p><b><font face="Arial"><font size=+0>Effort Estimates</font></font></b></td>
+
+<td><p>
+The time needed to retrieve the source code from the distribution site varies depending upon your connection speed. The source code is less than 532 KB (version 2.3p1). Building and installing SSH depends upon machine performance but on average will take less than twenty minutes. 
+
+<p>Determining a comprehensive configuration suitable for your environment and tailored to your security requirements will take some additional time and may require minor adjustments once you are familiar with the programs in your operational environment. 
+
+<p>If users are forced to use strong public key-based authorization, each user will need to have associated public keys located on each server they want to access. This will likely require some ongoing system administrator attention as users may not have the necessary access when SSH replaces other applications for remote access. 
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial"><font size=+0>Prerequisites</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>SSH can be built and installed on many UNIX systems. To build SSH on your system, you need Internet access to retrieve the following software tools:
+<ul>
+<li>An <a href="i002.01.html">MD5</a> cryptographic checksum program  
+<li><a href="ftp://ftp.gnu.org/gnu/gzip/gzip-1.2.4a.tar">GZIP</a> to uncompress the downloaded file   
+<li><a href="http://www.pgp.com">PGP</a> to verify the authenticity of the software distribution  
+<li>A C compiler; either the Sun C Computer or the <a href="ftp://prep.ai.mit.edu/gnu/gcc/gcc-core-2.95.2.tar.gz">free GNU C Compiler</a>
+<li>The <a href="http://www.info-zip.org/pub/infozip/zlib/">ZLIB library</a> for compression functions
+<li>The <a href="http://www.openssl.org/source/">OpenSSL library</a> for cryptographic functions
+<li><a href="i041.07.html">TCP Wrapper</a>
+</ul>
+</td></tr>
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial"><font size=+0>Downloading and Verifying</font></font></b></td>
+<td ALIGN=LEFT VALIGN=TOP></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font face="Arial"><font color="#008000">Download the OpenSSH distribution</font></font></b>
+<p>Perform a file transfer from one of the sites listed on <a href="http://www.openssh.com/portable.html">http://www.openssh.com/portable.html</a>. Make sure to download the companion, detached PGP signature file.
+</td></tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><br>
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP><br><b><font face="Arial"><font color="#008000">Verify the authenticity of the OpenSSH distribution</font></font></b>
+<p>To do this, you need the PGP public key from "Damien Miller &lt;dmiller@ilogic.com.au&gt;" within your own PGP public key ring. You can get a copy of his key by searching one of the known PGP public key servers such as <a href="http://pgpkeys.mit.edu:11371">http://pgpkeys.mit.edu:11371</a>.  The key ID is 0x11B5748F.  However, in our most recent attempt, we found that this key is expired so we recommend also performing the MD5 check described below.
+
+<p>A match with his digital signature ensures that the software was downloaded successfully without modification. To verify the digital signature, issue the following command in the directory containing the downloaded files: 
+
+<p><font face="courier new"><small>$ pgp openssh-2.3.0p1.tar.gz.sig</small></font> 
+
+<p>If the signature doesn't match, verify that:
+<ul>
+<li>your downloaded filenames match those listed above 
+<li>you have included the needed PGP key in your public key ring 
+</ul>
+
+<p>If you are unable to verify the authenticity using PGP, you can verify the distribution using an MD5 checksum as shown below:
+<p><table cellpadding=3 cellspacing=3 border=1>
+<tr>
+<td><b>File to Download</b></td>
+<td><b>MD5 Checksum</b></td></tr>
+<tr>
+<td>openssh-2.3.0p1.tar.gz</td>
+<td><font face="courier new"><small>b3d53dfb45da6e7bf88aaaf65b528aac</small></font></td></tr>
+<tr>
+<td>openssh-2.3.0p1.tar.gz.sig</td>
+<td><font face="courier new"><small>dc34e26359b2f0c3a3bc0de8bd5ab722</small></font></td></tr>
+</table>
+ 
+<p>If the computed cryptographic checksum of the download files does not correspond to the information above, verify that  
+<ul>
+<li>your downloaded filenames match those listed above 
+<li>your checksum program computes MD5 message digests 
+</td></tr>
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial"><font size=+0>Building</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>Choose a location that has sufficient space for the OpenSSH distribution.</td></tr>
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><br>
+<div align=right></div>
+</td>
+<td ALIGN=LEFT VALIGN=TOP><br><b><font face="Arial"><font color="#008000">Unpack the OpenSSH distribution</font></font></b>
+<p>First you need to unzip the OpenSSH distribution:
+
+<p><font face="courier new"><small>$ gunzip openssh-2.3.0p1.tar.gz</small></font> 
+
+<p>To unpack the OpenSSH distribution, use the system tar command:
+
+<p><font face="courier new"><small>$ tar xvf openssh-2.3.0p1.tar</small></font>
+
+<p>This command creates a subdirectory named <font face="courier new"><small>openssh-2.3.0p1</small></font>.
+
+<p> All operations are to be performed within this subdirectory.
+
+Several files exist in the created directory. One of these files is the OpenSSH <font face="courier new"><small>INSTALL</small></font> file. It outlines the requirements and various settings for configuration and installation. Another file is named <font face="courier new"><small>README</small></font>. It gives background information on this distribution and references for more information about the SSH protocol.
+</td></tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><br>
+<div align=right></div>
+</td>
+<td ALIGN=LEFT VALIGN=TOP><br><b><font face="Arial"><font color="#008000">Choose the right configuration settings prior to compile time</font></font></b>
+<p>A configuration script <font face="courier new"><small>configure</small></font> provided with the distribution, generates a tailored <font face="courier new"><small>Makefile</small></font>. You need to specify several options prior to executing the <font face="courier new"><small>configure</small></font> script:
+
+<p><font face="courier new"><small>$ ./configure --with-tcp-wrappers --sysconfdir=/etc/ssh</small></font>
+<p><table cellpadding=3 cellspacing=3 border=1>
+<tr>
+<td><b>Option</b></td>
+<td><b>Description</b></td></tr>
+<tr> 
+<td><font face="courier new"><small>--with-tcp-wrappers</small></font></td>
+<td>Enable the use of the TCP wrapper library to protect against some attacks coming from non-authorized IP addresses.</td></tr>
+<tr>
+<td><font face="courier new"><small>--with-syssconfdir</small></font></td>
+<td>Path to the subdirectory containing the OpenSSH configuration files, public keys and host keys.</td></tr></table>
+</td></tr>
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><br>
+<div align=right></div>
+</td>
+<td ALIGN=LEFT VALIGN=TOP><br><b><font face="Arial"><font color="#008000">Generate the OpenSSH executables and man pages</font></font></b>
+<p>After the configuration is finished, you can now build the executable and generate the tailored man pages by specifying the <font face="courier new"><small>make</small></font> command twice:
+<pre>
+$ make
+$ make manpages
+</pre>
+</td></tr>
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial"><font size=+0>Testing Before Installation</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>No pre-installation test suite comes with OpenSSH.
+</td></tr>
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial"><font size=+0>Installation</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>To place the OpenSSH binaries, templates for configuration files, and man pages into the correct system directories, start the installation using the <font face="courier new"><small>make install</small></font> command as the system administrator using the root account. You can also place all necessary files into the right directory manually as follows:
+<pre><small>
+# cp ssh_config.out /etc/ssh/ssh_config
+# cp sshd_config.out /etc/ssh/sshd_config
+# cp ssh /usr/local/bin/ssh
+# ln -s /usr/local/bin/ssh /usr/local/bin/slogin
+# cp ssh-keygen /usr/local/bin/ssh-keygen
+# cp ssh-agent /usr/local/bin/ssh-agent
+# cp ssh-add /usr/local/bin/ssh-add
+# cp scp /usr/local/bin/scp
+# cp sshd /usr/local/sbin/sshd
+# cp ssh.1.out /usr/local/man/man1/ssh.1
+# ln -s /usr/local/man/man1/ssh.1 /usr/local/man/man1/slogin.1 
+# cp ssh-keygen.1.out /usr/local/man/man1/ssh-keygen.1
+# cp ssh-agent.1.out /usr/local/man/man1/ssh-agent.1
+# cp ssh-add.1.out /usr/local/man/man1/ssh-add.1
+# cp scp.1.out /usr/local/man/man1/scp.1
+# cp sshd.8.out /usr/local/man/man8/sshd.8
+# cp sftp-server.8.out /usr/local/man/man8/sftp-server.8
+</small></pre>
+<p>All files installed in <font face="courier new"><small>/usr/local/bin</small></font> and in <font face="courier new"><small>/usr/local/sbin</small></font> should be set to mode 755, and all documentation files installed in <font face="courier new"><small>/usr/local/man</small></font> should be set to mode 644. The <font face="courier new"><small>/etc/ssh/ssh_config</small></font> and <font face="courier new"><small>/etc/ssh/sshd_config</small></font> files should also be mode 644. As the system runs, the <font face="courier new"><small>/usr/local/sbin/sshd</small></font> daemon creates <font face="courier new"><small>/etc/ssh/sshd.pid</small></font> and stores its process ID in that file. If <font face="courier new"><small>/etc/ssh/sshd.pid</small></font> exists, then its contents are overwritten with the new process ID each time <font face="courier new"><small>sshd</small></font> starts.
+</td></tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><br>
+<div align=right></div>
+</td>
+<td ALIGN=LEFT VALIGN=TOP><br><b><font face="Arial"><font color="#008000">Generate the host keys</font></font></b>
+<p>If you already have host keys from an older installation, you can continue to use them. Both RSA and DSA are effective and secure public key algorithms. However, from a security perspective we recommend using the DSA-based version 2 protocol instead of the RSA-based version 1 protocol, due to problems with this earlier protocol.
+
+<p>The version you select depends on the client software in use at your site. For example, if you have a larger number of Windows95/98/NT clients that support only the old version 1 protocol, you need to support that version. If on the other hand, you are building a new service, use the new version 2 protocol.
+
+<p>If you are supporting RSA-based version 1 protocol clients, you should plan to update them. Once you have switched to the version 2 protocol, make sure to remove the RSA key files <font face="courier new"><small>/etc/ssh/ssh_host_key</small></font> and <font face="courier new"><small>/etc/ssh/ssh_host_key.pub</small></font> to prohibit any further use.
+
+<p>To continue using existing keys, place the files within the <font face="courier new"><small>/etc/ssh/</small></font> directory with the same file name as before. (Do not issue the commands listed below as they will override your existing files!)
+
+<p>If you are not updating an existing SSH or OpenSSH installation, you will not have a public key pair associated with the host. To create the public key pair, you have to issue one or both of the following commands. The two commands shown below create two different pairs suitable for the old version 1 protocol and the new version 2 protocol. Create only the pair that you need.
+
+<p>To support the old, RSA-based version 1 protocol use:
+
+<p><font face="courier new"><small># ssh-keygen -b 1024 -f /etc/ssh/ssh_host_key -N ""</small></font>
+
+<p>For support of the new, DSA-based version 2 protocol use:
+
+<p><font face="courier new"><small># ssh-keygen -d -f /etc/ssh/ssh_host_key_dsa -N ""</small></font>
+
+<p>For user keys, a passphrase (as described below) is needed to protect the private key stored in the user's <font face="courier new"><small>~/.ssh</small></font> directory; this is not required or supported for host keys (Option <font face="courier new"><small>-N</small></font>).
+
+<p>Both the <font face="courier new"><small>/etc/ssh/ssh_host_key</small></font> and the <font face="courier new"><small>/etc/ssh/ssh_host_key_dsa</small></font> files must be mode 400 and must belong to the root account. Note that <font face="courier new"><small>sshd</small></font> disables the particular version if the specific file is group/world-accessible. The <font face="courier new"><small>/etc/ssh/ssh_host_key.pub /etc/ssh/ssh_host_key_dsa.pub</small></font> files should be mode 644.
+</td></tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><br>
+<div align=right></div>
+</td>
+<td ALIGN=LEFT VALIGN=TOP><br><b><font face="Arial"><font color="#008000">Start and stop the sshd daemon</font></font></b>
+<p>As a final step, you need to be able to start and stop the server on system reboots and on demand. Install the following script into <font face="courier new"><small>/etc/init.d/sshd</small></font>. Make hard links to <font face="courier new"><small>/etc/rc0.d/K57sshd</small></font>, <font face="courier new"><small>/etc/rc1.d/K57sshd</small></font> and <font face="courier new"><small>/etc/rc2.d/S99sshd</small></font> (see the man pages <font face="courier new"><small>init (1M)</small></font> and <font face="courier new"><small>init.d</small></font> for more information). 
+<pre><small>
+#! /bin/sh 
+# 
+# start/stop the secure shell deamon 
+# Make links to get sshd start/stoped at the right time: 
+# /etc/rc0.d/K57sshd 
+# /etc/rc1.d/K57sshd 
+# /etc/rc2.d/S99sshd 
+ 
+case "$1" in 
+
+'start') 
+     # Start the ssh deamon 
+     if [ -f /usr/local/sbin/sshd ]; then 
+          echo "starting SSHD daemon" 
+          /usr/local/sbin/sshd & 
+     fi 
+     ;; 
+
+'stop') 
+     # Stop the ssh deamon 
+     PID=`/usr/bin/ps -e -u 0 | /usr/bin/fgrep sshd | /usr/bin/awk '{print $1}'` 
+     if [ ! -z "$PID" ] ; then 
+          /usr/bin/kill ${PID} 1/dev/null 2&1
+     fi 
+     ;; 
+
+*) 
+     echo "usage: /etc/init.d/sshd {start|stop}" 
+     ;; 
+
+esac
+</small></pre>
+</td></tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial"><font size=+0>Testing after Installation</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>To check whether the sshd daemon is actually working, execute the following tests.
+</td></tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+<td ALIGN=LEFT VALIGN=TOP><b><font face="Arial"><font color="#008000">Start the sshd daemon</font></font></b>
+<p>As root, start the daemon with the following command:
+
+<p><font face="courier new"><small># sh /etc/init.d/sshd</small></font>
+ 
+<p>Inspect <font face="courier new"><small>/var/adm/message</small></font> for log entries similar to the following:
+<pre><small>
+Nov 23 19:24:23 host1 sshd[526]: Server listening on 0.0.0.0 port 22.
+Nov 23 19:24:23 host1 sshd[526]: Generating 768 bit RSA key.
+Nov 23 19:24:24 host1 sshd[526]: RSA key generation complete.
+</small></pre>        
+<p>These entries indicate that the server is running and is listening for connections on port 22 and that it has generated a 768-bit RSA key. The number of the listening process is in brackets. That number must match the contents of <font face="courier new"><small>/etc/ssh/sshd.pid</small></font>.
+<pre>
+$ more /etc/ssh/sshd.pid
+526        
+</pre>
+</td></tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+<td ALIGN=LEFT VALIGN=TOP><b><font face="Arial"><font color="#008000">Connect to the sshd daemon using telnet</font></font></b>
+<p>Connect to the daemon with telnet. If sshd is running and accepting connections, you should see the message shown below. If you are updating your installation, verify that the displayed version number corresponds to the installed version.
+<pre><small>
+$ telnet localhost 22
+Trying 127.0.0.1... 
+Connected to localhost. 
+Escape character is '^]'. 
+SSH-1.99-OpenSSH_2.3.0p1 
+^] 
+telnet z 
+Suspended 
+$ ps -e -u 0 | grep sshd
+526 ? 0:51 sshd
+1057 ? 0:01 sshd
+$ % 
+telnet localhost 22 
+^] 
+telnet q 
+Connection closed. 
+$ ps -e -u 0 | grep sshd
+526 ? 0:51 sshd
+</small></pre>
+</td></tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+<td ALIGN=LEFT VALIGN=TOP><b><font face="Arial"><font color="#008000">Stop the sshd daemon</font></font></b>
+<p>As root, stop the daemon with the following command:
+
+<p><font face="courier new"><small># sh /etc/init.d/sshd stop</small></font>
+</td></tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial"><font size=+0>Configuring</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>The initial <font face="courier new"><small>/etc/ssh/ssh_config</small></font> and <font face="Courier new"><small>/etc/ssh/sshd_config</small></font> files may need to be changed from their installed values. While <font face="courier new"><small>ssh_config</small></font> controls the use of the client programs (all programs installed into <font face="courier new"><small>/usr/local/bin</small></font>, most notably <font face="courier new"><small>ssh</small></font>, <font face="courier new"><small>slogin</small></font> and <font face="courier new"><small>scp</small></font>), <font face="courier new"><small>sshd_config</small></font> controls the server program <font face="courier new"><small>/usr/local/sbin/sshd</small></font>. We provide some recommendations for both files below. This approach allows authentication of users only based on their public keys.
+
+<p>You can implement an alternative model based on user authentication using ordinary passwords. We provide an outline of the changes to accommodate this approach.
+</td></tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><br>
+<div align=right></div>
+</td>
+<td ALIGN=LEFT VALIGN=TOP><br><b><font face="Arial"><font color="#008000">Configure the ssh_config file</font></font></b>
+<p>The <font face="courier new"><small>ssh_config</small></font> file is the per-user configuration file used by the SSH client. Note that this file's values are installed after the user-specific file, located in <font face="courier new"><small>~.ssh/config</small></font>. From the comments shown below, note that any configuration value is only changed the first time it is set. This means that the user's values can override the values given here. This may, however, disable the user's ability to gain access depending on the configuration of the remote host the user wants to connect to (for example, the user specifies an incompatible cipher to ensure confidentiality not supported by the server).
+
+<p>We recommend that all configurable values be set so that the program's results are more predictable during version upgrades, a time when program defaults can change. Refer to the man page <font face="courier new"><small>ssh (1)</small></font> for a detailed explanation of all available values. We concentrate here on values that may have impact the security of the overall configuration.
+
+<p>You can further tailor the configuration files by using sections bracketed by "Host" specifications. Such a section is only applied for hosts that match one of the patterns given in the specification. "*" and "?" can be used as wildcards in the patterns to be matched. A single "*" as a pattern can be used to provide global defaults for all hosts.
+<p><table cellspacing=3 cellpadding=3 border=1>
+<tr>
+<td><b>Option</b></td>
+<td><b>Recommendation</b></td>
+<td><b>Description</b></td></tr>
+<tr>
+<td>BatchMode</td>
+<td>no</td>
+<td>BatchMode may be necessary for the execution of scripts, etc. but should be disabled by default.</td></tr> 
+<tr>
+<td>CheckHostIP</td>
+<td>yes</td>
+<td>Enables checking whether the IP address of a server has changed. Such a change may indicate an attack.</td></tr>
+<tr> 
+<td>Cipher</td>
+<td>blowfish</td>
+<td>Cipher to use for version 1 encryption. Blowfish provides good security and performance.</td></tr>
+<tr>
+<td>Ciphers</td>
+<td>blowfish-cbc</td>
+<td>Cipher to use for version 2 encryption.</td></tr>
+<tr>
+<td>DSAAuthentication</td>
+<td>yes</td>
+<td>DSA authentication is only attempted if a DSA key exists for the user.</td></tr>
+<tr> 
+<td>FallBackToRsh</td>
+<td>no</td>
+<td>Otherwise the client tries to connect via the <font face="courier new"><small>rsh</small></font> client whenever a connection to the <font face="courier new"><small>sshd</small></font> daemon on the remote server is refused.</td></tr>
+<tr> 
+<td>ForwardAgent</td> 
+<td>no</td>
+<td>Setting this value to "yes" is necessary to make use of the authentication agent. Refer to the man page <font face="courier new"><small>ssh-agent (1)</small></font> for further information.</td></tr>
+<tr>
+<td>ForwardX11</td> 
+<td>no</td>
+<td>Otherwise X11 connections are automatically redirected over the secure channel.</td></tr>
+<tr> 
+<td>GatewayPorts</td> 
+<td>no</td>
+<td>No remote hosts are allowed to connect to a local forwarded port.</td></tr> 
+<tr>
+<td>PasswordAuthentication</td> 
+<td>no</td>
+<td>Disables the use of password authentication.</td></tr>
+<tr>
+<td>Protocol</td>
+<td>2,1</td>
+<td>The order of precedence of version 1 and version 2 protocol. As version 2 provides better security, the recommended order is "2" followed by "1". If you are not using version "1" at all, just list "2" here.</td></tr>
+<tr>
+<td>RhostsAuthentication</td> 
+<td>no</td>
+<td>RhostAuthentication is not secure. A value of "yes" slows down the client; "no" is recommended.</td></tr>
+<tr> 
+<td>RhostsRSAAuthentication</td> 
+<td>no</td>
+<td>RhostsRSAAuthentication is based on host keys only and is therefore not recommended. It is no longer supported in the version 2 protocol.</td></tr>
+<tr> 
+<td>RSAAuthentication</td> 
+<td>yes</td>
+<td>RSA authentication is only attempted if a RSA key exists for the user.</td></tr>
+<tr> 
+<td>StrictHostKeyChecking</td> 
+<td>yes</td>
+<td>Disables any automatic addition of host keys to the user's files indicating any known hosts. If the host key has changed, the connection is refused. This provides maximum protection against attacks.</td></tr></table>
+</td></tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><br>
+<div align=right></div>
+</td>
+<td ALIGN=LEFT VALIGN=TOP><br><b><font face="Arial"><font color="#008000">Configure the sshd_config file</font></font></b>
+<p>The <font face="courier new"><small>sshd_config</small></font> file is the per-system configuration file used by the <font face="courier new"><small>sshd</small></font> daemon. We recommend that all configurable values be set so that the program's results are more predictable during version upgrades, a time when program defaults can change. Refer to the man page <font face="courier new"><small>sshd(8)</small></font> for a detailed explanation of all available values. We concentrate here on values that may impact the security of the overall configuration.
+
+<p>You need to make changes as part of ongoing maintenance. Specifically, these include:
+<ul>
+<li><font face="courier new"><small>AllowHosts</small></font>: Change this to the list of hosts and domains that are allowed to connect to your server. 
+<li><font face="courier new"><small>AllowUsers</small></font>: Change this to the list of users who can connect to your server. 
+<li><font face="courier new"><small>ListenAddress</small></font>: This directive lists the IP address(es) where the <font face="Courier new"><small>sshd</small></font> daemon listens for incoming connection requests. For multi-homed hosts, including those with dial in IP access, you may want to define the interfaces that <font face="courier new"><small>sshd</small></font> listens to. 
+</ul>
+<p><table cellpadding=3 cellspacing=3 border=1>
+<tr>
+<td><b>Option</b></td>
+<td><b>Recommendation</b></td>
+<td><b>Description</b></td>
+<tr>
+<td>Ciphers</td>
+<td>blowfish-cbc</td>
+<td>Cipher to use for version 2 encryption.</td></tr>
+<tr>
+<td>DSAAuthentication</td> 
+<td>yes</td>
+<td>DSA authentication is allowed.</td></tr>
+<tr> 
+<td>IgnoreRhosts</td>
+<td>yes</td>
+<td><font face="courier new"><small>.rhosts</small></font> and <font face="courier new"><small>.shosts</small></font> in user direcotories are ignored.</td></tr>
+<tr>
+<td>IgnoreUserKnownHosts</td> 
+<td>yes</td>
+<td>Known hosts contained in user specific files are ignored.</td></tr>
+<tr>
+<td>PasswordAuthentication</td> 
+<td>no</td>
+<td>Password authentication is not allowed. Users are authenticated based on keys only.</td></tr>
+<tr>
+<td>PermitEmptyPasswords</td> 
+<td>no</td>
+<td>When password authentication is allowed, this specifies whether login to accounts with empty passwords is allowed.</td></tr>
+<tr>
+<td>PermitRootLogin</td> 
+<td>without-password</td> 
+<td>Root login is allowed with a user key for root only.</td></tr>
+<tr> 
+<td>Protocol</td> 
+<td>2,1</td>
+<td>The order of precedence of version 1 and version 2 protocol. As version 2 provides better security, the recommended order is "2" followed by "1". If you are not using version "1" at all, just list "2" here.</td></tr>
+<tr>
+<td>RhostsAuthentication</td> 
+<td>no</td>
+<td>RhostAuthentication is not secure. A value of "yes" slows down the client; "no" is recommended.</td></tr>
+<tr> 
+<td>RhostsRSAAuthentication</td> 
+<td>no</td>
+<td>RhostsRSAAuthentication is based on host keys only and is therefore not recommended. It is no longer supported in the version 2 protocol.</td></tr>
+<tr> 
+<td>RSAAuthentication</td>
+<td>yes</td>
+<td>RSA authentication is allowed. If you do not need version 1, set the value to "no".</td></tr>
+<tr> 
+<td>StrictModes</td> 
+<td>yes</td>
+<td>Strict checks on ownership and access rights for all user files are enabled. This avoids attacks based on insufficient protection of such files.</td></tr></table>
+</td></tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial"><font size=+0>Setting Up a User Account</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>To set up a SSH-enabled user account, you first need to create the necessary keys.</td></tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+<td ALIGN=LEFT VALIGN=TOP><b><font face="Arial"><font color="#008000">Create a version 1 user key</font></font></b>
+<p>The program <font face="courier new"><small>ssh-keygen</small></font> is used to create user keys. The user needs to enter a passphrase twice to protect the private key against unauthorized use. This passphrase is provided prior to any use.
+<pre><small>
+$ ssh-keygen
+Generating RSA keys:  Key generation complete.
+Enter file in which to save the key (/home/jdoe/.ssh/identity):
+Enter passphrase (empty for no passphrase):********
+Enter same passphrase again:********
+Your identification has been saved in /home/jdoe/.ssh/identity.
+Your public key has been saved in /home/jdoe/.ssh/identity.pub.
+The key fingerprint is: 
+76:37:9d:a6:cb:f8:8e:c1:4c:9d:65:8b:aa:3d:7b:d6 jdoe@host1
+</small></pre>
+<p>This produces two files:
+<pre><small>
+$ ls -la ~/.ssh
+total 4
+drwx------   2 jdoe      csd        1024 Nov 22 00:16 .
+drwx------  23 jdoe      csd        1024 Nov 21 23:51 ..
+-rw-------   1 jdoe      csd         529 Nov 22 00:16 identity
+-rw-r--r--   1 jdoe      csd         333 Nov 22 00:16 identity.pub
+</small></pre></td></tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+<td ALIGN=LEFT VALIGN=TOP><b><font face="Arial"><font color="#008000">Create a version 2 user key</font></font></b>
+<p>The program <font face="courier new"><small>ssh-keygen</small></font> is used to create version 2 user keys but executes longer than for version 1 keys. The user needs to enter a passphrase twice to protect the private key against unauthorized use.
+<pre><small>
+$ ssh-keygen -d
+Generating DSA parameter and key.
+Enter file in which to save the key (/home/jdoe/.ssh/id_dsa):
+Enter passphrase (empty for no passphrase):********
+Enter same passphrase again:********
+Your identification has been saved in /home/jdoe/.ssh/id_dsa.
+Your public key has been saved in /home/jdoe/.ssh/id_dsa.pub.
+The key fingerprint is:
+fd:cf:32:64:b1:5d:6e:e0:b3:ba:eb:5b:74:41:ee:94 jdoe@host1
+</small></pre>
+<p>This produces two more files (assuming that the user has created the version 1 keys first):
+<pre><small>
+$ ls -la ~/.ssh
+total 6
+drwx------   2 jdoe      csd        1024 Nov 24 21:41 .
+drwx------  23 jdoe      csd        1024 Nov 24 21:24 ..
+-rw-------   1 jdoe      csd         736 Nov 24 21:41 id_dsa
+-rw-r--r--   1 jdoe      csd         604 Nov 24 21:41 id_dsa.pub
+-rw-------   1 jdoe      csd         529 Nov 22 00:16 identity
+-rw-r--r--   1 jdoe      csd         333 Nov 22 00:16 identity.pub
+</small></pre>
+</td></tr>
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+<td ALIGN=LEFT VALIGN=TOP><b><font face="Arial"><font color="#008000">Transfer public keys to remote hosts</font></font></b>
+<p>Users create their public/private key pairs with <font face="courier new"><small>ssh-keygen</small></font> as outlined above. Once these are created, the public keys <font face="courier new"><small>~/.ssh/identity.pub</small></font> and/or <font face="courier new"><small>~/.ssh/id_dsa.pub</small></font> need to be transferred to the user's directory on all machines where they wish to login as <font face="courier new"><small>~/.ssh/authorized_keys</small></font> (for version 1) and as <font face="courier new"><small>~/.ssh/authorized_keys2</small></font> (for version 2). However, since the public keys have not yet been installed on these machines, <font face="courier new"><small>ssh</small></font> apparently cannot be used to make this transfer. This transfer requires system administrator assistance.
+
+<p>System administrators at large sites find it difficult to maintain and distribute public keys. As a result, many sites do not require public key-based authentication but allow password authentication, given that SSH encryption avoids cleartext password transmissions over insecure networks. The changes to accommodate this approach are outlined below.</td></tr>
+<tr>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><br>
+<div align=right></div>
+</td>
+<td ALIGN=LEFT VALIGN=TOP><br><b><font face="Arial"><font color="#008000">Accessing a remote host</font></font></b>
+<p>Once an administrator stores the required public keys as authorized keys, the user can use <font face="courier new"><small>ssh</small></font> to connect to a remote host. In order to do so, the user needs to provide the passphrase that was given as the key was created:
+<pre>
+$ ssh remotehost 
+Enter passphrase for RSA key 'jdoe@host1':********
+Last login: Wed Nov 22 00:36:42 2000 from host1
+[jdoe@remotehost ~]$  
+</pre>
+<p>The user has now established an encrypted connection to the remote host and has been authenticated using strong public key cryptography.
+</td></tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial"><font size=+0>Configuring for Password Authentication</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>You need to update <font face="courier new"><small>ssh_config</small></font> and <font face="courier new"><small>sshd_config</small></font> to allow password authentication. If you use this setup, users are not required to use public key authentication but they can still do so at any time.
+
+<p>Change the following entry in both configuration files from "no" to "yes":
+<p><table cellpadding=3 cellspacing=3 border=1>
+<tr>
+<td><b>Option</b></td>
+<td><b>Recommendation</b></td>
+<td><b>Description</b></td></tr>
+<tr>
+<td>PasswordAuthentication</td> 
+<td>yes</td>
+<td>Password authentication is allowed. Users are authenticated based on their established passwords.</td></tr></table>
+
+<p>For <font face="courier new"><small>sshd_config</small></font>, we strongly recommend that you not change the following two entries from the recommended values:
+<p><table cellpadding=3 cellspacing=3 border=1>
+<tr>
+<td><b>Option</b></td>
+<td><b>Recommendation</b></td>
+<td><b>Description</b></td>
+<tr>
+<td>PermitEmptyPasswords</td> 
+<td>no</td>
+<td>When password authentication is allowed, this specifies whether login to accounts with empty passwords is allowed.</td></tr>
+<tr>
+<td>PermitRootLogin</td> 
+<td>without-password</td> 
+<td>Root login is allowed with a user key for root only. Consider disabling any root login by setting the value to "no". In such cases, users may gain root privileges via <font face="courier new"><small>su</small></font>. All users authorized to do so should use public key authentication instead of password authentication.</td></tr></table> 
+
+<p>Keep in mind <font face="courier new"><small>sshd_config</small></font> changes need to be made on all remote hosts to which users want to connect.
+</td></tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><br>
+<div align=right></div>
+</td>
+<td ALIGN=LEFT VALIGN=TOP><br><b><font face="Arial"><font color="#008000">Access a remote host</font></font></b>
+<p>Once the <font face="courier new"><small>ssh</small></font> tools are available on the local host and <font face="courier new"><small>sshd</small></font> is running on the remote host, users can use <font face="courier new"><small>ssh</small></font> to connect to that remote host. The user needs to provide the remote password. The password is encrypted as part of establishing the network connection.
+<pre>
+$ ssh remotehost 
+jdoe@remotehost's password:********
+Last login: Wed Nov 22 00:36:42 2000 from host1
+[jdoe@remotehost ~]$  
+</pre>
+<p>The user has now established an encrypted connection to the remote host and has been authenticated using strong public key cryptography.
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial"><font size=+0>Tripwire Configuration</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>This section presents the Tripwire configuration for the SSH system once it is installed. Almost all files are read-only, and none of their attributes should change. One exception is <font face="courier new"><small>/etc/ssh/sshd.pid</small></font>. The process ID file changes each time the daemon starts.
+
+<p>In addition, you may need to perform maintenance on the <font face="courier new"><small>/etc/ssh/ssh_config</small></font> and <font face="courier new"><small>/etc/ssh/sshd_config</small></font> files to change various configuration options. All of these files only change when you change them, and any other changes are unexpected.
+<pre>
+@@define DYNAMIC               E+pinugc-sam0123456789 
+
+/etc/ssh/sshd.pid                        @@DYNAMIC 
+
+@@define BINARY                E+pinugsamc1-023456789 
+
+/etc/init.d/sshd                        @@BINARY
+/etc/ssh/rc0.d/K57sshd                  @@BINARY
+/etc/ssh/rc1.d/K57sshd                  @@BINARY
+/etc/ssh/rc2.d/S99sshd                  @@BINARY
+/etc/ssh/known_hosts                    @@BINARY
+/etc/ssh/ssh_host_key                   @@BINARY 
+/etc/ssh/ssh_host_key.pub               @@BINARY
+/etc/ssh/ssh_host_key_dsa               @@BINARY 
+/etc/ssh/ssh_host_key_dsa.pub           @@BINARY 
+/etc/ssh/ssh_config                     @@BINARY
+/etc/ssh/sshd_config                    @@BINARY
+/usr/local/bin/ssh                      @@BINARY
+/usr/local/bin/slogin                   @@BINARY
+/usr/local/bin/ssh-keygen               @@BINARY
+/usr/local/bin/ssh-agent                @@BINARY
+/usr/local/bin/ssh-add                  @@BINARY
+/usr/local/bin/scp                      @@BINARY
+/usr/local/sbin/sshd                    @@BINARY
+/usr/local/man/man1/ssh.1               @@BINARY
+/usr/local/man/man1/ssh-keygen.1        @@BINARY
+/usr/local/man/man1/ssh-agent.1         @@BINARY
+/usr/local/man/man1/ssh-add.1           @@BINARY
+/usr/local/man/man1/scp.1               @@BINARY
+/usr/local/man/man1/slogin.1            @@BINARY
+/usr/local/man/man8/sshd.8              @@BINARY
+/usr/local/man/man8/sftp-server.8       @@BINARY
+</pre>
+<p>Normal maintenance may also cause the <font face="courier new"><small>/etc/ssh/known_hosts</small></font> file to change if you use host authentication. You need to make changes to this file when you add or remove host keys or when you replace the old keys for a host by new ones. If you plan to change this file, include the following line into your Tripwire configuration:
+<pre>
+/etc/ssh/known_hosts                    @@BINARY
+</pre>
+</td></tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial"><font size=+0>Additional Resources</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>We recommend that you stay current with the SSH suite of security tools by consulting the following additional resources:
+<ul>
+<li>The OpenSSH FAQ, available at <a href="http://www.openssh.com/faq.html">http://www.openssh.com/faq.html</a>
+<p><li>The SSH FAQ, available at <a href="http://www.tigerlair.com/ssh/faq/">http://www.tigerlair.com/ssh/faq/</a>. This site lists other sites where the FAQ is mirrored. You should check the FAQ often for advice. 
+<p><li>The SSH News Group - The news group comp.security.ssh is available at <a href="http://www.deja.com/=liszt/dnquery.xp?query=-g                    omp.security.ssh">http://www.deja.com/=liszt/dnquery.xp?query=-g                    omp.security.ssh</a>. You should read this frequently to find out about software updates and review questions and answers from SSH users.
+</td></tr>
+
+
+
+</body>
+</html>
+
+

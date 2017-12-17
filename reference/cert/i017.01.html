@@ -1,0 +1,792 @@
+<html>
+
+<head>
+<title>Improving Security</title>
+</head>
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+
+<font face="Helvetica, Geneva, Arial">
+<small>
+
+<P>&nbsp;</P>
+
+<TABLE CELLSPACING=6 WIDTH="100%" >
+<TR>
+<TD VALIGN=top WIDTH=120><B><FONT SIZE=-1>Implementation Details</FONT></B>
+</TD>
+
+<TD VALIGN=top><B><FONT SIZE=+2>Configuring NCSA httpd and Web-server content
+directories on a Sun Solaris 2.5.1 host</FONT></B> </TD>
+</TR>
+
+<TR>
+<TD WIDTH=120></TD>
+
+<TD VALIGN=top>&nbsp; 
+<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=4 >
+<TR>
+<TD bgcolor="#ccddff"><FONT SIZE=-1>Applies to the practice:<BR>
+<A HREF="../practices/p017.html">Configure the Web server to enhance
+security</A></FONT><FONT SIZE=-2>.</FONT> 
+<P><FONT SIZE=-1>Applicable technologies:<BR>
+NCSA httpd server; Solaris 2.5.1 operating system</FONT> </P>
+</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp; </P>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120></TD>
+
+<TD VALIGN=top>This implementation example describes how to build, install
+and configure NCSA Web server software, version 1.5.2a<SUP>1</SUP> on a
+host running Sun Solaris version 2.5.1. In addition, recommended access
+control settings will be covered for files and directories associated with
+the Web server and the content it will be serving. It is assumed that you
+have a Solaris development platform separate from the deployment Solaris
+host. The deployment host should be prepared with a minimized, secure configuration
+suitable to support and operate a public Web server. 
+<P>
+<HR SIZE="1" WIDTH="20%" ALIGN=LEFT NOSHADE><SUP>1</SUP><FONT SIZE=-1>
+NCSA (National Center for Supercomputing Applications, University of Illinois)
+httpd version 1.5.2a, current as of March 21, 1997. It is available for
+<A HREF="http://hoohoo.ncsa.uiuc.edu/docs/setup/Compilation.html">downloading</A>.]</FONT>
+</P>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top COLSPAN=2 HEIGHT=10>
+<HR SIZE="1"></TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120><B>General configuration approach</B> </TD>
+
+<TD VALIGN=top>There are three steps in setting up the Web server in a
+secure manner: 
+<UL>
+<LI>Set up and use the chroot facility provided by Sun Solaris. </LI>
+
+<LI>Configure the server content directories. </LI>
+
+<LI>Build and configure the Web server to make best use of the first two
+steps. </LI>
+</UL>
+
+<P>Each of these steps is described in detail below. </P>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top COLSPAN=2>
+<HR SIZE="1"></TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120><B>Setting up for changing the root directory</B>
+</TD>
+
+<TD VALIGN=top>Changing the root directory in Solaris requires the creation
+of a subtree in the file hierarchy that enables the Web server to operate
+within that subtree independently of the remaining files on the system.
+The steps to be taken are described below. 
+<P><B>NOTE</B>: All actions in this section must be done as root using
+/bin/sh as the shell. </P>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120>
+</TD>
+
+<TD><B><FONT COLOR="#005500">Create a user www in group www who will own
+all the files in the server root area.</FONT></B> 
+<P>The example below assumes that the user www will have a home directory
+in /home/www. Change it suitably for your own situation. Note also that
+there are no security implications for the groupid and userid numbers show
+(999 in both cases). In the third line below, set the password as desired
+-- a hard-to-guess password.</P>
+
+<PRE><TT>groupadd -g 999 www&nbsp;</TT>&nbsp;
+<TT>useradd -u 999 -g www -s /bin/sh -d /home/www www</TT>&nbsp;
+<TT>passwd www</TT></PRE>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120>
+</TD>
+
+<TD><B><FONT COLOR="#005500">Set up the directory for the Web server and
+the directory into which the server will chroot.</FONT></B> 
+<P>The example below assumes that the server's directory is /www and the
+chrooted directory is /www/daemon_root.</P>
+
+<PRE><TT>chown www /www</TT>&nbsp;
+<TT>chgrp www /www</TT>&nbsp;
+<TT>ROOT=/www/daemon_root</TT>&nbsp;
+<TT>export ROOT</TT></PRE>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120>
+</TD>
+
+<TD><B><FONT COLOR="#005500">Download the <A HREF="data/Solaris.2.5.1/mkchroot.sh">mkchroot.sh</A>
+script file and execute it. Then edit ${ROOT}/etc/passwd and ${ROOT}/etc/group
+to contain entries only for nobody and www, replacing the text in the password
+fields with an asterisk.</FONT></B> 
+<P><FONT COLOR="#005500">You now have created an environment appropriate
+for <B>chrooting </B>the Web server into /www/daemon_root (or whatever
+you have chosen for the ROOT directory).</FONT> </P>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top COLSPAN=2>
+<HR SIZE="1"></TD>
+</TR>
+
+<TR>
+<TD VALIGN=top align=LEFT WIDTH=120><B>Securing content directories</B>
+</TD>
+
+<TD VALIGN=top>The directory setup being suggested here assumes that you
+will be <B>chrooting </B>into a directory as set up in the previous step.
+For additional security, two Web server-related directories (logs and conf)
+will be created outside the chroot directory so that the chances of logs
+or configurations being corrupted are minimized. The steps are described
+below. </TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120>
+</TD>
+
+<TD><B><FONT COLOR="#005500">Create the following directories.</FONT></B>
+
+<PRE><TT>mkdir /www/conf</TT>&nbsp;
+<TT>mkdir /www/logs</TT>&nbsp;
+<TT>mkdir /www/bin</TT>&nbsp;
+<TT>      </TT></PRE>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120>
+</TD>
+
+<TD><B><FONT COLOR="#005500">Protect the conf, logs, and bin directories.</FONT></B>
+
+<P>These files and directories should be strongly protected from unauthorized
+uses and hence should be readable only by the group and writable only by
+the owner. All others should have no visibility into them at all. In the
+case of the bin directory, execute privileges are required for both the
+owner and group. The commands below secure the directories and the files
+within them:</P>
+
+<PRE><TT>chmod 750 /www/conf /www/logs /www/bin</TT></PRE>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120>
+</TD>
+
+<TD><B><FONT COLOR="#005500">Protect all files in the ${ROOT}/cgi-bin,
+${ROOT}/htdocs, and ${ROOT}/icons areas.</FONT></B> 
+<P>The Web server subtrees rooted at <B>cgi-bin</B>, <B>htdocs</B>, and
+<B>icons </B>should be protected to allow the files to be read by the Web
+server while limiting their ability to be changed by other users and processes
+unexpectedly. </P>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120>
+</TD>
+
+<TD><B><FONT COLOR="#005500">Set proper ownership for all files and directories.</FONT></B>
+
+<P>For the directory subtrees <B>cgi-bin</B>, <B>htdocs</B>, and <B>icons</B>,
+the owner and group can be set to <B>www </B>and <B>www</B>, limiting the
+access to these files by those people who are members of the www group
+and the www user exclusively. Specific permission settings shown below
+will allow appropriately limited access to specific files for those users
+(for example nobody which is the user running the Web server). The following
+command can be used to properly set the file and directory ownerships for
+these directory trees:</P>
+
+<PRE><TT>chown -R www:www ${ROOT}/cgi-bin ${ROOT}/htdocs ${ROOT}/icons</TT></PRE>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120>
+</TD>
+
+<TD><B><FONT COLOR="#005500">Protect the ${ROOT}/cgi-bin directory.</FONT></B>
+
+<P>The <B>${ROOT}/cgi-bin</B> directory can contain three different types
+of files: data files, executable shell scripts, and program binaries. All
+the scripts and program binaries should be executable by anyone (recall
+that the Web server runs as user <B>nobody</B>) and all files should be
+readable by anyone.</P>
+
+<P>The <B>${ROOT}/cgi-bin</B> directory, and all subdirectories under it,
+should be protected to allow owner and group read and execute access (555),
+and can be done as follows:&nbsp;</P>
+
+<PRE><TT>find ${ROOT}/cgi-bin -type d -exec chmod 555 {} \;</TT></PRE>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120>
+</TD>
+
+<TD><B><FONT COLOR="#005500">Protect ${ROOT}/htdocs/ and ${ROOT}/icons/.</FONT></B>&nbsp;
+
+<P>The files under <B>${ROOT}/htdocs</B> and <B>${ROOT}/icons</B> are limited
+to providing data to the server for downloading to the user's browser.
+For that reason, they can be protected so that only the owner can change
+things, and anybody can read them, using the following commands:</P>
+
+<PRE><TT>chmod 755 ${ROOT}/htdocs ${ROOT}/icons</TT>&nbsp;</PRE>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120>
+</TD>
+
+<TD><B><FONT COLOR="#005500">In order to run the Web server in both a chrooted
+and a regular environment without having to change configuration files,
+issue the following commands:</FONT></B> 
+<PRE><TT>mkdir ${ROOT}/www</TT>&nbsp;
+<TT>cd ${ROOT}/www</TT>&nbsp;
+<TT>ln -s ../ daemon_root</TT></PRE>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top COLSPAN=2>
+<HR SIZE="1"></TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120><B>Configuring and securing</B> <B>the Web server</B>
+</TD>
+
+<TD VALIGN=top>In the process of building, installing, and configuring
+the Web server software and operating system details, you will be confronted
+with a large number of options and settings which will affect the security
+of the software and the way in which the software and system operate. These
+include compilation settings, installation options and access controls,
+and run-time configuration settings. Keep the following in mind when considering
+what settings to enable and what values to assign: 
+<UL>
+<LI>Keep things simple. In general, the more settings you enable, the more
+complex the security ramifications you have to consider will be. </LI>
+
+<LI>Start with all options disabled, and then enable only those which you
+absolutely require. Record the original default values in configuration
+files and command line arguments for your reference. Then disable all settings
+and (re)enable only those that are necessary for your requirements. </LI>
+
+<LI>Beware of hidden defaults. The absence of an explicit setting does
+not necessarily mean that it is disabled. Hidden defaults may change between
+releases of software and in patches you apply to keep your software up-to-date.
+Make all settings explicit, even if you intend to keep the default values.
+</LI>
+
+<LI>Document the settings you have made. Even if you are the only person
+who will ever need to look at the configurations again, you will want to
+record what settings you made and why, to help you later when reconfiguring
+the server, diagnosing problems, or investigating security incidents. </LI>
+</UL>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top COLSPAN=2>
+<HR SIZE="1"></TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120><B>Planning</B> </TD>
+
+<TD VALIGN=top>Build a model of the Web server setup. Without a sufficient
+understanding of how your Web server software operates, and how to deploy
+it to implement your security and performance requirements, it will be
+difficult for you to know what settings and options are appropriate to
+build, install, and configure the software. You should be prepared to make
+several attempts to get everything working correctly in your isolated test
+environment. In some cases you may even have to modify parts of the software
+to get the server to behave according to your requirements. Sketching out
+your deployment ahead of time will help to guide you in determining necessary
+settings and to document your implementation. 
+<P>For example, one good security requirement is to prevent Web clients
+and CGI programs from gaining access to sensitive areas of the system,
+including the Web server logs, operating system programs and configuration
+files. A common approach to enforcing this type of requirement is to set
+up the Web server so that it operates within a chrooted environment. The
+Web server is configured so that the root of the filesystem is effectively
+moved to the top of a subtree of directories that contain only those programs
+and files that are to be accessible to Web clients and CGI programs.</P>
+
+<P>Implementing a chrooted environment for an NCSA server is illustrated
+as follows: In its default installation, the NCSA Web server creates a
+hierarchy in which the directories containing CGI programs and Web documents
+accessed by Web clients are located at the same level. Figure 1 shows this
+arrangement for an NCSA Web server installed under the default /usr/local/etc/httpd.</P>
+
+<CENTER><P>
+<HR SIZE="1" WIDTH="80%" NOSHADE></P></CENTER>
+
+<CENTER><P><B>Figure 1: Default layout of NCSA Web server implementation</B></P></CENTER>
+
+<CENTER><P></P></CENTER>
+
+<CENTER><P>
+<HR SIZE="1" WIDTH="80%" NOSHADE></P></CENTER>
+
+<P>In this default environment, files accessible to Web client programs
+in the CGI program directory (cgi-bin), Web document directory (htdocs),
+and graphics directory (icons), are located at the same level as the directories
+containing the Web server program (bin), configuration files (conf) and
+logs. It is convenient to have the bin, conf and logs directories at the
+same level, but they must be protected against accidental or malicious
+accesses. In addition, operating system utilities and data files called
+upon by the Web server and CGI programs are accessed from system directories
+(e.g., /usr/bin, /etc), which are likely to contain a variety of programs
+and data which, for security reasons, should not be accessible.</P>
+
+<P>To set up the chrooted environment, you recreate the arrangement of
+directories necessary for normal operation of the server under a separate
+subdirectory. You then copy only those operating system utilities and data
+files necessary for operation of the server and cgi-programs to their corresponding
+directories under the new separate subdirectory.</P>
+
+<CENTER><P>
+<HR SIZE="1" WIDTH="80%" NOSHADE></P></CENTER>
+
+<CENTER><P><B>Figure 2: Setup for a chrooted environment</B> </P></CENTER>
+
+<CENTER><P></P></CENTER>
+
+<CENTER><P>
+<HR SIZE="1" WIDTH="80%" NOSHADE></P></CENTER>
+
+<P>In the example depicted in Figure 2, the top of the Web server tree
+has been moved to /www (instead of /usr/local/etc/httpd) to simplify and
+shorten the path to it. The Web server program directory (bin), configuration
+directory (conf), and logs directory effectively remain where they were
+before. The chroot directory (/www/daemon_root) will appear to be the root
+directory (/) when the Web server is running. In other words, when the
+Web server is running, everything above the /www/daemon_root directory
+is inaccessible to Web client and CGI programs because they see that directory
+as /, above which they cannot navigate. Nevertheless, they can make use
+of system utilities and data because those resources have been copied from
+their original locations to the corresponding directory in the chrooted
+environment.</P>
+
+<P>The chrooted environment not only helps to simplify access controls
+to sensitive parts of the server, but also facilitates the protection of
+necessary sensitive files. For example, it is common for programs to refer
+to the system's password file (/etc/passwd) to identify user names associated
+with file ownership and access rights. In the conventional environment,
+this makes the system's password file subject to undesirable exposure.
+The copy of the /etc/passwd file in the chrooted environment need not have
+all the entries of the original file; any sensitive information per record
+in the file can be erased.</P>
+
+<P>To implement the chrooted environment with the NCSA Web server software,
+you will need to modify some of the httpd source code so that the server
+software operates correctly. These source code changes are listed at the
+end of this document.</P>
+
+<P>In order to both protect configuration and log files from being compromised
+and avoid interfering with the operation of the NCSA Web server as currently
+implemented, we suggest a two step approach:</P>
+
+<UL>
+<LI><A HREF="data/Solaris.2.5.1/securelogs.tar">Download
+the securelogs utility</A>. This tar file contains the sources and a binary
+which lets the server write to log files within the chrooted environment
+but which are physically located outside (in the example drawn above, in
+/www/logs) and connected to the files within the chrooted environment (/www/daemon_root/logs)
+via named pipes. Install the binary in <PRE>/www/bin</PRE></LI>
+
+<LI>Ensure that the configuration files actually used by the WWW server on startup (located in the <PRE>/www/daemon_root/conf</PRE> directory) are the
+same as those outside and more protected (in <PRE>/www/conf</PRE>) before starting the Web server. </LI>
+</UL>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top COLSPAN=2>
+<HR SIZE="1"></TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120><B>Compiling the NCSA httpd program source code</B>
+</TD>
+
+<TD VALIGN=top>Since the public Web server host does not have the facilities
+installed on it to compile and build software, the NCSA httpd Web server
+software must be built on a separate, compatible development platform.
+For this example, the server software will be compiled on a Sun Solaris
+2.5.1 system with the developer system support software installed, and
+using the freely available GNU C compiler<SUP>2</SUP>. 
+<P>
+<HR SIZE="1" WIDTH="20%" ALIGN=LEFT NOSHADE><SUP>2</SUP><FONT SIZE=-1>
+GNU C compiler (gcc), version 2.7.2, is available for <A HREF="ftp://prep.ai.mit.edu/pub/gnu/gcc/">download</A>.</FONT>
+
+<HR SIZE="1" WIDTH="20%" ALIGN=LEFT NOSHADE></P>
+
+<P>Carefully read the directions provided in the documentation accompanying
+the httpd source code. Compilation options for NCSA httpd are set in the
+src/Makefile and src/config.h files. All options (including non-security
+options) should be thoroughly reviewed and explicitly set before you compile
+the source code with make. </P>
+
+<P>The SECURE_LOGS option in config.h should be turned on to prevent CGI
+programs from accessing the httpd log files.<SUP>3</SUP> This will help
+to prevent accidental and malicious modification of the Web server logs
+via the CGI interface.</P>
+
+<P>
+<HR SIZE="1" WIDTH="20%" ALIGN=LEFT NOSHADE><SUP>3</SUP><FONT SIZE=-1>
+If logging capabilities are needed by the CGI programs, use separate application-specific
+log facilities.</FONT> 
+<HR SIZE="1" WIDTH="20%" ALIGN=LEFT NOSHADE></P>
+
+<P>NCSA httpd version 1.5.2 optionally supports md5, kerberos v.4, and
+kerberos v.5 authentication. However, these authentication mechanisms are
+currently not supported by many Web client programs. If the clients you
+expect to serve have such authentication turn them on in the src/config.h
+and src/Makefiles files.</P>
+
+<P>If you need to change compile-time options after having built the software,
+be sure to remove binaries and object files produced during the previous
+compilation before executing make again to rebuild the software. This is
+necessary to ensure that your revised options are reflected in all applicable
+components of the software, and that old object files are not incorporated
+by mistake. To remove obsolete files execute the following command:</P>
+
+<PRE>make clean</PRE>
+
+<P>Afterward, check that there are no leftover obsolete object files and
+binaries. </P>
+
+<P>More specific changes are required to enable NCSA httpd 1.5.2 to operate
+reasonably in a chrooted environment. <A HREF="tools/Solaris.2.5.1/ncsa-1.5.2a-patches.tar">Download
+the required patches</A> and apply them to the sources in the src subdirectory.
+Alternatively, you can directly <A HREF="tools/Solaris.2.5.1/ncsa-1.5.2a-mods.tar">download
+the modified versions</A> of the three affected files and recompile them
+to suit your needs.</P>
+
+<P>Finally, you can directly <A HREF="tools/Solaris.2.5.1/ncsa-1.5.2a-httpd.tar">download
+a binary file </A>that will work in the environment created in this and
+related implementations.</P>
+
+<P>Make the server daemon using your standard approach.</P>
+
+<P>&nbsp; </P>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top COLSPAN=2>
+<HR SIZE="1"></TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120><B>Installing</B> </TD>
+
+<TD VALIGN=top>By default, the installation of httpd also results in the
+installation of example CGI programs. Remove all scripts and reinstall
+individually as needed and after careful review. Security holes found in
+these programs are more likely to be exploited on a large scale, given
+that these programs are present on a large number of hosts and that details
+of exploitation will be distributed quickly. An example of such a security
+hole is the phf CGI script (see <A HREF="/advisories/CA-96.06.cgi_example_code.html">CERT advisory
+96.06</A>). The directory structure and organization is covered in another
+installation example. 
+<P>The installation of the server is in two phases: first the installation
+of the server and its attendant files. Second, the installation of files
+to be served including content pages, graphics, and, after careful review,
+scripts into the selected directories (usually in cgi-bin, htdocs, and
+icons). We cover each of these separately below. </P>
+
+<P>The steps to take to start the server are described in a separate section
+called <B>Launching</B>. </P>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120><B>Server Installation</B></TD>
+
+<TD></TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120>
+</TD>
+
+<TD VALIGN=top><B><FONT COLOR="#005500">Locate the daemon in /www/bin while
+the other executable files required for CGI procedures should be in ${ROOT}/cgi-bin.&nbsp;</FONT></B>&nbsp;
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120>
+</TD>
+
+<TD><B><FONT COLOR="#005500">If your cgi scripts require other programs
+(such as perl), these should go into ${ROOT}/bin with permissions set to
+555.</FONT></B>&nbsp; </TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120>
+</TD>
+
+<TD><B><FONT COLOR="#005500">Place your configuration files in /www/conf
+and edit them as shown in the Configuring section below. </FONT></B></TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120><B>Content Installation</B></TD>
+
+<TD></TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120>
+</TD>
+
+<TD><B><FONT COLOR="#005500">All content and graphic files (usually placed
+in htdocs and icons), are set to be read by anybody but with no other privileges.
+Script files are placed in cgi-bin and are set to be executable by anybody
+but with no other privileges. </FONT></B>
+<P><FONT COLOR="#000000">These are set with the following commands:</FONT><B><FONT COLOR="#005500">
+</FONT></B></P>
+
+<PRE><TT><FONT COLOR="#000000">find ${ROOT}/htdocs -type f exec chmod 644
+find ${ROOT}/icons  -type f exec chmod 644
+find ${ROOT}/cgi-bin -type f exec chmod 611
+</FONT></TT><B><FONT COLOR="#005500">         </FONT></B></PRE>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top COLSPAN=2 WIDTH=120>
+<HR SIZE="1"></TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120><B>Launching</B>
+</TD>
+
+<TD VALIGN=top>Setting up the server in this fashion requires that you
+launch the server in a specific way to increase the security of your server.
+The steps to be taken are described below but can be executed conveniently
+using the script found in the file <A HREF="data/Solaris.2.5.1/launchwww.sh">
+http://www.cert.org/security-improvement/implementations/data/Solaris.2.5.1/launchwww.sh</A>.
+First start the securelogs program in daemon mode. Second, copy the configuration
+files from the safe area (/www/conf) to the chrooted area (/www/daemon_root/conf).
+Finally, start the httpd server itself with the chroot command. The commands
+are: 
+<PRE>
+/www/bin/securelogs /www/daemon_root/logs /www/logs \
+   error_log access_log agent_log referer_log &amp;
+cp -p /www/conf/* /www/daemon_root/conf
+chroot /www/daemon_root /www/bin/httpd -d /conf/httpd.conf 
+</PRE>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120><B>Configuring</B>
+</TD>
+
+<TD VALIGN=top><B>Server configuration (httpd.conf)</B> 
+<P>There are many options that one can set in httpd.conf.&nbsp; For security
+reasons, you should set the following options:&nbsp;</P>
+
+<PRE><TT>Port&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 80
+TimeOut&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1200
+User&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nobody
+Group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #60001
+ServerName&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;the name of this server&gt;
+ServerAdmin&nbsp;&nbsp;&nbsp;&nbsp;&lt;email address of web site administrator&gt;
+ServerRoot&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /<SUP>4
+</SUP>ErrorLog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; logs/error_log
+TransferLog&nbsp;&nbsp;&nbsp;&nbsp; logs/access_log
+AgentLog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; logs/agent_log
+RefererLog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; logs/referer_log
+LogOptions&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Separate
+DNSMode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Maximum</TT></PRE>
+
+<P>
+<HR SIZE="1" WIDTH="20%" ALIGN=LEFT NOSHADE><SUP>4</SUP><FONT SIZE=-1>
+Assuming that you are going to use the chroot command to change the logical
+file-system root to the selected real root for the server.</FONT> 
+<HR SIZE="1" WIDTH="20%" ALIGN=LEFT NOSHADE></P>
+
+<P>Running the parent httpd process as root allows the use of port 80,
+a restricted port, which prevents a user process from masquerading as a
+Web server. Port 80 is also the standard port for httpd servers. Running
+the child processes as the user nobody limits the potential damage caused
+if the server or a CGI program is coerced into executing foreign code.</P>
+
+<P>See the practice on setting up the directory hierarchy for details on
+what the user nobody is able to access. In brief, nobody should only be
+allowed to access the minimal set of files it needs (i.e., static Web pages,
+CGI programs, icons).</P>
+
+<P>The ServerName option is set to the hostname. This option is necessary
+for relative URLs to work correctly. The ServerAdmin option is set to the
+electronic mail address of the person responsible for the maintenance of
+the server. This enables external users to send mail to the right person
+in case of problems with the server. Finally, the ServerRoot option is
+set to the root directory of the server files. Since, in this case, the
+server runs in a chroot environment, it is set to &quot;/&quot;. The server
+then looks for log files in the directory /logs, configuration files in
+/conf, etc.</P>
+
+<P>All logging facilities should be turned on and the logs located in an
+appropriate place (here in the logs directory in the ServerRoot directory).&nbsp;
+The LogOptions option allows for standard processing of some of the logs
+generated, so you can use readily available tools&nbsp; to process them.</P>
+
+<P>&nbsp; </P>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120>
+</TD>
+
+<TD><B>Resource configuration (srm.conf)</B> 
+<P>From a security perspective, set the options in srm.conf as follows:</P>
+
+<PRE><TT>DocumentRoot&nbsp;&nbsp;&nbsp; /htdocs
+ScriptAlias&nbsp;&nbsp;&nbsp;&nbsp; /cgi-bin/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /cgi-bin/
+Alias&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /icons/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /icons/
+IndexIgnore&nbsp;&nbsp;&nbsp;&nbsp; * */.??*</TT></PRE>
+
+<P>The static Web pages and the CGI programs are separated into two different
+directory trees to facilitate administrative control. CGI programs are
+potential sources of weaknesses, given that they are executed with the
+same privileges as the server. A hole in a CGI program can be as damaging
+as a hole in the server. Moreover, holes in CGI programs are more frequent
+than holes in the server, given that CGI programs are much less scrutinized
+for such bugs. Collecting all CGI programs in one directory and allowing
+only the Web master to write to the cgi-bin directory makes it easier to
+prevent problems.</P>
+
+<P>For now, setting IndexIgnore to &quot;* */.??*&quot; results in double
+protection against inadvertent disclosure of information about a directory
+since this forces all files to be ignored by the server when it prepares
+a directory listing.</P>
+
+<P>The source code of CGI programs should be kept outside the server hierarchy,
+although it should not be assumed that the absence of source code access
+alone prevents the exploitation of holes in CGI programs. The review of
+CGI program source code should be done through alternate distribution channels.</P>
+
+<P>More generally, only the necessary CGI programs should be kept in the
+hierarchy. Previous versions, debugging version, default CGI programs which
+were installed with the server should be removed or safeguarded in a separate
+area.</P>
+
+<P>By default, remove everything in the cgi-bin directory for a start.</P>
+
+<P>&nbsp; </P>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top WIDTH=120>
+</TD>
+
+<TD><B>Access configuration (access.conf)</B> 
+<PRE><TT>&lt;Directory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /cgi-bin&gt;
+AllowOverride&nbsp;&nbsp; None
+Options&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; None
+&lt;/Directory&gt;
+&lt;Directory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /htdocs&gt;
+Options&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; None
+AllowOverride&nbsp;&nbsp; None
+&lt;/Directory&gt;</TT></PRE>
+
+<P>The configuration file access.conf contains options controlling authentication
+and other file access features, such as server-side includes, automatic
+index generation, and symbolic link handling. These directives are specified
+for individual directories by enclosing then with the &lt;Directory&gt;
+sectioning directive. If a directory has no directives associated with
+it, values from its parent directory are used. If no directory in the path
+has any directives associated with it, server defaults are used. </P>
+
+<P>The access.conf file should not rely on server defaults, which may change
+when the server is upgraded. Also, httpd servers are configured by default
+for features, not for security. The access.conf file should at least contain
+directives for the cgi-bin and htdocs directories.</P>
+
+<P>In order to centralize access control, all access related options should
+be set in the file access.conf. AllowOverride None prevents global directives
+from being overridden by directives in .htaccess files.</P>
+
+<P>Unless required by the specific application, all features should be
+disabled using the Options directive. In the example above, no options
+are enabled for the cgi-bin and htdocs directories.</P>
+
+<P>If symbolic links are required by the application (e.g., to share pages
+across directories), the SymLinksIfOwnerMatch option should be used. Otherwise,
+following symbolic links should be disabled altogether. Disabling symbolic
+links is especially important when local users can add files to the htdocs
+hierarchy and, thus, create symbolic links to files they do not own.</P>
+
+<P>The ExecCGI option should not be turned on. This option allows the execution
+of CGI programs in the specified directory and is needed only when CGI
+programs and static pages are mixed in the same hierarchy.</P>
+
+<P>Server-side includes option should not be turned on.<SUP>5</SUP> Server-side
+includes allow Web pages to contain information generated on the fly (e.g.,
+the current date, number of hits). The execution of arbitrary programs
+by users represents a security risk.</P>
+
+<P>
+<HR SIZE="1" WIDTH="20%" ALIGN=LEFT NOSHADE><SUP>5</SUP><FONT SIZE=-1>
+Server-side includes introduce a substantial performance penalty, since
+they require the server to parse individual pages.</FONT> 
+<HR SIZE="1" WIDTH="20%" ALIGN=LEFT NOSHADE></P>
+
+<P>Automatic index generation should not be turned on. Although indexes
+do not present an intrinsic security risk, they may reveal too much information
+to an outside user. The above setup for the /htdocs and /cgi-bin defaults
+to not generating the index automatically.</P>
+
+<P>Since no restrictions are required on access, we have not used the &lt;LIMIT&gt;
+directives. This also removes the requirement to set up various authentication
+schemes.</P>
+
+<P><A HREF="tools/Solaris.2.5.1/ncsa-1.5.2-conf.tar">Example
+files</A> of all three configuration files are available. </P>
+</TD>
+</TR>
+</TABLE>
+
+</body>
+</html>

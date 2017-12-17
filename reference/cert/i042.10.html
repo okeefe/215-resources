@@ -1,0 +1,396 @@
+
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
+   <title>Using newarguslog to rotate log files on systems running Solaris 2.x 
+
+</title>
+</head>
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+<table CELLSPACING=1 CELLPADDING=1 WIDTH="100%">
+<tr>
+<td VALIGN=TOP WIDTH="105"><b><font face="Helvetica, Geneva, Arial">Implementation
+Details</font></b></td>
+
+<td VALIGN=TOP>
+<h2>
+<font face="Helvetica, Geneva, Arial">Using newarguslog to rotate argus
+log files on systems running Solaris 2.x&nbsp;</font></h2>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="105"></td>
+
+<td VALIGN=TOP>
+<table BORDER CELLSPACING=2 CELLPADDING=4 WIDTH="80%" >
+<tr>
+<td BGCOLOR="#CCDDFF">Applies to the practices:
+<br><a 
+href="../practices/p094.html">"Monitor and inspect network activities for unexpected behavior"</a>
+<br><a
+href="../practices/p091.html">"Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior"</a>
+
+<p>Applicable technologies:
+<br>argus; Sun Solaris 2.x; UNIX operating systems and derivatives</td>
+</tr>
+</table>
+&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"></td>
+
+<td VALIGN=TOP>Network packet information captured by <tt><a href="/security-improvement/implementations/i042.09.html">argus</a></tt>
+is stored in log files that can be accessed by various <tt>argus</tt> utilities.
+These files contain all logged data from a specified point in time. It
+is not practical to retain all data in a single file indefinitely, and
+available disk space may be limited. System administrators need to balance
+the demand for ready access to recent messages with the availability of
+disk space.&nbsp;
+<p><tt>newarguslog</tt> is a small script that periodically moves <tt>argus</tt>
+files to a different location. This allows you to retain a specified number
+of historical files, delete the oldest file, and create a new file to store
+any new messages arriving after <tt>newarguslog</tt> is executed. <tt>newarguslog</tt>
+is usually called via the cron-facility (e.g., every day, every Friday, on some other specified day of
+the week, or on the first day of each month.&nbsp;
+<p>This implementation describes how to use <tt>newarguslog</tt> on the
+Sun Solaris operating system, version 2.x. This approach also works on
+any UNIX operating system supporting <tt>/bin/sh</tt> and the <tt>cron</tt>
+system.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="105"><b><font face="Helvetica, Geneva, 
+
+Arial"><font color="#000000">Effort
+Estimates</font></font></b></td>
+
+<td>It should take no longer than five to ten minutes (depending on the
+tailoring necessary) to create the necessary script and enable periodic
+calling.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"><b><font face="Helvetica, Geneva,
+
+Arial">Preparation</font></b></td>
+
+<td VALIGN=TOP>Rotating the log files helps to reduce log file analysis
+time by an <tt>argus</tt> client. As long as past log files are still accessible
+and available, they can be analyzed by referencing the appropriate log
+file as a command line argument. See the appropriate manual pages for the
+arguments you need to provide to the <tt>argus</tt> clients.&nbsp;
+<p>To meet your requirements, you need to make three decisions before editing
+the <tt>newarguslog</tt> script and enabling a periodic call of this script.<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"></td>
+align=RIGHT></td>
+
+<td><b><font color="#005500"><font face="Helvetica, Geneva, Arial">Decide
+on the time period for rotating </font><tt><font size=+1>argus</font></tt><font face="Helvetica, Geneva, Arial">
+files.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105">&nbsp;</td>
+
+<td VALIGN=TOP>One week seems a reasonable time period for all hosts that
+monitor a network using <tt>argus</tt>. However, when a system administrator
+uses one of the <tt>argus</tt> utilities, the entire week's worth of data
+is processed. This may unnecessarily slow the searching process. To that
+end, we recommend rotating <tt>argus</tt> files on a daily basis.&nbsp;<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"></td>
+align=RIGHT></td>
+
+<td><b><font color="#005500"><font face="Helvetica, Geneva, Arial">Decide
+on a time of day to regularly analyze </font><tt><font size=+1>argus</font></tt><font face="Helvetica, Geneva, Arial">
+files.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105">&nbsp;</td>
+
+<td VALIGN=TOP>If a system administrator analyzes network data each morning,
+the <tt>argus</tt> file should be rotated shortly before that time. This
+supports the administrator in processing only the most recent 24 hour time
+period while not interfering with the ongoing collection of network data.&nbsp;<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"></td>
+align=RIGHT></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Decide
+how long historical data should be available online.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105">&nbsp;</td>
+
+<td VALIGN=TOP>This time period should be long enough to ensure that <tt>argus</tt>
+files can be analyzed whenever an incident is reported, perhaps even weeks
+after the events took place. We recommend retaining <tt>argus</tt> files
+online for two months.&nbsp;
+<p>This recommendation requires enough disk space to keep all the log files
+for whatever time period you select. Experiences has shown that even for
+small networks (between 5 and 7 hosts).  You can expect log files of 2
+to 15 MB per day.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"><b><font face="Helvetica, Geneva, Arial">Prepare
+the</font></b> <b><tt><font size=+1>newarguslog</font></tt></b> <b><font face="Helvetica, Geneva, Arial">script</font></b></td>
+
+<td VALIGN=TOP>There is no default file for <tt>newarguslog</tt> similar
+to the <tt><a href="http://www.cert.org/security-improvement/implementations/i041.09.html">newsyslog</a></tt>
+script for <tt><a href="http://www.cert.org/security-improvement/implementations/i041.08.html">syslogd</a></tt>,
+so you need to write your own. (see the <a href="#Examples">example</a>
+below)&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"></td>
+align=RIGHT></td>
+
+<td><b><font color="#005500"><font face="Helvetica, Geneva, Arial">Create
+a new </font><tt><font size=+1>newarguslog</font></tt><font face="Helvetica, Geneva, Arial">
+script.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105">&nbsp;</td>
+
+<td VALIGN=TOP>You can generate a <tt>newarguslog</tt> script easily by
+using the <tt><a href="http://www.cert.org/security-improvement/implementations/i041.09.html">newsyslog</a></tt>
+script as a starting point.&nbsp;
+
+<p>When the <tt>argus</tt> server writes to the log file, it first opens that file, writes the required
+information, and then closes the file. This means that, unlike syslog, there is no need to create 
+new log files after moving the old ones aside. The <tt>argus</tt> server will create the new log file if 
+necessary. In addition, no data is lost during the log file rotation process.<p>&nbsp;<br>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"></td>
+align=RIGHT></td>
+
+<td><b><font color="#005500"><font face="Helvetica, Geneva, Arial">Enable
+periodic execution of the </font><tt><font size=+1>newarguslog</font></tt><font face="Helvetica, Geneva, Arial">
+script.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105">&nbsp;</td>
+
+<td VALIGN=TOP>The <tt>newarguslog</tt> script is called to rotate specified
+log files at predefined times. While the script can be called manually,
+we recommend using the <tt>cron</tt> facility. User root privileges are
+required to move files and create a new file. The following entry for user
+root calls the script each day at 7 AM:&nbsp;
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <tt>0 7 * * * /usr/local/sbin/newarguslog</tt></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"><a NAME="Examples"></a><b><font face="Helvetica,
+Geneva, Arial">Example</font></b></td>
+
+<td VALIGN=TOP>The following is an example script for an <tt>argus</tt>
+server host. This example is based on the <tt><a href="http://www.cert.org/security-improvement/implementations/i041.09.html">newsyslog</a></tt>
+script and the guidance stated above.&nbsp;
+<pre><font size=-1>#!/bin/sh
+
+#
+# /usr/local/sbin/newarguslog - rotate argus files
+#
+
+
+LOGDIR = /var/adm/argus
+DAYSTOKEEP = 60
+N = $DAYSTOKEEP
+I = `expr $N - 1`
+
+
+if test -d $LOGDIR
+then
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cd $LOGDIR
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while [ $I -ge 0 ] ; do
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; test -f $LOG.$I &amp;&amp; mv $LOG.$I $LOG.$N
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; N = $I
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; I = `expr $I - 1`
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; done
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; test -f $LOG&nbsp;&nbsp; &amp;&amp; mv $LOG&nbsp;&nbsp; $LOG.0
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp /dev/null $LOG
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /bin/chmod 640 $LOG
+fi
+
+
+# end of file /usr/local/sbin/newarguslog</font></pre>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"><b><font face="Helvetica, Geneva, Arial">Other
+considerations</font></b></td>
+
+<td VALIGN=TOP>The above steps described the process of rotating log files,
+implementing rotation in a <tt>newarguslog</tt> script, and enabling periodic
+execution of this script. You need to consider the following additional
+topics to address site-specific needs.&nbsp;<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"></td>
+align=RIGHT></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Handle
+an increasing log file size.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105">&nbsp;</td>
+
+<td VALIGN=TOP>Starting with version 1.8, the <tt>argus</tt> utilities
+support compressed files created by the GNU <tt>gzip</tt> and <tt>compress</tt>
+utilities. You can modify <tt>newarguslog</tt>&nbsp; to compress the argus
+file named "0". To do so, replace the following two lines:&nbsp;
+<blockquote>
+<pre><font size=-1>...
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; test -f $LOG.$I &amp;&amp; mv $LOG.$I $LOG.$N
+
+...
+
+test -f $LOG&nbsp;&nbsp; &amp;&amp; mv $LOG&nbsp;&nbsp; $LOG.0
+
+...</font></pre>
+</blockquote>
+with&nbsp;
+<blockquote>
+<pre><font size=-1>...
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; test -f $LOG.$I.Z &amp;&amp; mv $LOG.$I.Z $LOG.$N.Z
+
+...
+
+test -f $LOG&nbsp;&nbsp; &amp;&amp; mv $LOG&nbsp;&nbsp; $LOG.0&nbsp; &amp;&amp;&nbsp; /bin/compress $LOG.0
+
+...</font></pre>
+</blockquote><p>&nbsp;<br>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"></td>
+align=RIGHT></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Include
+other functions.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105">&nbsp;</td>
+
+<td VALIGN=TOP>You can include other functions in the <tt>newarguslog</tt>
+script depending on your site's requirements. Examples include encrypting
+historical log files and sending cryptographic checksums to the system
+administrator.&nbsp;
+<p>In addition, you can rename each file to a name that includes the date
+in the filename instead of rotating the files each day and losing the oldest
+file.&nbsp;
+<p>To do so, use the following commands:&nbsp;
+<pre><font size=-1>...
+
+ACTDATE = `date +%Y.%m.0`&nbsp;
+for LOG in argus.log ; do
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; test -f $LOG&nbsp;&nbsp; &amp;&amp; mv $LOG&nbsp;&nbsp; $LOG.$ACTDATE
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/local/bin/md5sum $LOG.$ACTDAT |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /bin/mailx -s "NEWARGUSLOG: md5sum $LOG.$ACTDATE" md5sum@save.host.somewhere
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/local/bin/pgp -ea $LOG.$ACTDAT 0xABCDABCD
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp /dev/null $LOG
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /bin/chmod 640 $LOG $LOG.$ACTDAT.asc&nbsp;
+done
+
+...</font></pre>
+This example is based on two programs: <tt>md5sum</tt> and <tt>pgp</tt>.
+<tt>md5sum</tt>
+generates an MD5 checksum that can be used as a digital fingerprint. <tt>pgp</tt>
+is used here to encrypt the log file for a specific user (identified by
+the pgp keyid <tt>"0xABCDABCD"</tt>). You will need to replace the <tt>"0xABCDABCD"</tt>
+string with the keyid of the desired key to be used for encryption. Only
+the user with the passphrase that unlocks files encrypted with that key
+will be able to decrypt the log file. <tt>pgp</tt> will place an encrypted
+copy of the log file with the extension <tt>.asc</tt> in the same directory
+as the original log file. The original log file will not be deleted unless
+<tt>pgp</tt> is told otherwise. This allows instant access to the log files
+but provides a protected copy that can be decrypted later and used to compare
+both the log file and the decrypted copy to learn whether any modifications
+were made to the stored log file.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="105"><b><font face="Helvetica, Geneva, Arial"><font
+color="#000000">Tripwire
+Configuration</font></font></b></td>
+
+<td>The following is the <tt>tripwire</tt> configuration for the
+<tt>newarguslog</tt>
+script once installed. Only one file, the <tt>newarguslog</tt> script itself,
+requires monitoring by <tt>tripwire</tt>.&nbsp;
+<p>The following file should not change, and any changes are unexpected:&nbsp;
+<pre>
+
+
+<font size=-1>@@define BINARY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; E+pinugsamc1-023456789
+
+
+/usr/local/sbin/newarguslog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY</font>
+
+</pre>
+</td>
+</tr>
+</table>
+
+</body>
+</html>

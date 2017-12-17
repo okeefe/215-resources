@@ -1,0 +1,924 @@
+<html>
+
+<head>
+<title>Improving Security</title>
+</head>
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+<font face="Helvetica, Geneva, Arial">
+<small>
+
+<P>&nbsp; <TABLE  CELLSPACING=6 CELLPADDING=1 WIDTH="100%">
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P><B><FONT SIZE="-1">Implementation Details</FONT></B>
+      </TD><TD VALIGN=top>
+         <P><B><FONT SIZE="+2">Configuring Sun Solaris as a Web
+         server</FONT></B>
+      </TD></TR>
+   <TR>
+      <TD WIDTH=120>
+         <P>
+      </TD><TD>
+         <P>&nbsp; <TABLE BORDER=1 CELLSPACING=0 CELLPADDING=4
+         WIDTH="80%">
+            <TR>
+               <TD bgcolor="#CCDDFF">
+                  <P><FONT SIZE="-1">Applies to the
+                  practice:</FONT>&nbsp;<BR>
+                  
+                  <FONT
+                  SIZE="-1"><A HREF="../practices/p068.html">Offer
+                  only essential network services and operating
+                  system services on the server host
+                  machine.</A></FONT></P>
+                  
+                  <P><FONT SIZE="-1">Applicable
+                  technologies:</FONT>&nbsp;<BR>
+                  
+                  <FONT SIZE="-1">Solaris 2.5.1 operating
+                  system</FONT>
+               </TD></TR>
+         </TABLE>
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P>This section describes the information necessary to
+         create a minimally configured secure system on the Sun
+         Solaris operating system, version 2.5.1. These instructions
+         assume that this system will be enhanced separately to
+         provide additional required services (such as http service,
+         etc.).
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top COLSPAN=2 HEIGHT=10>
+         <P>
+         <HR SIZE="1">
+      
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P><B>Preparation tasks</B>
+      </TD><TD VALIGN=top>
+         <P>Before beginning, there is some information that you will
+         need to complete the installation and set-up of the new
+         server, as well as several software tools that you should
+         download and configure before beginning.&nbsp; These tools
+         will be referred to by later steps in the configuration
+         process. Please make sure you have all of the items outlined
+         in this section before progressing to subsequent sections.
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Necessary configuration
+         information.</FONT></B></P>
+         
+         <P><FONT COLOR="#000000">Before you begin the installation
+         process, there are several pieces of information that you
+         will need, and it is assumed you will have:</FONT> <LI>
+         <FONT COLOR="#000000">An IP address for the new
+         system.</LI></FONT> <LI> <FONT COLOR="#000000">The IP
+         address of the default router that the new machine will
+         use.</LI></FONT> <LI> <FONT COLOR="#000000">The netmask to
+         use for the new machine.</LI></FONT><BR>
+         
+         <FONT COLOR="#000000">If you do not have any of this
+         information, you should get it before proceeding
+         further.</FONT>
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Recommended security
+         patches.</FONT></B></P>
+         
+         <P>The recommended security patches are available either on
+         CD-ROM (if you have Sun's support service contract) or from
+         their Web site at
+         <A HREF="http://sunsolve.sun.com">http://sunsolve.sun.com</A>
+         (following the link for recommended and security bug patches
+         under Free Services). Patch clusters for specific versions
+         of Solaris are available from the above site, and detailed
+         instructions for applying the patches are available in the
+         patch cluster README file included with the patches.</P>
+         
+         <P>Once you have the recommended patches from Sun, you should
+         check the CERT Web site at
+         <A HREF="http://www.cert.org">http://www.cert.org</A> for
+         security advisories that may be applicable to Solaris
+         systems. For problems that do not yet have patches, advisories
+         may contain workarounds to limit exposure to vulnerabilities.
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">MD5.</FONT></B></P>
+         
+         <P><FONT COLOR="#000000">If you do not already have a copy
+         of this tool (one</FONT> that creates a unique 128-bit
+         fingerprint of an input file<FONT COLOR="#000000">), you can
+         download it from the Web at </FONT><FONT
+         COLOR="#000000"><A HREF="ftp://ftp.cerias.purdue.edu/pub/tools/unix/crypto/md5">ftp://ftp.cerias.purdue.edu/pub/tools/unix/cerias/md5</A></FONT><FONT
+         COLOR="#000000">.&nbsp; You should build md5 on a secure
+         internal Solaris system.&nbsp; Instruction for the building
+         and use of md5 can be found as part of its
+         distribution.</FONT>
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Fix-modes.</FONT></B></P>
+         
+         <P><FONT COLOR="#000000">This tool for correcting the
+         protection modes on a number of Solaris files is available
+         from </FONT><FONT
+         COLOR="#000000"><A HREF="ftp://ftp.fwi.uva.nl/pub/solaris/fix-modes.tar.gz">ftp://ftp.fwi.uva.nl/pub/solaris/fix-modes.tar.gz</A></FONT><FONT
+         COLOR="#000000">.&nbsp; You should download this tool and
+         compile it on a Solaris 2.5.1 machine prior to transferring
+         it to the new sever, as the new server will not have a C
+         compiler installed as part of its secure
+         configuration.</FONT>
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Tripwire.</FONT></B></P>
+         
+         <P><FONT COLOR="#000000">If you do not already have a copy
+         of this tool, you can download it from the Web at
+         </FONT><FONT
+         COLOR="#000000"><A HREF="ftp://ftp.cerias.purdue.edu/pub/tools/unix/ids/tripwire/">ftp://ftp.cerias.purdue.edu/pub/tools/unix/ids/tripwire/</A></FONT><FONT
+         COLOR="#000000">. Alternately, both an open source and commercial version are available at <a href="http://www.tripwire.com">http://www.tripwire.com</a>. You should build this tool on a
+         secure internal Solaris system, and configure it for its
+         initial use on the new Solaris server.&nbsp; Instruction for
+         the building and use of tripwire can be found as part of its
+         distribution.</FONT>
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top COLSPAN=2>
+         <P>
+         <HR>
+      
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P><B>Install the base operating system</B>
+      </TD><TD VALIGN=top>
+         <H4><FONT COLOR="#005500">Isolate the Sun Solaris system on
+         the network.</FONT></H4>
+         
+         <P>Place the system to be configured on a secure internal
+         network segment, or disconnect it from the network, to
+         prevent the machine from being exposed to possible
+         compromise during the install procedure. Do not place it on
+         the external network where it will eventually live until
+         after the entire setup has been completed.
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Install the core operating
+         system (OS).</FONT></B></P>
+         
+         <P>The following instructions assume that you will be
+         installing the OS on a machine that includes a bit mapped
+         display, and that the install script will be running under
+         OpenWindows.&nbsp; If you are installing the OS from a text
+         based terminal, the instructions will be similar, except
+         that the commands will be mapped to function keys, described
+         at the bottom of each screen.&nbsp; For example, where you
+         will see a Continue button under OpenWindows, you will see a
+         menu including F2_Continue under the terminal version of the
+         install, and you will hit the F2 key to Continue.</P>
+         
+         <P>Follow the instructions that come with the Solaris 2.5.1
+         installation software to boot the CD-ROM and begin the
+         installation.&nbsp; Once the installation has begun, you
+         will be given the option to choose the type of install to
+         perform.&nbsp; Choose the "Core" software installation
+         option. You will now be prompted for the following
+         information:</P>
+         
+         <OL>
+            <LI>Under the heading "The Solaris Installation Program":
+            
+            <OL>
+               <LI TYPE="a">press Continue
+            </OL>
+            
+            <LI>Under the heading "Identify This System":
+            
+            <OL>
+               <LI TYPE="a">press Continue
+            </OL>
+            
+            <LI>Under the heading "Host name":
+            
+            <OL>
+               <LI TYPE="a">enter the fully qualified host name
+               
+               <LI>press Continue
+            </OL>
+            
+            <LI>Under the heading "Network Connectivity":
+            
+            <OL>
+               <LI TYPE="a">make sure there is an "X" next to Yes
+               
+               <LI>press Continue
+            </OL>
+            
+            <LI>Under the heading "IP Address":
+            
+            <OL>
+               <LI TYPE="a">enter the IP Address
+               
+               <LI>Continue
+            </OL>
+            
+            <LI>Under the heading "Confirm Information":
+            
+            <OL>
+               <LI TYPE="a">verify the information is correct
+               
+               <LI>press Continue
+            </OL>
+            
+            <LI>Under the heading "Name Service":
+            
+            <OL>
+               <LI TYPE="a">NIS+ will be selected
+               
+               <LI>Select Other
+               
+               <LI>press Continue
+            </OL>
+            
+            <LI>Under the heading "Confirm Information":
+            
+            <OL>
+               <LI TYPE="a">confirm that Name Service is set to Other
+               
+               <LI>press Continue
+            </OL>
+            
+            <LI>Under the heading "Subnets":
+            
+            <OL>
+               <LI TYPE="a">select Yes
+               
+               <LI>press Continue
+            </OL>
+            
+            <LI>Under the heading "Netmask":
+            
+            <OL>
+               <LI TYPE="a">enter the netmask for your network next
+               to Netmask
+               
+               <LI>press Continue
+            </OL>
+            
+            <LI>Under the heading "Time Zone":
+            
+            <OL>
+               <LI TYPE="a">select Geographic Region
+               
+               <LI>press Set
+               
+               <P><BR>
+               
+               At this point, the Geographic Region dialog box
+               appears:</P>
+               
+               <LI>make sure the appropriate fields are selected
+               
+               <LI>hit Continue
+            </OL>
+            
+            <LI>Under the heading "Date and Time":
+            
+            <OL>
+               <LI TYPE="a">verify that the values are correct,
+               modifying them as appropriate
+               
+               <LI>press Continue
+            </OL>
+            
+            <LI>Under the heading "Confirm Information":
+            
+            <OL>
+               <LI TYPE="a">verify that the listed information is
+               correct for your installation
+               
+               <LI>press Continue
+            </OL>
+            
+            <P>At this point, the system will tell you that the
+            System Identification is complete, and will begin the
+            Solaris Installation program in the console window. This
+            operation may take a little time to complete; this is
+            normal.</P>
+            
+            <LI>Under the heading "Install Solaris Software -
+            Initial"
+            
+            <OL>
+               <LI TYPE="a">press Continue
+            </OL>
+            
+            <LI>Under the heading "Upgrade System?"
+            
+            <OL>
+               <LI TYPE="a">press Initial
+            </OL>
+            
+            <LI>Under the heading "System Type"
+            
+            <OL>
+               <LI TYPE="a">verify that Standalone is selected
+               
+               <LI>press Continue
+            </OL>
+            
+            <LI>Under the heading "Software"
+            
+            <OL>
+               <LI TYPE="a">select "Core System Support" from the
+               list
+               
+               <LI>press Customize
+            </OL>
+            
+            <LI>Under the heading "Custom Software: Core System
+            Support"
+            
+            <OL>
+               <LI TYPE="a">select System Accounting and Terminal
+               Information from the list
+               
+               <LI>press OK
+            </OL>
+            
+            <LI>You will be returned to the "Software" dialog box
+            
+            <OL>
+               <LI TYPE="a">verify Core System Support is selected
+               
+               <LI>press Continue
+            </OL>
+            
+            <LI>Under the heading "Disks"
+            
+            <OL>
+               <LI TYPE="a">select and then add the appropriate disks
+               from the list of devices available so that they appear
+               in the selected disks list
+               
+               <LI>press Continue
+            </OL>
+            
+            <LI>Under the heading "Preserve Data"
+            
+            <OL>
+               <LI TYPE="a">press Continue
+            </OL>
+            
+            <LI>Under the heading "Automatically&nbsp; Layout File
+            Systems?"
+            
+            <OL>
+               <LI TYPE="a">press Auto_Layout to select auto layout
+               of the disks.
+            </OL>
+            
+            <LI>Under the heading "Auto-layout File Systems"
+            
+            <OL>
+               <LI TYPE="a">verify that /, swap, and /usr are
+               selected
+               
+               <LI>add /var,
+               
+               <LI>press Continue.
+            </OL>
+            
+            <LI>Under the heading "File System and Disk Layout"
+            
+            <OL>
+               <LI TYPE="a">press Customize to change the disk
+               layout.
+            </OL>
+            
+            <LI>Under the heading "Customize Disk: diskid",
+            
+            <OL>
+               <LI TYPE="a">increase the size of /, swap, /var, and
+               /usr, as appropriate,
+               
+               <LI>press OK.
+            </OL>
+            
+            <P>The partition /var holds your log files for the
+            server, so increase this if you expect a large amounts of
+            log data, and increasing swap is particularly useful for
+            memory intensive services, such as Web servers.</P>
+            
+            <P>You will have to decrease some of the larger
+            partitions in order to increase the smaller partitions by
+            the same amount, as the total space allocated to all
+            partitions is the entire disk.</P>
+            
+            <P>Note: In this step, you can replace /export/home with
+            something more appropriate to your server's function. For
+            example, if this is to be a web server, you might want to
+            change the name /export/home to /web.</P>
+            
+            <P>Also note: When adjusting the sizes of the various
+            disk partitions, you may not be able to use all of the
+            available space on the disk.&nbsp; This is normal round
+            off error, and the missing disk space will be noted as
+            such in the dialog.</P>
+            
+            <LI>Back at the dialog "System and Disk Layout"
+            
+            <OL>
+               <LI TYPE="a">verify that the partitions and sizes are
+               what you want
+               
+               <LI>press Continue.
+            </OL>
+            
+            <LI>Under the heading "Mount Remote File Systems?",
+            
+            <OL>
+               <LI TYPE="a">press Continue.
+            </OL>
+            
+            <LI>Under the heading "Profile",
+            
+            <OL>
+               <LI TYPE="a">press Begin Installation.
+            </OL>
+            
+            <LI>Now select Reboot and then hit Begin
+            
+            <P>At this point, the system will begin the actual
+            installation, which could take two hours or more. You
+            will get a histogram showing completion progress and a
+            number of messages as it customizes the system following
+            that, though it can take less than 10 minutes on a
+            machine such as a Sun Sparc5. The system will then reboot
+            with the core system installed to allow the changes to
+            take effect.
+         </OL>
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Set the super-user
+         password.</FONT></B></P>
+         
+         <P>To select a new password for root, log into the system as
+         root and run the following command:</P>
+         
+         <PRE>passwd root</PRE>
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Configure the
+         network.</FONT></B></P>
+         
+         <P>First, set up the <TT>/etc/nsswitch.conf</TT> file by
+         copying the <TT>/etc/nsswitch.files</TT> file to
+         <TT>/etc/nsswitch.conf</TT> and changing the line:</P>
+         
+         <PRE>hosts: files</PRE>
+         
+         <P>as follows:</P>
+         
+         <PRE>hosts: files dns</PRE>
+         
+         <P>Next, turn off IP routing by creating an empty file
+         called <TT>/etc/notrouter</TT> and setting its protection to
+         400 as follows:</P>
+         
+         <PRE>touch /etc/notrouter
+chmod 400 /etc/notrouter</PRE>
+         
+         <P>Now define the default router for the system by creating
+         the <TT>/etc/defaultrouter</TT> file and adding the IP
+         address of your router to it. For example, if the IP number
+         of your router was 10.1.0.1, the commands would be</P>
+         
+         <PRE>echo "10.1.0.1" &gt; /etc/defaultrouter
+chmod 444 /etc/defaultrouter</PRE>
+         
+         <P>Now reboot the system to have the changes take effect.
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Install recommended SUN
+         patches.</FONT></B></P>
+         
+         <P>The following example illustrates the commands used to
+         install a set of patches once they have been transferred
+         over to the system:</P>
+         
+         <PRE>cd /var/tmp
+uncompress 2.5.1_Recommended.tar.Z
+tar xvf 2.5.1_Recommended.tar
+...
+cd 2.5.1_Recommended
+./install_cluster
+...</PRE>
+         
+         <P>If the script issues a space warning before running, be
+         sure to verify that you have enough space for the patches to
+         be installed.</P>
+         
+         <P>While installing the patches, some may not install,
+         returning an error 8, which signifies a non-installed
+         package patch that did not complete. Since the OS install
+         was a core installation, certain packages were not
+         installed. The error 8 indicates a failed attempt to patch
+         an uninstalled package, and thus can be safely ignored. You
+         can list the installed packages by going to the
+         <TT>/var/sadm/patch</TT> directory and using the <TT>ls</TT>
+         command.
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Install any additional security
+         patches downloaded from the CERT Web site, if
+         applicable.</FONT></B>
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top COLSPAN=2>
+         <P>
+         <HR SIZE="1">
+      
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top align=LEFT WIDTH=120>
+         <P><B>Disable services</B>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Remove all "r" (remote)
+         commands.</FONT></B></P>
+         
+         <P>From <TT>/usr/bin</TT>, move each command from
+         "<TT>name</TT>" to "<TT>#name</TT>" for the following
+         commands:&nbsp; <TABLE BORDER=0 CELLPADDING=1 WIDTH="90%"
+         cols=3>
+            <TR>
+               <TD>
+                  <P><TT>/usr/bin/rcp&nbsp;</TT>
+               </TD><TD>
+                  <P><TT>/usr/bin/rdate&nbsp;</TT>
+               </TD><TD>
+                  <P><TT>/usr/bin/rdist&nbsp;</TT>
+               </TD></TR>
+            <TR>
+               <TD>
+                  <P><TT>/usr/bin/remsh&nbsp;</TT>
+               </TD><TD>
+                  <P><TT>/usr/bin/rlogin&nbsp;</TT>
+               </TD><TD>
+                  <P><TT>/usr/bin/rpcinfo&nbsp;</TT>
+               </TD></TR>
+            <TR>
+               <TD>
+                  <P><TT>/usr/bin/rsh&nbsp;</TT>
+               </TD><TD>
+                  <P><TT>/usr/bin/rup&nbsp;</TT>
+               </TD><TD>
+                  <P><TT>/usr/bin/ruptime&nbsp;</TT>
+               </TD></TR>
+            <TR>
+               <TD>
+                  <P><TT>/usr/bin/rusers&nbsp;</TT>
+               </TD><TD>
+                  <P><TT>/usr/bin/rwho&nbsp;</TT>
+               </TD><TD>
+                  <P>
+               </TD></TR>
+         </TABLE> When moving the files, you may need to put
+         quotation marks around the "#" filename to keep the shell
+         from interpreting it as a shell special character, for
+         example:</P>
+         
+         <PRE>mv /usr/bin/rcp "/usr/bin/#rcp"</PRE>
+         
+         <P>"kill -9" the <TT>inetd</TT> process if running.
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Disable RPC, NFS, and automount
+         facilities.</FONT></B></P>
+         
+         <P>You can disable these features with the following
+         commands:</P>
+         
+         <PRE>cd /etc/init.d
+rm nfs.* autofs rpc
+cd /etc/rc2.d
+rm S74autofs S71rpc S73nfs.client
+cd /etc/rc3.d
+rm S15nfs.server</PRE>
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Disable inetd.</FONT></B></P>
+         
+         <P>In /etc/init.d/inetsvc, comment out the line that
+         launches inetd. That is, change</P>
+         
+         <PRE>/usr/sbin/inetd -s</PRE>
+         
+         <P>to</P>
+         
+         <PRE>#/usr/sbin/inetd -s</PRE>
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Limit Internet
+         services.</FONT></B></P>
+         
+         <P>Rename /etc/inetd.conf to /etc/#inetd.conf, touch the
+         file /etc/inetd.conf, and changes its protection with chmod
+         to 000 with the following commands:</P>
+         
+         <PRE>mv /etc/inetd.conf "/etc/#inetd.conf"
+touch /etc/inetd.conf
+chmod 000 /etc/inetd.conf</PRE>
+         
+         <P>In the file /etc/inet/services comment out all lines
+         except:&nbsp; <TABLE BORDER=0 CELLPADDING=1 WIDTH="100%">
+            <TR>
+               <TD WIDTH="25%">
+                  <P><TT>listen</TT>
+               </TD><TD WIDTH="25%">
+                  <P><TT>2766/tcp</TT>
+               </TD><TD>
+                  <P><TT>#System V listener port</TT>
+               </TD></TR>
+         </TABLE>
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Remove all other Internet
+         daemons.</FONT></B></P>
+         
+         <P>In /usr/sbin, rename all in.* to #in.* and inetd to
+         #inetd. The complete list of commands to rename are <TABLE
+         BORDER=0 CELLPADDING=1 WIDTH="100%" cols=3>
+            <TR>
+               <TD>
+                  <P><TT>/usr/sbin/in.comsat</TT>
+               </TD><TD>
+                  <P><TT>/usr/sbin/in.rdisc</TT>
+               </TD><TD>
+                  <P><TT>/usr/sbin/in.rwhod</TT>
+               </TD></TR>
+            <TR>
+               <TD>
+                  <P><TT>/usr/sbin/in.fingerd</TT>
+               </TD><TD>
+                  <P><TT>/usr/sbin/in.rexecd</TT>
+               </TD><TD>
+                  <P><TT>/usr/sbin/in.talkd</TT>
+               </TD></TR>
+            <TR>
+               <TD>
+                  <P><TT>/usr/sbin/in.ftpd</TT>
+               </TD><TD>
+                  <P><TT>/usr/sbin/in.rlogind</TT>
+               </TD><TD>
+                  <P><TT>/usr/sbin/in.telnetd</TT>
+               </TD></TR>
+            <TR>
+               <TD>
+                  <P><TT>/usr/sbin/in.named</TT>
+               </TD><TD>
+                  <P><TT>/usr/sbin/in.routed</TT>
+               </TD><TD>
+                  <P><TT>/usr/sbin/in.tftpd</TT>
+               </TD></TR>
+            <TR>
+               <TD>
+                  <P><TT>/usr/sbin/in.rarpd</TT>
+               </TD><TD>
+                  <P><TT>/usr/sbin/in.rshd</TT>
+               </TD><TD>
+                  <P><TT>/usr/sbin/in.tnamed</TT>
+               </TD></TR>
+         </TABLE> In /usr/bin, rename telnet, ftp, and tftp to
+         #telnet, #ftp, and #tftp, respectively.
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top COLSPAN=2>
+         <P>
+         <HR SIZE="1">
+      
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P><B>Configuration changes</B>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Correct system file
+         permissions.</FONT></B></P>
+         
+         <P>Run fix-modes to correct file and directory protections.
+         Then remove the group write protection for /etc with the
+         following command:</P>
+         
+         <PRE>chmod -R g-w /etc</PRE>
+         
+         <P>Remove the suid and sgid permission from all programs
+         with the following command:</P>
+         
+         <PRE>chmod -R -s /</PRE>
+         
+         <P>Then restore the permissions on the commands
+         /usr/bin/passwd and /usr/bin/su as follows:</P>
+         
+         <PRE>chmod 6555 /usr/bin/passwd
+chmod 4555 /usr/bin/su</PRE>
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Ensure that the correct umask is
+         set for root.</FONT></B></P>
+         
+         <P>The following commands force the correct umask for the
+         start-up scripts to ensure that files created at that time
+         have the appropriate permissions:</P>
+         
+         <PRE>/bin/sh
+cd /etc/init.d
+umask 027
+echo umask 027 &gt; umask.sh
+chmod 750 umask.sh
+cd /etc
+for d in rc?.d; do
+ln -s /etc/init.d/umask.sh /etc/$d/S00.umask.sh
+ln -s /etc/init.d/umask.sh /etc/$d/K00.umask.sh
+done
+exit</PRE>
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Remove the following unnecessary
+         accounts from the /etc/passwd file:</FONT></B></P>
+         
+         <PRE>userdel uucp
+userdel nuucp</PRE>
+         
+         <P>Change the default null shell for the daemon, bin, sys,
+         adm, lp, smtp, listen, noaccess, nobody4 and nobody accounts
+         to /bin/false. For example, for daemon, use this command:
+         </P>
+         
+         <PRE>usermod -s /bin/false daemon</PRE>
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Run sendmail as a cron
+         job.</FONT></B></P>
+         
+         <P>Edit /etc/init.d/sendmail and change the line launching
+         sendmail from</P>
+         
+         <PRE>/usr/lib/sendmail -bd -q1h;</PRE>
+         
+         <P>to</P>
+         
+         <PRE># /usr/lib/sendmail -bd -q1h;</PRE>
+         
+         <P>Kill off any currently running sendmail processes using
+         "<TT>kill</TT>", and the run sendmail hourly from cron by
+         adding the line</P>
+         
+         <PRE>0 * * * * /usr/lib/sendmail -q</PRE>
+         
+         <P>to root's crontab. To start an editor to allow you to
+         edit root's crontab, run the following command:</P>
+         
+         <PRE>crontab -e root</PRE>
+         
+         <P>Note: the default unix editor for root is ed, which is
+         what the <TT>crontab</TT> tool will use unless you reset the
+         <TT>EDITOR</TT> environment variable to something
+         else.&nbsp; For example, to change it under the Bourne shell
+         (<TT>/bin/sh</TT>) to vi, you would use the command</P>
+         
+         <PRE>EDITOR=vi ; export EDITOR</PRE>
+         
+         <P>before calling the <TT>crontab</TT> command.
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Turn on additional logging
+         services.</FONT></B></P>
+         
+         <P>In the <TT>/etc/syslog.conf</TT> file add
+         <TT>auth.notice</TT> to the line logging to
+         <TT>/var/adm/messages</TT> as follows:
+      </TD></TR>
+   <TR>
+      <TD WIDTH=120>
+         <P>
+      </TD><TD>
+         <FONT SIZE=-1><PRE>
+*.err;kern.debug;daemon.notice;mail.crit;auth.notice;user.none /var/adm/messages
+</PRE></FONT>
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Initialize a Tripwire database
+         for the minimally configured system.</FONT></B></P>
+         
+         <P>Please refer to the documentation that comes with the
+         Tripwire<B> </B>distribution for information on setting up
+         and running it.
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top COLSPAN=2>
+         <P>
+         <HR SIZE="1">
+      
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P><B>Post-<WBR>installation</B>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Backup the system.</FONT></B>
+         </P>
+         
+         <P>You should make a level 0 backup of the entire system.
+         This will allow you to restore the system should something
+         unexpected happen during the next phase of the server's
+         configuration.
+      </TD></TR>
+   <TR>
+      <TD VALIGN=top WIDTH=120>
+         <P>
+      </TD><TD VALIGN=top>
+         <P><B><FONT COLOR="#005500">Notes on renaming files from
+         "name" to "#name".</FONT></B></P>
+         
+         <P>Files are renamed from "name" to "#name" so that the
+         system start-up files will not find them, and the system can
+         be tested as though the files are not on the system (while
+         making them easily recovered if necessary during the
+         configuration phase.)</P>
+         
+         <P>Once the system has been configured and tested, you can
+         locate the #name files easily using this command:</P>
+         
+         <PRE>find / -name "#*" -print</PRE>
+         
+         <P>Then you can remove these files. After doing so, you may
+         need to reinitialize your Tripwire<B> </B>database in case
+         any of the files had been cataloged by the tool.
+      </TD></TR>
+</TABLE>
+
+</body>
+</html>

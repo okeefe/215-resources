@@ -1,0 +1,758 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.61 [en] (WinNT; U) [Netscape]">
+   <title>Security Improvement</title>
+</head>
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+<table BORDER=0 CELLSPACING=6 CELLPADDING=4 WIDTH="100%" >
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Implementation Details</font></b></td>
+
+<td><b><font face="Arial"><font size=+1>Installing, configuring, and using
+swatch 2.2 to analyze log messages on systems running Solaris 2.x</font></font></b></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130">&nbsp;</td>
+
+<td>
+<table BORDER CELLSPACING=0 CELLPADDING=8 WIDTH="75%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP BGCOLOR="#CCDDFF">Applies to the practices: "<a
+href="../practices/p095.html">Monitor and inspect system   
+activities for unexpected behavior</a>," "<a
+href="../practices/p091.html">Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior</a>",
+<br><a href="/security-improvement/practices/p077.html">&quot;Identify and enable Web-server-specific logging mechanisms.&quot;</a>
+
+<p>Applicable technologies: Solaris 2.x; UNIX operating system and derivatives</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130">&nbsp;</td>
+
+<td>Many programs log messages that are of potential interest from a security
+and system administrative perspective. <font face="Courier New, Courier, mono"><font size=+0><a href="i041.08.html">Syslogd</a></font></font>
+is the conventional method for capturing important messages from applications
+and servers. Typically no support tools are provided for online analysis
+of these messages.&nbsp;
+<p>You can use <font face="Courier New"><font size=+0>swatch </font></font>to
+define rules that alert designated personnel whenever specific messages
+are logged. You still need to perform manual review of log files, but <font face="Courier New">swatch
+</font>and
+other similar tools considerably improve your ability to analyze these
+files. You can also use <font face="Courier New"><font size=+0>swatch
+</font></font>to
+parse text files.&nbsp;
+<p>This section describes how to download, install, and configure <font face="Courier New"><font size=+0>swatch</font></font>,
+version 2.2, on the Sun Solaris operating system, version 2.x.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Preparation</font></b></td>
+
+<td>The latest release of swatch is available via anonymous ftp from
+<p><a href="ftp://ftp.stanford.edu/general/security-tools/swatch">ftp://ftp.stanford.edu/general/security-tools/swatch</a></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Ensure that
+you can meet installation requirements.</font></font></font></b>
+<p>In order to build the <font face="Courier"><font size=+0>swatch</font></font>,
+you need:&nbsp;
+<ul>
+<li>
+Internet access to retrieve the latest version&nbsp;</li>
+
+<li>
+<a href="http://www.gzip.org">GZIP</a> to uncompress the downloaded file
+(optional)&nbsp;</li>
+
+<li>
+<a href="http://www.pgp.com">PGP</a> (Pretty Good Privacy) to verify the
+authenticity of the software distribution&nbsp;</li>
+
+<li>
+a PERL interpreter to run the executable script&nbsp;</li>
+</ul>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font color="#008000"><font size=+0><font face="Arial">Download
+the </font><font face="Courier New,Courier">swatch</font><font face="Arial">
+distribution</font></font></font></b>
+<p>Perform an anonymous file transfer from<a href="ftp://ftp.stanford.edu/general/security-tools/swatch/OLD/swatch-2.2.tar.gz">
+ftp://ftp.stanford.edu/general/security-tools/swatch/OLD/swatch-2.2.tar.gz</a>.
+You can also download the software as <font face="Courier"><font size=+0>.tar</font></font>
+without any compression or as .<font face="Courier New"><font size=+0>tar.Z</font></font>
+compressed using the UNIX <font face="Courier New"><font size=+0>compress</font></font>
+utility. For the next step, you also need the PGP signature file from <a href="ftp://ftp.stanford.edu/general/security-tools/swatch/OLD/swatch-2.2.tar.asc">ftp.stanford.edu/general/security-tools/swatch/OLD/swatch-2.2.tar.asc</a>
+to verify authenticity.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font color="#008000"><font size=+0><font face="Arial">Unpack the
+</font><font face="Courier New,Courier">swatch</font><font face="Arial">
+distribution.</font></font></font></b>
+<p>If a compressed file was downloaded, the distribution must be uncompressed
+before the authenticity can be verified. To prepare the distribution, the
+file should be uncompressed using the appropriate utility (GNU gunzip or
+UNIX uncompress) and unpacked using the system tar command.&nbsp;
+<p><font face="Courier New"><font size=-1>$ gunzip swatch-2.2.tar.gz</font></font>
+<p><font face="Courier New"><font size=-1>$ tar xvf swatch-2.2.tar.gz</font></font>
+<p>This will create a subdirectory named <font face="Courier New"><font size=+0>swatch-2.2.</font></font></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font color="#008000"><font size=+0><font face="Arial">Verify the
+authenticity of the </font><font face="Courier New">swatch </font><font face="Arial">distribution.</font></font></font></b>
+<p>To perform this step, you need to include the PGP public key from "sunset@Stanford.EDU"
+within your own PGP public key ring. SunSET, the incident response team
+at Stanford University, has signed the <font face="Courier New"><font size=+0>swatch</font></font>
+software to ensure that it hasn't been compromised and can be verified.
+You need to execute the following command in the directory containing the
+downloaded files:&nbsp;
+<p><font face="Courier New"><font size=-1>$ pgp swatch-2.2.tar.asc swatch-2.2.tar</font></font>
+<p>If the signature doesn't match, the software has likely been compromised.
+You should not use this version. These commands create a subdirectory named
+<font face="Courier New"><font size=+0>swatch-2.2</font></font>.
+All subsequent operations are to be performed within this subdirectory.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2" WIDTH="130">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130" HEIGHT="818"><b><font face="Arial">Install the </font><font face="Courier New"><font size=+0>swatch</font></font><font face="Arial">
+software</font></b></td>
+
+<td HEIGHT="818">The install script provided below can be used in most
+environments.&nbsp;
+<p>Place the <font face="Courier New"><font size=+0>swatch</font></font>
+script, perl header files, and man pages into the correct system directories.
+By default, the directories where <font face="Courier New"><font size=+0>swatch</font></font>
+will be installed do not exist and must be created before executing the
+install script. Once these directories exist, start the install script:&nbsp;
+<p><font face="Courier"><font size=-1>Enter the directory where swatch
+is to be installed (default '/usr/sbin')&nbsp;</font></font>
+<p><font face="Courier"><font size=-1>What user should own the installed
+swatch files? (default 'root')&nbsp;</font></font>
+<p><font face="Courier"><font size=-1>What group should own the installed
+swatch files? (default 'wheel')&nbsp;</font></font>
+<p><font face="Courier"><font size=-1>What should the permissions be for
+the installed swatch script? (default '755') 750&nbsp;</font></font>
+<p><font face="Courier"><font size=-1>What should the permissions be for
+the installed swatch libraries and man pages? (default '444') 444&nbsp;</font></font>
+<p><font face="Courier"><font size=-1>Enter the name of the directory where
+the perl library files are located (default '/usr/local/lib/perl') /usr/local/lib/perl5</font></font>
+<p><font face="Courier"><font size=-1>Enter the name of the directory where
+you wish to install the swatch library files (default '/usr/local/lib/perl')
+/usr/local/lib/perl5&nbsp;</font></font>
+<p><font face="Courier"><font size=-1>What directory should the swatch
+man pages be installed (default '/usr/local/man')</font></font>
+<p><font face="Courier"><font size=-1>What should the extension be for
+the swatch program manual page? (default '8')&nbsp;</font></font>
+<p><font face="Courier"><font size=-1>What should the extension be for
+the swatch configuration file manual page? (default '5')&nbsp;</font></font>
+<p><font face="Courier"><font size=-1>Here is what I have...&nbsp;</font></font>
+<pre><font face="Courier"><font size=-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Perl library: /usr/lib/perl5
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Swatch binary location: /usr/sbin
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Swatch manual page location: /usr/man
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Swatch program manual page extension: 8
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Swatch configuration file manual page extension: 5
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Swatch data file permissions: 0444
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Swatch program permissions: 0750
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Swatch owner: root
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Swatch group: wheel&nbsp;</font></font></pre>
+<font face="Courier"><font size=-1>Are these values okay (y or n)? y&nbsp;</font></font>
+<p><font face="Courier"><font size=-1>Are you ready for me to start the
+installation (y or n)? y&nbsp;</font></font>
+<pre><font face="Courier"><font size=-1>Installing swatch...done.
+
+Installing sw_actions.pl...done.
+
+Installing sw_history.pl...done.
+
+Installing swatch.prog.man...done.
+
+
+Installing swatch.conf.man...done.</font></font></pre>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2" WIDTH="130">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Configure</font><font face="Courier New">
+swatch</font></b></td>
+
+<td>After the <font face="Courier New"><font size=+0>swatch</font></font>
+program is installed, you need to prepare the configuration.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Understand
+the underlying limitations.</font></font></font></b>
+<p>One <font face="Courier New"><font size=+0>swatch </font></font>process
+can analyze only one file at a time. There is no ability to specify which
+configuration rules are to be executed based on the log file messages being
+analyzed.&nbsp;
+<p><font face="Courier New">swatch</font> can start external programs.
+This may affect the performance of the system. As a case in point, <font face="Courier New"><font size=+0>swatch
+</font></font>can
+directly send email to users (based on a configuration rule) or it can
+invoke<font face="Courier"> <font size=+0>sendmail </font></font>to do
+this. The mailer can be called in a way that delivers email immediately.
+You need to be careful to ensure that in the case of a message flood, <font face="Courier New"><font size=+0>swatch</font></font>
+does not initiate <font face="Courier New"><font size=+0>a sendmail</font></font>
+flood as well. Additional programming is necessary to change this behavior.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Understand
+the structure of the configuration file.</font></font></font></b>
+<p>Each rule consists of two to four fields separated by the TAB character.
+The first rule that matches a line in the log file is applied. More details
+are provided in the man page <font face="Courier New"><font size=+0>swatch</font></font>
+(5):&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130" HEIGHT="538">&nbsp;</td>
+
+<td HEIGHT="538">
+<table BORDER CELLPADDING=7 WIDTH="75%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="25%" BGCOLOR="#CCDDFF"><b>Field&nbsp;</b></td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="75%" BGCOLOR="#CCDDFF"><b>Explanation&nbsp;</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="25%">1. pattern&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="75%">This field determines what lines match the rule.
+Perl regular expressions are used to describe the pattern. Multiple patterns
+can be listed, separated by the character ",".&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="25%">2. actions&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="75%">This field describes the actions to be performed
+if the analyzed line matches the pattern specified in field 1. Multiple
+actions can be listed, separated by the character ",". For a list of possible
+actions, refer to the table below.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="25%">3. time interval (optional)</td>
+
+<td VALIGN=TOP WIDTH="75%">If an interval is specified, only the first
+rule/line match in the interval is processed. No further action is taken
+on subsequent matches until the specified time interval has elapsed. Then
+any further action can be taken making use of the matching line or just
+giving the number of occurrences of the particular message within the time
+period.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="25%">4. location of time stamp (optional, with field
+3)</td>
+
+<td VALIGN=TOP WIDTH="75%">This field describes the position and length
+of the time stamp used to determine the time interval specified in field
+3.&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000">Understand the actions
+available for the configuration file</font>.</font></b>
+<p>The following actions are available:&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130">&nbsp;</td>
+
+<td>
+<table BORDER CELLPADDING=7 WIDTH="75%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="32%" BGCOLOR="#CCDDFF"><b>Action&nbsp;</b></td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="68%" BGCOLOR="#CCDDFF"><b>Explanation&nbsp;</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="32%">bell[=N]</td>
+
+<td VALIGN=TOP WIDTH="68%">This echoes the matching line and sends a bell.
+"N" specifies the number of bell rings.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="32%">echo[=mode]</td>
+
+<td VALIGN=TOP WIDTH="68%">This echoes the matching line. Possible values
+for "mode" are normal (default), bold, underscore, blink, or reverse.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="32%">exec=command&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="68%">This executes the command. To use part of the
+matched line, a <font face="Courier New"><font size=+0>$N</font></font>
+is replaced by the Nth field separated by blanks. <font face="Courier New"><font size=+0>$0</font></font>
+or <font face="Courier New"><font size=+0>$*</font></font> are replaced
+by the entire line.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="32%">ignore&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="68%">The matched line is ignored.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="32%">mail[=address:address:...]&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="68%">The matched line is sent to the specified users
+via email. If no address is provided, the email is sent to the user id
+that is executing the <font face="Courier New"><font size=+0>swatch</font></font>
+process.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="32%">pipe=command&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="68%">The matched line is piped into the specified
+command.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="32%">write[=user:user:...]&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="68%">The matched line is sent to the users specified
+in the <font face="Courier New"><font size=+0>write</font></font> (1) command.&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Create the
+initial configuration.</font></font></font></b>
+<p>The most difficult part of the <font face="Courier New"><font size=+0>swatch</font></font>
+setup is to define an acceptable and workable initial configuration. To
+do this effectively, you need to analyze messages of interest from representative
+logs recorded by your operational systems. You then determine what actions
+you need to take based on these messages.&nbsp;
+<p>Messages considered unimportant should be explicitly ignored. This allows
+<font face="Courier New"><font size=+0>swatch</font></font>,
+and those analyzing the <font face="Courier New"><font size=+0>swatch </font></font>output,
+to focus on messages that are of interest as well as those that are unexpected,
+may establish a new attack pattern, and result in new rules being added
+to the configuration.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2" WIDTH="130">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Example</font></b></td>
+
+<td>Several example rules are provided below to illustrate how <font face="Courier New"><font size=+0>swatch
+</font></font>can
+be used. The volume and type of logged messages depend on the specifics
+of the installed software and the configuration of <font face="Courier New, Courier, mono"><a href="i041.08.html">syslogd</a></font>.
+As a result, it is not possible to provide examples that fit all needs.&nbsp;
+<p>For this example, we assume that other tools are also installed on the
+system:&nbsp;
+<ul>
+<li>
+<a href="i041.07.html">tcp wrapper&nbsp;</a></li>
+
+<li>
+<a href="i041.11.html">rshd and rlogind from logdaemon</a></li>
+
+<li>
+<a href="i041.10.html">login from logdaemon&nbsp;</a></li>
+
+<li>
+rpcbind from tcp wrapper</li>
+</ul>
+The <font face="Courier New"><font size=+0>swatch </font></font>configuration
+is stored in <font face="Courier New"><font size=+0>/etc/swatchrc</font></font>.
+The program safe_finger is part of the <a href="i041.07.html">tcp wrapper</a>
+distribution and is used in the example to determine what users are responsible
+for handling specific log messages.&nbsp;
+<pre>&nbsp;
+
+&nbsp;
+
+<font face="Courier New"><font size=-2>#-------------------------------------------------------------------&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+# logins
+
+#&nbsp;
+
+/login.*: .* LOGIN FAILURES ON/&nbsp;&nbsp;&nbsp; mail=swatcher&nbsp;
+
+/login.*: LOGIN .* REFUSED ON/&nbsp;&nbsp;&nbsp;&nbsp; mail=swatcher&nbsp;
+
+/login.*: .* LOGIN FAILURES FROM/&nbsp; mail=swatcher,exec="/usr/sbin/safe_finger&nbsp;&nbsp; @$9mailx
+
+&nbsp;-s \"Login failed\"&nbsp;&nbsp;
+
+&nbsp;&nbsp; swatcher"&nbsp;
+
+/login.*: .* LOGIN REFUSED FROM/&nbsp;&nbsp; mail=swatcher,exec="/usr/sbin/safe_finger&nbsp; @$9mailx
+
+&nbsp; -s \"Login refused\"&nbsp;
+
+&nbsp;&nbsp; swatcher"&nbsp;
+
+/login.*: LOGIN .* REFUSED FROM .* ON TTY/
+
+mail=swatcher,exec="/usr/sbin/safe_finger @$9| mailx&nbsp;
+
+-s \"Login refused\"&nbsp;
+
+swatcher"&nbsp;
+
+/login.*: login on/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ignore
+
+/login.*: ROOT LOGIN ON/&nbsp;&nbsp;&nbsp;&nbsp; ignore&nbsp;
+
+/login.*: login from/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ignore&nbsp;
+
+/su: .* failed/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &amp; mail=swatcher&nbsp;
+
+/su: .*/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &amp;&amp;n bsp;&nbsp;&nbsp; ignore
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+# -------------------------------------------------------------------&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+# network services (internal network: 10.0.1.0/255.255.255.0= local.net)&nbsp;
+
+#&nbsp;
+
+/rpcbind: connect from 10.0.1.* to/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ignore&nbsp;
+
+/rpcbind: rpcbind terminating on signal/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ignore&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+/rpcbind: verbose logging on/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ignore
+
+/rpcbind: refused connect from .* to getport/ mail=swatcher,
+
+exec="/usr/local/sbin/safe_finger @$8| mailx -s \"RPCbind refused\" swatcher"&nbsp;
+
+
+
+/rshd\[[0-9]*\]: connect from root@.*cert.dfn.de to backup/&nbsp; ignore&nbsp;
+
+/rshd\[[0-9]*\]: connect from root@.*local.net/&nbsp;&nbsp;&nbsp;&nbsp; mail=swatcher&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+/rshd\[[0-9]*\]: refused connect from .*/&nbsp;&nbsp; mail=swatcher,
+
+exec="/usr/local/sbin/safe_finger&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $8| mailx&nbsp;
+
+-s \"rshd refused\" swatcher"&nbsp;
+
+/rlogind\[[0-9]*\]: connect from root@.*local.net/ mail=swatcher&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+/rlogind\[[0-9]*\]: refused connect from .*/ mail=swatcher,
+
+exec="/usr/local/sbin/safe_finger&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @$8| mailx&nbsp;
+
+\"rshd refused\" swatcher"
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+# -------------------------------------------------------------------&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+# some syslog messages are useless without context&nbsp;
+
+#&nbsp;
+
+/last message repeated .* times/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ignore&nbsp;
+
+/-- MARK --/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &amp;nbsp; ignore&nbsp;
+
+
+
+# -------------------------------------------------------------------&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+# previously unknown message&nbsp;
+
+#&nbsp;
+
+/.*/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mail=swatcher,mail=swatcher-admin&nbsp;
+
+#&nbsp;
+
+# EO swatchrc&nbsp;
+
+# -------------------------------------------------------------------&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></font>&nbsp;</pre>
+Many normal syslog messages are generated during the startup process and
+by the kernel. The above example provides rules to ignore these unimportant
+messages.&nbsp;
+<p>The last rule matches all messages that have not been specified, sending
+them to a specific destination (like the responsible administrator) for
+later analysis. We recommend sending email containing these messages also
+to all designated users that receive notifications of other messages so
+they can react to anything that may be critical but that was not recognized
+prior to the occurrence of a new log message. The extent to which you do
+this depends on your security policy.&nbsp;
+<p>The <font face="Courier New"><font size=+0>swatch</font></font> software
+includes several examples in the <font face="Courier New"><font size=+0>config_files</font></font>
+subdirectory and two scripts in the <font face="Courier New"><font size=+0>utils</font></font>
+subdirectory, one similar <font face="Courier New"><font size=+0>to safe_finger</font></font>
+(<font face="Courier New"><font size=+0>badloginfinger.pl</font></font>)
+and a script to activate a pager (<font face="Courier New"><font size=+0>call_pager.pl</font></font>).</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2" WIDTH="130">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Complete the </font><font face="Courier New,Courier">swatch</font><font face="Arial">
+setup</font></b></td>
+
+<td>After installing the <font face="Courier New"><font size=+0>swatch</font></font>
+software and creating the initial configuration, you need to perform several
+additional administrative tasks and initiate the automatic startup.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Prepare a
+separate user id.</font></font></font></b>
+<p>The <font face="Courier New"><font size=+0>swatch </font></font>process
+does not require <font face="Courier New"><font size=+0>root</font></font>
+privileges to read the relevant log files, even though this may be the
+easiest approach. You should create a separate user id for <font face="Courier"><font size=+0>swatch
+</font></font>execution
+(e.g., called <font face="Courier New"><font size=+0>swatcher</font></font>).&nbsp;
+<p>If read access to the log files is restricted to a group of system administrators
+(SA), <font face="Courier New"><font size=+0>swatcher </font></font>needs
+to be included in this group. If the group has more privileges than necessary
+for <font face="Courier New"><font size=+0>swatcher</font></font>, you
+need to create a new group that includes the SA group and <font face="Courier New"><font size=+0>swatcher</font></font>.
+The access privileges for the log files should be set to the new group.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Prepare the
+needed email addresses.</font></font></font></b>
+<p>Include email aliases (not specific user ids) in the <font face="Courier New"><font size=+0>swatch</font></font>
+configuration if email is used to alert system personnel. This makes it
+easier to maintain the configuration when users are added and removed.&nbsp;
+<p>Set up aliases or mailing lists for each group that needs to receive
+messages from <font face="Courier New"><font size=+0>swatch</font></font>.
+All unknown messages should be sent to an administrative account for manual
+inspection and consideration for inclusion in the <font face="Courier New"><font size=+0>swatch
+</font></font>configuration.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Create a
+specific startup file</font></font></font></b>
+<p>The following script <font face="Courier New"><font size=-1>/etc/init.d/</font><font size=+0>swatch</font></font>
+can be executed to start up <font face="Courier New"><font size=+0>swatch
+</font></font>automatically.
+It supports starting and stopping the swatch process. Keep in mind that
+hard links (see <font face="Courier New"><font size=+0>init (1M)</font></font>
+and<font face="Courier New"><font size=+0> init.d</font></font>) must be
+created to control changes that occur whenever the system status changes.&nbsp;
+<p>Startup scripts are executed with <font face="Courier New"><font size=+0>root</font></font>
+privileges. Executing the <font face="Courier New"><font size=+0>su</font></font>
+command can change the privileges to the previously created user id <font face="Courier New"><font size=+0>swatcher</font></font>.
+Doing so limits any exposure and potential damage if problems are encountered
+during swatch execution.&nbsp;
+<pre><font face="Courier New"><font size=-1>#!/bin/sh&nbsp;
+
+#/etc/init.d/swatch&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp; pid=`/bin/ps -ef | /usr/bin/egrep "/usr/sbin/swatch&nbsp;
+
+-c /etc/swatchrc -t /var/adm/messages" | /usr/bin/egrep&nbsp;
+
+-v egrep | /usr/bin/awk '{print $2}'`&nbsp;
+
+&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp; case "$1" in&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'start')&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # start the swatch process&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if [ "${pid}" != "" ];&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; then&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo 'Swatch System is already initialized.'&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit 0&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fi&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if [ -f /usr/sbin/swatch -a -f /etc/swatchrc ];&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; then&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /bin/su - swatcher -c "/usr/sbin/swatch -c
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /etc/swatchrc -t /var/adm/messages &amp;"&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fi&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo 'Swatch System startup complete.'&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'stop')&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #stop all swatch processes&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if [ "${pid}" != "" ];&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; then&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/bin/kill -TERM ${pid}&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo 'Swatch System shutdown complete.'&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo 'No Swatch System initialized.'&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fi&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;;&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *)&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo "Usage: /etc/init.d/swatch { start | stop }"&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;;&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; esac&nbsp;</font></font>
+
+</pre>
+This script is executed during the next status change or at startup unless
+explicitly initiated.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font color="#008000"><font size=+0><font face="Arial">Restart </font><font face="Courier">swatch</font><font face="Arial">
+after rotation of log files</font></font></font></b>.
+<p><font face="Courier">swatch</font> opens a specific file to read every
+new line appended to this file. <font face="Courier New"><font size=+0>swatch</font></font>
+needs to be informed if the file is no longer used by <font face="Courier New"><font size=+0>syslog</font></font>
+[occurs as a result of log file rotation using <font face="Courier New"><font size=+0>newsyslog
+</font></font>(
+<a href="i041.09.html">"Using newslog to rotate files containing logging
+messages on systems running Solaris 2.x"</a>). To restart swatch, the init
+script can be called from newsyslog as shown below.
+<pre><font face="Courier New"><font size=-1>&nbsp;
+
+#!/bin/sh
+
+#
+
+# /usr/lib/newsyslog - rotate log files (loghost)
+
+#
+
+
+
+[...]
+
+
+
+/bin/kill -HUP `cat /etc/syslog.pid`
+
+
+
+# ensure a restart of swatch
+
+
+
+/etc/init.d/swatch stop
+
+sleep 1
+
+/etc/init.d/swatch start
+
+
+
+# end of file /usr/lib/newsyslog</font></font>
+
+</pre>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2" WIDTH="130">
+<hr size="1"></td>
+</tr>
+</table>
+</body>
+</html>

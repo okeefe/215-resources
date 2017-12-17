@@ -1,0 +1,45 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>3.16. The "Packet List" pane</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="ChapterUsing.html" title="Chapter 3. User Interface"><link rel="prev" href="ChUseFilterToolbarSection.html" title='3.15. The "Filter" toolbar'><link rel="next" href="ChUsePacketDetailsPaneSection.html" title='3.17. The "Packet Details" pane'></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.16. The "Packet List" pane</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChUseFilterToolbarSection.html">Prev</a> </td><th width="60%" align="center">Chapter 3. User Interface</th><td width="20%" align="right"> <a accesskey="n" href="ChUsePacketDetailsPaneSection.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChUsePacketListPaneSection"></a>3.16. The "Packet List" pane</h2></div></div></div><p>
+      The packet list pane displays all the packets in the current capture
+	  file.
+    </p><div class="figure"><a name="ChUseWiresharkListPane"></a><p class="title"><b>Figure 3.13. The "Packet List" pane</b></p><div><img src="wsug_graphics/ws-list-pane.png" alt='The "Packet List" pane'></div></div><p>
+	Each line in the packet list corresponds to one packet in the capture
+	file. If you select a line in this pane, more details will be displayed in
+	the "Packet Details" and "Packet Bytes" panes.
+    </p><p>
+	While dissecting a packet, Wireshark will place information from the
+	protocol dissectors into the columns. As higher level protocols might
+	overwrite information from lower levels, you will typically see the
+	information from the highest possible level only.
+    </p><p>
+	For example, let's look at a packet containing TCP inside IP inside
+	an Ethernet packet. The Ethernet dissector will write its data (such as
+	the Ethernet addresses), the IP dissector will overwrite this by its own
+	(such as the IP addresses), the TCP dissector will overwrite the IP
+	information, and so on.
+    </p><p>
+	There are a lot of different columns available. Which columns are
+	displayed can be selected by preference settings, see
+	<a href="ChCustPreferencesSection.html" title="9.5. Preferences">Section 9.5, &#8220;Preferences&#8221;</a>.
+    </p><p>
+	The default columns will show:
+	</p><div class="itemizedlist"><ul type="disc"><li><p><span><strong class="command">No.</strong></span>
+	  The number of the packet in the capture file. This number won't change,
+	  even if a display filter is used.
+	  </p></li><li><p><span><strong class="command">Time</strong></span>
+	  The timestamp of the packet. The presentation format of this timestamp
+	  can be changed, see <a href="ChWorkTimeFormatsSection.html" title="6.11. Time display formats and time 
+  references">Section 6.11, &#8220;Time display formats and time 
+  references&#8221;</a>.
+	  </p></li><li><p><span><strong class="command">Source</strong></span>
+	  The address where this packet is coming from.
+	  </p></li><li><p><span><strong class="command">Destination</strong></span>
+	  The address where this packet is going to.
+	  </p></li><li><p><span><strong class="command">Protocol</strong></span>
+	  The protocol name in a short (perhaps abbreviated) version.
+	  </p></li><li><p><span><strong class="command">Info</strong></span>
+	  Additional information about the packet content.
+	  </p></li></ul></div><p>
+    </p><p>
+	There is a context menu (right mouse click) available, see details in
+	<a href="ChWorkDisplayPopUpSection.html#ChWorkPacketListPanePopUpMenu" title='Figure 6.3. Pop-up menu of the "Packet List" pane'>Figure 6.3, &#8220;Pop-up menu of the "Packet List" pane&#8221;</a>.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChUseFilterToolbarSection.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ChapterUsing.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ChUsePacketDetailsPaneSection.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.15. The "Filter" toolbar </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 3.17. The "Packet Details" pane</td></tr></table></div></body></html>

@@ -1,0 +1,393 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0048)http://www.ils.unc.edu/~lindgren/190/mysql-jdbc/ -->
+<HTML><HEAD><TITLE>Introduction to MySQL and JDBC</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<STYLE>H1 {
+	FONT-WEIGHT: bold; FONT-SIZE: x-large; COLOR: teal; FONT-FAMILY: sans-serif; TEXT-ALIGN: center
+}
+H2 {
+	FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: teal; FONT-FAMILY: sans-serif
+}
+H3 {
+	FONT-WEIGHT: bold; FONT-SIZE: medium; COLOR: teal; FONT-FAMILY: sans-serif
+}
+</STYLE>
+
+<META content="MSHTML 6.00.2800.1170" name=GENERATOR></HEAD>
+<BODY>
+<H1>Introduction to MySQL and JDBC</H1>
+<HR>
+
+<H2>Overview</H2>
+<H3>What is MySQL?</H3>
+<P>MySQL is a multi-user SQL <B>relational</B> database server. It can run on 
+most unix platforms, windows and OS/2. Relational databases store information in 
+tables with rows and columns. SQL (Structured Query Language) is high-level, 
+declarative database language used for defining and querying relational 
+databases. For an introduction to the relational database model and SQL see <A 
+href="http://www.citilink.com/~jgarrick/vbasic/database/rdbms.html">Jose's 
+Database Programming Corner</A>. For more information about MySQL visit the <A 
+href="http://www.mysql.com/">MySQL website</A>. 
+<H3>What is JDBC?</H3>
+<P>JDBC (Java Database Connectivity) is a Java API developed by JavaSoft for 
+executing SQL statements. According to JavaSofts <A 
+href="http://www.javasoft.com/products/jdbc/overview.html">overview</A>, "The 
+JDBC API defines Java classes to represent database connections, SQL statements, 
+result sets, database metadata, etc. It allows a Java programmer to issue SQL 
+statements and process the results." 
+<HR>
+
+<H2>Sample MySQL Database</H2>
+<H3>Design</H3>
+<P>For purposes of this demonstration, I will build a simple three table 
+database. My database will store information about students, courses and 
+registration. The following Entity-Relationship (ER) diagram shows the basic 
+design of my database:</P>
+<CENTER><IMG src="images/ER.gif"></CENTER>
+<P>The student table has attributes for studentID, name, email and major. The 
+studentID is will be the "Primary Key," an attribute that uniquely identifies 
+each record in the table. The course table has attributes for call_number, name, 
+teacher, semester. It's Primary Key is call_number. The registration table links 
+the student table with the the course table. A student can register for many 
+courses and a course can have many students. The relationship between course and 
+student is stored in the registration table which has attributes, SID and 
+call_num, that correspond to the Primary Keys of the related tables. Because a 
+student cannot be registered for a course twice, both attributes (SID and 
+call_num) will be the joint Primary Key for the registration table. 
+<H3>SQL Data Definition</H3>
+<P>In order to create the database in MySQL we need to convert the above design 
+into SQL statements. We use the CREATE TABLE statement to do this. I used the 
+following SQL statements to create my MySQL database:</P><PRE>CREATE TABLE alex_student (
+  studentID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(30) NOT NULL,
+  email VARCHAR(45), 
+  major VARCHAR(15)
+);
+
+CREATE TABLE alex_course (
+  call_number INT NOT NULL PRIMARY KEY,
+  name VARCHAR(25) NOT NULL,
+  teacher VARCHAR(30),
+  semester VARCHAR(10) NOT NULL
+);
+
+CREATE TABLE alex_registration (
+  SID INT NOT NULL,
+  call_num INT NOT NULL,
+  PRIMARY KEY (SID, call_num)
+);
+
+</PRE>
+<H3>Datatypes</H3>
+<P>Each attribute must have a data or column type defined for it. As with most 
+database systems, MySQL provides a number of column (data) types. The most 
+common are INT (a normal sized integer, FLOAT (a floating-point number), DOUBLE 
+(a double-precision floating-point number), DATE, DATETIME, CHAR (a fixed-length 
+string), and VARCHAR (a variable-length string). I used INT and VARCHAR in my 
+sample database. See the MySQL <A 
+href="http://www.mysql.com/Manual_chapter/manual_Syntax.html#Column_types">Reference 
+Manual</A> for more information about the various data types that MySQL 
+supports. 
+<H3>Keywords (NOT NULL, AUTO_INCREMENT, PRIMARY KEY)</H3>
+<P>Besides the data type, I used following three key words (or phrases) to 
+define my sample database: 
+<UL>
+  <LI>NOT NULL 
+  <LI>AUTO_INCREMENT 
+  <LI>PRIMARY KEY </LI></UL>
+<P>NOT NULL means that the field must have a value for every record. 
+AUTO_INCREMENT means that the field automatically gets the biggest value plus 
+one for each insert where the column value is 0 or NULL. (Note: not all SQL 
+database systems use this syntax for autonumbering.) PRIMARY KEY indicates that 
+the attribute is the primary key for that table. Note that in MySQL, for tables 
+where more than one attribute make up the primary key, you cannot use the 
+keywork after each attribute name. Instead, you must define the primary key at 
+the end of the SQL statement with the attritutes in parenthesis (see the CREATE 
+TABLE statement for the alex_registration table above). 
+<H3>SHOW, DESCRIBE, DROP</H3>Some other useful MySQL commands include SHOW, 
+DESCRIBE, DROP. The SHOW command creates a list of tables in the database. The 
+following is an example of how you use the SHOW command in MySQL: <PRE>mysql&gt; show tables;
++-------------------+
+| Tables in CES     |
++-------------------+
+| alex_course       |
+| alex_registration |
+| alex_student      |
++-------------------+
+3 rows in set (0.00 sec)
+
+</PRE>
+<P>The name of my database is CES. There are three tables in it: alex_course, 
+alex_registration, and alex_student. (I named them with the alex prefix because 
+the database was created for another class project.) 
+<P>In order to get a description of a table type: SHOW table_name. For example: <PRE>mysql&gt; describe alex_course;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| call_number | int(11)     |      | PRI | 0       |       |
+| name        | varchar(25) |      |     |         |       |
+| teacher     | varchar(30) | YES  |     | NULL    |       |
+| semester    | varchar(10) |      |     |         |       |
++-------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql&gt; describe alex_registration;
++----------+---------+------+-----+---------+-------+
+| Field    | Type    | Null | Key | Default | Extra |
++----------+---------+------+-----+---------+-------+
+| SID      | int(11) |      | PRI | 0       |       |
+| call_num | int(11) |      | PRI | 0       |       |
++----------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql&gt; describe alex_student;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| studentID | int(11)     |      | PRI | 0       | auto_increment |
+| name      | varchar(30) |      |     |         |                |
+| email     | varchar(45) | YES  |     | NULL    |                |
+| major     | varchar(15) | YES  |     | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+</PRE>
+<P>Finally, you may want to delete a table. You can do this with the DROP TABLE 
+command. (The syntax is: DROP TABLE table_name; where table_name is the name of 
+the table you want to delete. 
+<H3>Inserting Data</H3>
+<P>Adding data to a table is done with the INSERT command. It looks like this: <PRE>INSERT INTO alex_course VALUES 
+  (100, 'COMP 190 Web Programming', 'John Smith', 'Spring1999')
+);
+</PRE>
+<H3>Creating a Simple Query</H3>
+<P>The SELECT command is used in SQL for retrieving data. The basic syntax of 
+SELECT is as follows: <PRE>SELECT column(s) (or '*' for all)
+FROM table(s)
+[WHERE constraint(s)];
+</PRE>An example of a simple query is: <PRE>mysql&gt; SELECT * FROM alex_student;
++-----------+---------------+----------------------+-----------------+
+| studentID | name          | email                | major           |
++-----------+---------------+----------------------+-----------------+
+|         1 | Alex Lindgren | lindgren@ils.unc.edu | Information Sci |
+|         2 | Rajiv Zutshi  | zutsr@ils.unc.edu    | Informaton Scie |
+|         3 | Kiduk Yang    | yang@ils.unc.edu     | Informaton Scie |
++-----------+---------------+----------------------+-----------------+
+3 rows in set (0.01 sec)
+</PRE>The optional WHERE clause allows us to retrieve a limited data set. For 
+example: <PRE>mysql&gt; SELECT * FROM alex_course
+    -&gt; WHERE semester = 'Spring1999';
++-------------+--------------------------+------------+------------+
+| call_number | name                     | teacher    | semester   |
++-------------+--------------------------+------------+------------+
+|         100 | COMP 190 Web Programming | John Smith | Spring1999 |
+|         102 | INLS 131 Management      | Solomon    | Spring1999 |
+|         103 | INLS 258 Database II     | S. Haas    | Spring1999 |
++-------------+--------------------------+------------+------------+
+3 rows in set (0.01 sec)
+</PRE>
+<HR>
+
+<H2>Database Access with JDBC</H2>
+<H3>A Simple JDBC Application</H3>
+<P>In order to use a database from a Java applet, servlet or application, we 
+need to: 
+<OL>
+  <LI>establish a connection with the database 
+  <LI>send SQL statments 
+  <LI>process the results </LI></OL>
+<P>The following is a very simple Java application that connects to the MySQL 
+database: <PRE>import java.sql.*;
+import twz1.jdbc.mysql.*;
+
+public class TestQuery {
+
+    public TestQuery () {
+    }
+
+    public static void main(String args[]) {
+
+        String url="jdbc:z1MySQL://luna.oit.unc.edu/CES?user=alexadmin";
+        Connection con;
+        String query = "SELECT * FROM alex_course";
+        Statement stmt;
+
+        try {
+            Class.forName("twz1.jdbc.mysql.jdbcMysqlDriver");
+        }
+        catch (java.lang.ClassNotFoundException e) {
+            System.err.print("ClassNotFoundException: ");
+            System.err.println(e.getMessage());
+        }
+
+        try {
+            System.out.println("Trying to connect...");
+            con = DriverManager.getConnection (url, "alexadmin", "xxxxxxx");
+            System.out.println("connected!");
+            stmt = con.createStatement();
+            ResultSet result = stmt.executeQuery(query);
+            while (result.next()) {
+                String name = result.getString(1) + " " + result.getString(2);
+                System.out.println(name);
+            }
+            stmt.close();
+            con.close();
+        }
+        catch(SQLException ex) {
+            System.err.print("SQLException: ");
+            System.err.println(ex.getMessage());
+        }
+    }
+}
+</PRE>
+<H3>Making the Connection</H3>
+<P>The first step is to load the JDBC driver. I am using a type 4 (native) 
+driver from <A href="http://www.voicenet.com/~zellert/tjFM/">Terrance 
+Zellars</A>. The driver is loaded in the first try block: <PRE>try {
+    Class.forName("twz1.jdbc.mysql.jdbcMysqlDriver");
+}
+</PRE>
+<P>Next, the connection to the database established and a Connection object is 
+created: <PRE>con = DriverManager.getConnection (url, "alexadmin", "xxxxxxx");
+</PRE>
+<P>Information is retrieved by first creating the SQL Statement object using the 
+Connections createStatement() method and then by creating a ResultSet using the 
+Statements executeQuery() method: <PRE>stmt = con.createStatement();
+ResultSet result = stmt.executeQuery(query);
+</PRE>Next, we step through the ResultSet using a while loop: <PRE>while (result.next()) {
+     String name = result.getString(1) + " " + result.getString(2);
+     System.out.println(name);
+}
+</PRE>
+<P>Finally, we close up all the loose ends by calling the close() method for 
+both the Statment and Connection objects: <PRE>stmt.close();
+con.close();
+
+</PRE>
+<H3>JDBC Servlets</H3>
+<P>Connecting to a database from a Servlet using JDBC is very similar to an 
+Applet or Application. The steps (outlined above) are essentially the same. 
+<P>My first <A 
+href="http://wwwj.cs.unc.edu:8080/servlet/alexLookupClass">servlet example</A> 
+queries the database, using a SELECT statement, to get a table of courses for 
+the Spring. The resulting page should look like this:</P>
+<CENTER><IMG src="images/screen.gif"></CENTER>
+<P>Here is the code for this servlet: <PRE>import java.sql.*;
+import twz1.jdbc.mysql.*;
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+// Based on example 9-1 in Java Servlet Programming by Jason Hunter (O'Reilly)
+
+public class alexLookupClass extends HttpServlet {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) 
+		throws ServletException, IOException {
+		
+		String url="jdbc:z1MySQL://luna.oit.unc.edu/CES?user=alexadmin";
+		Connection con = null;
+		Statement stmt = null;
+		ResultSet rs   = null;
+		String query;
+
+		res.setContentType("text/html");
+		ServletOutputStream out = res.getOutputStream();
+
+		try {
+			//Load the driver
+			Class.forName("twz1.jdbc.mysql.jdbcMysqlDriver");
+
+			//Get a Connection to the database
+			con = DriverManager.getConnection (url, "alexadmin", "xxxxxxx");
+
+			//Create a Statement object
+			stmt = con.createStatement();
+
+			//Execute an SQL query, get a ResultSet
+			query = "SELECT call_number, name, teacher FROM alex_course WHERE semester='Spring1999'";
+			ResultSet result = stmt.executeQuery(query);
+
+			//Display the result set in a HTML table
+			out.println("&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;Spring Course List&lt;/TITLE&gt;&lt;/HEAD&gt;");
+			out.println("&lt;BODY&gt;&lt;h2&gt;spring course list&lt;/hd&gt;&lt;TABLE BORDER='1' CELLSPACING='2' CELLPADDING='2'&gt;");
+			out.println("&lt;TR&gt;&lt;TH&gt;Call No.&lt;/TH&gt;&lt;TH&gt;Course Title&lt;/TH&gt;&lt;TH&gt;Instructor&lt;/TH&gt;&lt;/TR&gt;");
+			while(result.next()) {
+				String callNumResult = result.getString("call_number");
+				String courseNameResult = result.getString("name");
+				String instructorResult = result.getString("teacher");
+				out.println("&lt;TR&gt;&lt;TD&gt;" + callNumResult + "&lt;/TD&gt;");
+				out.println("&lt;TD&gt;" + courseNameResult + "&lt;/TD&gt;");
+				out.println("&lt;TD&gt;" + instructorResult + "&lt;/TD&gt;&lt;/TR&gt;");
+			} // end while
+			out.println("&lt;/TABLE&gt;&lt;/BODY&gt;&lt;/HTML&gt;");
+		} // end try
+
+		catch(ClassNotFoundException e) {
+			out.println("Could not load database driver: " + e.getMessage());
+		}
+
+		catch(SQLException e) {
+			out.println("SQLException caught: " + e.getMessage());
+		}
+
+		finally {
+			//close the database connection.
+			try {
+				if (con != null) con.close();
+				}
+			catch (SQLException e) {}
+		}
+	}
+}
+
+</PRE>
+<P>As you can see from the code, the steps for connecting to the database a the 
+same as in the application: load the driver, get a connection, create and 
+execute a SQL Statement and step through the Result Set using a while loop. The 
+only difference is that it is in the context of a servlet and the output is 
+served to an HTML page. 
+<H3>Another Servlet Example</H3>
+<P>Click <A href="http://wwwj.cs.unc.edu:8080/servlet/alexLookupClass2">here</A> 
+to see slightly more complex Servlet example. In this example you can select a 
+course and click on the button to see a list of students registered for that 
+course.</P>
+<CENTER><IMG src="images/screen2.gif"></CENTER>
+<P>The code for this exampe is located <A 
+href="http://www.ils.unc.edu/~lindgren/190/mysql-jdbc/examples.html">here</A>. 
+<HR>
+
+<H2>Resources</H2>
+<H3>Relational Database Concepts
+<H3>
+<UL>
+  <LI><I>Fundamentals of Database Systems</I>, 2nd ed. by Ramex Elmasri and 
+  Shamkant Navathe (Addison-Wesley, 1994) 
+  <LI><I>The Essence of Databases</I> by F.D. Rolland (Prentice Hall, 1998) 
+  <LI><A 
+  href="http://www.citilink.com/~jgarrick/vbasic/database/rdbms.html">Jose's 
+  Database Programming Corner</A> </LI></UL>
+<H3>Web Databases</H3>
+<UL>
+  <LI><A href="http://wdvl.com/Authoring/DB/Intro/">Introduction to Databases 
+  for the Web</A> </LI></UL>
+<H3>MySQL</H3>
+<UL>
+  <LI><A 
+  href="http://www.devshed.com/resource/advanced/mysql/index.html">Beginning 
+  MySQL Tutorial</A> (DevShed) 
+  <LI><A href="http://www.mysql.net/">MySQL.net</A> 
+  <LI><A href="http://mysql.turbolift.com/mysql/">MySQL contributed 
+  documentation</A> </LI></UL>
+<H3>JDBC</H3>
+<UL>
+  <LI><I>JDBC Database Access with Java</I> by Hamilton, Cattell and Fisher 
+  (Addison-Wesley, 1997) 
+  <LI><I>Java Servlet Programming</I> Chapter 9 by Jason Hunter (O'Reilly, 1998) 
+
+  <LI><A href="http://www.javasoft.com/products/jdbc/index.html">The JDBC Data 
+  Access API</A> 
+  <LI><A 
+  href="http://www.javasoft.com/docs/books/tutorial/jdbc/index.html">JavaSofts 
+  JDBC Database Access tutorial</A> 
+  <LI><A href="http://www.purpletech.com/java/courses/jdbc/">JDBC and Database 
+  Programming in Java</A> (Purple Technology) </LI></UL></H3></H3></BODY></HTML>

@@ -1,0 +1,591 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+
+<TITLE>Installing, configuring, and using Tripwire<sup>&reg</sup> to verify the integrity of directories 
+and files on systems running Solaris 2.x</TITLE>
+</HEAD>
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+<table border="0" width="100%" cellspacing="6" cellpadding="4">
+  <tr> 
+    <td width="125" align="LEFT" valign="TOP" height="58"><b><font face="Arial">Implementation 
+      Details</font></b></td>
+    <td align="LEFT" valign="TOP" height="58"><b><font face="Arial" size="4">Installing, 
+      configuring, and using Tripwire<sup>&reg</sup> to verify the integrity of directories and 
+      files on systems running Solaris 2.x</font></b></td>
+  </tr>
+  <tr> 
+    <td width="125">&nbsp;</td>
+    <td> 
+      <table border="1" width="75%" cellspacing="0" cellpadding="8">
+        <tr> 
+          <td colspan="2" align="LEFT" valign="TOP" bgcolor="#ccddff"> 
+            <p>Applies to the practices: <a href="../practices/p096.html">"Inspect files and 
+directories for unexpected changes"</a><br> 
+<a
+href="../practices/p091.html">"Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior"</a><br>
+<a href="../practices/p067.html">"Keep operating systems and applications software up to date"</a>
+<br><a href="../practices/p079.html">"Configure the Web server to minimize the functionality of programs, scripts, and plug-ins"</a>
+            <p>Applicable technologies: Tripwire; Solaris 2.x; UNIX operating 
+              system and derivatives </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td width="125">&nbsp;</td>
+    <td align="LEFT" valign="TOP"> 
+      <p>Tripwire<small><sup><a href="#1">1</a></sup></small> is a file system integrity-checking 
+program for UNIX operating systems. To use it, 
+you first must build a configuration file that designates the directories and files that you want to verify and the attributes you want to have verified for each. You then run Tripwire (with the initialize option) to create a database of cryptographic checksums that correspond to the files and directories specified in the configuration file. 
+
+<p>To protect the Tripwire program, configuration file, and initialized database against corruption, be sure to transfer them to a medium that can be designated as physically write-protected, such as a disk or CD-ROM. This read-only version then becomes the authoritative reference program, configuration, and data, which you can reliably use to test the integrity of directories and files on your system.
+
+<p>In addition to one or more cryptographic checksums representing the contents of each directory and file, the Tripwire database also contains information that allows you to verify:
+<ul>
+<li>access permissions and file mode settings, including effective execution settings 
+<li>inode number in the file system 
+<li>number of links 
+<li>user ID of the owner 
+<li>group ID of the group of users to which access may be granted 
+<li>size of the item 
+<li>date and time the item was last accessed, the last modification made to the item, and the creation date and time associated with the item's inode
+</ul>
+<p>For any system, you want to verify the integrity of all critical operating system directories and files, plus any other directories and files that you consider sensitive or that have no reason to change under normal conditions. Pay particular attention to executable programs, daemons, scripts, and the libraries and configuration files associated with them.
+
+<p>The default Tripwire configuration file for Solaris provides a good starting point, but you need to carefully review and edit it to reflect your system. Consult the <font face="courier new"><small>filesystem(5)</small></font> manual page for details about how the Solaris 2.x file system is organized, and for descriptions of directories that include files that you should verify.
+
+<p>When choosing which attributes of files and directories to verify, you need to consider how they are used on your system. For example, you know that your log files grow as events cause records to be written to them, so verifying the constancy of the file size for these files does not make sense. However, monitoring changes to the size of system binaries or to access permissions for log files is probably warranted. 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td align="left" valign="TOP" width="125"><b><font face="Arial"> 
+      <p>Effort Estimates</p>
+      </font></b> </td>
+    <td align="LEFT" valign="TOP">
+<p>The time needed to retrieve the source code from the distribution site varies depending upon your connection speed. The source code is less than 283 KB (version 1.3.1-1). Building and installing Tripwire depends upon machine performance but on average will take less than ten minutes. 
+
+<p>You will need to allocate several days of staff effort to determine a comprehensive configuration suitable for your environment that is tailored to minimize the generation of any misleading or unnecessary messages. Extraneous messages that do not require your attention will show up during this initial period of use. You will need to make adjustments and tailor to meet your reporting requirements as you go. 
+
+<p>Tripwire database updates are required if new software or new releases are added to your system configuration. These actions may also require further tailoring of your Tripwire configuration.
+    </td>
+  </tr>
+  <tr> 
+<td colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="TOP" width="125"><b><font face="Arial">
+      <p>Prerequisites</p>
+ </font></b> </td>
+    <td align="LEFT" valign="TOP">
+      <p>You can build and install Tripwire on many UNIX systems. To build Tripwire on your system, you need Internet access to retrieve the following software tools:
+<ul>
+<li>An <a href="i002.01.html">MD5</a> cryptographic checksum program  
+<li><a href="ftp://ftp.gnu.org/gnu/gzip/gzip-1.2.4a.tar">GZIP</a> to uncompress the downloaded file   
+<li><a href="http://www.pgp.com">PGP</a> to verify the authenticity of the software distribution  
+<li>A C compiler; either the Sun C Computer or the <a href="ftp://prep.ai.mit.edu/gnu/gcc/gcc-core-2.95.2.tar.gz">free GNU C Compiler</a>
+</ul>
+    </td>
+  </tr>
+  <tr>
+<td colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="TOP" width="125"><b><font face="Arial">
+<p>Downloading and Verifying</p>
+</font></b> </td>
+    <td align="LEFT" valign="TOP">
+<p>The latest Academic Source Release (ASR) version of Tripwire (1.3.1-1) is available as <font face="courier new"><small>Tripwire-1_3_1-1_tar.gz</small></font> from <a href="http://www.tripwiresecurity.com/products/index.cfml">http://www.tripwiresecurity.com/products/index.cfml</a>.
+
+<p>See <b>Additional Information</b> below for guidance on open source and for-purchase versions.
+
+<p>Perform a file transfer from <a href="http://www.tripwiresecurity.com/products/index.cfml">http://www.tripwiresecurity.com/products/index.cfml</a> to download the Tripwire distribution.
+
+<p>Verify the authenticity of the Tripwire distribution using an MD5 checksum as shown below:
+
+<P><table cellpadding=3 cellspacing=3 border=1>
+<tr>
+<td><b>File to Download</b></td>
+<td><b>MD5 Checksum</b></td>
+</tr>
+<tr>
+<td>Tripwire-1.3.1-1.tar.gz</td>
+<td><font face="courier new"><small>31025a0649e8c5123877b30d13b62143</small></font></td>
+</tr>
+</table>
+<p>If the computed cryptographic checksum of the download files does not correspond to the information above, verify that
+<ul>
+<li>your downloaded filenames match those listed above 
+<li>your checksum program computes MD5 message digests
+</ul>
+    </td>
+  </tr>
+  <tr>
+<td colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="TOP" width="125"><b><font face="Arial">
+<p>Install Tripwire</p>
+</font></b> </td>
+    <td align="LEFT" valign="TOP">
+<p>Choose a storage location with sufficient space for the Tripwire distribution. We recommend that you also download the Tripwire User Manual. It contains trouble-shooting suggestions and additional details that are beyond the scope of this implementation.
+</td>
+  </tr>
+  <tr>
+    <td width="125" align="right" valign="TOP"> 
+    </td>
+    <td align="LEFT" valign="TOP" bordercolor="#33FFFF"><b><font face="Arial" size=3 color="#009900">
+      <p>Unpack the Tripwire distribution</p>
+      </font></b><font size=3> </font>
+<p>First you need to unzip the Tripwire distribution:
+
+<p><font face="courier new"><small>$ gunzip Tripwire-1_3_1-1_tar.gz</small></font> 
+
+<p>To unpack the Tripwire distribution, use the system tar command:
+
+<p><font face="courier new"><small>$ tar xvf Tripwire-1.3.1-1_tar</small></font>
+
+<p>This command creates a subdirectory named <font face="courier new"><small>tw_ASR_1.3.1_src</small></font>. Perform all operations within this subdirectory.
+
+<p>Several files exist in the created directory. One of these files is the Tripwire <font face="courier new"><small>README</small></font> file. It outlines the various strategies and settings for configuring and operating. <font face="courier new"><small>Ported</small></font>, another file, lists the platforms and operating systems that Tripwire has already been ported to. Find your OS in the list and note the system settings. You will use these to build Tripwire on your system. Once you have reviewed both the <font face="courier new"><small>README</small></font> and <font face="courier new"><small>Ported</small></font> files, you will better understand how to configure Tripwire for your specific system.
+</td>
+  </tr>
+  <tr>
+    <td width="125" align="right" valign="TOP"> 
+    </td>
+    <td align="LEFT" valign="TOP" bordercolor="#33FFFF"><b><font face="Arial" size=3 color="#009900">
+      <p>Choose the right operating system settings</p>
+      </font></b><font size=3> </font>
+<p>Change the <font face="courier new"><small>Makefile</small></font> to make sure it is correctly tuned for your system environment. To do so, edit the lines:
+<pre>
+        #CC    = cc        # common
+        CC     = gcc       # also common
+     </pre>   
+<p>to read:
+<pre>
+        CC     = cc        # common
+        #CC    = gcc       # also common
+</pre>
+</td>
+  </tr>
+  <tr>
+    <td width="125" align="right" valign="TOP"> 
+    </td>
+    <td align="LEFT" valign="TOP" bordercolor="#33FFFF"><b><font face="Arial" size=3 color="#009900">
+      <p>Choose the path and name of the Tripwire configuration and database files</p>
+      </font></b><font size=3> </font>
+<p>Edit the <font face="courier new"><small>./include/config.h</small></font> file, tailoring it to your specific system. Paths and names for Tripwire configuration files are specified in <font face="courier new"><small>./include/config.h</small></font>. Decide if you will use a disk or CD-ROM to store the Tripwire databases (as read-only) and specify the locations where Tripwire will look for its files.
+
+<p>Perform the following steps if you are using a floppy disk to store the Tripwire databases:
+<ol>
+<li>Insert the disk with the protect tab set to writable.
+
+<li>Format the disk:<br>
+<font face="courier new"><small># fdformat -v /dev/rdisk</small></font>
+
+<li>Create a file system on the floppy disk:<br>
+<font face="courier new"><small># newfs -v /dev/rdisk</small></font>
+
+<li>Create the /floppy mount directory:<br>
+<font face="courier new"><small># mkdir /floppy</small></font>
+
+<li>Mount the floppy disk as read-write:<br>
+<font face="courier new"><small># mount -n /dev/disk /floppy</small></font>
+
+<li>Create the /floppy/databases data directory:<br>
+<font face="courier new"><small># mkdir /floppy/databases</small></font>
+</ol>
+<p>If you prefer to use a CD-ROM, refer to other technical sources for its proper configuration and use. Once you have a working CD-ROM writer, it should act as any other media device with respect to its interaction with Tripwire.
+
+<p>Based on the assumption that the configuration files are stored locally and that the Tripwire databases are stored on a floppy disk, the following table lists the options that need to be adjusted within <font face="courier new"><small>./include/config.h</small></font>. Edit this file to reflect the recommendations below:
+<p><table cellpadding=3 cellspacing=3 border=1>
+<tr>
+<td><b>Option</b></td>
+<td><b>Recommendation</b></td>
+<td><b>Description</b></td>
+</tr>
+<td><font face="courier new"><small>
+CONFIG_PATH</small></font></td>
+<td><font face="courier new"><small>/etc</small></font></td>
+<td>The directory where the Tripwire program looks for its configuration file.</td></tr>
+<tr>
+<td><font face="courier new"><small>DATABASE_PATH</small></font></td>
+<td><font face="courier new"><small>/floppy/databases</small></font></td>
+<td>The directory where the Tripwire program searches for the databases.</td>
+</tr></table>
+</td>
+  </tr>
+  <tr>
+    <td width="125" align="right" valign="TOP"> 
+    </td>
+    <td align="LEFT" valign="TOP" bordercolor="#33FFFF"><b><font face="Arial" size=3 color="#009900">
+      <p>Create an initial version of Tripwire configuration files</p>
+      </font></b><font size=3> </font>
+<p>Various templates for several operating systems are located in the <font face="courier new"><small>./config</small></font> directory as part of the distribution. Copy the default file for Solaris 2.x <font face="courier new"><small>tw.conf.sunos5</small></font> to the directory specified for the Tripwire configuration file location (see the previous step). 
+
+<p><font face="courier new"><small># cp config/tw.conf.sunos5 /etc/tw.config</small></font>
+
+<p>Next, you need to edit the <font face="courier new"><small>/etc/tw.config</small></font> file (consult the <font face="courier new"><small>tw.config.5</small></font> man page) to include any local system binaries, other critical files, and any additional files that you want to monitor. 
+
+<p>After the configuration is finished, you can now build the Tripwire executable by specifying the <font face="courier new"><small>make</small></font> command:
+
+<p><font face="courier new"><small>$ make</small></font>
+</td>
+  </tr>
+  <tr>
+    <td width="125" align="right" valign="TOP"> 
+    </td>
+    <td align="LEFT" valign="TOP" bordercolor="#33FFFF"><b><font face="Arial" size=3 color="#009900">
+      <p>Install the Tripwire distribution</p>
+      </font></b><font size=3> </font>
+<p>Start the installation using the command <font face="courier new"><small>make install</small></font> to place the Tripwire binary and man pages into the correct system directories. Perform this as system administrator using the <font face="courier new"><small>root</small></font> account. You can also place all necessary files into the desired directory manually as follows:
+<pre>
+# cp man/siggen.8 /usr/local/man/man8/
+# cp man/tripwire.8 /usr/local/man/man8/
+# cp man/tw.config.5 /usr/local/man/man5/
+# cp src/tripwire /usr/local/bin/
+# cp src/siggen /usr/local/bin/
+</pre>
+    </td>
+  </tr>
+  <tr>
+<td colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="TOP" width="125"><b><font face="Arial">
+<p>Testing Tripwire</p>
+</font></b> </td>
+    <td align="LEFT" valign="TOP">
+<p>The Tripwire distribution includes a script-driven testing suite that checks the build process. To run the testing suite, type the following command:
+
+<p><font face="courier new"><small>$ make test</small></font>
+
+<p>This starts a script that tests your build of Tripwire against a copy of the Tripwire database in the <font face="courier new"><small>./test</small></font> directory. If all goes well, the output of the test matches the expected values that the script provides. For more information on the testing suite, consult the Tripwire User Manual.
+
+<p>For additional details on installation and configuration, consult the Tripwire User Manual, the <font face="courier new"><small>README</small></font> file, or the man pages.
+    </td>
+  </tr>
+  <tr>
+<td colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="TOP" width="125"><b><font face="Arial">
+<p>Preparing to use Tripwire</p>
+</font></b> </td>
+    <td align="LEFT" valign="TOP">
+<p>Once you have built and tested Tripwire, you need to address several additional topics that are important for the program's overall use. Not all files need the same level of protection. Tripwire comes with multiple cryptographic signature algorithms. Some execute more quickly than others and some are more secure than others. (See the Tripwire User Manual for a discussion of the individual algorithms.) You will need to tailor your configuration files to reflect this tradeoff between security and performance. Tripwire's default setting is to use two algorithms to calculate cryptographic checksums; MD5 and Snefru. Using MD5 alone should be sufficient for most files and directories.
+
+<p>Tripwire can be run in one of four modes:
+<ol>
+<li>database generation
+<li>database update
+<li>interactive update mode
+<li>integrity checking
+</ol>
+    </td>
+  </tr>
+  <tr>
+<td colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="TOP" width="125"><b><font face="Arial">
+<p>Generate the Tripwire database</p>
+</font></b> </td>
+    <td align="LEFT" valign="TOP">
+<p>Integrity checking requires that a previously generated database exists against which to compare. Such a database is created by the <font face="courier new"><small>tw.config</small></font> file once you start database generation. Once you have configured the <font face="courier new"><small>tw.config</small></font> file as desired and have successfully installed Tripwire, insert the prepared floppy disk (disable write protection if necessary) and type the following commands:
+<pre>
+# mount -n /dev/disk /floppy
+# tripwire -initialize
+</pre>      
+<p>The first command mounts the floppy. The second command creates a file named <font face="courier new"><small>tw.db_&lt;the local system's host name&gt;</small></font> within the directory <font face="courier new"><small>/floppy/databases/</small></font>. This file is the authoritative copy to which the Tripwire program refers when checking the file system's integrity for this host. You can use the automatic or interactive update modes to maintain this database whenever changes are made to the system that need to be reflected in the Tripwire database.
+
+<p>After completing database generation, place a copy of the Tripwire program and its configuration file on the same disk as the database to protect the Tripwire software and critical files. Restrict access via the ownership and permissions settings on the files written to the disk so that only the root user can read them. Having all files on a write-protected floppy disk allows you to easily identify any changes by comparing versions on the disk to an authoritative reference copy. Once this step is complete, unmount and eject the floppy disk. The commands to execute this step are as follows:
+<pre>
+# cp /etc/tw.config /floppy
+# cp /usr/local/bin/tripwire /floppy
+# umount /floppy
+</pre>      
+<p>Shift the write-protect tab on the disk to disable writing to it. This write-protected disk now represents your authoritative reference. Store this floppy in a physically secure location. Create an exact copy of the disk to work with so that you do not need to use the original.
+    </td>
+  </tr>
+  <tr>
+<td colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="TOP" width="125"><b><font face="Arial">
+<p>Integrity checking using Tripwire</p>
+</font></b> </td>
+    <td align="LEFT" valign="TOP">
+<p>Obtain the read-only medium containing the authoritative reference from its physically secured storage. Make sure that write protection is enabled and mount the floppy disk as shown below: 
+<pre>
+# mount -n /dev/disk /floppy
+# echo 'test' &gt; /floppy/test
+/floppy/test: cannot create
+</pre>      
+<p>If the file <font face="courier new"><small>test</small></font> exists after the last command, the floppy is not write-protected.
+
+<p>Compare each directory and file with its authoritative reference data. Identify any files whose contents or other attributes have changed. Execute Tripwire directly from the write-protected floppy, specifying which configuration (<font face="courier new"><small>-c</small></font> option) and database (<font face="courier new"><small>-d</small></font> option) files to use as follows:
+<pre>
+# cd /floppy
+# ./tripwire -c ./tw.config -d ./databases/tw.db_&lt;the local system's host name&gt;      
+</pre>
+<p>Investigate any unexpected changes among those you have identified. If any changes cannot be attributed to authorized activities, initiate your incident response procedures immediately as described in the module <a href="../modules/m06.html">Responding to Intrusions</a>. Report the incident to your internal security point of contact. Provide the Tripwire report as additional data if applicable.
+
+<p>Return the authoritative reference data to its physically secured storage. If all changes reported by Tripwire are as expected, follow your organization's procedures for securely updating the authoritative reference copy of the Tripwire database.
+
+<p>When you have completed a Tripwire scan and update process, don't forget to unmount the authoritative reference medium and return it to secure storage.
+
+<p><font face="courier new"><small># umount /floppy</small></font>
+    </td>
+  </tr>
+  <tr>
+<td colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="TOP" width="125"><b><font face="Arial">
+<p>Tripwire report examples</p>
+</font></b> </td>
+<td></td>
+  </tr>
+  <tr>
+    <td width="125" align="right" valign="TOP"> 
+    </td>
+    <td align="LEFT" valign="TOP" bordercolor="#33FFFF"><b><font face="Arial" size=3 color="#009900">
+      <p>Example 1: No changes have occurred</p>
+      </font></b><font size=3> </font>
+<p>The output below shows that no changes have occurred in the files and directories being checked.
+
+<p>For this example, verbose mode (<font face="courier new"><small>-v</small></font> option) is enabled to illustrate Tripwire's scanning of each directory and file. The configuration is tailored to cover only files in the <font face="courier new"><small>/etc</small></font> directory.
+<pre><small>
+# cd /floppy
+# ./tripwire -v -c ./tw.config -d ./databases/tw.db_&lt;the local system's host name&gt;
+### Phase 1: Reading configuration file
+### Phase 2: Generating file list
+./tripwire: /etc/dfs/sharetab: No such file or directory
+./tripwire: /etc/hosts.equiv:  No such file or directory
+./tripwire: /etc/named.boot: No such file or directory
+./tripwire: /etc/rmtab: No such file or directory
+### Phase 3: Creating file information database
+scanning: /etc scanning: /etc/TIMEZONE
+scanning: /etc/aliases
+scanning: /etc/autopush
+scanning: /etc/clri
+scanning: /etc/crash
+scanning: /etc/cron
+scanning: /etc/cron.d
+scanning: /etc/cron.d/.proto
+scanning: /etc/cron.d/logchecker
+scanning: /etc/cron.d/queuedefs
+scanning: /etc/cron.d/at.deny
+scanning: /etc/cron.d/cron.deny
+scanning: /etc/cron.d/FIFO
+
+ (...additional output deleted...)
+
+scanning: /etc/nodename
+scanning: /etc/hostname.le0
+scanning: /etc/defaultrouter
+scanning: /etc/resolv.conf
+scanning: /etc/.mnttab.lock
+scanning: /etc/nsswitch.conf.OLD
+scanning: /etc/shadow.OLD
+scanning: /etc/openwin
+scanning: /etc/openwin/devdata
+scanning: /etc/openwin/devdata/profiles
+scanning: /etc/.obp_devices
+scanning: /etc/initpipe
+scanning: /etc/utmppipe
+scanning: /etc/ftpusers
+scanning: /etc/auto_global
+scanning: /etc/auto_o
+scanning: /etc/auto_u
+scanning: /etc/ethers
+scanning: /etc/printers.conf
+scanning: /etc/shells
+scanning: /etc/one-time.sh
+scanning: /etc/mkgroup
+scanning: /etc/mkpasswd
+scanning: /etc/mkshadow
+
+### Phase 4: Searching for inconsistencies
+### ### Total files scanned:     461
+### Files added:                   0
+### Files deleted:                 4
+### Files changed:               454
+###
+### After applying rules:
+### Changes discarded:           454
+### Changes remaining:             0
+###
+</small></pre>      
+<p>In phase 4, Tripwire summarizes its findings. 454 files have changed in some way but according to the rules that are specified in the configuration file, none of these changes is considered unexpected. The detected changes are probably associated with the most recent read accesses to the files, which we have chosen to ignore. If any files are modified unexpectedly, this modification is reported, as illustrated in example 2.
+</td>
+</tr>
+  <tr>
+    <td width="125" align="right" valign="TOP"> 
+    </td>
+    <td align="LEFT" valign="TOP" bordercolor="#33FFFF"><b><font face="Arial" size=3 color="#009900">
+      <p>Example 2: Changes have occurred</p>
+      </font></b><font size=3> </font>
+<p>Example 2 illustrates typical output generated after a new user has been added. In phase 4, Tripwire reports five unexpected changes. In Example 1 where unexpected occurred, reporting stopped after phase 4. In this example, phase 5 of the Tripwire report gives more information and shows the detected modifications.
+<pre><small>
+# cd /floppy
+# ./tripwire -c ./tw.config -d ./databases/tw.db_&lt;the local system's host name&gt;
+### Phase 1: Reading configuration file
+### Phase 2: Generating file list
+./tripwire: /etc/dfs/sharetab: No such file or directory
+./tripwire: /etc/hosts.equiv: No such file or directory
+./tripwire: /etc/named.boot: No such file or directory
+./tripwire: /etc/rmtab: No such file or directory
+### Phase 3: Creating file information database
+### Phase 4: Searching for inconsistencies
+###
+### Total files scanned:   463
+### Files added:           2
+### Files deleted:         4
+### Files changed:         456
+###
+### After applying rules:
+### Changes discarded:     455
+### Changes remaining:     5
+###
+added: -rw------- root   0 Apr 19 16:21:14 1997 /etc/.pwd.lock
+added: -rw------- root   0 Apr 19 16:21:13 1997 /etc/.group.lock
+changed: drwxr-xr-x root 3584 Apr 19 16:21:14 1997 /etc
+changed: -r--r--r-- root 6982 Apr 19 16:20:58 1997 /etc/passwd
+changed: -r-------- root 1571 Apr 19 16:20:59 1997 /etc/shadow
+### Phase 5: Generating observed/expected pairs for changed files
+###
+### Attr Observed (what it is) Expected (what it should be)
+### ============================================================
+/etc
+  st_mtime: Sat Apr 19 16:21:14 1997   Sat Apr 19 14:00:09 1997
+  st_ctime: Sat Apr 19 16:21:14 1997   Sat Apr 19 14:00:09 1997
+/etc/passwd
+  st_ino: 74339                        74305
+  st_size: 6982                        6932
+  st_mtime: Sat Apr 19 16:20:58 1997   Sat Apr 19 14:00:08 1997
+  st_ctime: Sat Apr 19 16:20:58 1997   Sat Apr 19 14:00:08 1997
+ md5 (sig1): 1k0No.UNC9mCJglGMtPk4O    0D5zziXYpwvXxOzy.DrYCx
+ snefru (sig2): 0ENvBIiHddw3tJMRQUMFHy 3ilRZc:dY2NFYLu3CAEXVI
+/etc/shadow
+  st_ino: 74305 74338
+</small></pre>      
+<p>The first two lines of phase 4 of the report are listing new files that are created when the <font face="courier new"><small>admintool</small></font> is executed to add the new user. The next three lines represent previously existing directories and files that have changed as a result of the addition. Phase 5 shows the following modifications:
+<ul>
+<li><font face="courier new"><small>inode</small></font> creation timestamps on the <font face="courier new"><small>/etc</small></font> directory
+<li>several attributes of the <font face="courier new"><small>/etc/passwd</small></font> file
+<li>the inode number of the <font face="courier new"><small>/etc/shadow</small></font> file
+</ul>
+<p>It is evident that the contents of the <font face="courier new"><small>/etc/passwd</small></font> file changed, since its size and cryptographic checksums (MD5, Snefru) changed.
+</td></tr>
+    <td width="125" align="right" valign="TOP"> 
+    </td>
+    <td align="LEFT" valign="TOP" bordercolor="#33FFFF"><b><font face="Arial" size=3 color="#009900">
+      <p>Example 3: Identify any missing files or directories</p>
+      </font></b><font size=3> </font>
+<p>In both of the previous examples, phase 2 reports that four files are missing. 
+This reporting occurs because the files were specified in the configuration file at the time the Tripwire configuration was initialized, but they did not exist at the time the database was generated.
+
+<p>If files are deleted, the line specifying the number of files deleted is non-zero in phase 4:
+
+<p><font face="courier new"><small>### Files deleted: 4</small></font>
+
+<p>Similarly, a more detailed entry indicates which file has been deleted: 
+
+<p><font face="courier new"><small>deleted: -rw-r----- 0 36 Jul 3 10:48:26 1997 /etc/testdir/testfile</small></font>
+
+<p>Depending on how you have configured the parent directory scan, more information can be reported to indicate any changes related to the directory where the missing file was previously located.
+</td></tr>
+    <td width="125" align="right" valign="TOP"> 
+    </td>
+    <td align="LEFT" valign="TOP" bordercolor="#33FFFF"><b><font face="Arial" size=3 color="#009900">
+      <p>Example 4: Identify any new files and directories</p>
+      </font></b><font size=3> </font>
+<p>If files or directories are added, this is indicated on the line specifying the number of files added in phase 4 of the Tripwire report:
+
+<p><font face="courier new"><small>### Files added: 2</small></font>
+
+<p>As with missing or changed files, the names of the added files are also listed. 
+<pre>
+added: -rw------- root 0 Apr 19 16:21:14 1997 /etc/.pwd.lock
+added: -rw------- root 0 Apr 19 16:21:13 1997 /etc/.group.lock
+</pre>
+</td></tr>
+  <tr>
+<td colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="TOP" width="125"><b><font face="Arial">
+<p>Additional information</p>
+</font></b> </td>
+    <td align="LEFT" valign="TOP">
+<p>
+As stated above in the "Downloading and Verifying" section of this implementation, the open source version is called Tripwire 1.3 ASR
+(Academic Source Release). It is the latest version available as
+source code for Solaris and other UNIX operating system variants. For this implementation, we assume that you are using this version.
+<p>
+Tripwire was originally developed in 1992 at Purdue University. Since that time, it has been downloaded and used by thousands of
+individuals and organizations. In 1998, Purdue transferred management of Tripwire to
+<a href="http://www.tripwiresecurity.com">Tripwire Security Solutions, Inc. (TSS)</a> . TSS currently offers multiple distributions of
+Tripwire for purchase and at no charge. Newer versions (than the version used in this implementation) are available for purchase.
+Because of operating system coverage (which now includes Windows/NT) and significant improvements in functionality, we recommend that
+you evaluate TSS versions for use in your environment. The latest version available for sale is version 2.2.1. 
+<p>
+In addition, a free version of 2.2.1 is also available from Tripwire Security for Linux. According to their web page,
+ <a href="http://www.tripwiresecurity.com/downloads/index.cfml">http://www.tripwiresecurity.com/downloads/index.cfml</a>, the following
+is true: "Linux is officially supported on RedHat 5.2 and 6.0. Other distributed versions of Linux are not officially supported, but
+basic functionality has been verified on RedHat 6.1, and various distributions of Debian, Caldera, Open Linux, and SuSE systems using
+Linux kernel 2.0.36 or higher." If you operate Linux, we recommend that you retrieve and install this version of Tripwire.
+ Note that the differences between 1.3.1 and 2.2.1 are so significant that the
+majority of this implementation does not accurately document version 2.2.1. Use Tripwire Security's documentation to guide you through
+that version's installation and operation.
+<p>
+A comparison between the for-purchase and no charge versions can be found at <a href="http://www.tripwiresecurity.com/products/index.cfml">http://www.tripwiresecurity.com/products/index.cfml</a>. The
+links for downloading either version for use with a UNIX operating system are contained at the bottom of their web page.
+<p>
+Other open source versions of Tripwire are available via the Internet. Generally, these non-TSS open source versions are not as well
+maintained. As a result, we recommend using the version available through TSS if you chose not to use the version used in this
+implementation.
+<p>
+<h3>Footnotes</h3>
+<small>
+<ul>
+<a name="1">1. Tripwire is a registered trademark of Tripwire, Inc.</a>
+</small>
+
+</td></tr>
+
+</table>
+
+
+</body>
+</html>
+

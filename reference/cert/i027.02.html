@@ -1,0 +1,538 @@
+<html><head>
+<title>Installing and securing Solaris 2.6 servers</title>
+</head>
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+<table  BORDER=0 CELLSPACING=6 CELLPADDING=4 WIDTH="100%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="121" HEIGHT="61"><b><font face="Arial, Helvetica, sans-serif"><font size=+0>Implementation
+Details</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2" HEIGHT="61">
+<h4>
+<b><font face="Arial"><font size=+1>Installing and securing Solaris 2.6
+servers</font></font></b></h4>
+</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="121" HEIGHT="159">&nbsp;</td>
+
+<td ALIGN=LEFT VALIGN=TOP>
+<table BORDER CELLSPACING=0 CELLPADDING=8 WIDTH="75%" BGCOLOR="#66FFFF" >
+<tr BGCOLOR="#CCDDFF">
+<td ALIGN=LEFT VALIGN=TOP>Applies to the practices:&nbsp;
+<br><a href="/security-improvement/practices/p067.html">"Keep
+operating systems and applications software up to date."</a>
+<br><a href="/security-improvement/practices/p068.html">"Offer
+only essential network services and operating system services on the server
+host machine."</a>
+<br><a href="/security-improvement/practices/p070.html">"Configure
+computer operating systems with appropriate object,device, and file access
+controls."</a>
+<br><a href="../practices/p091.html">"Identify data that characterize systems and aid in detecting signs of suspicious behavior."</a>
+<br><a href="../practices/p092.html">"Manage logging and other data collection mechanisms."</a>
+<br><a href="/security-improvement/practices/p073.html">"Configure
+computers for secure remote administration."&nbsp;</a>
+<br><a href="/security-improvement/practices/p065.html">"Develop a computer deployment plan that includes security issues."&nbsp;</a>
+<p>Applicable technologies: Solaris 2.6&nbsp;
+<p>Applicable scripts: <a href="http://www.cert.org/security-improvement/downloads/saferm">saferm<a NAME="saferm"></a></a>,
+<a href="http://www.cert.org/security-improvement/downloads/safeinstallf">safeinstallf</a><a NAME="safeinstallf"></a>
+<br>&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="121">&nbsp;</td>
+
+<td ALIGN=LEFT VALIGN=TOP>This implementation
+contains the recommended procedure for installing and securing (i.e. hardening)
+a Sun Sparc server running Solaris Version 2.6. Section 2 contains the
+procedure for installing the operating system. Section 3 contains the procedure
+for hardening the OS. If the OS is already installed on the system to be
+hardened, skip to the hardening section.&nbsp;
+<p>We recommend that you install only the minimum essential operating system
+configuration, meaning only those packages containing files and directories
+that you need to operate your server. Sun provides many diverse packages
+to meet the functional needs of most organizations. Using these requires
+little or no additional effort beyond installing the operating system.
+This approach does not generally serve the needs of the security-conscious
+systems administrator. Even with the "Core System Support," which is the
+minimum configuration by default, there are many additional security changes
+that are desireable.&nbsp;
+<p>Our general approach to security is:&nbsp;
+<ol>
+<li>
+Remove all privilege and access and then only grant (add back in) privilege
+and access as needed.</li>
+
+<li>
+Enable as much system logging as possible.&nbsp;</li>
+</ol>
+When you perform these tasks, you will gain a much better understanding
+of how your system operates, and what constitutes abnormal operation. Using
+this knowledge and some additional tools, you can reduce the time required
+to administer your system. The more you know about your systems, the more
+able you are to detect problems and protect your organization's assets.&nbsp;
+<p>We provide time estimates when the amount of time needed to complete
+a task can be reasonably estimated or when the time is greater than five
+minutes. Our estimate does not include the time required for you to make
+decisions based on site-specific issues such as disk partition layout.&nbsp;
+<p>We've also written and included two scripts to keep the Solaris software
+installation database (/var/sadm/install/contents) consistent with the
+changes you make to your system. The first of these is <b><a href="#saferm">saferm</a></b>.
+We recommend that you use <b>saferm</b> instead of <b>rm</b> when you need
+to remove files and directories. <b>Saferm</b> uses <b>removef</b> to keep
+the installation database current.&nbsp;
+<p>The second tool is <b><a href="#safeinstallf">safeinstallf</a></b>.
+It is a simple front-end for the installf program. We recommend that you
+use <b>safeinstallf</b> after making any file and directory changes, such
+as when you use <b>chmod</b>,
+<b>chown</b>, or change a configuration file.&nbsp;
+<p>References to the SANS Guide are taken from: Solaris Security Step By
+Step: A Survival Guide for Solaris Security, Version 1.0, The SANS Institute,
+1999. Refer to <a href="http://www.sans.org">http://www.sans.org</a> for
+more information.&nbsp;</td>
+</tr>
+
+<tr>
+<td COLSPAN="3">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="121"><b><font face="Arial, Helvetica, sans-serif"><font size=+0>Solaris
+2.6 installation</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>We strongly recommend
+that when you install Solaris 2.6 on a machine, you disconnect that machine
+from the network. Generally, the distribution CD contains packages that
+have vulnerabilities which are fixed by subsequent patches. If the machine
+being built is connected to the network during installation, it is possible
+for an attacker to exploit these vulnerabilities before you've had time
+to patch them.&nbsp;
+<p>Furthermore, we recommend that if you download any files from the internet,
+such as OS patches, you should use another machine which you know to be
+secure. The changes that you download should then be transported via tape
+(or some other secure manner) to the target machine.&nbsp;
+<p>Note: You need the following information before you begin the installation
+process:&nbsp;
+<blockquote>IP Name&nbsp;
+<br>IP Address&nbsp;
+<br>Subnet Mask&nbsp;
+<br>Default Gateway&nbsp;
+<br>DNS Server&nbsp;
+<br>Domain Name&nbsp;
+<br>Time Zone&nbsp;</blockquote>
+<b>Boot Time Configuration</b>
+<br>Perform SANS Guide steps 1.1.1 to 1.1.8, Basic OS Installation.&nbsp;
+<br>With the exception of step 1.1.5, select "other".&nbsp;
+<p>Estimated time required: 10 minutes&nbsp;
+<p><b>Minimal OS Installation</b>
+<br>Perform SANS Guide steps 1.2.1 to 1.2.7, Minimal OS Installation.&nbsp;
+<br>With the exception of 1.2.4, also select "System Accounting"&nbsp;
+<p>Estimated time required: 30 minutes&nbsp;
+<blockquote><b>File System Layouts&nbsp;</b>
+<br>There is considerable debate about file system layout. Some choose
+to have one large file system mounted as /; others prefer the more traditional
+layout as suggested in the SANS Guide. There are arguments that support
+both; choose the layout that is best for your application.&nbsp;
+<p><b>Installed Packages</b>
+<br>Install only those packages needed target machine. Each additional
+package potentially introduces another vulnerability to the system.&nbsp;
+<p><b>System Accounting</b>
+<br>System accounting provides a log of all processes that run on the system.
+Unfortunately it does not log all available information (such as the pathname
+to the program executed) and is not as useful as it could be. However,
+it can be used to correlate events with other system logs. System accounting
+also gives you a better understanding of what processes run, when they
+run, and how long they run. You can use this information to determine if
+something abnormal is occurring on your system.&nbsp;</blockquote>
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="3">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="121">
+<h3>
+<b><font face="Arial, Helvetica, sans-serif"><font size=+0>Solaris 2.6
+hardening</font></font></b></h3>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP>
+<ol>We recommend that you install the system from scratch. We recognize
+that you may need to harden an existing system (and the following steps
+may be followed in either case); however hardening an existing system is
+a more difficult task.&nbsp;
+<br>&nbsp;
+<li>
+If you are hardening a machine on which you have already installed Solaris,
+first remove all packages not needed for the operation of your server.
+The presence of any package not required for the services provided by the
+system reduces the security of the system.</li>
+
+<p><br>Estimated time required: > 1 hour, depending on how many packages
+are installed.&nbsp;
+<p>Note: Files and directories to be removed should be removed with <b><a href="#saferm">saferm</a></b>.
+You should run <b><a href="#safeinstallf">safeinstallf</a></b> after changing
+any attribute of a file. Links to both scripts are found at the top of
+this implementation.
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Verify that the file <i>/etc/hostname.&lt;interface><interface> </i>contains
+only the hostname of the machine in the appendix to this implementation.</li>
+
+<p><br>This is to verify the information that was given during the installation.&nbsp;
+<br>&nbsp;
+<li>
+Verify that the file <i>/etc/inet/hosts</i> contains:</li>
+
+<p><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=+0>
+127.0.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+localhost</font><ip address>
+<br><font size=+0>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&lt;IP address>&nbsp;&nbsp;&nbsp;&nbsp; &lt;hostname>&nbsp;</font>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;IP address>&nbsp;&nbsp;
+<font size=+0>loghost</font>
+<br><font size=+0>If you have a central logging host, add an entry for
+it as well. See Configuring and using syslogd to collect logging messages
+on systems running Solaris 2.x". In this case, the file <i>/var/inet/hosts</i>
+should contain:</font>
+<p><font size=+0>127.0.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+localhost</font>
+<br><font size=+0>&lt;IP address>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&lt;hostname> loghost</font>
+<p>The <i>/etc/inet/hosts</i> file may contain other hosts on your network.
+For instance, the file <i>/etc/nsswitch.conf</i> contains:&nbsp;
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=+0>&nbsp;
+hosts:&nbsp;&nbsp; files dns.&nbsp;</font>
+<p>This configuration prevents some DNS attacks on your system. The disadvantage
+of this approach is that for every host configured this way, you must make
+changes to keep the information consistent.&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Verify that the file <i>/etc/inet/netmasks</i> conains:</li>
+
+<p><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;Network Number>&nbsp;&nbsp;&nbsp;&nbsp;
+&lt;Subnet Mask>&nbsp;
+<p>This step is performed to verify the accuracy of information that was
+given during the installation.&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Perform SANS Guide steps 1.3.1 to 1.3.5, Post Install/Networking Configuration.</li>
+
+<p><br>Set a very secure password for the root account. <b>Npasswd</b>
+is a tool that can be installed and used to help set secure passwords.
+See <a href="http://www.cert.org/security-improvement/implementations/i028.05.html">"Installing,
+configuring, and using npasswd to improve password quality on systems running
+Solaris 2.x"</a>.&nbsp;
+<p>Estimated time required: 5 minutes&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Perform SANS Guide steps 1.4.2 to 1.4.7, Installing Patches.</li>
+
+<br>Note: We have not had a problem with the unmodified patchadd script
+for Solaris 2.6 Hardware 3/98&nbsp;
+<p>Installing the latest patches from Sun protects the system from many
+vulnerabilities that have been discovered since the distribution CD was
+produced. If you fail to do this, the system that you have just installed
+is unnecessarily vulnerable to attack. There are many automated tools on
+the Internet that probe systems looking for known vulnerabilites.&nbsp;
+<p>Estimated time required: > 1 hour, depending on the number of patches
+to install.&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Install Tripwire (See <a href="http://www.cert.org/security-improvement/implementations/i002.02.html">"Installing,
+configuring, and using Tripwire to verify the integrity of directories
+and files on systems running Solaris 2.x"</a>).</li>
+
+<p><br>You can use Tripwire (for accounting purposes) to keep track of
+changes you make during this installation. With it, you can monitor the
+changes you make to files on the system during normal operation. This can
+give you more insight about how your system works. You can use this information
+to determine if something unexpected happened, meriting further investigation.
+Build Tripwire on a development machine that has a C compiler and transfer
+it securely to the target machine. We recommend that service machines not
+have compilers installed.&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Install SSH (See "Installing, configuring, and operating the secure shell
+(SSH) on systems running Solaris 2.x").</li>
+
+<p><br>SSH provides a more secure way of connecting and copying files to
+a machine. SSH should be built on a development machine that has a C compiler
+and transferred securely to the target machine. Service machines should
+not have compilers installed.&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Perform SANS Guide step 2.1.1, <i>Purging Boot Directories of Unecessary
+Services</i>.</li>
+
+<p><br>Other run levels should not be used; remove them using <b><a href="#saferm">saferm</a>.</b>
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Perform SANS Guide steps 2.1.2 to 2.1.5 and 2.1.7, but remove the files
+with <b><a href="#saferm">saferm</a></b> instead of renaming them. For
+example:</li>
+
+<p><br>saferm S80PRESERVE&nbsp;
+<p>instead of:&nbsp;
+<p>mv S90PRESERVE . NOS80PRESERVE&nbsp;
+<p>Verify that these settings will not interfere with the normal operation
+of the machine. NFS and RPC services should be avoided because they have
+many vulnerabilities. Enabling these services opens the target system to
+attacks on well-known vulnerabilities of these services. Step 2.1.6 can
+be done if <b>sendmail</b> is invoked from <b>cron</b>; see also step 2.5.3.&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Perform SANS Guide step 2.1.8 and 2.1.9.</li>
+
+<br>We recommend that the <b>umask</b> in step 2.1.8 be set to 027 and
+the system run for a time to determine if this change is practical in your
+environment. This change makes any file created by normal system operation
+not world-readable by default. If problems result, you should consider
+creating a group that contains a list of users who may need to read files
+created by system daemons.&nbsp;
+<p>Estimated time required: 10 minutes&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Perform SANS Guide step 2.1.10.</li>
+
+<p><br>If you need DHCP or multicast support, do not replace the <i>/etc/init.d/inetsvc</i>
+file. Servers should not use DHCP. Attacks on DHCP servers may allow the
+host information for the service machines to be compromised.&nbsp;
+<p>If inetd services are needed, uncomment the inetd line at the end of
+the <i>/etc/init.d/inetsvc</i> file.&nbsp;
+<p>Remove all <b>inetd</b> services.
+<p><font size=-1>&nbsp;&nbsp; sed -e 's/^\([^#]\)/#\1/' &lt; /etc/inetd.conf
+> /etc/inetd.new&nbsp;</font>
+<br><font size=-1>&nbsp;&nbsp;&nbsp;&nbsp; mv /etc/inetd.new /etc/inetd.conf&nbsp;</font>
+<p>Enable only the services that are required.&nbsp;
+<p>Estimated time required: If no <b>inetd</b> services are needed, &lt;
+5 minutes. If <b>inetd</b> services are needed, 10 minutes.&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Perform SANS Guide steps 2.2.1 to 2.2.5, Cleaning House.</li>
+
+<p><br>If you need printing support, do not remove the<font face="Arial, Helvetica, sans-serif">
+lp</font> user and related crontab entries. The printing subsystem may
+have vulnerabilities and should not be used on service machines.&nbsp;
+<p>If performance statistics are being collected using <b>sar</b>, do not
+remove the <font face="Arial, Helvetica, sans-serif">sys</font> crontab
+entry.
+<p>If <b>inetd</b> services are needed, skip 2.2.3.&nbsp;
+<p>Estimated time required: 10 minutes&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Install TCP wrappers. See <a href="http://www.cert.org/security-improvement/implementations/i041.07.html">"Installing,
+configuring, and using tcp wrapper to log unauthorized connection attempts
+on systems running Solaris 2.x"</a>.</li>
+
+<p><br>If you are not installing any services in <i>/etc/inetd.conf </i>to
+be started by <b>inetd</b>, the TCP wrappers do not need to be installed.&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+If possible, perform SANS Guide steps 2.3.1 to 2.3.3, <i>File System Configuration</i>.</li>
+
+<p><br>Mounting the file systems as read only and nosuid preclude changes
+to files and programs that could result from unauthorized access or attempts
+to corrupt data. All file systems should be configured in this manner,
+if possible.&nbsp;
+<p>Estimated time required: 10 minutes&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Set enhanced syslog logging:</li>
+
+<br>The end of the file<i> /etc/syslog.conf </i>should contain:&nbsp;
+<p>kern.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/kern.log&nbsp;
+<br>user.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/user.log&nbsp;
+<br>mail.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/mail.log&nbsp;
+<br>daemon.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /var/log/all/daemon.log&nbsp;
+<br>auth.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/auth.log&nbsp;
+<br>syslog.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/syslog.log&nbsp;
+<br>lpr.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/lpr.log&nbsp;
+<br>news.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/news.log&nbsp;
+<br>uucp.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/uucp.log&nbsp;
+<br>cron.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/cron.log&nbsp;
+<br>local0.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/local0.log&nbsp;
+<br>local1.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/local1.log&nbsp;
+<br>local2.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/local2.log&nbsp;
+<br>local3.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/local3.log&nbsp;
+<br>local4.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/local4.log&nbsp;
+<br>local5.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/local5.log&nbsp;
+<br>local6.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/local6.log&nbsp;
+<br>local7.debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/var/log/all/local7.log&nbsp;
+<p>Note: The whitespace between the type and action <b>must </b>be created
+by using tabs only (for example, between lpr.debug and /var/log/all/lpr.log).
+The files listed as recipients of logging information (for example var/log/all/lpr.log)
+must exist before <b>syslogd</b> will write log information to them.&nbsp;
+<p>Configuring <b>syslogd</b> in this way allows the system administrator
+to examine the activities of each daemon that writes to that log level.
+The logs give you insight about how the system is working, and you can
+use them to determine if something unexpected is happening on the machine.
+This configuration generates a lot of information in the log files. <b>Newsyslog</b>
+should be modified to rotate the log files on a regular basis. (Refer to
+<a href="http://www.cert.org/security-improvement/implementations/i041.09.html">"Using
+newsyslog to rotate files containing logging messages on systems running
+Solaris 2.x"</a>) All logging information should be archived for later
+analysis.&nbsp;
+<p>See also <a href="http://www.cert.org/security-improvement/implementations/i041.08.html">"Configuring
+and using syslogd to collect logging messages on systems running Solaris
+2.x "</a>,<a href="http://www.cert.org/security-improvement/implementations/i042.01.html">"Installing,
+configuring, and using swatch 2.2 to analyze log messages on systems running
+Solaris 2.x "</a> and <a href="http://www.cert.org/security-improvement/implementations/i042.02.html">"Installing,
+configuring, and using logsurfer 1.41 on systems running Solaris 2.x"</a>.&nbsp;
+<p>Estimated time required: 10 minutes&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Perform SANS Guide steps 2.4.3 and 2.4.4, Additional Logging.</li>
+
+<br>This log shows if someone is repeatedly trying to log into the system.
+Regularly examine this file, as well as the other log files. You can add
+these files to the /usr/lib/newsyslog to rotate this logfile.&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Perform SANS Guide steps 2.5.1 to 2.5.3, Sendmail.</li>
+
+<p><br>If you do not want to replace the vendor-supplied version of sendmail,
+follow steps 2.5.2 and 2.5.3. Another option is to remove the -bd option
+to the daemon from the file <i>/etc/init.d/sendmail.</i> This denies incoming
+mail and protects the system from some possible vulnerabilities in the
+sendmail package. Some vulnerabilities may exist in the vendor-supplied
+sendmail package. These could be exploited.&nbsp;
+<p>Estimated time required: 10 minutes, if the Open Source package is already
+compiled.&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Perform SANS Guide steps 2.6.1 to 2.6.5, Fix-modes script.</li>
+<font face="Arial, Helvetica, sans-serif"></font>
+<p><br><font face="Arial, Helvetica, sans-serif">Fix-modes</font> is a
+script that tries to make the filesystem modes more secure. It does this
+by removing the group and world write permissions of all files, devices,
+and directories listed in <i>/var/sadm/install/contents</i> (with the exception
+of those listed in <i>exceptions.h</i> that come with the source distribution).
+Additionally <font face="Arial, Helvetica, sans-serif">fix-modes</font>
+changes the ownership of most files to root and removes all write permission
+from non-root owned executables. Use the PGP utilities to verify the contents
+of the package after downloading from the Internet.&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Perform the following steps in addition to (or in lieu of) the steps in
+the SANS Guide.</li>
+
+<p><br>Examine all file ownership and protections. There should be no world-writeable
+files on the system. Check for world-writeable files with the following:&nbsp;
+<p><font size=+0>find&nbsp; /&nbsp; -local&nbsp; !&nbsp; -type&nbsp; l&nbsp;
+-perm -0002 -ls >&nbsp; /var/log/world-writeable-files&nbsp;</font>
+<p>Examine setUID, setGID, and group-writeable to determine what files
+need to have these set.&nbsp;
+<p><font size=+0>find&nbsp; /&nbsp; -local&nbsp; !&nbsp; -type&nbsp; l&nbsp;
+-perm&nbsp; -4000&nbsp; -ls >&nbsp; /var/log/suid-files&nbsp;</font>
+<br><font size=+0>find&nbsp; /&nbsp; -local&nbsp; !&nbsp; -type&nbsp; l&nbsp;
+-perm&nbsp; -2000&nbsp; -ls >&nbsp; /var/log/sgid-files&nbsp;</font>
+<br><font size=+0>find&nbsp; /&nbsp; -local&nbsp; !&nbsp; -type&nbsp; l&nbsp;
+-perm&nbsp; -0020&nbsp; -ls >&nbsp; /var/log/group-writeable-files&nbsp;</font>
+<br><font size=+0>find&nbsp; /&nbsp; -local&nbsp; !&nbsp; -type&nbsp; l&nbsp;
+-perm&nbsp; -0001&nbsp; -ls >&nbsp; /var/log/world-executable-files&nbsp;</font>
+<p>Examine these results and restict file permissions as much as possible.
+Only programs that need to be setUID/setGID should be and all others should
+not be. Only programs that need to be group/world-executable should be,
+and all others should not be, etc. Document each change (or decision not
+to change) each file's permission and record your rationale. Tripwire can
+be used to track the changes made to the files. This task is time-intensive
+but necessary. Any changes that you make should be recorded in /var/sadm/install/contents
+with <b><a href="#safeinstallf">safeinstallf</a></b>.&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Perform SANS Guide steps 2.7.1 to 2.7.9, Miscellaneous.</li>
+
+<p><br>The EEPROM change is for physical security. No one can boot the
+machine with alternate media to get information from the machine.&nbsp;
+<p>The <i>ftpusers</i> file restricts the users listed in the file from
+using <b>ftp</b> to connect to the system. The <b>scp</b> command from
+the SSH package should be used as a secure way in which to transfer files
+instead.&nbsp;
+<p>If <b>rlogin</b> or <b>rsh</b> are needed, removing the entry from the
+<i>pam.conf</i>
+file causes rlogin and rsh to ignore the <i>.rhosts</i> and <i>hosts.equiv</i>
+files. <b>Rlogin</b> and <b>rsh</b> will then always require a password.
+Where possible, use SSH instead.&nbsp;
+<p>Estimated time required: 10 minutes&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+If possible, disable all remote commands with the following:</li>
+
+<br>saferm&nbsp;&nbsp; /usr/bin/rcp
+<br>saferm&nbsp;&nbsp; /usr/bin/rdate
+<br>saferm&nbsp;&nbsp; /usr/bin/rdist
+<br>saferm&nbsp;&nbsp; /usr/bin/remsh
+<br>saferm&nbsp;&nbsp; /usr/bin/rlogin
+<br>saferm&nbsp;&nbsp; /usr/bin/rpcinfo
+<br>saferm&nbsp;&nbsp; /usr/bin/rsh
+<br>saferm&nbsp;&nbsp; /usr/bin/rksh
+<br>saferm&nbsp;&nbsp; /usr/bin/rup
+<br>saferm&nbsp;&nbsp; /usr/bin/ruptime
+<br>saferm&nbsp;&nbsp; /usr/bin/rusers
+<br>saferm&nbsp;&nbsp; /usr/bin/rwho&nbsp;
+<p>Removing all remote commands will protect the system from vulnerabilities
+in these programs.&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<li>
+Perform SANS Guide steps 4.1.1 to 4.3.3, Make a Backup, Physically Secure
+the Machine, and Provide Adequate Network Security Infrastructure.</li>
+
+<p><br>The physical security of the system is just as important (if not
+more so) as the security of the network. If an attacker has access to the
+physical machine, no amount of hardening will protect the data of the machine
+or its state.&nbsp;</ol>
+</td>
+</tr>
+</table>
+</td></tr></table>
+</td></tr></table></table>
+</body></html>

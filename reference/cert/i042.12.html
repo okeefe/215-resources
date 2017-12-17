@@ -1,0 +1,343 @@
+<html>
+<head>
+<title>Installing and operating lastcomm on systems running Solaris 2.x</title>
+</head>
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+<font face="Helvetica, Geneva, Arial">
+<small>
+
+
+<table border="0" width="100%" cellspacing="2" cellpadding="2">
+<tr>
+<td width="130" align="left" valign="top"><font face="helvetica, geneva, arial">
+<h3>Implementation Details<h3></td>
+<td align="left" valign="top"><font face="helvetica, geneva, arial">
+<h2>Installing and operating lastcomm on systems running Solaris 2.x</h2></td></tr>
+
+<tr>
+<td width="130"></td>
+
+<td align="left" valign="top">
+<table border="1" width="75%" cellspacing="0" cellpadding="8" bgcolor="#ccddff">
+<tr>
+<td align="left" valign="top">
+<p>Applies to the practices: "<a href="../practices/p095.html">Monitor and inspect system   
+activities for unexpected behavior</a>," "<a
+href="../practices/p091.html">Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior</a>".
+<p>Applicable technologies: Solaris 2.x; UNIX operating system and derivatives
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td width="130"></td>
+<td align="left" valign="top">
+<p>The tool <font face="courier"><b>lastcomm</b></font> is used to display the process accounting records on UNIX systems where process accounting has been enabled. It provides information from the accounting records created by <i><b>accton</b></i> by using command line expressions to query accounting logs and translating them into a human-readable form. <font face="courier"><b>lastcomm</b></font> is similar to <a href="/security-improvement/implementations/i042.04.html"><font face="courier"><b>spar</b></font></a> (Show Process Accounting Records) but requires more processor time to return queries and offers fewer query options.
+
+<p><font face="courier"><b>lastcomm</b></font> is useful to you as an administrator when you need access to accounting record logs and are precluded from adding untested or publicly available software tools (such as <font face="courier"><b>spar</b></font>) to your computing environment.
+
+<p>It provides data that you can use to determine if unauthorized processes have been executed. For example, you can use the tool to baseline the normal execution of system processes for a specific time period and compare this information with process accounting data collected at a later, equivalent time period. In this manner, you begin to characterize the normal behavior of a particular system and ultimately recognize those behaviors that fall outside of normal or expected bounds.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Effort Estimates</h3>
+</td>
+<td>
+The are no effort estimates for installing and configuring <font face="courier"><b>lastcomm</b></font> because it is native to Solaris 2.x under the core system installation. You must still install and turn on process accounting as described below, but configuration of any packages is not applicable.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>System Prerequisites</h3>
+</td>
+<td>
+This implementation assumes that you are running Sun Solaris 2.x and that you have installed the operating system from a known source, using original distribution media or a network connection.
+
+<p><font face="courier"><b>lastcomm</b></font> is installed from SUNWesu and SUNWman, which means that <font face="courier"><b>lastcomm</b></font> is installed by default under the core system installation option.
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Software Prerequisites</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">
+To run <font face="courier"><b>lastcomm</b></font> on your system, you need Solaris 2.x process accounting packages, SUNWacctu and SUNWacctr. 
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Configuration</h3>
+</td>
+<td>
+<font face="courier"><b>lastcomm</b></font> does not require configuration of any of the distribution files. Procedures for configuring dependent services related to <font face="courier"><b>lastcomm</b></font> are described in the following section.
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Turn on process accounting</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">
+<font face="courier"><b>lastcomm</b></font> requires that process accounting be turned on and assumes that the process accounting information is written to the file <i>/var/adm/pacct</i>. If you have not already enabled process accounting on your system and are not familiar with how to do so, see <a href="/security-improvement/implementations/i041.06.html">Enabling process accounting on systems running Solaris 2.x.</a> 
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Using lastcomm</h3>
+</td>
+<td>
+Recognizing "what commands were executed and under what conditions" is a normal system administrative duty. <font face="courier"><b>lastcomm</b></font> aides the administrator by examining process accounting logs to provide more useful information about process execution&#151;the who, where, when, and how long information.
+</td>
+</tr>
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Basic Use</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">
+<font face="courier"><b>lastcomm</b></font> is run with or without options from the command line and in the following format:
+<pre><font face="courier" size="2">
+# lastcomm [<i>command-name</i>] ... [<i>user-name</i>] ... [<i>terminal-name</i>] ...
+</pre></font>
+<p>For each process accounting entry <font face="courier"><b>lastcomm</b></font> displays the following information (taken from the <font face="courier"><b>lastcomm</b></font> man page):
+<ul>
+<li>command name under which process was called<p>
+<li>one or more flags to indicate special information about process<p>
+<ul>
+<li>F - when the process has performed a fork but not an exec<p>
+<li>S - when the process ran as a set-user-id program<p>
+</ul>
+<li>name of the user who ran process<p>
+<li>terminal user was logged into when process executed<p>
+<ul>
+<li>"_ _" - when no controlling tty for process<p>
+<li>"??" - when controlling tty could not be decoded into a printable name<p>
+</ul>
+<li>amount of CPU time used by process (in seconds)<p>
+<li>date and time process exited
+</ul>
+<p>Under basic execution with no options, <font face="courier"><b>lastcomm</b></font> returns ASCII output to the terminal, similar to:
+<pre><small>
+lastcomm			root	fb  0.59  secs	Mon   Mar 20  13:04
+sendmail	S	F	root	__  0.10  secs	Mon   Mar 20  13:04
+bash			F	root	fb  0.08  secs	Mon   Mar 20  13:04
+sed				root	fb  0.15  secs	Mon   Mar 20  13:04
+Xsun		S		root	__  6.75  secs	Mon   Mar 20  13:04
+Fbconsol			root	fb  0.30  secs	Mon   Mar 20  13:04
+...
+startup                 	root	__  0.03  secs	Mon   Mar 20  13:04
+turnacct			root	__  0.10  secs	Mon   Mar 20  13:04
+accton	S			root	__  0.03  secs	Mon   Mar 20  13:04
+</small></pre>
+<p>
+When <font face="courier"><b>lastcomm</b></font> is run with command line options, it returns information specified by any or all of three attribute options: command name, user name, or terminal name. See the <font face="courier"><b>lastcomm</b></font> man page for more detail on these options. The following examples illustrate these options:
+
+<h4><font face="helvetica, geneva, arial">Basic Example 1:</font></h4>
+<pre><font face="courier" size="2">
+	# lastcomm sendmail
+</pre></font>
+<p>
+Returns only those accounting records where the executed process was <font face="courier"><b>sendmail</b></font>.
+
+<h4><font face="helvetica, geneva, arial">Basic Example 2:</font></h4>
+<pre><font face="courier" size="2">
+	# lastcomm root 
+</pre></font>
+<p>
+Returns only those accounting records where a process was executed by the user "root".
+
+<h4><font face="helvetica, geneva, arial">Basic Example 3:</font></h4>
+<pre><font face="courier" size="2">
+	# lastcomm fb
+</pre></font>
+<p>
+Returns only those accounting records where a process was executed from the terminal "fb".
+
+<h4><font face="helvetica, geneva, arial">Combined Example 1:</font></h4>
+<pre><font face="courier" size="2">
+	# lastcomm accton root
+</pre></font>
+<p>
+Returns only those accounting records where the process <b><i>accton</i></b> was executed by user 'root' on any terminal.
+
+<h4><font face="helvetica, geneva, arial">Combined Example 2:</font></h4>
+<pre><font face="courier" size="2">
+	# lastcomm root fb
+</pre></font>
+<p>
+Returns only those accounting records where the user 'root' executed any process from terminal 'fb'.
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Recommended Use</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">
+The above examples show <font face="courier"><b>lastcomm</b></font> as a function of normal administration where the administrator wants to determine whether a specific process has been executed, by whom, and from where. You can also extend <font face="courier"><b>lastcomm</b></font> to be a function of security and to determine whether processes have been executed by proper users and from proper locations. In this way, you can use <font face="courier"><b>lastcomm</b></font> to track down privileged commands executed under other-than-normal circumstances. 
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Advanced Use</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">
+Though <font face="courier"><b>lastcomm</b></font> is more useful when combined with multiple command line options as shown in the combined examples under "Basic Use" above, the tool is limited to combinations of the three attributes: command name, user name, and terminal name. This limitation prevents the execution of more complex queries on the process accounting logs. For example, <font face="courier"><b>lastcomm</b></font> cannot be executed to report only those processes that root or another privileged user has run between certain dates and times. To accomplish more advanced queries, <font face="courier"><b>lastcomm</b></font> must be combined with other command line tools. Additionally, its output can be compared against the output of other tools to create a more complete picture of a system and help recognize unexpected events.
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Use with other Commands</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">
+When integrated with other native text tools, <font face="courier"><b>lastcomm</b></font> can be used to return more useful information in a manner that allows you to begin to characterize the normal behavior of your system. The following are some examples of <font face="courier"><b>lastcomm</b></font> combined with other text tools:
+
+<h4><font face="helvetica, geneva, arial">Example 1:</font></h4>
+<pre><font face="courier" size="2">
+# lastcomm root | grep mon
+</pre></font>
+<p>
+Returns only those processes run by the user 'root' on a specific day of the week&#151;in this case Mondays&#151;by returning process accounting lines satisfying the <font face="courier"><b>lastcomm</b></font> and grep arguments.
+
+<h4><font face="helvetica, geneva, arial">Example 2:</font></h4>
+<pre><font face="courier" size="2">
+# lastcomm root | grep tue | sort
+</pre></font>
+<p>
+Returns only those processes run by the user 'root' on Tuesdays and returns the information as a list sorted by the command name by returning first all the user 'root' accounting records, then sorting and displaying only lines that satisfy the grep arguments.
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Automated Use</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">
+Two aspects of automation can be used to better understand process accounting information: characterizing normal behavior and reporting items of interest generated by <font face="courier"><b>lastcomm</b></font> through automation. It is important that you review accounting records over a sufficient period of time to become familiar with the normal operation of your system. This will enable you to recognize abnormal events and to determine what circumstances a process is run by either a user or another program. While this time period may fluctuate based on the role and function of a particular system, it is good practice to spend at least one month collecting process data before comparing normal (versus abnormal) events.
+
+<h4><font face="helvetica, geneva, arial">Characterizing normal behavior.</font></h4>
+Process accounting records log information to the file <i>/var/adm/pacct</i> or elsewhere if another file is specified. <font face="courier"><b>newsyslog</b></font> can then be used to rotate the accounting logs on a periodic basis to keep the logs down to a manageable size for use with <font face="courier"><b>lastcomm</b></font>. Additionally, if <a href="/security-improvement/implementations/i041.09.html"><font face="courier"><b>newsyslog</b></font></a> is set up to rotate log files on a weekly basis, you can begin to characterize normal function. You do this by comparing information generated by <font face="courier"><b>lastcomm</b></font> under a specific log period against another log period covering the same timeframe. For example, you might run <font face="courier"><b>lastcomm</b></font> on a previous week's worth of accounting data to determine the number of instances a process executed and compare this with the current week's worth of processing data for the same process.
+
+<p>For help in configuring <font face="courier"><b>newsyslog</b></font> in rotating logs, see <a href="/security-improvement/implementations/i041.09.html">Using newsyslog to rotate files containing logging messages on systems running Solaris 2.x</a>. 
+
+<h4><font face="helvetica, geneva, arial">Reporting items of interest generated by <font face="courier"><b>lastcomm</b></font>.</font></h4>
+<font face="courier"><b>lastcomm</b></font> can be automated by adding the tool to a daily or weekly <b><i>cron</i></b> job where the tool is set to execute with a specific set of options, such as mentioned in the examples above. For example, you might want to find out how many times a command (such as <font face="courier">useradd</font>, <font face="courier">passwd</font>, <font face="courier">chgrp</font>, <font face="courier">chown</font>) was executed, by whom, from where, for how long, and at what times. By doing this you can determine whether
+<ul>
+<li>a privileged command was run during non-normal business hours or by non-privileged users
+<p><li>an unusual process executed when it was not supposed to 
+<p><li>other items of interest specific to your normal processes
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Integration with Other Administrative/Security Tools</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">
+When compared with the output of other security tools, <font face="courier"><b>lastcomm</b></font>'s output can
+<ul>
+<li>corroborate a security event that happened by returning the process and user information of the event 
+<p><li>identify discrepancies when processes that are reported by programs such as <a href="/security-improvement/implementations/i042.06.html"><b>top</b></a>, <a href="/security-improvement/implementations/i005.03.html"><b>sps</b></a>, and <a href="/security-improvement/implementations/i005.01.html"><b>ps</b></a> are not properly logged by process accounting
+</td>
+</tr>
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Tripwire Configuration</h3>
+</td>
+<td>
+No <font face="courier"><b>tripwire</b></font> configuration is necessary because <font face="courier"><b>lastcomm</b></font> is a native tool in the Solaris 2.x operating system under multiple installation levels; <font face="courier"><b>tripwire</b></font> should already be aware of the binary file and manual page.
+
+The following <font face="courier"><b>tripwire</b></font> configuration is provided when <font face="courier"><b>lastcomm</b></font> has never been previously installed. Only two files, the <font face="courier"><b>lastcomm</b></font> executable and <font face="courier"><b>lastcomm</b></font>(1) man page, require monitoring. In addition, files necessary to implement process accounting in the Solaris OS should be monitored.
+
+The following files should not change, as any changes are unexpected:
+<pre><small>
+@@define BINARY				E+pinugsamc1-023456789
+
+/usr/bin/lastcomm			@@BINARY
+/usr/share/man/sman1/lastcomm.1		@@BINARY
+</small></td>
+</tr>
+
+
+</table>
+
+
+
+
+
+
+</html>
+
+
+

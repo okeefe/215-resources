@@ -1,0 +1,426 @@
+
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
+   <title>Disabling user accounts on systems running Solaris 2.X 
+</title>
+</head>
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+<table CELLSPACING=6 WIDTH="100%" >
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="Times New Roman,Times"><font size=-1>Implementation
+Details</font></font></b></td>
+
+<td VALIGN=TOP>
+<h2>
+<font face="Helvetica, Geneva, Arial">Disabling network services on systems
+running Solaris 2.x.</font></h2>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="120"></td>
+
+<td VALIGN=TOP>
+<table BORDER CELLSPACING=0 CELLPADDING=4 WIDTH="80%" >
+<tr>
+<td BGCOLOR="#CCDDFF"><font size=-1>Applies to the practice:</font>
+<br><font size=-1><a href="http://www.cert.org/security-improvement/practices/p049.html">Apply
+short term solutions to contain an intrusion.</a></font>
+<p><font size=-1>Applicable technologies:</font>
+<br><font size=-1>Sun Solaris 2.x; UNIX operating systems and derivatives</font></td>
+</tr>
+</table>
+&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td VALIGN=TOP>This implementation describes how to disable a network service
+on the Sun Solaris operating system, version 2.x. The method should also
+work with many other UNIX operating systems and hosts. Note that application
+systems, while executing, may also provide access to network services.
+We do not address application-specific network service access.
+<p>Disabling a network service may not always completely restrict an intruder's
+access to your network because they may have other ways to access it. However,
+disabling a network service will terminate at least one direct access path
+that likely was established when the intruder took advantage of a security
+vulnerability within the network service software. If an intruder used
+the network service as the primary means for gaining access, and installed
+no alternative means for access (such as sniffed passwords, backdoors,
+etc.), then disabling the network service can deny further access to the
+intruder until you can install a corrected version of the network service.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="120"><b><font face="Times New Roman,Times"><font color="#000000"><font size=-1>Effort
+Estimates</font></font></font></b></td>
+
+<td>It will normally take less than ten minutes to disable a single network
+service.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="120"><b><font face="Times New Roman,Times"><font color="#000000"><font
+size=-1>System Prerequisites</font></font></font></b></td>
+<td>&nbsp;</td>
+</tr>
+<tr VALIGN=TOP>
+<td valign="top" ALIGN=RIGHT WIDTH="120"></td>
+<td ALIGN=LEFT valign="top">
+<h4>
+<font face="helvetica, geneva, arial"><font color="#008000">Software Prerequisites</font></font></h4>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="120"></td>
+
+<td ALIGN=LEFT>Install the <tt><a href="http://www.cert.org/security-improvement/implementations/i041.07.html">tcp
+wrapper</a></tt> program to aid you in detecting attempts to gain access
+to any disabled TCP-based network service .</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="Times New Roman,Times"><font size=-1>Disabling
+a service</font></font></b></td>
+
+<td VALIGN=TOP>If you execute the following steps, you will successfully
+disable all access paths provided by a specific network service, assumed
+to be vulnerable. These steps do not address application-specific network
+services.&nbsp;
+<p>Prior to executing these steps and if appropriate, make a full backup
+of the system accessed using the compromised account and deliver this backup
+to your legal point of contact. This, at a minimum, is required to support
+any subsequent legal investigation or court proceedings. Follow all organizational
+policies and procedures on the topic of protecting evidence.&nbsp;
+<p>In the course of disabling a network service, system configuration files
+are changed. This may affect the availability of evidence. We recommend
+that you address such issues before you start disabling any network service.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Switch
+to single user mode.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>Switch to single user mode to ensure that the disabled network
+service is not used while you are trying to disable it and to make sure
+that no active processes are running.&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; # init 1</font></pre>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font color="#005500"><font face="Helvetica, Geneva, Arial">For
+services started through </font><tt>inetd,</tt><font face="Helvetica, Geneva, Arial">
+change its configuration file </font><tt>/etc/inetd.conf</tt></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>If, for example, you need to disable the <tt>finger</tt>
+service, you need to change the <tt>/etc/inetd.conf</tt> configuration
+file. Without this change this file contains the following line:&nbsp;
+<pre><font size=-1>finger&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stream&nbsp;&nbsp; tcp&nbsp;&nbsp; nowait&nbsp;&nbsp; nobody&nbsp;&nbsp; /usr/sbin/in.fingerd&nbsp; in.fingerd</font></pre>
+This line causes <tt>inetd</tt> to accept an incoming TCP connection for
+the <tt>finger</tt> service and pass this connection on to the <tt>in.fingerd</tt>
+program. Commenting this line out is sufficient to disable the network
+service. However, you should also include comments that describe the reason
+for disabling the service, your name, and the date. This will keep another
+administrator from inadvertently re-enabling the service, thinking that
+it may have been mistakenly disabled. An example update is as follows:&nbsp;
+<pre><font size=-1>#
+
+
+# SERVICE DISABLED by John Doe &lt;john.doe@yourorg.yourdomain>, 24 Sep. 2000
+
+
+#
+
+
+# Explanation: As explained within CERT Advisory yyyy:nn this
+
+
+# version of the fingerd service ...
+
+
+#
+
+
+# finger&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stream&nbsp;&nbsp; tcp&nbsp;&nbsp; nowait&nbsp;&nbsp; nobody&nbsp;&nbsp; /usr/sbin/in.fingerd&nbsp; in.fingerd</font></pre>
+After the next boot process, the now-disabled network service will not
+be started through <tt>inetd</tt>. You can re-enable the network service
+by&nbsp; removing the inserted lines and the <tt>#</tt> at the start of
+the <tt>finger </tt>service line.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font color="#005500"><font face="Helvetica, Geneva, Arial">For
+standalone services, change their startup scripts in </font><tt>/etc/init.d/</tt></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><tt>&nbsp;</tt></td>
+
+<td VALIGN=TOP>Standalone services are started when the system boots. They
+can execute continuously and accept connections. Other network services
+started via <tt>inetd</tt> incur additional overhead and delay when compared
+to standalone services.&nbsp;
+<p>We do not recommend that you delete the links in the various <tt>/etc/rc*.d/</tt>
+directories as you may need to enable these at a later time. We do recommend
+that you change the startup script explicitly.&nbsp;
+<p>Usually a startup script has the following structure:&nbsp;
+<pre><font size=-1>#!/bin/sh
+
+
+
+
+
+case "$1" in
+
+
+'start')
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;;
+
+
+'stop')
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;;
+
+
+*)
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo "Usage: /etc/init.d/xxx { start | stop }"
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;;
+
+
+
+
+
+esac
+
+
+exit 0</font></pre>
+To disable the start of a network service, add lines to the beginning of
+the script that&nbsp; read as follows:&nbsp;
+<pre><font size=-1>#!/bin/sh
+
+
+
+
+
+#
+
+
+# SERVICE DISABLED by John Doe &lt;john.doe@yourorg.yourdomain>, 24 Sep. 2000
+
+
+#
+
+
+# Explanation: As explained within CERT Advisory yyyy:nn this
+
+
+# version of the sendmail service ...
+
+
+#
+
+
+echo "Warning: /etc/init.d/xxx disabled for security reasons"
+
+
+exit 0
+
+
+
+
+
+case "$1" in
+
+
+...</font></pre>
+During the next boot process,&nbsp; a warning message will be displayed
+and the disabled service will not be started. You can re-enable the service
+by removing the inserted lines.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">For
+TCP-based services, activate TCP wrapper to log incoming connection requests
+(optional)</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>Any attempted access to a disabled TCP-based service will
+not show up in a system log file. Therefore we recommend to use the <tt><a href="http://www.cert.org/security-improvement/implementations/i041.07.html">tcp
+wrapper</a></tt> program that provides access control and logging facilities.&nbsp;
+<p>For example, if you want to log incoming connection requests to the
+<tt>finger</tt>
+service using <tt>tcp wrapper,</tt> you need to add the following line
+to the <tt>/etc/inetd.conf</tt> configuration file:&nbsp;
+<pre><font size=-1>finger&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stream&nbsp;&nbsp; tcp&nbsp;&nbsp; nowait&nbsp;&nbsp; nobody&nbsp;&nbsp; /usr/sbin/tcpd&nbsp;&nbsp; in.fingerd</font></pre>
+To avoid any execution of the program <tt>in.fingerd</tt> (which implements
+the <tt>finger</tt> service), you need to make sure that the <tt>tcp wrapper</tt>
+configuration file <tt>hosts.deny</tt> contains the recommended default
+entry as follows:&nbsp;
+<pre><font size=-1>ALL: ALL: RFC931 : BANNERS /usr/sbin/sec/reject : \
+ SPAWN (/usr/sbin/sec/safe_finger -l @%h | /usr/ucb/mail -s 0-%h root)&amp;</font></pre>
+As an alternative, you need to place the following line in <tt>hosts.deny</tt>
+for the <tt>finger</tt> service:&nbsp;
+<pre><font size=-1>in.fingerd: ALL: RFC931 : BANNERS /usr/sbin/sec/reject : \
+ SPAWN (/usr/sbin/sec/safe_finger -l @%h | /usr/ucb/mail -s 
+0-%h root)&amp;</font></pre>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Reboot
+to switch back to multi-user mode.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>Update the Tripwire configuration as described below before
+switching back to multi-user mode. Initiate multi-user mode by rebooting
+with the following command:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; # init 6</font></pre>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Check
+the availability of network services.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>Use the following tools to verify that only desired network
+services are available:&nbsp;
+<ul>
+<li>
+<a href="http://www.cert.org/security-improvement/implementations/i042.05.html">lsof</a>
+- identifies processes that are listening for incoming connections</li>
+
+<br>&nbsp;
+<li>
+<a href="http://www.insecure.org">nmap</a> - identifies network ports that
+will accept incoming connections</li>
+</ul>
+If the output from these tools reveals that the disabled network service
+is still accessible, execute the steps above again and verify that you
+have made the right changes.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="Times New Roman,Times"><font size=-1>Further
+Information</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Visibility
+of the disabled network service.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>If someone tries to access the now-disabled network service,
+the fact that the service is disabled will be obvious because the system
+returns either a&nbsp; "no service reachable" message or a "no connection
+established" message when <tt>tcp wrapper</tt> is installed.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Applying
+patches to systems with disabled network services.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>Applying a patch to a disabled network service may result
+in the service being re-enabled. You need to check your system configuration
+after applying any service-related patch to ensure previously disabled
+services remain disabled.&nbsp;
+<p>If a previously disabled service is inadvertently re-enabled by the
+installation of a patch,&nbsp; you need to disable the service as described
+above, document this behavior, and alert fellow administrators.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="130"><b><font face="Times New Roman,Times"><font color="#000000"><font size=-1>Tripwire 
+Configuration</font></font></font></b></td>
+
+<td>This implementation produces changes to several system configuration
+files. You should update your <a href="http://www.cert.org/security-improvement/implementations/i002.02.html">T<tt>ripwire</tt></a>
+database as soon as you have executed all steps.</td>
+</tr>
+</table>
+</body>
+</html>

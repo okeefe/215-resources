@@ -1,0 +1,29 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 4. Capturing Live Network Data</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="index.html" title="Wireshark User's Guide"><link rel="prev" href="ChUseStatusbarSection.html" title="3.19. The Statusbar"><link rel="next" href="ChCapPrerequisitesSection.html" title="4.2. Prerequisites"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. Capturing Live Network Data</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChUseStatusbarSection.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ChCapPrerequisitesSection.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="ChapterCapture"></a>Chapter 4. Capturing Live Network Data</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ChapterCapture.html#ChCapIntroduction">4.1. Introduction</a></span></dt><dt><span class="section"><a href="ChCapPrerequisitesSection.html">4.2. Prerequisites</a></span></dt><dt><span class="section"><a href="ChCapCapturingSection.html">4.3. Start Capturing</a></span></dt><dt><span class="section"><a href="ChCapInterfaceSection.html">4.4. The "Capture Interfaces" dialog box</a></span></dt><dt><span class="section"><a href="ChCapCaptureOptions.html">4.5. The "Capture Options" dialog box</a></span></dt><dd><dl><dt><span class="section"><a href="ChCapCaptureOptions.html#id4751139">4.5.1. Capture frame</a></span></dt><dt><span class="section"><a href="ChCapCaptureOptions.html#id4751382">4.5.2. Capture File(s) frame</a></span></dt><dt><span class="section"><a href="ChCapCaptureOptions.html#id4751505">4.5.3. Stop Capture... frame</a></span></dt><dt><span class="section"><a href="ChCapCaptureOptions.html#id4751561">4.5.4. Display Options frame</a></span></dt><dt><span class="section"><a href="ChCapCaptureOptions.html#id4751639">4.5.5. Name Resolution frame</a></span></dt><dt><span class="section"><a href="ChCapCaptureOptions.html#id4751712">4.5.6. Buttons</a></span></dt></dl></dd><dt><span class="section"><a href="ChCapInterfaceDetailsSection.html">4.6. The "Interface Details" dialog box</a></span></dt><dt><span class="section"><a href="ChCapCaptureFiles.html">4.7. Capture files and file modes</a></span></dt><dt><span class="section"><a href="ChCapLinkLayerHeader.html">4.8. Link-layer header type</a></span></dt><dt><span class="section"><a href="ChCapCaptureFilterSection.html">4.9. Filtering while capturing</a></span></dt><dd><dl><dt><span class="section"><a href="ChCapCaptureFilterSection.html#ChCapCaptureAutoFilterSection">4.9.1. Automatic Remote Traffic Filtering</a></span></dt></dl></dd><dt><span class="section"><a href="ChCapRunningSection.html">4.10. While a Capture is running ...</a></span></dt><dd><dl><dt><span class="section"><a href="ChCapRunningSection.html#ChCapStopSection">4.10.1. Stop the running capture</a></span></dt><dt><span class="section"><a href="ChCapRunningSection.html#ChCapRestartSection">4.10.2. Restart a running capture</a></span></dt></dl></dd></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChCapIntroduction"></a>4.1. Introduction</h2></div></div></div><p>
+	Capturing live network data is one of the major features of Wireshark.
+	</p><p>
+	The Wireshark capture engine provides the following features:
+	</p><p>
+	</p><div class="itemizedlist"><ul type="disc"><li><p>
+	Capture from different kinds of network hardware (Ethernet, Token Ring, 
+	ATM, ...).
+	</p></li><li><p>
+	Stop the capture on different triggers like: amount of captured data, 
+	captured time, captured number of packets.
+	</p></li><li><p>
+	Simultaneously show decoded packets while Wireshark keeps on capturing.
+	</p></li><li><p>
+	Filter packets, reducing the amount of data to be captured, see <a href="ChCapCaptureFilterSection.html" title="4.9. Filtering while capturing">Section 4.9, &#8220;Filtering while capturing&#8221;</a>.
+	</p></li><li><p>
+	Capturing into multiple files while doing a long term capture, and in 
+	addition the option to form a ringbuffer of these files, keeping only 
+	the last x files, useful for a "very long term" capture, see <a href="ChCapCaptureFiles.html" title="4.7. Capture files and file modes">Section 4.7, &#8220;Capture files and file modes&#8221;</a>.
+	</p></li></ul></div><p>
+	The capture engine still lacks the following features:
+	</p><div class="itemizedlist"><ul type="disc"><li><p>
+	Simultaneous capturing from multiple network interfaces (however, you 
+	can start multiple instances of Wireshark and merge capture files later).
+	</p></li><li><p>
+	Stop capturing (or doing some other action), depending on the captured 
+	data.
+	</p></li></ul></div><p>
+	</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChUseStatusbarSection.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ChCapPrerequisitesSection.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.19. The Statusbar </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4.2. Prerequisites</td></tr></table></div></body></html>

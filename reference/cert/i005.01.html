@@ -1,0 +1,357 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+
+<TITLE>  Using the ps program to examine processes for signs of intrusive activity                                                                                                  </TITLE>
+</HEAD>
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+
+
+<font face="Helvetica, Geneva, Arial">
+<small>
+
+<table border="0" width="100%" cellspacing="6" cellpadding="4">
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">Implementation 
+      Details</font></b></td>
+    <td><b><font face="Arial" size=4> 
+      <p>Using the ps program to examine processes for signs of intrusive activity</p>
+      </font></b> </td>
+  </tr>
+  <tr> 
+    <td width="130">&nbsp;</td>
+    <td> 
+      <table border="1" width="75%" cellspacing="0" cellpadding="8">
+        <tr> 
+          <td align="LEFT" valign="TOP" bgcolor="#ccddff"> 
+            <p>Applies to the practice: "<a href="../practices/p095.html">Monitor and inspect system   
+
+activities for unexpected behavior</a>"</p>
+            <p>Applicable technologies: UNIX operating system and derivatives 
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130">&nbsp;</td>
+    <td> 
+      <p> </p>
+      <p> The ps (process status) program provides a snapshot of information for 
+        processes currently executing on UNIX systems. You can specify a variety 
+        of command-line options to control which processes this program reports 
+        and what information it reports about each. For details of all of the 
+        options and output values, consult the ps(1) manual pages. On Solaris 
+        systems, ps is normally found in <font face="Courier New" size=3>/usr/bin</font>. 
+        The table below lists some options that are particularly useful when investigating 
+        processes on a Solaris 2.x system: </p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130">&nbsp;</td>
+    <td> 
+      <table border="0" width="100%">
+        <tr> 
+          <td> 
+            <table border cellspacing=1 cellpadding=7 width=75%>
+              <tr> 
+                <td width="17%" valign="TOP" bgcolor="#ccddff"> 
+                  <p><b>Option </b>
+                </td>
+                <td width="83%" valign="TOP" bgcolor="#ccddff"> 
+                  <p><b>Effect </b> 
+                </td>
+              </tr>
+              <tr> 
+                <td width="17%" valign="TOP"> 
+                  <p>-e
+                </td>
+                <td width="83%" valign="TOP"> 
+                  <p>Include information about all processes currently running. 
+                </td>
+              </tr>
+              <tr> 
+                <td width="17%" valign="TOP"> 
+                  <p>-fb
+                </td>
+                <td width="83%" valign="TOP"> 
+                  <p>Report the user ID, parent process ID, start time, and full 
+                    command line associated with each process. 
+                </td>
+              </tr>
+              <tr> 
+                <td width="17%" valign="TOP"> 
+                  <p>-l
+                </td>
+                <td width="83%" valign="TOP"> 
+                  <p>Report additional information for each process, including 
+                    its current state (i. e., running, sleeping, queued, zombie, 
+                    stopped). 
+                </td>
+              </tr>
+              <tr> 
+                <td width="17%" valign="TOP"> 
+                  <p>-t <i>term</i>
+                </td>
+                <td width="83%" valign="TOP"> 
+                  <p>Report only processes associated with the terminal connection 
+                    specified by <i>term</i>. 
+                </td>
+              </tr>
+              <tr> 
+                <td width="17%" valign="TOP"> 
+                  <p>-u <i>uidlist</i>
+                </td>
+                <td width="83%" valign="TOP"> 
+                  <p>Report only processes whose effective user ID numbers or 
+                    login names are specified in <i>uidlist</i>.
+                </td>
+              </tr>
+              <tr> 
+                <td width="17%" valign="TOP"> 
+                  <p>-U <i>uidlist</i>
+                </td>
+                <td width="83%" valign="TOP"> 
+                  <p>Report only processes whose real user ID numbers or login 
+                    names are specified in <i>uidlist</i>. 
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"> 
+      <p> </p>
+      <b><font face="Arial"> 
+      <p>Example 1: All is not necessarily as it appears... </p>
+      </font></b></td>
+    <td align="LEFT" valign="TOP"> 
+      <p></p>
+      <b><font face="Arial"></font></b> 
+      <p>If used by itself, the -e option reports the following information about 
+        each process: the process ID (PID), the terminal on which the process 
+        was initiated (TTY), the total time consumed by the process (TIME), and 
+        the name of the program associated with the process (CMD). Since there 
+        is no user ID reported with each process, it is difficult to know who 
+        might be executing what. It is therefore common to combine the -e option 
+        with the -f and -l options to produce more robust and readable output, 
+        but as we will see in the example below, you have to be careful when interpreting 
+        the information reported: </p>
+<pre>
+<font face="Courier New" size=2>
+$ ps -ef
+   UID   PID  PPID C  STIME     TTY    TIME    CMD
+   root  0    0    0  12:05:52  ?      0:06   sched
+   root  1    0    0  12:05:55  ?      0:00   etc/init -
+   root  2    0    0  12:05:55  ?      0:00   ageout
+   root  3    0    2  12:05:55  ?      2:07   fsflush
+   root  263  260  0  12:07:38  ?      0:00   /usr/lib/saf/ttymon
+   root  113  1    0  12:06:36  ?      0:00   /usr/lib/nfs/statd
+   root  260  1    0  12:07:35  ?      0:00   /usr/lib/saf/sac -t 300
+   root  87   1    0  12:06:23  ?      0:00   /usr/sbin/rpcbind
+
+... additional output removed ...)
+     
+   root  736  724  0  15:17:53  pts/4  0:01   sh
+   root  737  736  2  15:19:16  pts/4  0:02   elm
+   root  595  594  0  14:05:46  pts/3  0:00   sh
+   root  599  595  0  14:06:00  pts/3  0:01   tcsh
+   root  594  357  0  14:05:45  pts/0  0:02   xterm
+ othello 724  722  0  15:13:06  pts/4  0:01   -csh
+   root  722  104  0  15:13:06  ?      0:00   in.telnetd
+   root  747  744  2  15:20:08  pts/5  0:00   ps -ef   
+</font>
+</pre>
+      <p>At first glance, it would appear that nothing unusual is going on. Other 
+        than a bunch of normal-looking processes run by root, user <font face="Courier New" size=3>othello</font> 
+        has simply logged into his account, which uses the <font face="Courier New" size=3>/bin/csh</font> 
+        shell. With the <font face="Courier New" size=3>-f</font> option, the 
+        hyphen before <font face="Courier New" size=3>csh</font> in the CMD column 
+        indicates that it is a login shell.</p>
+      <p>Let's take a second look at the same processes, using the <font face="Courier New" size=3>-l</font> 
+        option instead of <font face="Courier New" size=3>-f</font>: </p>
+      
+<font face="Courier New" size=2> 
+      <pre> 
+$ ps -el
+      
+F  S   UID  PID PPID  C PRI NI      ADDR   SZ    WCHAN  TTY   TIME CMD
+19 T    0    0     0  0   0 SY  f02177c0    0            ?    0:06 sched
+ 8 S    0    1     0  0  41 20  ff21e338  103  ff21e508  ?    0:01 init
+19 S    0    2     0  0   0 SY  ff21dcd8    0  f022b3fc  ?    0:00 pageout
+19 S    0    3     0  1   0 SY  ff21d678    0  f022f66c  ?    2:07 fsflush
+ 8 S    0  263   260  0  41 20  ff21d018  352  ff21d1e8  ?    0:00 ttymon
+ 8 S    0  113     1  0  93 20  ff28c9a0  411  ff46dd6e  ?    0:00 statd
+ 8 S    0  260     1  0  41 20  ff28c340  333  ff227c94  ?    0:00 sac
+ 8 S    0   87     1  0  41 20  ff28bce0  414  ff0178fe  ?    0:00 rpcbind
+      
+... additional output removed ...
+  
+ 8 S    0  736   724  0  51 20  ff7d4010   56  ff7d4080 pts/4 0:01 sh
+ 8 S    0  737   736  2  41 20  fc0e0338  396  fc118336 pts/4 0:02 snoop
+ 8 S    0  595   594  0  51 20  fc0f09a0   56  fc0f0a10 pts/3 0:00 sh
+ 8 S    0  599   595  0  51 20  fc0f0340  445  fc0f3e1e pts/3 0:01 tcsh
+ 8 S    0  594   357  0  41 20  fc0efce0  658  ff7bf3f6 pts/0 0:02 xterm
+ 8 S 1004  724   722  0  41 20  fc0ef020  245  fc0ef1f0 pts/4 0:01 csh
+ 8 S    0  722   104  0  49 20  fc0ff980  350  ff7bf806   ?   0:00 in.telne
+ 8 O    0  748   744  1  71 20  fc115988  190           pts/5 0:00 ps
+</pre>
+</font>
+      
+      <p>Where did the snoop process suddenly come from? It is a network data 
+        packet capturing program (also known as a packet sniffer) that should 
+        be restricted for use only by authorized system administrators. If we 
+        look at our earlier output from the <font face="Courier New" size=3>ps 
+        -ef</font> command, the program name reported for this process is elm, 
+        which is the name of a common mail client program. To investigate this, 
+        let's take a look at the processes running on the terminal (TTY) from 
+        which snoop is being executed: <font face="Courier New" size=2> </font></p>
+      <font face="Courier New" size=2> 
+<pre>
+$ ps -ft pts/4
+    UID   PID  PPID  C  STIME     TTY    TIME  CMD
+   root   736   724  0  15:17:53  pts/4  0:01  sh
+   root   737   736  2  15:19:16  pts/4  0:03  elm 
+othello   724   722  0  15:13:06  pts/4  0:01  -csh
+     
+
+$ ps -lt pts/4
+F S  UID  PID  PPID  C PR INI     ADDR   SZ     WCHAN   TTY  TIME CMD
+8 S    0  736   724  0 51  20 ff7d4010   56  ff7d4080 pts/4  0:01 sh
+8 S    0  737   736  2 41  20 fc0e0338  396  fc118336 pts/4  0:03 snoop
+8 S 1004  724   722  0 41  20 fc0ef020  245  fc0ef1f0 pts/4  0:01 csh
+
+</pre>
+</font>
+      <p>Again, we see that with the -f option, the process appears as elm, but 
+        without it, it appears as snoop (we'll get to why later). Notice that 
+        user <font face="Courier New" size=2> othello </font>is logged in on pts/4.</p>
+      <p>Now look at the process ID (PID) and parent process ID (PPID) fields. 
+        The PID for snoop is 737. Its parent process (i.e., the process that spawned 
+        it) is 736, which is the PID of the root-owned <font face="Courier New" size=3>sh</font> 
+        process above it. The <font face="Courier New" size=3>sh</font> process's 
+        parent is PPID 724, which is the process ID of <font face="Courier New" size=3>othello</font>'s<font face="Courier New" size=2> 
+        </font>login shell. This means that whoever is logged in using the<font face="Courier New" size=3> 
+        othello</font><font face="Courier New" size=2> </font>account has managed 
+        to execute a root-owned <font face="Courier New" size=3>sh</font> shell 
+        (i.e., an <font face="Courier New" size=3>sh</font> shell executing with 
+        user root's privileges), and from it is capturing network traffic using 
+        the snoop program. Unless the person logged in via the <font face="Courier New" size=3>othello</font><font face="Courier New" size=2> 
+        </font>account is an authorized administrator performing authorized activities, 
+        you have an intruder in your system. </p>
+      <p>Now to the mystery of snoop being reported as elm. When you use the -f 
+        option, it is important to note that the information reported in the CMD 
+        field is the name of the program as the user entered it to initiate the 
+        process. Without the -f option, the information in the CMD field is the 
+        name of the actual program associated with the process. In this case, 
+        elm was a name created as a symbolic link to the snoop program, located 
+        in a directory that is in user <font face="Courier New" size=3>othello's</font><font face="Courier New" size=2> 
+        </font>PATH environment setting. Thus when the person using the <font face="Courier New" size=3>othello</font><font face="Courier New" size=2> 
+        </font>account entered the command, elm, the program that was actually 
+        initiated was snoop. It is important to note here that since the snoop 
+        program requires privileged access restricted to root, without the root-owned 
+        shell, the scenario depicted above would not have succeeded. </p>
+      <p>If you discover that a user has apparently acquired unauthorized root 
+        access, you should consider it an extremely serious security breach, to 
+        which you must respond immediately according to your organization's intrusion 
+        response procedures. </p>
+    </font></td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"><b>Example 2: The difference between 
+      real and effective process user IDs</b></td>
+    <td align="LEFT" valign="TOP"> 
+      <p>It is important to note that there are valid instances in which a regular 
+        user will invoke a program that operates with root privileges, such as 
+        <font face="Courier New" size=3>passwd</font>, which is used to update 
+        their users' passwords. The <font face="Courier New" size=3>passwd</font> 
+        program needs to have root privileges so that it can modify password-related 
+        files that are restricted from direct user modification. </p>
+      <p><font face="Courier New" size=2> </font></p>
+      <font face="Courier New" size=2> 
+      <p>$ ls -l /usr/bin/passwd<br>
+        -r-sr-sr-x 3 root sys 15688 May 3 1996 /usr/bin/passwd</p>
+      </font> 
+      <p>The <font face="Courier New" size=3>passwd</font> program is owned by 
+        root and has its <font face="Courier New" size=3>setuid</font> and <font face="Courier New" size=3>setgid</font> 
+        bits set (mode 6555). This means that when a user executes <font face="Courier New" size=3>passwd</font>, 
+        it runs with root's privileges, not the user's. We say that the real user 
+        of <font face="Courier New" size=3>passwd</font> is the user who the invoked 
+        the program, but the effective user of the program is root. This difference 
+        is illustrated when we use the ps program to list processes according 
+        to real (-U) and effective (-u) users. In the examples below, merlin is 
+        a user currently executing the <font face="Courier New" size=2>passwd</font> 
+        program: </p>
+      <font face="Courier New" size=2> 
+<pre>
+$ ps -U merlin
+   PID  TTY    TIME  CMD
+   900  pts/5  0:00  passwd
+   781  pts/5  0:01  ksh
+        
+$ ps -U merlin -f
+   UID    PID   PPID  C  STIME     TTY    TIME  CMD
+   Root   900   781   0  18:27:16  pts/5  0:00  passwd
+   merlin 781   779   0  15:42:24  pts/5  0:01  -ksh
+  
+$ ps -U merlin -l
+F  S  UID PID PPID  C  PRI NI     ADDR  SZ    WCHAN TTY   TIME CMD
+8  S    0 900  781  0   39 20 fc0e0998 366 fc118336 pts/5 0:00 passwd
+8  S 1011 781  779  0   59 20 fc0e0338 366 fc0e03a8 pts/5 0:01 ksh
+ 
+$ ps -u merlin
+PID   TTY    TIME  CMD
+781   pts/5  0:01  ksh
+      
+$ ps -u merlin -f
+      UID  PID  PPID C STIME     TTY    TIME  CMD
+   merlin  781  779  0 15:42:24  pts/5  0:01  -ksh
+  
+$ ps -u merlin -l
+F S  UID  PID  PPID  C PRI NI     ADDR  SZ    WCHAN   TTY TIME CMD
+8 S 1011  781   779  0  59 20 fc0e0338 366 fc0e03a8 pts/5 0:01 ksh
+     
+</pre>
+</font>
+      <p> </p>
+      <p>The first three examples show that root is the owner of the <font face="Courier New" size=3>passwd</font> 
+        process, although its parent process ID is that of the <font face="Courier New" size=3>ksh</font> 
+        login shell which belongs to <font face="Courier New" size=3>merlin</font>. 
+        This means that the real user of both processes is <font face="Courier New" size=3>merlin</font>. 
+        The last three examples illustrate that <font face="Courier New" size=2>merlin</font> 
+        is not the effective user of the <font face="Courier New" size=3>passwd</font> 
+        process. These examples also show that the command that <font face="Courier New" size=3>merlin</font> 
+        entered to change his password is the same as the name of the actual program 
+        executing, since the name in the CMD field is the same with and without 
+        the -f option. </p>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <hr size="1">  
+    </td>
+  </tr>
+</table>
+
+</BODY>
+</HTML>
+
+
+

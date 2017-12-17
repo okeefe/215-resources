@@ -1,0 +1,352 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+
+<TITLE>Using newsyslog 
+      to rotate files containing logging messages                                                                                                   </TITLE>
+</HEAD>
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+
+
+<font face="Helvetica, Geneva, Arial">
+<small>
+
+<table border="0" width="100%" cellspacing="6" cellpadding="4">
+  <tr> 
+    <td align="LEFT" valign="TOP" width="130"> 
+      <p><b><font face="Arial, Helvetica, sans-serif">Implementation Details</font></b></p>
+    </td>
+    <td align="LEFT" valign="TOP"><b><font face="Arial" size=4>Using newsyslog 
+      to rotate files containing logging messages on systems running Solaris 2.x 
+      </font></b></td>
+  </tr>
+  <tr> 
+    <td width="130">&nbsp;</td>
+    <td> 
+      <table border="1" width="75%" cellspacing="0" cellpadding="8" bgcolor="#ccddff">
+        <tr> 
+          <td height="79"> 
+            <p>Applies to the practices:<br>
+<a href="../practices/p091.html">"Identify data that characterize systems and aid in detecting signs of suspicious behavior"</a><br>
+<a href="../practices/p092.html">"Manage logging and other data collection mechanisms"</a>
+
+            <p>Applicable technologies: Sun Solaris 2.x; UNIX operating systems 
+              and derivatives</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130">&nbsp;</td>
+    <td align="LEFT" valign="TOP"> 
+      <p>Messages stored by <font face="Courier New" size=3>syslogd</font> (<a href="i041.08.html">&quot;Configuring 
+        and using syslogd to collect logging messages on systems running Solaris 
+        2.x&quot;</a>) are appended to existing log files. These files contain 
+        all logged messages from a given point in time. It is not practical to 
+        retain all logged messages online in a single set of files indefinitely. 
+        System administrators regularly need to review the most current messages, 
+        and available disk space may be limited. You need to balance the need 
+        for ready access to recent messages with the availability of disk space. 
+      </p>
+      <p><font face="Courier New" size=3>Newsyslog </font>is a small script that 
+        periodically moves <font face="Courier New" size=3>syslog</font> files 
+        to a different location. This allows you to retain a specified number 
+        of historical files, delete the oldest file, and create a new file to 
+        store any new messages arriving after <font face="Courier New" size=3>newsyslog</font> 
+        is executed. <font face="Courier New" size=3>newsyslog</font> is usually 
+        called via the cron-facility, e.g., every Friday or the first day of each 
+        month. </p>
+      <p>This section describes the information necessary to use <font face="Courier New" size=3>newsyslog</font> 
+        on the Sun Solaris operating system, version 2.x. This approach will also 
+        work on any UNIX operating system supporting <font face="Courier New" size=3>/bin/sh</font> 
+        and the <font face="Courier New" size=3>cron</font><font size=3> </font>system. 
+      </p>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"><b><font face="Arial"> 
+      <p>Preparation</p>
+      </font></b> </td>
+    <td align="LEFT" valign="TOP">You need to make two decisions before editing 
+      the <font face="Courier New" size=3>newsyslog</font> script and enabling 
+      a periodic call of this script. </td>
+  </tr>
+  <tr> 
+    <td width="130" align="right" valign="TOP"></td>
+    <td align="LEFT" valign="TOP"><b><font face="Arial" size=3 color="#008000"> 
+      <p>Decide on the time period for rotating log files.</p>
+      </font></b> 
+      <p> </p>
+      <p>We recommend that you use the same time periods for all files belonging 
+        to a given configuration on a specific host. A reasonable time period 
+        is one week for all hosts, starting at the beginning of the week to avoid 
+        losing any logging data between the rotation and the restart of <font face="Courier New" size=3>syslogd</font>.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="right" valign="TOP"><b><font face="Arial"> 
+      <p></p>
+      </font></b></td>
+    <td align="LEFT" valign="TOP"><b><font face="Arial" size=3> 
+      <p> <font color="#008000">Decide how long historical messages should be 
+        available online.</font></p>
+      </font></b> 
+      <p> </p>
+      <p>This time period should be longer on a loghost than on the local hosts. 
+        We recommend two months for loghosts and at least four weeks for local 
+        hosts. The <font face="Courier New" size=3>newsyslog </font>script must 
+        be changed to adjust these time periods.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"><b><font face="Arial"> 
+      <p>Prepare the newsyslog script</p>
+      </font></b> </td>
+    <td align="LEFT" valign="TOP" width="660">The default settings in the <font face="Courier New" size=3>/usr/lib/newsyslog</font> 
+      script will not reflect any changes made to the <font face="Courier New" size=3>syslogd 
+      </font>configuration. If you use the default settings, only <font face="Courier New" size=3>/var/adm/messages</font> 
+      and <font face="Courier New" size=3>/var/log/syslog</font> are rotated, 
+      assuming they exist. </td>
+  </tr>
+  <tr> 
+    <td width="130" align="right" valign="TOP"><b><font face="Arial"></font></b></td>
+    <td align="LEFT" valign="TOP" width="660"> 
+      <p><b><font face="Arial" size=3 color="#008000">Create a new newsyslog script.</font></b></p>
+      <p> </p>
+      <p>In most cases, the <font face="Courier New" size=3>newsyslog</font> script 
+        consists of a number of similar blocks, each block rotating only one log 
+        file and past versions of this file. Programming for a new file is easily 
+        done by a "cut and paste" of the default script, but it is not easy to 
+        maintain. We recommend that all files that are in the same directory and 
+        specify the same time period be handled in a loop (see the <a href="#example">example</a> 
+        below). </p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="right" valign="TOP"><b><font face="Arial"></font></b></td>
+    <td align="LEFT" valign="TOP" width="660"> 
+      <p><b><font face="Arial" size="3" color="#008000">Initiate the re-opening 
+        of new log files.</font></b></p>
+      <p> </p>
+      <p>You need to inform <font face="Courier" size=3>syslogd</font> that rotation 
+        has occurred after the log files are rotated. Given that the rotation 
+        is done automatically, you need to include the commands to do this notification 
+        within the <font face="Courier New" size=3>newsyslog </font>script. </p>
+      <p>The command <font face="Courier" size=3>kill -HUP &lt;pid of syslogd&gt;</font> 
+        is needed to close all open file descriptors and open the specified, now 
+        empty log files again. Without this command, syslogd continues to append 
+        new messages to the old files. The pid of syslog can usually be found 
+        in the file /etc/syslogd.pid and can be restarted with the following command: 
+      </p>
+      <p><font face="Courier New" size="2"># kill -SIGHUP `cat /etc/syslogd.pid`</font></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="right" valign="TOP" height="173"><b><font face="Arial"></font></b></td>
+    <td align="LEFT" valign="TOP" height="173"> 
+      <p> <b><font face="Arial" size="3" color="#008000">Enable periodic execution 
+        of the </font><font face="Courier New" size="3" color="#008000">newsyslog 
+        </font><font face="Arial" size="3" color="#008000">script. </font></b></p>
+      <p> </p>
+      <p> The <font face="Courier New" size=3>newsyslog</font> script is called 
+        to rotate specified log files at predefined time periods. The script can 
+        be called manually but we recommend using the <font face="Courier New" size=3>cron</font> 
+        facility. User root privileges are required to move files, create new 
+        files, and send a signal to the running syslogd process. The following 
+        entry for user <font face="Courier New" size=3>root</font> calls the script 
+        each Friday: </p>
+      <p><font face="Courier New" size="2"> 5 4 * * 6 /usr/lib/newsyslog</font></p>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"><b><font face="Arial"> 
+      <p><a name="example"></a>Examples</p>
+      </font></b> </td>
+    <td align="LEFT" valign="TOP">Example scripts are included for local hosts 
+      and for loghosts. These examples are consistent with those provided for 
+      <font size=3><a href="http://www.cert.org/security-improvement/implementations/i041.08.html">syslogd</a> 
+      </font> and the guidance stated above. </td>
+  </tr>
+  <tr> 
+    <td width="130" align="right" valign="TOP"><b><font face="Arial"></font></b></td>
+    <td align="LEFT" valign="TOP"><b> 
+      <p><font face="Arial" size=3 color="#008000">Example 1: </font><font face="Courier New" size="3" color="#008000">newsyslog 
+        </font><font face="Arial" size="3" color="#008000">for local hosts</font></p>
+      </b> 
+      <p> </p>
+      <p>The files messages <font face="Courier New" size=3>auth.log, daemon.log, 
+        lpr.log</font>, and <font face="Courier New" size=3>mail.log</font> within 
+        the <font face="Courier New" size=3>/var/adm/ </font>directory are retained 
+        for four full weeks. Messages for the current week are also retained. 
+        Different "generations" of files are noted using ".3" for the oldest file 
+        and ".0" for the newest file. </p>
+      
+<pre><font size="2" face="Courier New, Courier, mono">
+#!/bin/sh
+#
+# /usr/lib/newsyslog - rotate log files (local host)
+#
+
+LOGDIR=/var/adm
+if test -d $LOGDIR
+then
+   cd $LOGDIR
+   for LOG in messages auth.log daemon.log lpr.log mail.log ; do       
+        test -f $LOG.2 &amp;&amp; mv $LOG.2 $LOG.3
+        test -f $LOG.1 &amp;&amp; mv $LOG.1 $LOG.2
+        test -f $LOG.0 &amp;&amp; mv $LOG.0 $LOG.1
+        test -f $LOG &amp;&amp; mv $LOG $LOG.0
+        cp /dev/null $LOG
+        chmod 640 $LOG
+        
+   done
+      
+fi 
+
+/bin/kill -HUP `cat  /etc/syslog.pid` 
+
+# end of file /usr/lib/newsyslog
+</font> </pre>
+    </td>
+  </tr>
+  <tr> 
+    <td width="114" align="right" valign="TOP"><b><font face="Arial"></font></b></td>
+    <td align="LEFT" valign="TOP"> 
+      <p><font face="Arial" size=3 color="#008000"> <b>Example 2: </b></font><b><font face="Courier New" size="3" color="#008000">newsyslog</font><font face="Arial" size="3" color="#008000"> 
+        on loghosts</font></b></p>
+      <p> </p>
+      <p>The <font face="Courier New" size=3>newsyslog</font> script contains 
+        minor variations for a loghost. The changes address the additional log 
+        files, the log files' directory, and the longer period for retaining past 
+        log files online. </p>
+      <font face="Courier New" size=2> 
+      <pre>
+#!/bin/sh
+
+#
+# /usr/lib/newsyslog - rotate log files (loghost)
+#
+LOGDIR=/var/log
+if test -d $LOGDIR
+then
+cd $LOGDIR
+
+  for LOG in messages auth.log daemon.log 
+  lpr.log mail.log news.log user.loguucp.log ; do
+     test -f $LOG.6 &amp;&amp; mv $LOG.6 $LOG.7
+     test -f $LOG.5 &amp;&amp; mv $LOG.5 $LOG.6
+     test -f $LOG.4 &amp;&amp; mv $LOG.4 $LOG.5
+     test -f $LOG.3 &amp;&amp; mv $LOG.3 $LOG.4
+     test -f $LOG.2 &amp;&amp; mv $LOG.2 $LOG.3
+     test -f $LOG.1 &amp;&amp; mv $LOG.1 $LOG.2
+     test -f $LOG.0 &amp;&amp; mv $LOG.0 $LOG.1
+     test -f $LOG &amp;&amp; mv $LOG $LOG.0
+     cp /dev/null $LOG
+     chmod 640 $LOG
+       
+   done
+fi
+
+/bin/kill -HUP `cat /etc/syslog.pid`
+# end of file /usr/lib/newsyslog
+</pre>
+      </font></td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="114" align="LEFT" valign="TOP"><b><font face="Arial">Other considerations</font></b></td>
+    <td align="LEFT" valign="TOP">The above steps have described the process of 
+      rotating log files, implementing rotation in a <font face="Courier New" size=3>newsyslog</font> 
+      script, and enabling periodic execution of this script. The following additional 
+      topics need to be considered to address the needs of an individual site.</td>
+  </tr>
+  <tr> 
+    <td width="130" align="right" valign="TOP"></td>
+    <td align="LEFT" valign="TOP"><b> 
+      <p><font face="Arial" size=3 color="#008000">Review </font><font face="Courier New" size="3" color="#008000">newsyslog</font><font face="Arial" size="3" color="#008000"> 
+        after changing the </font><font face="Courier New" size="3" color="#008000">syslogd</font><font face="Arial" size="3" color="#008000"> 
+        configuration.</font></p>
+      </b> 
+      <p> </p>
+      <p>The <font face="Courier New" size=3>newsyslog</font> script should be 
+        changed whenever file names and directory paths are changed in the <font face="Courier New" size=3><a href="/security-improvement/implementations/i041.08.html">syslogd</a></font> 
+        configuration. If this is not done, existing log files will likely not 
+        be rotated and will continue to grow beyond desired size limits. </p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="right" valign="TOP"></td>
+    <td align="LEFT" valign="TOP"><b><font face="Arial" size=3 color="#008000"> 
+      <p>Handle an increasing log file size.</p>
+      </font></b> 
+      <p> </p>
+      <p>You can set a shorter rotation time period if the log files grow too 
+        large, you can compress the rotated log files as part of the <font face="Courier New" size=3>newsyslog</font> 
+        script, or you can provide additional disk space.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="130" align="right" valign="TOP"><b><font face="Arial"></font></b></td>
+    <td align="LEFT" valign="TOP"><b><font face="Arial" size=3 color="#008000"> 
+      <p>Handle conflicting demands for different log files.</p>
+      </font></b> 
+      <p> </p>
+      <p>If there are conflicting demands with rotating different log files on 
+        the same machine (for example, rotate some log files daily, others weekly), 
+        you need to adjust the script to include optional parameters defining 
+        distinct levels of operation. You can specify different scripts, each 
+        one handling only a subset of log files, or you can include all functions 
+        in one script with multiple parts, each part handling a different demand.</p>
+      </td>
+  </tr>
+  <tr> 
+    <td width="130" align="right" valign="TOP"><b><font face="Arial"> 
+      <p></p>
+      </font></b> </td>
+    <td align="LEFT" valign="TOP"> 
+      <p> <font color="#008000" size="3" face="Arial, Helvetica, sans-serif"><b>Include 
+        other functions.</b></font></p>
+      <p> </p>
+      <p>You can include other functions in the <font face="Courier New" size=3>newsyslog 
+        </font>script depending on your site's requirements, e.g., encryption 
+        of past log files, compressing of past log files, and sending cryptographic 
+        checksums to the system administrator.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+</table>
+
+
+
+
+</BODY>
+</HTML>
+
+

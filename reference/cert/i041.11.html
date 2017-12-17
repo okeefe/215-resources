@@ -1,0 +1,413 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.61 [en] (WinNT; U) [Netscape]">
+   <title>Installing, configuring, and 
+
+      using logdaemon to log unauthorized connection attempts to rshd and rlogind                                                                                                 </title>
+</head>
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+<table BORDER=0 CELLSPACING=6 CELLPADDING=4 WIDTH="100%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial,Helvetica"><font size=+0>Implementation
+Details</font></font></b></td>
+
+<td ALIGN=LEFT><b><font face="Arial"><font size=+1>Installing, configuring,
+and using logdaemon to log unauthorized connection attempts to rshd and
+rlogind on systems running Solaris 2.x&nbsp;</font></font></b></td>
+</tr>
+
+<tr>
+<td WIDTH="130">&nbsp;</td>
+
+<td>
+<table BORDER CELLSPACING=0 CELLPADDING=8 WIDTH="75%" BGCOLOR="#CCDDFF" >
+<tr>
+<td VALIGN=TOP>Applies to the practices:<br> 
+<a 
+href="../practices/p094.html">"Monitor and inspect network activities for unexpected behavior"</a><br>
+<a
+href="../practices/p091.html">"Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior"</a><br>
+<a
+href="../practices/p092.html">"Manage logging and other data collection mechanisms"</a>
+
+<p>Applicable technologies: Solaris 2.x; UNIX operating system and derivatives</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="130" HEIGHT="332">&nbsp;</td>
+
+<td ALIGN=LEFT VALIGN=TOP>It is well known that the default versions of
+<font face="Courier New"><font size=+0>rshd</font></font>
+and <font face="Courier New"><font size=+0>rlogind
+</font></font>are responsible
+for successful intrusions. In addition, they do not provide adequate logging
+information (e.g., connection source, timestamp). The logdaemon version
+of these two services is based on the tcp wrapper library <font face="Courier New"><font size=+0>libwrap.a</font></font>
+and provides the same capabilities using the same configuration files and
+options. Refer to the <a href="i003.04.html">tcp wrapper implementation
+details</a> for more information on the background and operation of this
+program.&nbsp;
+<p>The logdaemon package also provides a replacement for the login program
+(<a href="i041.10.html">"Installing, configuring, and using logdaemon to
+log unauthorized login attempts on systems running Solaris 2.x"</a>); this
+is beyond the scope of this implementation.&nbsp;
+<p>tcp wrapper can only log information that is available from IP (Internet
+protocol) packets (i.e., source and destination addresses and port numbers).
+<font face="Courier New"><font size=+0>rshd</font></font>
+and <font face="Courier New"><font size=+0>rlogind</font></font> are able
+to log more information as they are handling the connection request (e.g.,
+the destination local user id and the command for remote execution).&nbsp;
+<p>This section describes how to download, install, and configure the <font face="Courier"><font size=+0>rshd</font></font>
+and <font face="Courier New"><font size=+0>rlogind </font></font>portions
+of the logdaemon package, version 5.8, on the Sun Solaris operating system,
+version 2.x.&nbsp;</td>
+</tr>
+
+<tr>
+<td COLSPAN="2" WIDTH="12%">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130" HEIGHT="74"><b><font face="Arial">Preparation</font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP HEIGHT="74">The latest release of the logdaemon
+package is available via anonymous ftp from
+<p><a href="ftp://ftp.porcupine.org/pub/security/">ftp://ftp.porcupine.org/pub/security/</a></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130" HEIGHT="158">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP HEIGHT="158"><b><font face="Arial"><font color="#008000"><font size=+0>Ensure
+that you can meet installation requirements.</font></font></font></b>
+<p>In order to build <font face="Courier New"><font size=+0>rshd </font></font>and
+<font face="Courier New"><font size=+0>rlogind</font></font>,
+you need:&nbsp;
+<ul>
+<li>
+Internet access to retrieve the latest version of the logdaemon software&nbsp;</li>
+
+<li>
+<a href="http://www.pgp.com">PGP</a> (Pretty Good Privacy) to verify the
+authenticity of the software distribution&nbsp;</li>
+
+<li>
+<a href="http://www.gzip.org">GZIP</a> to uncompress the downloaded file&nbsp;</li>
+
+<li>
+a C compiler to build the executable program&nbsp;</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130" HEIGHT="168">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP HEIGHT="168"><b><font face="Arial"><font color="#008000"><font size=+0>Download
+the logdaemon distribution.</font></font></font></b>
+<p>Perform an anonymous file transfer from&nbsp;
+<p><a href="ftp://ftp.porcupine.org/pub/security/logdaemon-5.8.tar.gz">ftp://ftp.porcupine.org/pub/security/logdaemon-5.8.tar.gz</a>
+<p>For the next step, you also need the file&nbsp;
+<p><a href="ftp://ftp.porcupine.org/pub/security/logdaemon-5.8.tar.gz.sig">ftp://ftp.porcupine.org/pub/security/logdaemon-5.8.tar.gz.sig</a></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font face="Arial"><font color="#008000"><font size=+0>Verify
+the authenticity of the logdaemon distribution.</font></font></font></b>
+<p>To perform this step, you need the PGP public key from "wietse venema
+" and to include it within your own PGP public key ring. W. Venema is the
+author of the logdaemon software, and a match with his digital signature
+ensures that the distribution was downloaded successfully without modification.
+To verify the digital signature, the following command is issued in a directory
+containing the downloaded files:&nbsp;
+<p><font face="Courier New"><font size=-1>$ pgp logdaemon-5.8.tar.gz.sig
+logdaemon-5.8.tar.gz</font></font>
+<p>If the signature doesn't match, the distribution has likely been compromised.
+You should not use this version.&nbsp;</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font face="Arial"><font color="#008000"><font size=+0>Unpack
+the logdaemon distribution.</font></font></font></b>
+<p>The compressed file can be uncompressed using the GNU gunzip utility
+and unpacked using the system tar command:&nbsp;
+<p><font face="Courier New"><font size=-1>$ gunzip logdaemon-5.8.tar.gz</font></font>
+<p><font face="Courier New"><font size=-1>$ tar xvf logdaemon-5.8.tar</font></font>
+<p>These commands create a subdirectory named <font face="Courier New"><font size=+0>logdaemon-5.8.
+</font></font>All
+operations are to be performed within this subdirectory.&nbsp;</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font color="#008000"><font face="Arial">Build
+only </font><font face="Courier New"><font size=+0>rshd</font></font><font face="Arial">
+and </font><font face="Courier New"><font size=+0>rlogind.</font></font></font></b>
+<p>The logdaemon software is distributed as source code. <font face="Courier New"><font size=+0>Makefile</font></font>
+is provided and can be successfully used with some operating systems; however,
+it builds more than the new versions of <font face="Courier New"><font size=+0>rshd
+</font></font>and
+<font face="Courier New"><font size=+0>rlogind</font></font>.</td>
+</tr>
+
+<tr>
+<td COLSPAN="2" WIDTH="12%">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial">Install the
+new version of </font><font face="Courier New"><font size=+0>rshd</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="88%">After unpacking the distribution,
+select the <font face="Courier New"><font size=+0>rshd</font></font> subdirectory.&nbsp;</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="88%" HEIGHT="216"><b><font color="#008000"><font size=+0><font face="Arial">Change
+</font><font face="Courier New">Makefile.</font></font></font></b>
+<p>You need to change the <font face="Courier New"><font size=+0>Makefile</font></font>
+to enable the logging of commands executed via <font size=+0><font face="Courier New">rshd
+(-DLOG_COMMANDS)</font>.</font>
+<p>The third line of <font face="Courier New"><font size=+0>Makefile</font></font>
+should be:&nbsp;
+<p><font face="Courier New"><font size=-1>CFLAGS = -I../lib -O -DFACILITY=LOG_DAEMON
+$(XFLAGS) -DLOG_COMMANDS</font></font></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font color="#008000"><font size=+0><font face="Arial">Build
+the </font><font face="Courier New">rshd</font><font face="Arial"> binary.</font></font></font></b>
+<p>To build the binary, execute the following command:&nbsp;
+<p><font face="Courier New"><font size=-1># make sunos5</font></font>
+<p><font face="Courier New"><font size=+0>sunos5</font></font> specifies
+the operating system.&nbsp;</td>
+</tr>
+
+<tr>
+<td ALIGN=RIGHT VALIGN=TOP WIDTH="130"></td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font color="#008000"><font size=+0><font face="Arial">Install
+</font><font face="Courier New">rshd</font><font face="Arial">
+and supporting files.</font></font></font></b>
+<p>Following a successful make, the program and man pages are copied to
+the system directories as a system administrator using root privileges:&nbsp;
+<p><font face="Courier New"><font size=-1># cp rshd /usr/sbin/rshd</font></font>
+<br><font face="Courier New"><font size=-1># cp rshd.8 /usr/man/man8/rshd.8</font></font></td>
+</tr>
+
+<tr>
+<td COLSPAN="2" WIDTH="12%">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial, Helvetica, sans-serif">Install
+the new version of </font><font face="Courier New"><font size=+0>rlogind</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>Select the <font face="Courier New"><font size=+0>rlogind</font></font>
+subdirectory.&nbsp;</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font color="#008000"><font size=+0><font face="Arial">Change
+</font><font face="Courier New">Makefile</font><font face="Arial">.</font></font></font></b>
+<p>Make the same change as noted above. The third line of <font face="Courier New"><font size=+0>Makefile</font></font>
+should be:&nbsp;
+<p><font face="Courier New"><font size=-1>CFLAGS = -I../lib -O $(LOGIN)
+-DFACILITY=LOG_DAEMON $(XFLAGS)</font></font></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font color="#008000"><font size=+0><font face="Arial">Build
+the </font><font face="Courier New">rlogind </font><font face="Arial">binary.</font></font></font></b>
+<p>To build the binary, execute the following command:&nbsp;
+<p><font face="Courier New"><font size=-1># make sunos5</font></font></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130" HEIGHT="129">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP HEIGHT="129"><b><font color="#008000"><font size=+0><font face="Arial">Install
+</font><font face="Courier New">rlogind</font><font face="Arial">
+and supporting files.</font></font></font></b>
+<p>Copy the program and man pages to the system directories as follows
+using root privileges:&nbsp;
+<p><font face="Courier New"><font size=-1># cp rlogind /usr/sbin/rlogind</font></font>
+<p><font face="Courier New"><font size=-1># cp rlogind.8 /usr/man/man8/rlogind.8</font></font></td>
+</tr>
+
+<tr>
+<td ALIGN=RIGHT VALIGN=TOP WIDTH="130">
+<p><b>&nbsp;</b></td>
+
+<td><b><font color="#008000"><font size=+0><font face="Arial">Using </font><font face="Courier New">rlogind</font><font face="Arial">
+with the logdaemon </font><font face="Courier New">login </font><font face="Arial">replacement</font></font></font></b>
+<p>An additional option is available if you install the <font face="Courier New"><font size=+0>login
+</font></font>program
+provided with the logdaemon package ("Installing, configuring, and using
+logdaemon to log unauthorized login attempts on systems running Solaris
+2.x"). If you elect to do this, <font face="Courier New"><font size=+0>rlogind</font></font>
+handles the authentication of users and ignores wildcards in the user files
+(<font face="Courier New"><font size=+0>.rhosts</font></font>) and the
+system file (<font face="Courier New"><font size=+0>/etc/hosts.equiv</font></font>).
+When the option <font face="Courier New"><font size=+0>-l </font></font>is
+used, the interpretation of user files is disabled. To select this option,
+modify the make command as follows:&nbsp;
+<p><font face="Courier New"><font size=-1># make LOGIN=-DNEW_LOGIN sunos5</font></font>
+<p>All other steps remain the same.</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2" WIDTH="130">
+<hr noshade size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130" HEIGHT="86"><b><font face="Arial">Update
+the tcpd and inetd configurations.&nbsp;</font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP><font face="Courier New">rshd </font>and<font face="Courier New"><font size=+0>rlogind
+</font></font>use the same configuration file as tcp wrapper. As a result,
+you need to make several changes.</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font color="#008000"><font size=+0><font face="Arial">Edit
+the </font><font face="Courier New">tcpd </font><font face="Arial">configuration.</font></font></font></b>
+<p>Building on the tcp wrapper example (<a href="i041.07.html">"Installing,
+configuring, and using tcp wrapper to log unauthorized connection attempts
+on systems running Solaris 2.x")</a>, you need to include two new rules
+in the <font face="Courier New"><font size=+0>hosts.allow</font></font>
+file. No new rule is necessary for the <font face="Courier New"><font size=+0>hosts.deny</font></font>
+file.&nbsp;
+<pre><font face="Courier New"><font size=-1>[...]
+
+rshd:&nbsp;&nbsp;&nbsp;&nbsp; 10.0.2.15:&nbsp; RFC931
+
+rlogind:&nbsp; 10.0.2.15:&nbsp; RFC931 : BANNERS /usr/sbin/sec/banners
+
+[...]</font></font></pre>
+Users connected via the remote access server 10.0.2.15 now have access
+to <font face="Courier New"><font size=+0>rshd</font></font> and <font face="Courier New"><font size=+0>rlogind</font></font>.
+Both rules result in an ident lookup using the ident protocol defined in
+RFC 1413. Only the <font face="Courier New"><font size=+0>rlogind </font></font>displays
+any banner; <font face="Courier New"><font size=+0>rshd</font></font> is
+usually not used for interactive access.&nbsp;</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="12%">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font color="#008000"><font size=+0><font face="Arial">Edit
+the </font><font face="Courier New">inetd </font><font face="Arial">configuration.</font></font></font></b>
+<p>Like the original versions, the new versions of <font face="Courier New"><font size=+0>rshd</font></font>
+and <font face="Courier New"><font size=+0>rlogind</font></font> require
+entries in the <font face="Courier New"><font size=+0>inetd </font></font>configuration
+file. Since the new versions of these daemons require that the tcp wrapper
+software be installed before building, it is likely that you already are
+using tcp wrapper on your system, and that you have corresponding entries
+in your <font face="Courier New"><font size=+0>/etc/inetd.conf</font></font>
+file. The following lines are from a <font face="Courier New"><font size=+0>/etc/inetd.conf</font></font>
+file, configured to accommodate these new versions:&nbsp;
+<pre><font face="Courier New"><font size=-1>[...]
+
+shell stream tcp nowait root /usr/sbin/tcpd in.rshd
+
+login stream tcp nowait root /usr/sbin/tcpd in.rlogind
+
+[...]</font></font></pre>
+These lines need to be changed as follows:&nbsp;
+<pre><font face="Courier New"><font size=-1>[...]
+
+shell stream tcp nowait root /usr/sbin/rshd rshd
+
+login stream tcp nowait root /usr/sbin/rlogind rlogind
+
+[...]</font></font></pre>
+If the new version of <font face="Courier New"><font size=+0>login</font></font>
+that is distributed with this system is also installed and used, the option
+<font face="Courier New"><font size=+0>–l</font></font>
+for both <font face="Courier New"><font size=+0>rshd
+</font></font>and
+<font face="Courier New"><font size=+0>rlogind</font></font>
+disables the interpretation of user's <font face="Courier New"><font size=+0>.rhosts</font></font>
+files, as shown below:&nbsp;
+<pre><font face="Courier New"><font size=-1>[...]
+
+shell stream tcp nowait root /usr/sbin/rshd rshd -l
+
+login stream tcp nowait root /usr/sbin/rlogind rlogind -l
+
+[...]</font></font></pre>
+</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="12%">
+<div align=right></div>
+&nbsp;</td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="88%"><b><font color="#008000"><font size=+0><font face="Arial">Re-start
+</font><font face="Courier New">inetd.</font></font></font></b>
+<p><font face="Courier New"><font size=+0>inetd</font></font> is re-initiated
+to apply the <font face="Courier New"><font size=+0>/etc/inetd.conf</font></font>
+file changes as follows:&nbsp;
+<p><font face="Courier New"><font size=-1># kill -HUP &lt;pid of inetd></font></font></td>
+</tr>
+
+<tr>
+<td COLSPAN="2" WIDTH="12%">
+<hr size="1"></td>
+</tr>
+</table>
+</body>
+</html>

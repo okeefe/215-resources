@@ -1,0 +1,492 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
+   <title>Disabling user accounts on systems running Solaris 2.X </title>
+</head>
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+<table CELLSPACING=6 WIDTH="100%" >
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="Times New Roman,Times"><font size=-1>Implementation
+Details</font></font></b></td>
+
+<td VALIGN=TOP>
+<h2>
+<font face="Helvetica, Geneva, Arial">Disabling user accounts on systems
+running Solaris 2.x.</font></h2>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="120"></td>
+
+<td VALIGN=TOP>
+<table BORDER CELLSPACING=0 CELLPADDING=4 WIDTH="80%" >
+<tr>
+<td BGCOLOR="#CCDDFF"><font size=-1>Applies to the practice:</font>
+<br><font size=-1><a href="http://www.cert.org/security-improvement/practices/p049.html">Apply
+short term solutions to contain an intrusion.</a></font>
+<p><font size=-1>Applicable technologies:</font>
+<br><font size=-1>Sun Solaris 2.x; UNIX operating systems and derivatives</font></td>
+</tr>
+</table>
+&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td VALIGN=TOP>During the course of routine systems administration, it
+sometimes becomes necessary to disable a user’s accounts. One example is
+that the account’s password may have been compromised. As a systems administrator,
+you need to know how to disable an account and what disabling an account
+means.&nbsp;
+<p>Disabling an account effectively terminates a user's direct access path
+to a computer system although it may not be a reliable containment action
+because an intruder may have other means of access. Disabling an account
+can successfully deny any further access if the account is the only means
+used to gain access and no other means of access (backdoors, etc.) have
+been installed.&nbsp;
+<p>Keep in mind that you need to repeat this procedure every time you re-install
+the system based on a backup that has the user account still enabled.&nbsp;
+<p>If a user has access to many systems within your network, you may need
+to repeat this procedure on all of those systems. If a user has accounts
+(and, therefore, has to provide passwords) on many systems, he/she typically
+chooses the same password. As a result, it is important to disable accounts
+on all systems; otherwise an attacker may gain access via another system
+with using the password of a compromised account.&nbsp;&nbsp;
+<p>This implementation describes how to disable a user account on the Sun
+Solaris operating system, version 2.x. This approach should also work with
+many other UNIX operating systems and hosts. Please note that in addition
+to the operating system, application systems may have their own account
+management. For example, some web servers use an access scheme that is
+also login- and password- based but does not use the standard <tt>/etc/passwd</tt>
+and <tt>/etc/shadow</tt> files. This implementation does not address how
+to disable such application-specific accounts.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="120"><b><font face="Times New Roman,Times"><font color="#000000"><font size=-1>Effort
+Estimates</font></font></font></b></td>
+
+<td>It is difficult to estimate the time required to disable a single account.
+If an intruder actively used an account, the process of disabling it may
+reveal intruder activities that require further analysis.&nbsp;
+<p>On average, the steps described below will take approximately ten minutes.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="120"><b><font face="Times New Roman,Times"><font color="#000000"><font size=-1>System
+Prerequisites</font></font></font></b></td>
+
+<td>&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="120"></td>
+
+<td ALIGN=LEFT>
+<h4>
+<font face="helvetica, geneva, arial"><font color="#008000">Software Prerequisites</font></font></h4>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="120"></td>
+
+<td ALIGN=LEFT>You need Internet access to retrieve the following software
+tools:&nbsp;
+<ul>
+<li>
+<a href="http://www.gnu.org/software/tar/tar.html">GNU tar</a> to save
+user files with all attributes&nbsp;</li>
+
+<li>
+The <tt><a href="http://www.cert.org/security-improvement/implementations/i049.02.html">noshell</a></tt>
+program to aid you in detecting attempts to gain access to any disabled
+accounts</li>
+
+<li>
+The <tt><a href="http://www.cert.org/security-improvement/implementations/i046.01.html">mactime</a></tt>
+program to save all available time stamp information for files&nbsp;</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="Times New Roman,Times"><font size=-1>Disabling
+an account</font></font></b></td>
+
+<td VALIGN=TOP>Execution of the following steps successfully disables all
+standard access paths using a compromised account. As previously noted,
+this does not cover any application-specific accounts nor does it cover
+any backdoors that the intruder may have installed.&nbsp;
+<p>Before performing these steps and if appropriate, make a full backup
+of the system accessed by the intruder when using the compromised account.
+Follow your organization's procedures for preserving evidence (as the backup
+procedure might change the evidence when not done properly) when a computer
+system has suffered a break-in and make sure to satisfy any chain-of-evidence
+requirements. This, at a minimum, is required to support any subsequent
+legal investigation or court proceedings.&nbsp;
+<p>In the course of disabling an account, many files are transferred to
+a protected location that is only accessible by the system's administrator.
+This method may impact the availability of evidence to parties that may
+need such access. We therefore recommend that you address these issues
+before you start disabling any user account.&nbsp;
+<p>We recommend that you begin this process by creating the following directory:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; # mkdir /root/disabled_users
+
+
+&nbsp;&nbsp;&nbsp; # chmod 0700 /root/disabled_users</font></pre>
+Note that this method creates files that the root user will be able to
+read and manipulate. Therefore, if the intruder has become root on a compromised
+system, these files will still be accessible to the intruder even though
+they have been moved to another location.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Create
+a specific directory for all files belonging to the compromised account.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>First, create a specific user directory for the files belonging
+to the soon-to-be-disabled account. This avoids mixing these files with
+any other user files. For this implementation and the examples below, assume
+that the account name is <tt>fred</tt>.&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; # mkdir /root/disabled_users/fred
+
+
+&nbsp;&nbsp;&nbsp; # chmod 0700 /root/disabled_users/fred</font></pre>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Save
+as much timestamp information as possible.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>At this early stage, save all timestamp information about
+the entire file system. Timestamps of file creations, modifications, and
+accesses can reveal intruder activities. This information may be important
+once you have confirmed that an intruder compromised an account. Given
+that any further access can destroy important parts of this information,
+you should archive it as soon as possible. A small but useful tool
+called mactime (part of <tt><a href="http://www.fish.com/tct">The Coroner's Toolkit</a></tt>) can be used to do this:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; # /usr/local/tct/bin/mactime -y -d / -R 1/1/1970 > /root/disabled_users/fred/timestamps
+
+
+&nbsp;&nbsp;&nbsp; # compress /root/disabled_users/fred/timestamps&nbsp;</font></pre>
+Store a copy of the created file <tt>/root/disabled_users/fred/timestamps</tt>
+on a write-protected media in a physical secure storage area. This will
+protect it from malicious or accidental modifications.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Switch
+to single user mode.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>By switching to single user mode, you ensure that the disabled
+account will not be used while you are trying to disable it. It will also
+ensure that there are no active processes using this account. Note however
+that by switching to single user mode, some of the evidence of the compromised
+system may be destroyed, for example processes being run by the intruder
+(any backdoor programs, password cracking programs, etc). Grave-robber
+(part of <tt><a href="http://www.fish.com/tct">The Coroner's Toolkit</a></tt>)can be used to retrieve a more complete
+snapshot of the system including information about processes.&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; # init 1</font></pre>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font color="#005500"><font face="Helvetica, Geneva, Arial">Remove
+</font><tt>cron</tt><font face="Helvetica, Geneva, Arial"> and </font><tt>at</tt><font face="Helvetica, Geneva, Arial">
+jobs.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>Remove<tt> cron</tt> and <tt>at</tt> jobs being executed
+by the account you are about to disable. You need to do this because these
+jobs will execute even after the account is disabled. The wiley intruder
+may create a <tt>cron</tt> or <tt>at</tt> job to guard against a compromised
+account being disabled. Such a job typically re-enables a disabled account,
+thereby giving the intruder continued access to a system.&nbsp;
+<p>To transfer any <tt>cron</tt> job, use the following command:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; # mv /var/spool/cron/cronjobs/fred /root/disabled_users/fred/fred.cron</font></pre>
+To transfer all <tt>at</tt> jobs for a user, all files belonging to that
+user need to be specified:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; # find /var/spool/cron/atjobs/* -user fred -print</font></pre>
+This reveals all files belonging to the user and containing <tt>at</tt>
+jobs. You then move the user's <tt>at</tt> files to a directory under the
+newly created directory in the disabled account area. For example, if the
+above command reveals that Fred owns the <tt>at</tt> job <tt>a0000300f66,
+</tt>perform the following steps :&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; # mkdir /root/disabled_users/fred/at
+
+
+&nbsp;&nbsp;&nbsp; # mv /var/spool/cron/atjobs/a0000300f66 /root/disabled_users/fred/at/</font></pre>
+Finally, disable execution of <tt>at</tt> jobs by removing the user's name
+from the file <tt>/usr/lib/cron/atd.allow</tt> (if applicable) and inserting
+the user's name into the file <tt>/usr/lib/cron/atd.deny</tt>.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Transfer
+all user files to a protected directory.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>Transferring all user files to a protected subdirectory
+saves them but prohibits them from being executed by ordinary users. To
+save disk space, you can compress files. Enter the following commands
+(<tt>/users/fred</tt> is the home directory of the account that is to be
+disabled):&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; # cd /users/fred
+
+
+&nbsp;&nbsp;&nbsp; # /usr/local/bin/tar -cvf /root/disabled_users/fred/users.fred.tar .
+
+
+&nbsp;&nbsp;&nbsp; # compress /root/disabled_users/fred/users.fred.tar</font></pre>
+Once you are sure that all of the user’s files have been copied and compressed,&nbsp;
+remove them from the user's home directory and also remove the home directory
+itself.&nbsp;
+<p>Files belonging to a disabled account can reside at any arbitrary place
+in a file system in addition to those files residing within or below the
+user's home directory. These files could be programs or scripts with the 
+<tt>setuid</tt> bit enabled, which would provide an alternate access path
+to the account. The following command identifies such files and allows manual
+transfer to the protected subdirectory:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; # find / -local -user fred -print</font></pre>
+Once you have copied these files into the protected subdirectory, you should
+examine them for unusual characteristics such as an enabled <tt>setuid</tt>
+bit or an unusual file type. Remove all files after they are copied. (If, however, other users are depending on these files, examine
+the content of the files and their access rights before using them again.)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Copy
+available information about user logins.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>Information about user accesses may be important for later
+analysis of intruder activities. To preserve the actual set of information, copy the system files,
+and compress the copies to save disk space:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp; # cp /etc/utmp /root/disabled_users/fred/utmp
+
+
+&nbsp;&nbsp; # compress /root/disabled_users/fred/utmp
+
+
+&nbsp;&nbsp; # cp /etc/wtmp /root/disabled_users/fred/wtmp
+
+
+&nbsp;&nbsp; # compress /root/disabled_users/fred/wtmp</font></pre>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Change
+<tt>/etc/passwd</tt>.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>First (if not already performed), create a new subdirectory
+that provides a "safe" directory that cannot be manipulated by normal users.
+This also prevents any file being used as an access path by an intruder
+(such as the <tt>.rhosts</tt> file). Issue the following commands:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; # mkdir /users/jail
+
+
+&nbsp;&nbsp;&nbsp; # chmod 0111 /users/jail</font></pre>
+Edit the <tt>/etc/passwd</tt> file to disable the user account. The original
+line for our sample user account should read (using a user id of "555",
+a group id of "11111", and a full name of "Fred Username")&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; fred:x:555:11111:Fred Username:/users/fred:/bin/tcsh</font></pre>
+Modify the <tt>/etc/password</tt> file, setting the user's home directory
+to the "safe" directory created above. Then, set the login shell to the
+"safe" <tt><a href="http://www.cert.org/security-improvement/implementations/i049.02.html">noshell</a></tt> program. In the example
+above, the changed <tt>/etc/password</tt>
+entry for user Fred would then be:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; fred:x:555:11111:Fred Username:/users/jail:/bin/noshell</font></pre>
+The <tt><a href="http://www.cert.org/security-improvement/implementations/i049.02.html">noshell</a></tt>
+program denies access to the disabled account and generates a syslog message
+that allows you to detect attempts to access the account.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font color="#005500"><font face="Helvetica, Geneva, Arial">Change
+</font><tt>/etc/ftpusers</tt><font face="Helvetica, Geneva, Arial"> .</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>The disabled account cannot be used by ftp once the password
+in the <tt>/etc/shadow</tt> file is disabled (as explained in the next
+step). Even so, adding the user name to <tt>/etc/ftpusers</tt> disables
+any ftp access independent of any other configuration.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font color="#005500"><font face="Helvetica, Geneva, Arial">Change
+</font><tt>/etc/shadow</tt><font face="Helvetica, Geneva, Arial"> .</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>You need to disable the password (which is no longer stored
+in the <tt>/etc/passwd</tt> file) in the shadow file <tt>/etc/shadow</tt>.
+Change the line beginning with the name of the account from:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; fred:dsafFDQp/c2aY:6445::::::</font></pre>
+to the following line:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; fred:*NK*:6445::::::</font></pre>
+This disables the syslog message from <tt>noshell</tt> as the <tt>login</tt>
+program will now deny any access to the account. In environments where
+security requirements do permit the use of <tt>noshell</tt> with a still
+valid and enabled password, <tt>noshell</tt> is useful in detecting access
+to disabled accounts.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Disable
+the user's account in any application-specific account database.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>Often users use the same password for every system and application
+they are accessing. All other system and application-specific accounts
+that the user had access to should be disabled. Refer to the application-specific
+documentation.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Reboot
+to switch back to multi-user mode.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>Update the Tripwire configuration as described below before
+switching back to multi-user mode. Initiate multi-user mode by rebooting
+with the following command:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; # init 6</font></pre>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="Times New Roman,Times"><font size=-1>Further
+Information</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Visibility
+of the disabled account.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>If someone tries to access the now-disabled account, information
+may show up in the output of services that provide user information such
+as the <tt>fingerd</tt> daemon. Typically the output will reveal the&nbsp;
+<ul>
+<li>
+changed home directory</li>
+
+<li>
+changed login shell</li>
+</ul>
+To avoid this, you can choose non-descriptive names for the home directory
+of disabled accounts (<tt>/users/jail</tt>) and store the <tt>noshell</tt>
+program under a different name. Whether or not you choose to do this depends
+on the availability of such services and your procedures for responding
+to intrusions.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="130"><b><font face="Times New Roman,Times"><font color="#005500"><font size=-1>Tripwire
+Configuration</font></font></font></b></td>
+
+<td>This implementation produces changes to several system configuration
+files and to the file system. You should update your <a href="http://www.cert.org/security-improvement/implementations/i002.02.html">T<tt>ripwire</tt></a>
+database as soon as all steps have been completed.</td>
+</tr>
+</table>
+</body>
+</html>

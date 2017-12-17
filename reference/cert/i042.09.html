@@ -1,0 +1,1412 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
+   <title>Installing, configuring, and using argus to monitor systems running Solaris 2.x 
+
+</title>
+</head>
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+<table border="0" cellpadding=2 CELLSPACING=2 WIDTH="100%">
+<tr>
+<td VALIGN=TOP WIDTH="110"><b><font face="Helvetica, Geneva, Arial" size="2">Implementation
+Details</font></b></td>
+
+<td VALIGN=TOP>
+<h2>
+<font face="Helvetica, Geneva, Arial">Installing, configuring, and using
+argus to monitor network traffic and detect signs of intrusions on systems
+running Solaris 2.x.</font></h2>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="110"></td>
+
+<td VALIGN=TOP>
+<table BORDER CELLSPACING=0 CELLPADDING=4 WIDTH="80%" >
+<tr>
+<td BGCOLOR="#CCDDFF">Applies to the practices:
+<br><a 
+href="../practices/p094.html">"Monitor and inspect network activities for unexpected behavior"</a> 
+<br><a
+href="../practices/p091.html">"Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior"</a>
+
+<p>Applicable technologies:
+<br>Solaris 2.x; UNIX operating system and derivatives</td>
+</tr>
+</table>
+&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td VALIGN=TOP>The tools distributed with an operating system are often
+incomplete when the task at hand is to monitor all network traffic. These
+tools present neither a consistent nor a comprehensive overview of network
+traffic. To address these shortcomings, we recommend, at a minimum, that
+you log all TCP services with the publicly available <tt><a href="http://www.cert.org/security-improvement/implementations/i041.07.html">tcp
+wrapper</a></tt> and <tt><a href="http://www.cert.org/security-improvement/implementations/i041.11.html">log
+daemon</a></tt> tools. These tools help you to learn which TCP services
+are being requested by your users.&nbsp;
+<p>Should you need or want more details about your network traffic, we
+recommend more advanced tools. One such tool is the <tt>argus</tt> network
+monitor. <tt>argus</tt> helps you to learn about established connections
+to regular services provided by your hosts, and it can also reveal attacks
+and successful intrusions. Examples include attempts to connect to disabled
+services (through port scanning), connections to back doors on compromised
+systems (Back Orifice and Netbus), and administrative errors (such as accidentally
+deleting an important filtering rule in your firewall that leaves internal
+systems open for attack). Note that <tt>argus</tt> is not for the faint
+of heart; it is an advanced tool that requires moderate use to tune for
+your environment. If you are not able to commit the time and resources to its installation and tuning, we recommend
+that you 
+<ul>
+<li>establish a <a href="/security-improvement/modules/m08.html">firewall solution</a> 
+which protects your internal hosts 
+<li><a href="/security-improvement/implementations/i027.02.html">harden the
+installation</a> on the host level as much as possible 
+</ul>
+<p><tt>argus</tt> was originally developed for a high network traffic environment,
+but it has also proven useful in low traffic environments. Although <tt>argus</tt>
+can detect specific attacks against hosts and the network infrastructure,
+it is not an intrusion detection system because it does not analyze any
+transferred content once the connection is established.&nbsp;
+<p>This implementation describes how to download, install, configure, and
+use <tt>argus</tt> version 1.8.1 and its related utilities on the Sun Solaris
+Operating System, version 2.X.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="110"><b><font face="Helvetica, Geneva, 
+
+Arial" size="2"><font color="#000000">Effort
+Estimates</font></font></b></td>
+
+<td>The time needed to retrieve the source code from the distribution site
+will vary depending upon your connection speed. The source code is approximately
+253 KB (version 1.8.1). Building and installing <tt>argus</tt> also depends
+upon machine performance, but on average will take between five and ten
+minutes.&nbsp;
+<p>Configuration and tailoring depends on the specific network setup.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="110"><b><font face="Helvetica, Geneva, 
+
+Arial" size="2"><font color="#000000">System
+Prerequisites</font></font></b></td>
+
+<td><tt>argus</tt> can be built and installed on many UNIX systems, and
+it should run on all systems that support <tt><a href="/security-improvement/implementations/i042.11.html">libpcap</a></tt>
+.&nbsp;<p>&nbsp;<br></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="110"></td>
+
+<td ALIGN=LEFT>
+<h4>
+<font face="helvetica, geneva, arial"><font color="#008000">Software Prerequisites</font></font></h4>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="120"></td>
+<td ALIGN=LEFT>To build <tt>argus</tt> on your system, you need Internet
+access to retrieve the following software tools:&nbsp;
+<ul>
+<li>
+the <tt>tcp wrapper</tt> program (refer to <a href="/security-improvement/implementations/i041.07.html">Installing,
+configuring, and using tcp wrapper to log unauthorized connection attempts
+on systems running Solaris 2.x</a>) to protect against unauthorized connections
+if remote access is enabled (optional)&nbsp;</li><p>
+
+<li>
+the <tt>libpcap</tt> library (refer to <a href="/security-improvement/implementations/i042.11.html">Installing
+libpcap to support network packet capturing tools on systems running Solaris
+2.x</a>). argus is based on this interface for low-level packet capturing.&nbsp;</li>
+<p>
+<li>
+an MD5 cryptographic checksum program (refer to <a href="/security-improvement/implementations/i002.01.html">Using
+MD5 to verify the integrity of file contents</a>)&nbsp;</li>
+<p>
+<li>
+GZIP to uncompress the downloaded files (<a href="ftp://prep.ai.mit.edu/gnu/gzip/gzip-1.2.4a.tar">ftp://prep.ai.mit.edu/gnu/gzip/gzip-1.2.4a.tar</a>)&nbsp;</li>
+<p>
+<li>
+a C compiler; either the Sun C Computer or the free GNU C Compiler (<a href="ftp://prep.ai.mit.edu/gnu/gcc/gcc-core-2.95.2.tar.gz">ftp://prep.ai.mit.edu/gnu/gcc/gcc-core-2.95.2.tar.gz</a>)&nbsp;</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"><b><font face="Helvetica, Geneva, Arial" size="2">Downloading
+and Verifying</font></b></td>
+
+<td VALIGN=TOP>The latest release of <tt>argus</tt> is available via anonymous
+ftp from <a href="ftp://ftp.andrew.cmu.edu/pub/argus/current/">ftp://ftp.andrew.cmu.edu/pub/argus/current/</a>.&nbsp;
+<p>Download the distribution package (at the time of this writing <tt>argus-1.8.1.tar.gz</tt>
+into a directory (i.e. <i>/tmp</i>) with the ftp program and verify its
+checksum with an MD5 checksum program.&nbsp;<P>&nbsp;<br>
+<table BORDER CELLPADDING=3 cellspacing=3>
+<tr>
+<td><b>File to Download</b></td>
+
+<td><b>MD5 Checksum</b></td>
+</tr>
+
+<tr>
+<td><a href="ftp://ftp.andrew.cmu.edu/pub/argus/current/argus-1.8.1.tar.gz">ftp://ftp.andrew.cmu.edu/pub/argus/current/argus-1.8.1.tar.gz</a></td>
+
+<td><font face="courier new"><small>863f865cbae42ae63b976c85b30fc288</small></font></td>
+</tr>
+</table>
+
+<p>If the computed cryptographic checksum of the download files does not
+correspond to the information given above, verify that&nbsp;
+<ul>
+<li>
+your downloaded filenames match those listed</li>
+
+<li>
+your checksum program computes MD5 message digests&nbsp;</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"><b><font face="Helvetica, Geneva, Arial" size="2">Building</font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Unpack
+the <font face="courier">argus</font> distribution.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>The compressed file can be uncompressed using the GNU <tt>gunzip</tt>
+utility and unpacked using the system <tt>tar</tt> command:&nbsp;
+<pre><font size=-1>$ gunzip -c argus-1.8.1.tar.gz | tar xvf -</font></pre>
+These commands create a subdirectory named <tt>argus-1.8.1</tt>. Change
+to this subdirectory because all remaining operations are performed there.&nbsp;<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Decide
+on the requirements for remote access to <font face="courier">argus</font>.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>The <tt>argus</tt> implementation provides an unprotected
+(meaning cleartext without authentication) channel to the <tt>argus</tt>
+daemon via port 561/tcp. The <tt>argus</tt> utilities use this channel
+to retrieve data from the daemon.&nbsp;
+<p>If the traffic between an <tt>argus</tt> client and the <tt>argus</tt>
+server will traverse any public network (like the Internet) or any other
+unsecure network segments, we recommend that you disable this feature by
+editing the <tt>configure</tt> script that defines the default value for
+using <tt>tcp wrapper</tt>. Change the line&nbsp;
+<pre><font size=-1>#define TCPWRAPPER 1</font></pre>
+to&nbsp;
+<pre><font size=-1>#define TCPWRAPPER 0</font></pre>
+and then continue with the build procedure described below.&nbsp;
+<p>If you must use remote access over an insecure channel, we recommend
+that you use a tool such as <tt>ssh</tt> to encrypt all communication between
+<tt>argus</tt>
+clients and server. <tt>ssh</tt> provides confidentiality (through encryption)
+and strong authentication (through public and private key cryptography).
+One way to use <tt>ssh</tt> is through its port forwarding capabilities.&nbsp;
+<p>If you have decided to build <tt>argus</tt> with remote access enabled,
+we recommend that you further restrict access to this channel with the
+<tt>tcp
+wrapper</tt> system (refer to <a href="i041.07.html">Installing, configuring,
+and using tcp wrapper to log unauthorized connection attempts on systems
+running Solaris 2.x</a>). Access will then be granted based upon the <tt>tcp
+wrapper</tt> access control lists.&nbsp;<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Build
+the <font face="courier">argus</font> binaries.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP><tt>argus</tt> is distributed as source code. The <tt>configure</tt>
+script provided as part of the distribution can be used in most environments.
+Execute the <tt>configure</tt> script to create the system-specific <tt>Makefile</tt>:&nbsp;
+<pre><font size=-1>$ sh configure&nbsp;</font></pre>
+The <tt>configure</tt> script searches for the <tt>libpcap</tt> library
+named <tt>libpcap.a</tt>. <tt>configure</tt> and produces an error message
+if this library cannot be found. If this happens, review the implementation
+<a href="/security-improvement/implementations/i042.11.html">Installing
+libpcap to support network packet capturing tools on systems running Solaris
+2.x</a> to make sure that <tt>libpcap.a</tt> was installed correctly. <tt>argus</tt>
+depends on this interface for low-level packet capturing and cannot proceed
+without it.&nbsp;
+<p>Build the <tt>argus</tt> binaries with&nbsp;
+<pre><font size=-1>$ make</font></pre>
+When the <tt>make</tt> is complete, <tt>argus</tt> is ready to be installed.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"><b><font face="Helvetica, Geneva, Arial" size="2">Installation</font></b></td>
+
+<td VALIGN=TOP>To install <tt>argus</tt>, to automatically start
+the server when the system is booted, and to perform some routine housekeeping
+do the following.&nbsp;<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Install <font
+face="courier">argus</font>
+and supporting files.</font></font></b></td> </tr>
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>When <tt>make</tt> successfully finishes, install the programs
+and manual pages in the system directories. Note that the installation process
+is done as root:&nbsp;
+<pre><font size=-1># cp -p bin/argus_dlpi /usr/local/sbin
+# cp -p bin/ra /usr/local/sbin
+# cp -p bin/raservices /usr/local/sbin
+# cp -p bin/raconnections /usr/local/sbin
+# cp -p bin/rasort /usr/local/sbin
+# cp -p bin/racount /usr/local/sbin
+# cp -p bin/radjacency /usr/local/sbin
+# cp -p bin/radnstats /usr/local/sbin
+# cp -p bin/fullra /usr/local/sbin
+# cp -p man/man1/ra.1 /usr/local/man/man1
+# cp -p man/man1/rasort.1 /usr/local/man/man1
+# cp -p man/man1/services.1 /usr/local/man/man1
+# cp -p man/man1/connections.1 /usr/local/man/man1
+# cp -p man/man5/argus.5 /usr/local/man/man5
+# cp -p man/man8/argus.8 /usr/local/man/man8</font>
+</pre>
+The name of the executable <tt>argus_dlpi</tt> contains the name of the
+means by which packets are captured. For most Solaris 2.X systems, this
+name will be <tt>dlpi</tt>, which stands for the Data Link Provider Interface (see
+dpli (7P) manual page for more information). For convenience, you should
+create a hard link between this file and the more conventional name <tt>argusd</tt>.&nbsp;
+<pre><font size=-1># ln /usr/local/sbin/argus_dlpi /usr/local/sbin/argusd</font></pre>
+<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Create a directory for <font
+face="courier">argus</font> files.</font></font></b></td> </tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>Create a separate directory where the <tt>argus</tt> log
+files will be stored. Note that this directory will contain connection
+information that may reveal usage patterns of your network. We recommend
+that you restrict access to this directory as shown. We further recommend
+that this directory be stored within the <tt>/var</tt> directory because
+<tt>/var</tt>
+usually contains other log information:&nbsp;
+<pre><font size=-1># mkdir /var/adm/argus
+# chmod 700 /var/adm/argus</font></pre>
+<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Routinely
+rotate all <font face="courier">argus</font> files.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>Ensure that <tt>argus</tt> log files are routinely rotated
+so that <tt>argus</tt> client programs gain access to the most current
+data without having to go through older data.&nbsp;
+<p>Rotating <tt>argus</tt> log files also supports archiving those files
+for a longer period of time using different media or systems. This step
+is necessary to prevent consuming all available disk space with historical
+and outdated data while still providing access to the data when needed.
+See the implementation on <tt>newarguslog</tt> (refer to <a href="/security-improvement/implementations/i042.10.html">Using
+newarguslog to rotate argus log files on systems running Solaris 2.x</a>)
+for a detailed discussion and examples.&nbsp;<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Create
+a startup file.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>The following script can be executed to automatically start
+<tt>argus</tt>
+when your system boots. It should be installed as <tt>/etc/init.d/argus</tt>.
+It supports starting and stopping the <tt>argus</tt> process. You need
+to create hard links (see <tt>init</tt> (1M) and <tt>init.d</tt>)&nbsp;
+to control when the server is started and stopped.&nbsp;
+<p>Execute these scripts as root:&nbsp;
+<pre><font size=-1>#!/bin/sh
+#
+#/etc/init.d/argus
+#
+
+
+pid=`/bin/ps -ef | /usr/bin/egrep "/usr/local/sbin/argusd -w /var/adm/argus/argus.log" \
+&nbsp;&nbsp; | /usr/bin/egrep -v egrep | /usr/bin/awk '{print $2}'`
+
+
+# test if listed process is still active
+
+
+if [ "${pid}" != "" ]; then
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pid=`/usr/bin/ps -p ${pid} | /usr/bin/grep -w argusd | /usr/bin/awk '{print $1}'`
+fi
+
+
+# handle the option specified
+
+
+case "$1" in
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'start')
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # start the logsurfer process
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if [ "${pid}" != "" ]; then
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/bin/echo '\nArgus System is already initialized.'
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit 0
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fi
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if [ -x /usr/local/sbin/argusd -a -d /var/adm/argus ]; then
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/local/sbin/argusd -w /var/adm/argus/argus.log &amp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/bin/echo " argus\c"
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/bin/echo '\nArgus program or log directory not found.'
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fi
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;;
+
+
+&nbsp;&nbsp; 'newstart')
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # restart the argus process
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if [ "${pid}" = "" ]; then
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/bin/echo '\nNo Argus System initialized.'
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit 0
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fi
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # stop the actual process
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /etc/init.d/argus stop
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # wait a while
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/bin/sleep 5
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # start a new process
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /etc/init.d/argus start
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;;
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'stop')
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # stop the argus process
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if [ "${pid}" = "" ]; then
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/bin/echo '\nNo Argus System initialized.'
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit 0
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fi
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/bin/kill ${pid}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;;
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/bin/echo "Usage: /etc/init.d/argus { start | newstart | stop }"
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;;
+
+esac</font></pre>
+If you do nothing else at this point in the installation and configuration
+process, <tt>argus</tt> will be started when the system is rebooted. Alternatively,
+you can manually invoke the start script now as <tt>root</tt> to start
+<tt>argus</tt>
+with the following:&nbsp;
+<pre><font size=-1># sh /etc/init.d/argus start</font></pre>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"><b><font face="Helvetica, Geneva, Arial" size="2">Understanding
+<tt>argus</tt>
+concepts</font></b></td>
+
+<td VALIGN=TOP>This section presents concepts on the use of <tt>argus</tt>
+that will help you more fully understand the way it operates and what it
+allows you to do. To make full use of <tt>argus</tt> and its advanced network
+monitoring capabilities, you may need an advanced understanding of the
+TCP/IP protocol suite. There are many texts, both online and in print,
+that explain TCP/IP and the nuances of its use. In a later section, we
+will show usage examples suitable for all system administrators and for
+those with advanced skills and needs.&nbsp;<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Understand
+the role of the <font face="courier">argus</font> daemon.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>The <tt>argus</tt> daemon retrieves specific information
+from captured packets transmitted on a network segment. To begin to capture
+packets, the server must be started (this is usually done during system
+startup). The server will continue capturing packets until it is shut down
+by the administrator or the system is shutdown.&nbsp;
+<p>While capturing packets, <tt>argus</tt> stores a subset of the data
+available from those packets in a log file. The important information about
+each packet is immediately written to the log file to preclude slowing
+down the server and risking the loss of packets. The data available in
+the log files can directly be processed with help of the <tt>argus</tt>
+clients.&nbsp;
+<p>The collected information consists of&nbsp;
+<table BORDER WIDTH="90%" >
+<tr ALIGN=LEFT VALIGN=TOP BGCOLOR="#CCFFFF">
+<td WIDTH="25%"><b>Information</b></td>
+
+<td WIDTH="25%"><b>Available for</b></td>
+
+<td WIDTH="40%"><b>Explanation</b></td>
+</tr>
+
+<tr>
+<td>MAC address (both source and destination)</td>
+
+<td>Ethernet packets</td>
+
+<td>MAC address identifies the hosts on the local network that are the
+source and destination of an Ethernet packet.&nbsp;</td>
+</tr>
+
+<tr>
+<td>IP address (both source and destination)</td>
+
+<td>IP packets</td>
+
+<td>IP address identifies the hosts that are the source and destination
+of an IP packet. These hosts are not necessarily on the local network segment.</td>
+</tr>
+
+<tr>
+<td>IP options</td>
+
+<td>IP packets</td>
+
+<td>IP options request specific ways of handling the IP packet.</td>
+</tr>
+
+<tr>
+<td>Transport layer protocol</td>
+
+<td>IP packets with UDP or TCP payload</td>
+
+<td>A field in the IP packet header identifies the transport layer protocol.
+This is not applicable for ICMP packets.</td>
+</tr>
+
+<tr>
+<td>Port number (both source and destination)</td>
+
+<td>UDP and TCP packets</td>
+
+<td>The port number identifies a specific communication together with the
+IP address. It is especially used to differentiate parallel communication
+between any two hosts.</td>
+</tr>
+
+<tr>
+<td>ICMP codes</td>
+
+<td>ICMP packets</td>
+
+<td>If an ICMP packet is captured, the ICMP codes are stored to support
+categorization of the request/response.</td>
+</tr>
+</table>
+<p><tt>argus</tt> also stores the following information within the record
+written for each packet:&nbsp;
+<ul>
+<li>
+time stamps showing when a connection begins and ends</li>
+
+<li>
+the amount of data transmitted (source versus destination) in bytes&nbsp;</li>
+
+<li>
+the number of transmitted packets</li>
+</ul>
+The <tt>argus</tt> clients establish a relationship between packets based
+on the information available in each packet. One of the goals of this activity
+is to provide an abstraction of all packets by representing connection-oriented
+data. This means that in the case of a TCP connection, for example, the
+<tt>argus</tt>
+clients abstract the three-way handshake, consisting of three packets,
+into a single connection. The <tt>argus</tt> clients show the single connection
+when, in fact, three packets traversed the network. Since the amount of
+information differs for each connection type, the <tt>argus</tt> clients
+can do so only with different levels of assurance. The table below explains
+these levels:&nbsp;<p>&nbsp;<br>
+<table BORDER WIDTH="90%" >
+<tr ALIGN=LEFT VALIGN=TOP BGCOLOR="#CCFFFF">
+<td WIDTH="25%"><b>Type of protocol</b></td>
+
+<td WIDTH="25%"><b>Sub-type</b></td>
+
+<td><b>Explanation</b></td>
+</tr>
+
+<tr>
+<td>connection-oriented</td>
+
+<td>&nbsp;</td>
+
+<td>TCP connections are established after a three-way handshake between
+client/source and server/destination. For such connections, <tt>argus</tt>
+can usually identify all packets actually belonging to the same connection
+and can provide a consistent representation of it.&nbsp;</td>
+</tr>
+
+<tr>
+<td ROWSPAN="2">connectionless</td>
+
+<td>request / response</td>
+
+<td>UDP connections usually have the format of an initial request from
+the initiator/source and response(s) from the server/destination. Since
+there is no connection established and no common identifier used for both
+request and response, <tt>argus</tt> might not be able to rightfully corrolate
+these packets. This means that <tt>argus</tt> may show multiple connections
+when in fact only one UDP type connection occurred.&nbsp;</td>
+</tr>
+
+<tr>
+<td>persistant</td>
+
+<td>Other communications, most notably ICMP and MBONE. The same considerations
+for the request / response sub-type apply.</td>
+</tr>
+</table>
+<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Understand
+the accuracy of the data collected.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP><tt>argus</tt> may be working correctly and yet not collect
+complete data or not reveal the real source of a captured packet. There
+are two major reasons. You need to take these into into account when making
+decisions based on the collected data.&nbsp;
+<ul>
+<li>
+<b>Not every packet is captured.</b></li>
+
+All packets may not be captured depending on the performance of
+the host and the traffic load on the monitored network(s).&nbsp;
+<p>To limit the potential for dropping packets, you may need to run tests.
+These tests attempt to determine how <tt>argus</tt> behaves based on the
+performance of the host with respect to the maximum data rate of the network(s)
+being monitored. For example, a host that successfully captures all packets
+on a 10 Mbit/s Ethernet network may not be capable of doing so on a 100
+Mbit/s fast Ethernet network.&nbsp;
+<p>As more and more sites use switched networks, monitoring all network
+traffic becomes increasingly difficult. For this purpose, most switches
+support the duplication of all packets on a designated port. In some cases,
+the overall data rate of all ports may be much higher than the maximum
+data rate available on the port used for duplication. When this occurs,
+you will need to use two or more machines to capture packets and split
+the traffic to these machines so that they monitor distinct sets of potential
+connections. Through this method, all packets that are members of the same
+connection are monitored by the same machine.&nbsp;
+<p>Even if the host's performance is sufficient, its capacity can be negatively
+impacted by user actions (such as performing mathematical operations requiring
+extensive CPU resources) or denial-of-service attacks. We recommend that
+only the responsible system administrators have access to the <tt>argus</tt>
+packet capture host. All other services should be disabled on the <tt>argus</tt>
+host, with the exception of administrative services such as <tt>ssh</tt>.
+<p>A lack of disk space for <tt>argus</tt> log files may also result in
+packet capture information being lost.&nbsp;
+<br>&nbsp;
+<li>
+<b>Addresses contained within packets are spoofed.</b>&nbsp;</li>
+
+Many attacks, especially denial-of-service attacks, rely on address
+spoofing to hide the real source of a packet. <tt>argus</tt> can only store
+information that is available in the packet header and therefore susceptable
+to IP spoofing attacks.&nbsp;
+<p>If the information that <tt>argus</tt> collects is used after signs
+of intrusions have been detected, be careful to ensure that you make no
+false accusations based on the alleged attacking site. Even though <tt>argus</tt>
+information is useful in analyzing the intrusion, it may not point to the
+correct IP address of the attacker.&nbsp;
+<p><tt>argus</tt> can help to detect specific IP spoofing attacks. To do
+so requires more information (for example the MAC address) to distinguish
+between real and spoofed packets. This is explained in the <a href="#MINCONFIG">examples</a>
+below.&nbsp;<p>&nbsp;<br></ul>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Understand
+version compatibility issues.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>The data format for the <tt>argus</tt> output file changed
+from version 1.5 to 1.7 and then again in version 1.8. Format changes affect
+<tt>argus</tt>'s
+ability to access data created from daemons with earlier version numbers.&nbsp;
+<p>As field use within file entries has changed from version 1.5/1.7 to
+1.8, older clients are not able to extract all information correctly from
+1.8 files. The documentation states that <tt>argus</tt> version 1.8 utilities
+are backward compatible.&nbsp;
+<p>We recommend using version 1.8.1 as this version fixes a number of known
+programming errors and provides the most advanced information handling.&nbsp;
+<br>&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"><a NAME="MINCONFIG"></a><b><font face="Helvetica, Geneva, Arial" size="2">Issues
+related to <tt>argus</tt> clients</font></b></td>
+
+<td VALIGN=TOP>The <tt>argus</tt> server stores captured packet information
+in log files, and <tt>argus</tt> clients process this stored information.
+In addition, the format of this stored information is well-documented so
+that you can develop your own utilities to meet your needs.&nbsp;<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Understand
+the functions of the <tt>argus</tt> clients.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>All tools can be used to select specific data of interest
+from the full set of <tt>argus</tt> log files and data stored within. You
+do this by naming the specific files to analyze on the command line. In
+addition, clients can retrieve data directly from an <tt>argus</tt> server
+through a network connection. See the discussion above that describes how
+to do this and describes related security ramifications.&nbsp;
+<table BORDER WIDTH="90%" >
+<tr ALIGN=LEFT VALIGN=TOP BGCOLOR="#CCFFFF">
+<td WIDTH="20%"><b>Tool</b></td>
+
+<td WIDTH="20%"><b>Manual Page</b></td>
+
+<td><b>Explanation</b></td>
+</tr>
+
+<tr>
+<td><tt>ra</tt></td>
+
+<td>ra.1</td>
+
+<td>This tool is the most generic. It collects all available entries about
+different communication flows and presents each on a single line summarizing
+the information known about it.&nbsp;</td>
+</tr>
+
+<tr>
+<td><tt>raconnections</tt></td>
+
+<td>connections.1</td>
+
+<td>The log files created by <tt>argus</tt> usually consist of multiple
+entries (each representing a packet) for each communication flow. This
+tool reads the <tt>argus</tt> log files and collects and presents all available
+information describing a specific communication flow in a single entry.&nbsp;
+<p>You can create "compressed" <tt>argus</tt> log files with <tt>raconnections</tt>
+that can then be stored and used for further analysis. Note that compressing
+information loses some of the detail that you may require for later analysis.
+Therefore, we do not recommend that you compress <tt>argus</tt> log files
+unless you are forced to do so (e.g., due to lack of disk space).</td>
+</tr>
+
+<tr>
+<td><tt>raservices</tt></td>
+
+<td>services.1</td>
+
+<td>This tool collects all available entries about different communication
+flows and presents each on a single line summarizing the information known
+about it, sorted by services.</td>
+</tr>
+
+<tr>
+<td><tt>rasort</tt></td>
+
+<td>rasort.1</td>
+
+<td>This variant of <tt>ra</tt> (see above) sorts the output by time.</td>
+</tr>
+
+<tr>
+<td><tt>radjacency</tt></td>
+
+<td>no</td>
+
+<td>This tool creates a table listing the number of hosts, communication
+flows, and so forth for all ports.</td>
+</tr>
+
+<tr>
+<td><tt>radnstats</tt></td>
+
+<td>no</td>
+
+<td>This tool provide statistics on DNS-related traffic.</td>
+</tr>
+
+<tr>
+<td><tt>fullra</tt></td>
+
+<td>no</td>
+
+<td>This tool lists the entire content of all <tt>argus</tt> file entries.&nbsp;</td>
+</tr>
+</table>
+<p>&nbsp;<br>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Use
+<font face="courier">tcpdump</font> expressions to filter information of
+interest.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>Any <tt>argus</tt> output can be preprocessed to show only
+access specific hosts, networks, services, etc. To achieve this, the <tt>argus</tt>
+clients support the same expressions for such selections as known from
+<tt>tcpdump.</tt>
+Refer to <a href="/security-improvement/implementations/i042.13.html">Installing
+and operating tcpdump 3.4 on systems running Solaris 2.X</a> for a detailed
+list of available options.&nbsp;
+<p>For example, to list all communication flows related to hosts in the
+network <tt>193.0.0.0</tt>, netmask <tt>255.255.255.0</tt>, use <tt>ra</tt>
+as follows:&nbsp;
+<pre><font size=-1>/usr/local/bin/ra -n -r /var/adm/argus/argus.log src net 193.0.0.0</font></pre>
+<p>&nbsp;<Br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Use
+CISCO-like access lists to filter information of interest.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>Access lists similar to Cisco router access lists can also
+be used to select entries (refer to the <a href="#MINCONFIG">example</a>
+below for a more complete discussion of this option). To make use of this
+feature, the configuration file listing the CISCO-like access lists needs
+to be specified with the <tt>-C</tt> option as in the following example:&nbsp;
+<pre><font size=-1>/usr/local/sbin/ra -n -r /var/adm/argus/argus.log -C /usr/local/etc/argus_policy</font></pre>
+<p>&nbsp;<br>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Suppress
+address resolution to avoid related network traffic and performance drop.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>Whenever one of the <tt>argus</tt> clients is used to retrieve
+data from an <tt>argus</tt> log file, the client, by default, resolves
+hostnames for all IP addresses of the selected communication. This slows
+performance and generates considerable network traffic. In some cases,
+this information is superfluous because the hostname may not be required
+to analyze the traffic under consideration.&nbsp;
+<p>To avoid resolving IP addresses into hostnames, use option <tt>-n</tt>
+as shown in the examples above.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"><a NAME="MINCONFIG"></a><b><font face="Helvetica, Geneva, Arial" size="2">Elementary
+examples of recommended <tt>argus</tt> use</font></b></td>
+
+<td VALIGN=TOP>The following steps describe how to use the <tt>argus</tt>
+clients to examine certain aspects of your network configuration. These
+include&nbsp;
+<ul>
+<li>
+detecting IP spoofing attacks</li>
+
+<li>
+listing services accessed "outside" from "inside"</li>
+
+<li>
+listing services accessed "inside" from "outside"</li>
+</ul>
+<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Detect
+IP spoofing attacks.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>IP spoofing attacks are a major threat for today's networks.
+Some possible attacks can be detected with <tt>argus</tt>. You need to
+know the IP and MAC addresses of the router that connects your network
+to the Internet.&nbsp;
+<p>The IP spoofing attacks detectable with <tt>argus</tt> have packets
+with the following characteristics:&nbsp;
+<ul>
+<li>
+a packet has an IP source address belonging to your network</li>
+
+<li>
+it has the MAC address of the router connecting the internal network to
+the Internet</li>
+
+<li>
+the router is not the source</li>
+</ul>
+To illistrate this scenario, assume the following setup:&nbsp;
+<ul>
+<li>
+the IP address of the router is <tt>193.0.0.254</tt></li>
+
+<li>
+the MAC address of the router is <tt>0:0:ab:cd:de:f0</tt></li>
+
+<li>
+the internal network has the network address <tt>193.0.0.0</tt></li>
+
+<li>
+the netmask of the internal network is <tt>255.255.255.0</tt></li>
+</ul>
+This "translates" into the following command (this command should be given
+as one line!):&nbsp;
+<pre><font size=-1>/usr/local/bin/ra -n -r /var/adm/argus/argus.log src ! host 193.0.0.254&nbsp;
+
+&nbsp;&nbsp; and ( ether src 0:0:ab:cd:de:f0 and src net 193.0.0 )</font></pre>
+If <tt>ra</tt> shows a connection, you need to perform additional analysis
+because, in some cases, an IP spoofing attack may not be involved. For
+example, sometimes routers redirect packets originating from the inside
+to another inside host. They change the MAC address to the MAC address
+of the router instead of the true source MAC address. If your site uses
+this functionality, you need to consider whether this check is meaningful.
+While this sounds like a more advanced topic, even a novice network administrator
+needs to know whether the router provide such functionality.&nbsp;<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">List
+services accessed "outside" from "inside."</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>Generating a list of accessed services (independent of the
+hosts involved) is useful in reviewing what types of communication are
+occurring between internal and external hosts.&nbsp;
+<p>Communication or requests for service from inside servers directed to
+outside servers can be listed using the following command:&nbsp;
+<pre><font size=-2>/usr/local/sbin/raservices -n -r /var/adm/argus/argus.log dst ! net 193.0.0 and src net 193.0.0</font></pre>
+Again, from the output produced by <tt>raservices</tt>, you need to determine
+which are expected and which are unexpected. Each unexpected service needs
+to be analyzed in more detail. Use <tt>ra</tt> to review the hosts and
+addresses involved in addition to other details such as timestamps.&nbsp;<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">List
+services accessed "inside" from "outside."</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>Communication or requests for service from outside servers
+directed to inside servers can be listed using the following command. This
+type of information is generally more critical than that described in the
+previous step.&nbsp;
+<pre><font size=-2>/usr/local/sbin/raservices -r -n /var/adm/argus/argus.log dst net 193.0.0 and src ! net 193.0.0</font></pre>
+From the output produced by <tt>raservices</tt>, you need to determine
+which are expected and which are unexpected. Each unexpected service needs
+to be analyzed in more detail. Use <tt>ra</tt> to review the hosts and
+addresses involved in addition to other details such as timestamps.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"><a NAME="MINCONFIG"></a><b><font face="Helvetica, Geneva, Arial" size="2">Advanced
+examples of <tt>argus</tt> setup and use</font></b></td>
+
+<td VALIGN=TOP>The following steps describe how to setup <tt>argus</tt>
+more autonomously and use the <tt>argus</tt> clients to examine certain
+aspects of your network configuration. These include&nbsp;
+<ul>
+<li>
+comparing communication against policy-based profiles</li>
+
+<li>
+comparing and automating all checks</li>
+</ul>
+These steps are intended to illustrate by example. You need to adjust these
+configurations to meet your site-specific requirements.&nbsp;<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Compare
+communication against policy-based profiles.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>It is often more efficient to list only those connections
+that violate established policies as defined by your router configuration
+than it is to review each and every connection that has taken
+place. An example using the <tt>ra</tt> client is&nbsp;
+<pre><font size=-1>/usr/local/sbin/ra -r -n /var/adm/argus/argus.log -C /usr/local/etc/argus_policy</font></pre>
+This command depends on the existence of a specific configuration file
+describing the established policy. Such a policy is presented below. Please
+note that while the syntax is very like the CISCO access lists, it is not
+the same.&nbsp;
+<p>The position of the <tt>argus</tt> host within your network topology
+affects what connections can be captured. The command shown above assumes
+that the <tt>argus</tt> host is listening on the internal local area network
+and can see all traffic from any host through your firewall. For this example
+we assume the following setup:&nbsp;
+<ul>
+<li>
+the IP address of the router is <tt>193.0.0.254</tt></li>
+
+<li>
+the MAC address of the router is <tt>0:0:ab:cd:de:f0</tt></li>
+
+<li>
+the internal network has the network address <tt>193.0.0.0</tt></li>
+
+<li>
+the netmask of the internal network is <tt>255.255.255.0</tt></li>
+
+<li>
+the IP address of a public accessible information server is <tt>193.0.0.250</tt>.
+It is okay to ping this server as well as connect to the supported services
+WAIS, GOPHER, WWW, and FTP.</li>
+
+<li>
+the IP address of a public accessible email hub is <tt>193.0.0.249</tt>.
+It is okay to ping this server as well as connect to the supported service
+SMTP.</li>
+
+<li>
+the IP address of a public accessible DNS server is <tt>193.0.0.248</tt>.
+It is okay to ping this server as well as connect to the supported service
+DNS.</li>
+</ul>
+Any output produced by <tt>ra</tt> will deviate from the specified
+policy. You need to investigate further to understand the nature of the
+connections displayed.&nbsp;
+<pre><font size=-1>;&nbsp;
+
+
+
+; /usr/local/etc/argus_policy
+; -----------------------------------------------------------------------
+;
+; example definition of communication policies for argus
+;
+; Only denied connections will be reported!
+;
+; -----------------------------------------------------------------------
+; 1. ICMP - ignore all traffic to information and dns server, email hub.
+;
+
+
+access-list 102 permit icmp 0.0.0.0 255.255.255.255 193.0.0.250 0.0.0.0
+access-list 102 permit icmp 0.0.0.0 255.255.255.255 193.0.0.249 0.0.0.0
+access-list 102 permit icmp 0.0.0.0 255.255.255.255 193.0.0.248 0.0.0.0
+
+
+;
+; -----------------------------------------------------------------------
+; 2. TCP
+;
+; allow access to information server
+; (host 193.0.0.250 is separated by firewall/packet screen from other hosts)
+;
+
+
+; FTP
+access-list 102 permit tcp 0.0.0.0 255.255.255.255 193.0.0.250 0.0.0.0 eq 21
+; GOPHER
+access-list 102 permit tcp 0.0.0.0 255.255.255.255 193.0.0.250 0.0.0.0 eq 70
+; WWW
+access-list 102 permit tcp 0.0.0.0 255.255.255.255 193.0.0.250 0.0.0.0 eq 80
+; WAIS
+access-list 102 permit tcp 0.0.0.0 255.255.255.255 193.0.0.250 0.0.0.0 eq 210
+
+
+;
+; allow access to information server on high ports (greater than 32767)&nbsp;
+; (this are connections coming from FTP clients using passiv)
+;
+
+
+access-list 102 permit tcp 0.0.0.0 255.255.255.255 193.0.0.250 0.0.0.0 gt 32767
+
+
+;
+; allow access to mail server
+;
+
+
+access-list 102 permit tcp 0.0.0.0 255.255.255.255 193.0.0.249 0.0.0.0 eq 25
+
+
+;
+; allow access from internal hosts to Internet
+;
+
+
+access-list 102 permit tcp 193.0.0.0 0.0.0.255 0.0.0.0 255.255.255.255
+
+
+;
+; everything else is forbidden
+;
+
+
+access-list 102 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255
+
+
+;
+; -----------------------------------------------------------------------
+; 3. UDP
+;
+; allow DNS requests to DNS server
+;
+
+
+access-list 102 permit udp 0.0.0.0 255.255.255.255 193.0.0.248 0.0.0.0 eq 53
+
+
+;
+; allow DNS requests from internal hosts to DNS server
+;
+
+
+access-list 102 permit udp 193.0.0.0 0.0.0.255 0.0.0.0 255.255.255.255 eq 53
+
+
+;
+; everything else is forbidden
+;
+
+
+access-list 102 deny udp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255
+
+
+;
+; -----------------------------------------------------------------------
+; end of /usr/local/etc/argus_policy</font>
+
+</pre>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Combine
+and automate all checks.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="110">&nbsp;</td>
+
+<td VALIGN=TOP>All of the commands shown above depend on known file names
+of the <tt>argus</tt> log files. Therefore, they can be set up to execute
+automatically. We recommend that you use email for distributing reports
+to those responsible.&nbsp;
+<p>One way to implement this automation is to incorporate calling the script
+<tt>argus-dailyscan</tt>
+(a template is provided as part of the <tt>argus</tt> package <tt>example/dailyscan.sh</tt>)
+into the <tt>newarguslog</tt> script (refer to <a href="/security-improvement/implementations/i042.10.html">Using
+newarguslog to rotate argus log files on systems running Solaris 2.x</a>).
+For this example, the checks are executed once per day. To do so the following
+lines in <tt>newarguslog</tt> need to be changed from&nbsp;
+<pre><font size=-1>...
+
+test -f $LOG&nbsp;&nbsp; &amp;&amp; mv $LOG&nbsp;&nbsp; $LOG.0
+cp /dev/null $LOG
+/bin/chmod 640 $LOG
+
+...</font></pre>
+to&nbsp;
+<pre><font size=-1>...
+
+test -f $LOG&nbsp;&nbsp; &amp;&amp; mv $LOG&nbsp;&nbsp; $LOG.0
+cp /dev/null $LOG
+/bin/chmod 640 $LOG
+sleep 60
+/usr/local/sbin/argus-dailyscan
+
+...</font></pre>
+The two added lines cause a delay of 1 minute after the old <tt>argus</tt>
+log files are shifted and a new file is created. This allows the <tt>argus</tt>
+server to end all writes to the recently shifted log file. Once that is
+finished, the daily scans will be done.&nbsp;
+<p>The <tt>/usr/local/sbin/argus-dailyscan</tt> script consists of control
+statements (defining variables for file names, sending email, and checking
+for free disk space as important maintenance task) and the statements as
+described above. The following example shows the template that is provided
+as part of the <tt>argus</tt> package to reflect the scenario described
+above.&nbsp;
+
+<pre><font size=-1>#!/bin/csh -f
+
+#
+# /usr/local/sbin/argus-dailyscan
+#
+# This script is used to automate the daily routine checks based on argus
+# data. This script is called from /usr/local/sbin/newarguslog.
+#
+# file&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - name of the Argus file saved from newarguslog daily
+# dir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - directory the file is saved to
+# free_space&nbsp;&nbsp;&nbsp; - free space on partition
+# argus_admin&nbsp;&nbsp; - users to be notified via mail
+# policy_filter - Argus policy filter
+# my_net&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - own network name in /etc/networks or in decimal form
+# this_host&nbsp;&nbsp;&nbsp;&nbsp; - hostname of the host on which this evaluation is done
+#
+
+
+set file=argus.0
+set dir=/var/adm/argus
+set free_space=`df /var/adm/argus | tail -1 | awk '{ print $4 }'`
+set argus_admin=argusreports
+set policy_filter=/usr/local/etc/argus_policy
+set my_net=193.0.0
+set this_host=`/usr/bin/uname -n`
+
+
+cd $dir
+
+
+#
+# notify if data should be archived to tape
+#
+
+
+if ( ${free_space} &lt;= 20000 ) then
+&nbsp;&nbsp; echo ${this_host} has only ${free_space} blocks left in ${dir} \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | /usr/ucb/mail -s "ARGUS(${this_host}): SPACE-PROBLEM" ${argus_admin}
+endif
+
+
+#
+# notify if data file does not exist or is zero length
+#
+
+
+if ( ! -e ${dir}/${file} | -z ${dir}/${file} ) then
+&nbsp;&nbsp; echo "Argus data file empty or deleted" \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | /usr/ucb/mail -s "ARGUS(${this_host}): FILE-PROBLEM" ${argus_admin}
+&nbsp;&nbsp; exit(1)
+endif
+
+
+#
+# run argus utilities to report any transactions&nbsp;
+# 1. ip spoofing
+# 2. outside services accessed from inside
+# 3. inside services accessed from outside
+# 4. compare to policy
+#
+
+
+# check 1:
+# - router to Internet IP 193.0.0.254 its MAC address is 0:0:ab:cd:de:f0
+
+
+/usr/local/bin/ra -n -r $dir/$file src ! host ${my_net}.254 and ( ether src 0:0:ab:cd:de:f0 \
+&nbsp; and src net ${my_net} ) |&amp; /usr/ucb/mail -s "ARGUS(${this_host}): IP SPOOFING" ${argus_admin}
+
+
+# check 2:
+
+
+/usr/local/sbin/raservices -n -r $dir/$file dst ! net ${my_net} and src net ${my_net} \
+&nbsp;|&amp; /usr/ucb/mail -s "ARGUS(${this_host}): OUTSIDE SERVICES ACCESSED FROM INSIDE" ${argus_admin}
+
+
+# check 3:
+
+
+/usr/local/sbin/raservices -n -r $dir/$file dst net ${my_net} and src ! net ${my_net} \
+&nbsp;|&amp; /usr/ucb/mail -s "ARGUS(${this_host}): INSIDE SERVICES ACCESSED FROM OUTSIDE" ${argus_admin}
+
+
+# check 4:
+
+
+/usr/local/sbin/ra -n -r $dir/$file -C ${policy_filter} \
+&nbsp;|&amp; /usr/ucb/mail -s "ARGUS(${this_host}): POLICY VIOLATIONS" ${argus_admin}
+
+
+#
+# end of /usr/local/sbin/argus-dailyscan</font>
+</pre>
+</tr>
+<tr>
+<td valign="top" colspan="2" height="10">
+<hr SIZE="1"></td>
+</tr>
+<tr>
+<td VALIGN=TOP WIDTH="110"><b><font face="Helvetica, Geneva, Arial" size="2">Tripwire
+Configuration</font></b></td>
+
+<td VALIGN=TOP>The following is the <tt>tripwire</tt> configuration for
+the <tt>argus</tt> package once installed. In addition to all files from
+the package, all example files (scripts and configuration files) are included.&nbsp;
+<p>The following files should not change, and any changes are unexpected:&nbsp;
+<pre><font size=-1>@@define BINARY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; E+pinugsamc1-023456789
+
+
+/usr/local/etc/argus_policy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/sbin/argus_dlpi&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/sbin/argusd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/sbin/argus-dailyscan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/sbin/newarguslog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/sbin/ra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/sbin/raservices&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/sbin/raconnections&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/sbin/rasort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/sbin/racount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/sbin/radjacency&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/sbin/radnstats&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/sbin/fullra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/man/man1/ra.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/man/man1/rasort.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/man/man1/services.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/man/man1/connections.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/man/man5/argus.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/man/man8/argus.8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY</font>
+</pre>
+</td>
+</tr>
+</table>
+</td></tr></table>
+</body>
+</html>

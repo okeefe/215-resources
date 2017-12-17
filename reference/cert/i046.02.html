@@ -1,0 +1,363 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
+   <title>Using The Coroner's Toolkit : Harvesting information with grave-robber</title>
+</head>
+
+
+
+<body bgcolor="#FFFFFF" link="#004A6B" vlink="#C7AA05" alink="#DDB30B">
+&nbsp;
+<table CELLSPACING=6 WIDTH="100%" >
+<tr>
+<td VALIGN=MIDDLE WIDTH="120"> </td>
+
+<td VALIGN=TOP>
+<h2>
+<font face="Helvetica, Geneva, Arial">Using The Coroner's Toolkit : Harvesting
+information with grave-robber</font></h2>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="120" valign="top"><b><font face="helvetica, geneva, arial"><font 
+size=-1><p>Implementation                
+Details</font></font></b></td>
+
+<td VALIGN=TOP>
+<table BORDER CELLSPACING=0 CELLPADDING=4 WIDTH="80%" >
+<tr>
+<td BGCOLOR="#CCDDFF"><font size=-1>Applies to the practice:</font>
+<br><font size=-1><a href="http://www.cert.org/security-improvement/practices/p046.html">Analyze
+all available information to characterize an intrusion</a></font>
+<p><font size=-1>Applicable technologies:</font>
+<br><font size=-1>Sun Solaris 2.x; UNIX operating systems and derivatives</font></td>
+</tr>
+</table>
+&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><font face="helvetica, geneva, arial"><b><font size=-1>Introduction</font></b></td>
+
+<td VALIGN=TOP>In the aftermath of a network break-in, system administrators
+are often asked to explain what happened. The Coroner's Toolkit (TCT) is
+a collection of tools that gather and analyze data on a UNIX system and
+help the administrator answer that question. <tt>grave-robber</tt> is the
+central application of the toolkit used to achieve this goal. This program controls
+several other tools in an attempt to capture as much information as possible
+about a potentially compromised system and its files.&nbsp;
+<p>As the TCT authors point out: "If there was a theme, it would be the
+reconstruction of the past - determining as much as possible what happened
+with a static snapshot of a system." Certainly such activities require
+an experienced and committed system administrator during the forensic investigation
+phase of an intrusion. No software can replace someone who knows his or
+her system, but TCT is a start.&nbsp;
+<p>In addition to <tt>grave-robber,</tt> TCT contains two tools, <tt>unrm</tt>
+and <tt>lazarus</tt>,which can work together to help&nbsp; identify what
+happened after a break-in. These tools can also be used to recover&nbsp;
+files deleted by accident. While <tt>unrm</tt> makes a copy of all accessible,
+unallocated (free) disk space, <tt>lazarus</tt> analyzes this copy and
+tries to determine each block of data and its type (text versus graphics,
+etc.). Their use is explained in another <a href="../Attachments/tct-unrm.htm">implementation.</a>
+<p>Using the TCT tools can require a great deal of time and effort. You
+need to review all documentation carefully and test all parts before use
+so that you can understand and take full advantage of their features. In
+particular, when using <tt>grave-robber,</tt> you need to read the file
+<tt>help-when-broken-into</tt> which comes as part of the TCT documentation.&nbsp;
+<p>The installation of the TCT toolkit is explained in the implementation
+<a href="http://www.cert.org/security-improvement/implementations/i046.01.html">Installing
+The Coroner's Toolkit and using the mactime utility</a><a href="../Attachments/tct-mactime.htm">.</a>
+<p>This implementation discusses the use of one TCT tool <tt>grave-robber</tt>
+on the Sun Solaris operating system, version 2.x. You can use this approach
+with other UNIX operating systems and hosts.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="120"><b><font face="helvetica, geneva, arial"><font color="#000000"><font size=-1>Effort
+Estimates</font></font></font></b></td>
+
+<td>The time needed to retrieve all data collectable by the TCT tools depends
+on the underlying system, its processor, and required disk space. Using
+these tools can take considerable time and can create a large volume of
+output data. The technical analysis of this output can easily take hours
+or days.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="120"><b><font face="helvetica, geneva, arial"><font color="#000000"><font size=-1>Prerequisites</font></font></font></b></td>
+
+<td>The output of <tt>grave-robber</tt> can take considerable space. For
+example, for a system with 1.0 GB of data,&nbsp; <tt>grave-robber </tt>will
+typically produce anywhere from 50 to 200 KB of output. You need to make
+sure that you have set aside sufficient disk space to store the output.
+During forensic analysis, changes to the system being analyzed should be
+as small as possible. Therefore we recommend against storing the <tt>grave-robber
+</tt>output
+data on the disks being analyzed. In addition, if you need to search for
+deleted files, any write access to the disks can destroy the valuable data
+you are seeking.&nbsp;
+<p>Make sure that spare disks are reserved and available when you need
+them to store the <tt>grave-robber</tt> output. Make sure you know how
+to connect such disks to a live system such that minimal changes occur
+on the system being analyzed. In particular, ensure that no reboot occurs
+to avoid killing running processes before you have a chance to grab information
+about them with <tt>grave-robber</tt>.&nbsp;
+<p>To reliably analyze any system, you must use unmodified, authentic tools.
+Therefore, use write-protected media to store tools like the TCT and others
+used during forensic analysis.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="helvetica, geneva, arial"><font size=-1>Understanding
+the <tt>grave-robber</tt> output</font></font></b></td>
+
+<td VALIGN=TOP><tt>grave-robber</tt> can be used in three different modes.
+The output will vary depending on the mode used as explained below.&nbsp;
+<ol>
+<li>
+Life system, default data collection:</li>
+
+<br>By default, all data is collected except data only available by dumping
+the memory content of system processes.&nbsp;
+<li>
+Life system, maximal data collection:</li>
+
+<br>In addition to the default settings, information from active processes
+is collected.&nbsp;
+<li>
+Backup copy or mounted disk of another system (corpse):</li>
+
+<br>As no life system is available for analysis purposes, only the available
+disk space is analyzed.</ol>
+We recommended running <tt>grave-robber</tt> from a simple terminal if
+a life system is being analyzed. The program may kill a windows system
+while retrieving data from system processes!</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Directory
+structure of the <tt>grave-robber</tt> output.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>The availability of specific information depends on the
+running operating system. TCT relies on native programs to collect as much
+data as possible.&nbsp;
+<p>Several directories and files are created within the directory used
+to store all <tt>grave-robber</tt> output:&nbsp;
+<p><b>Files:</b>
+<ol>
+<li>
+<tt>coroner.log</tt></li>
+
+<br>This file lists all program executions that were initiated with time
+stamp information and arguments.&nbsp;
+<li>
+<tt>error.log</tt></li>
+
+<br>This file contains all error messages that occurred during the data
+collection.&nbsp;
+<li>
+<tt>body</tt></li>
+
+<br>This is the <a href="http://www.cert.org/security-improvement/implementations/i046.01.html">mactime</a>
+database which lists all attributes of all files examined such as its MD5
+checksum, inode information, and access time stamps.&nbsp;
+<li>
+<tt>body.S</tt></li>
+
+<br>This file has the same structure as <tt>body</tt> but contains information
+about SetUID files only.&nbsp;
+<li>
+<tt>MD5_all</tt></li>
+
+<br>This file lists all MD5 checksums for all output files generated by
+<tt>grave-robber</tt>.&nbsp;
+<li>
+<tt>MD5_all.md5</tt></li>
+
+<br>This file lists the MD5 checksum of the file <tt>MD5_all</tt> only.
+You can identify changes to the MD5 database file by comparing the actual
+MD5 checksum with this file.</ol>
+<b>Directories:</b>
+<p>All files contained within these subdirectories are protected with a
+MD5 checksum file. The name of this file is created by taking the original
+file name used by <tt>grave_robber</tt> and adding <tt>.md5</tt> as an
+extension.&nbsp;
+<ol>
+<li>
+<tt>command_out</tt></li>
+
+<br>This subdirectory keeps the output of most of the programs that are
+executed from within <tt>grave-robber</tt>. The files are named based on
+the command run and its arguments.&nbsp;
+<li>
+<tt>conf_vault</tt></li>
+
+<br>All files that are of interest for <tt>grave-robber</tt> are copied
+into this directory. This includes configuration files, critical files,
+and directories, etc. The list of files is controlled by several configuration
+files:&nbsp;
+<ul>
+<li>
+<tt>save_these_files</tt></li>
+
+<li>
+<tt>coroner.cf</tt></li>
+
+<li>
+<tt>grave-robber.cf</tt></li>
+</ul>
+
+<li>
+<tt>pcat</tt></li>
+
+<br><tt>pcat</tt> is used to recover images of running processes. Much
+important information can be found in process memory such as IP addresses,
+passwords, etc.&nbsp;
+<li>
+<tt>proc</tt></li>
+
+<br>This directory also contains images of running processes but based
+on the <tt>proc</tt> file system.&nbsp;
+<li>
+<tt>removed_but_running</tt></li>
+
+<br>This directory contains all deleted files that were still open or running
+at the time of data gathering.&nbsp;
+<li>
+<tt>trust</tt></li>
+
+<br>Within this directory, all files related to "trust" and trusted relationships
+that could be exploited are copied. Currently this will grab <tt>.rhosts</tt>,
+forward files, and dumps <tt>crontab</tt> and <tt>at</tt> output as well
+as <tt>xhost</tt> / <tt>xauth</tt> results.&nbsp;
+<li>
+<tt>user_vault</tt></li>
+
+<br>For all users, copies of sensitive files found while analyzing the
+file system (such as SSH key files, history files for various shells, etc.)
+are stored here.</ol>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="helvetica, geneva, arial"><font size=-1>Running
+<tt>grave-robber</tt>
+on a life system</font></font></b></td>
+
+<td VALIGN=TOP>In order to start <tt>grave-robber,</tt> you need to mount
+your secured copy of TCT. (The creation of a secured copy based on a write-protected
+floppy-disk is explained in the implementation <a href="http://www.cert.org/security-improvement/implementations/i046.01.html">Installing
+The Coroner's Toolkit and using the mactime utility.</a>)&nbsp;
+<p>This step assumes that the directory <tt>/tct</tt> is already available
+on the system and that a spare disk has been mounted as <tt>/tct-data</tt>.&nbsp;
+Create this directory on all systems that may be used for forensic analysis
+in advance of any incident. This will avoid your having to create this
+directory in order to be able to mount the spare disk.&nbsp;
+<p>After the TCT toolkit disk is mounted, change to the data directory
+on the spare disk. Start <tt>script</tt> to maintain a detailed log of
+all information displayed on the terminal.&nbsp;
+<p><font face="Courier New"><font size=-1># mount /dev/diskette /tct</font></font>
+<br><font face="Courier New"><font size=-1># cd /tct-data</font></font>
+<br><font face="Courier New"><font size=-1># script tct-20001031.log</font></font>
+<p>Now start <tt>grave-robber</tt> to collect the default set of data.
+Option <tt>-d</tt> directs the tool to use the actual directory (<tt>/tct-data</tt>)
+as the directory to store all output. <tt>-v</tt> directs the tool to create
+a more verbose explanation of its progress. The last argument <tt>/</tt>
+controls which directory is used as the starting point for any disk analysis:&nbsp;
+<p><font face="Courier New"><font size=-1># /tct/bin/grave-robber -d .
+-v /</font></font>
+<br><font face="Courier New"><font size=-1># exit</font></font>
+<p>If you want to collect the maximum set of data, you need to additionally
+provide option <tt>-E</tt> as shown below.&nbsp;
+<p><font face="Courier New"><font size=-1># /tct/bin/grave-robber -d .
+-E -v /</font></font>
+<p>While running&nbsp; <tt>grave-robber, </tt>avoid any other activities
+on the system being analyzed.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="helvetica, geneva, arial"><font size=-1>Running
+<tt>grave-robber</tt>
+on a corpse system</font></font></b></td>
+
+<td VALIGN=TOP>A clean and secure system should be used if a corpse system
+is being analyzed. It is not necessary to use a new spare disk to collect
+the <tt>grave-robber</tt> output if enough local disk space is available.
+For this step, we assume that the hard disk being analyzed is already mounted
+as <tt>/tct-corpse</tt>. Alternatively, a copy of the file system of a
+potentially compromised system can be copied to this location for further
+analysis.&nbsp;
+<p>Create a data directory for the <tt>grave-robber</tt> output and change
+to it. Start <tt>script</tt> to maintain a detailed log of all information
+displayed on the terminal.&nbsp;
+<p><font face="Courier New"><font size=-1># mkdir /tct-data</font></font>
+<br><font face="Courier New"><font size=-1># cd /tct-data</font></font>
+<br><font face="Courier New"><font size=-1># script tct-20001031.log</font></font>
+<p>Now start <tt>grave-robber</tt> with option <tt>-c &lt;path-to-corpse-directory></tt>
+to collect the set of data available for the analysis of corpses. Option
+<tt>-d</tt>
+directs the tool to use the actual directory (<tt>/tct-data</tt>) as the
+directory to store all output. <tt>-v</tt> directs the tool to create a
+more verbose explanation of its progress. The <tt>-o</tt> option tells
+the tool which operating system was running on the system to adjust for
+specific differences:&nbsp;
+<p><font face="Courier New"><font size=-1># /tct/bin/grave-robber -d .
+-v -c /tct-corpse -o SUNOS5</font></font>
+<br><font face="Courier New"><font size=-1># exit</font></font>
+<p>Option <tt>-o</tt> can be used with the following keywords indicating
+a supported operating system:&nbsp;
+<ul>
+<li>
+SUNOS5 and SUNOS4</li>
+
+<li>
+LINUX2</li>
+
+<li>
+BSDI2 and BSDI3</li>
+
+<li>
+OPENBSD2</li>
+
+<li>
+FREEBSD2 and FREEBSD3</li>
+</ul>
+</td>
+</tr>
+</table>
+</body>
+</html>

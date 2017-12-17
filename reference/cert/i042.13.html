@@ -1,0 +1,1073 @@
+<html>
+<head>
+   <title>Installing and operating tcpdump 3.4 on systems running Solaris 2.x</title>
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+&nbsp;
+<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="100%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="105">
+<h4>
+<font face="helvetica, geneva, arial"><small>Implementation Details</small></font></h4>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP>
+<h2>
+<font face="helvetica, geneva, arial">Installing and operating tcpdump
+3.5.x on systems running Solaris 2.x</font></h2>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="130"></td>
+
+<td ALIGN=LEFT VALIGN=TOP>
+<table BORDER CELLSPACING=2 CELLPADDING=8 WIDTH="75%" BGCOLOR="#CCDDFF" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP>Applies to the practices:&nbsp;
+<br><a href="../practices/p094.html">"Monitor and inspect network activities
+for unexpected behavior"</a>
+<br><a href="../practices/p091.html">"Identify data that characterize systems
+and aid in detecting signs of suspicious behavior"</a>
+<p>Applicable technologies: Solaris 2.x; UNIX operating system and derivatives</td>
+</tr>
+</table>
+<p><b><font face="courier">tcpdump</font></b> is
+a tool for network monitoring and one of the most well-known sniffers for
+UNIX. Built with the <b><font face="courier">libpcap</font></b> (packet
+capture library) interface, <b><font face="courier">tcpdump</font></b>
+collects information from packets on the network including those intended
+for other host machines. <b><font face="courier">tcpdump</font></b> does
+this through a network interface card's ability to enter into promiscuous
+mode where the tool then dumps packet header information depending on the
+Boolean expression being applied.&nbsp;
+<p><b><font face="courier">tcpdump</font></b> helps you characterize the
+normal behavior of a system and ultimately recognize those behaviors that
+fall outside of the normal bounds. Note that <b><font face="courier">tcpdump</font></b>
+only <i>aids</i> in the collection of information about network traffic
+(types of traffic, connections, etc.) appearing on a network segment; the
+administrator must still analyze whether the network traffic is within
+normal boundaries. Therefore, one of the key uses of <b><font face="courier">tcpdump</font></b>
+is to gather information about the normal behavior of a network's traffic
+and then filter out the known traffic patterns in an attempt to identify
+unusual or unexpected traffic that warrants further investigation.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="130">
+<h4>
+<font face="helvetica, geneva, arial"><small>Effort Estimates</small></font></h4>
+</td>
+
+<td>Time to retrieve the archive files from the distribution site will
+vary depending on connection speed. Expected time is under 30 seconds for
+both files via a T1 connection. Building and installing <b><font face="courier">tcpdump</font></b>
+will take some time depending on machine performance. The expected time
+is less than five minutes.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="130">
+<h4>
+<font face="helvetica, geneva, arial"><small>System Prerequisites</small></font></h4>
+</td>
+
+<td><b><font face="courier">tcpdump</font></b> can be built and installed
+on many UNIX systems. This software is known to compile and run on:&nbsp;
+<p>AIX, BSDI, DG-UX, FreeBSD, HP-UX, IRIX, Linux, NetBSD, OpenBSD, SCO,
+Solaris, SunOS, True64 UNIX, UNIX, Ultrix, and Unixware
+<p>&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td ALIGN=LEFT>
+<h4>
+<font face="helvetica, geneva, arial"><font color="#008000">Software Prerequisites</font></font></h4>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"></td>
+
+<td ALIGN=LEFT>To build and run <b><font face="courier">tcpdump</font></b>
+on your system you need internet access to retrieve the following software
+tools:
+<ul>
+<li>
+An MD5 cryptographic checksum program (refer to <a href="/security-improvement/implementations/i002.01.html">Using
+MD5 to verify the integrity of file contents</a>)</li>
+
+<li>
+GZIP to uncompress the downloaded files (<a href="ftp://prep.ai.mit.edu/gnu/gzip/gzip-1.2.4a.tar">ftp://prep.ai.mit.edu/gnu/gzip/gzip-1.2.4a.tar</a>)</li>
+
+<li>
+A C compiler; either the Sun C Computer or the free GNU C Compiler (<a href="ftp://prep.ai.mit.edu/gnu/gcc/gcc-core-2.95.2.tar.gz">ftp://prep.ai.mit.edu/gnu/gcc/gcc-core-2.95.2.tar.gz</a>)</li>
+</ul>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="130">
+<h4>
+<font face="helvetica, geneva, arial"><small>Downloading and Verifying</small></font></h4>
+</td>
+
+<td>Download the following files into the same directory (i.e. <i>/tmp</i>)
+and verify their checksums with an MD5 checksum program.
+<br>&nbsp;
+<br>&nbsp;
+<table BORDER CELLPADDING=10 >
+<tr>
+<td><b>File to Download</b></td>
+
+<td><b>MD5 Checksum</b></td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER VALIGN=CENTER><a href="http://www.tcpdump.org/release/tcpdump-3.5.2.tar.gz">http://www.tcpdump.org/release/tcpdump-3.5.2.tar.gz</a></td>
+
+<td>
+<pre><font size=-1>61f221d8a81893fbd4efa89f8426e145</font></pre>
+</td>
+</tr>
+
+<tr ALIGN=CENTER VALIGN=CENTER>
+<td><a href="http://www.tcpdump.org/release/libpcap-0.5.2.tar.gz">http://www.tcpdump.org/release/libpcap-0.5.2.tar.gz</a></td>
+
+<td>
+<pre><font size=-1>1138682b9bef56c8c9986346645f7216</font></pre>
+</td>
+</tr>
+</table>
+
+<p>If the computed cryptographic checksum of the download files does not
+correspond to the information above, verify that&nbsp;
+<ul>
+<li>
+your downloaded filenames match those listed above</li>
+
+<li>
+your checksum program computes MD5 message digests</li>
+</ul>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="130">
+<h4>
+<font face="helvetica, geneva, arial"><small>Building</small></font></h4>
+</td>
+
+<td>Unpack the <b><font face="courier">libpcap</font></b> and <b><font face="courier">tcpdump</font></b>
+distribution under the same parent directory (i.e. <i>/tmp</i>) with
+<pre><font face="courier"><font size=-1># /usr/local/sbin/gunzip -c libpcap-0.5.2.tar.gz | /usr/sbin/tar xf -
+# /usr/local/sbin/gunzip -c tcpdump-3.5.2.tar.gz | /usr/sbin/tar xf -</font></font></pre>
+This unpacks the compressed archives and creates directories named <i>libpcap-0.5</i>
+and <i>tcpdump-3.5</i>, respectively. If necessary, enter the <i>libpcap-0.5</i>
+and <i>tcpdump-3.5</i> directories and read the respective <i>INSTALL</i>
+files.&nbsp;
+<p>Next, enter the <i>libpcap-0.5</i> directory and build <b><font face="courier">libpcap</font></b>
+with
+<pre><font face="courier"><font size=-1># ./configure
+# /usr/ccs/bin/make</font></font></pre>
+Next, enter the <i>tcpdump-3.5</i> directory and build <b><font face="courier">tcpdump</font></b>
+with
+<pre><font face="courier"><font size=-1># ./configure
+# /usr/ccs/bin/make</font></font></pre>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="130">
+<h4>
+<font face="helvetica, geneva, arial"><small>Testing Before Installation</small></font></h4>
+</td>
+
+<td>To test the correct operation of <b><font face="courier">tcpdump</font></b>,
+change to the root user and execute <b><font face="courier">tcpdump</font></b>
+with no options from the pre-install location, with
+<pre><font face="courier"><font size=-1># ./tcpdump</font></font></pre>
+You should receive output to the terminal similar to the following:
+<pre><font size=-1>Tcpdump: listening on pcn[x]
+09:39:00.806655 hosta.domain.org.138 > 123.123.123.123.138: udp 212
+09:39:00.816435 hosta.domain.org.138 > 123.123.123.123.128: udp 210
+09:41:38.234360 arp who-has hostb.domain.org tell hosta.domain.org
+09:41:38.235053 arp reply hostb.domain.org is-at xx:xx:xx:xx:xx:xx
+10:02:07.770265 hosta.domain.org.32841 > hostc.domain.org.domain: 10557+ (31)
+10:02:07.780248 hostc.domain.org.domain > hosta.domain.org.32841: 10557 NxDomain* 0/1/0 (86) (DF)
+
+Hit Ctrl-C to escape the tool, you should receive messages similar to the following:
+
+^C
+7 packets received by filter</font></pre>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="130">
+<h4>
+<font face="helvetica, geneva, arial"><small>Installation</small></font></h4>
+</td>
+
+<td>Next, change to the root user and install <b><font face="courier">tcpdump</font></b>
+with:
+<pre><font face="courier"><font size=-1># /bin/su root
+# /usr/ccs/bin/make install
+# /usr/ccs/bin/make install-man</font></font></pre>
+The <b><font face="courier">tcpdump</font></b> binary, <b><font face="courier">tcpdump</font></b>,
+installs to <i>/usr/local/sbin/tcpdump</i> and the manual page, <b><font face="courier">tcpdump.1</font></b>,
+installs to <i>/usr/local/man/man1/tcpdump.1</i>. After installation, you
+should check their ownership and file protections to ensure that they cannot
+be modified or executed by unprivileged accounts. Our recommendations are
+to maintain access controls defined by the creator, as follows:
+
+<table BORDER=0 CELLPADDING=10 >
+<tr>
+<td><b><font face="courier">tcpdump</font></b></td>
+
+<td>Mode 550 with owner <b>bin</b> and group <b>sys</b></td>
+</tr>
+
+<tr>
+<td><b><font face="courier">tcpdump.1</font></b></td>
+
+<td>Mode 444 with owner <b>bin</b> and group <b>sys</b></td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+<tr valign=top>
+<td width="130">
+<h4>
+<font face="helvetica, geneva, arial"><small>Testing After Installation</small></font></h4>
+</td>
+<td>
+To test the correct operation of
+</font><b><font face="courier">tcpdump</font></b>
+after installation, follow the steps mentioned in the "Testing Before Installation"
+section above, naming the absolute path of the tool. Again, you must be
+the root user to execute </font><b><font face="courier">tcpdump</font></b>.
+Example:
+<pre><font face="courier"><font size=-1># /bin/su root
+# /usr/local/sbin/tcpdump</font></font></pre>
+</td>
+</tr>
+<tr>
+<Td colspan="2">
+<hr size="1">
+</td>
+</tr>
+<tr>
+<td>
+<h4>
+<font face="helvetica, geneva, arial"><small>Configuration</small></font></h4>
+</td>
+<td valign="top">
+The <b><font face="courier">tcpdump</font></b> program does not require configuration of any of the distribution files.</td>
+</tr>
+<tr>
+<Td colspan="2">
+<hr size="1">
+</td>
+</tr>
+<tr>
+<td valign="top">
+<h4>
+<font face="helvetica, geneva, arial"><small>Using tcpdump<small></font></h4></td></tr>
+<tr valign=top>
+<td align=right>
+
+</td>
+<td valign="top">
+<h4>
+<font face="helvetica, geneva, arial"><font color="#008000">Common Use</font></font></h4>
+<b><font face="courier">tcpdump</font></b> is run with or without options from the command line. Under basic execution
+with no options, <b><font face="courier">tcpdump</font></b> returns ASCII output to the terminal describing the network traffic, including the
+<ul>
+<li>timestamp [hh:mm:ss.xxxxxx]</li>
+
+<li>interface [pcn{0,1, 2, ...}, lo]</li>
+
+<li>direction of the traffic [>, &lt;]</li>
+
+<li>protocol [tcp, udp, arp, ...]</li>
+
+<li>resolved / unresolved address(es)</li>
+
+<li>media access control (MAC) address</li>
+
+<li>other information (dependent on traffic type)</li>
+</ul></td>
+</tr>
+<tr valign=top>
+<Td align=right><br>
+
+</td>
+<td valign="top"><br>
+<h4>
+<font face="helvetica, geneva, arial"><font color="#008000">Recommended
+Use</font></font></h4>
+<b><font face="courier">tcpdump</font></b> is more effective when used to examine specific network traffic passing
+by a promiscuous host. This filtering requires that command line arguments
+be supplied to <b><font face="courier">tcpdump</font></b> at execution. For example, <b><font face="courier">tcpdump</font></b> could be executed to return only that traffic that pertain to a specific
+protocol, host, or connection.
+<p>The following information presents
+options, primitives, and expressions that may be passed to <b><font face="courier">tcpdump</font></b>
+at the command line at execution. This information was reproduced from
+the <b><font face="courier">tcpdump</font></b>(1) manual pages.
+<br>&nbsp;
+<br>&nbsp;
+<table BORDER CELLPADDING=5 >
+<tr>
+<td WIDTH="80"><b>Option</b></td>
+
+<td><b>Description</b></td>
+</tr>
+
+<tr>
+<td>-a</td>
+
+<td>Attempt to convert network and broadcast addresses to names.</td>
+</tr>
+
+<tr>
+<td>-c</td>
+
+<td>Exit after receiving <b>count</b> packets.</td>
+</tr>
+
+<tr>
+<td>-d</td>
+
+<td>Dump the compiled packet-matching code in a human readable form to
+standard output and stop.</td>
+</tr>
+
+<tr>
+<td>-dd</td>
+
+<td>Dump packet-matching code as a C program fragment.</td>
+</tr>
+
+<tr>
+<td>-ddd</td>
+
+<td>Dump packet-matching code as decimal numbers (preceded with a count).</td>
+</tr>
+
+<tr>
+<td>-e</td>
+
+<td>Print the link-level header on each dump line.</td>
+</tr>
+
+<tr>
+<td>-f</td>
+
+<td>Print 'foreign' internet addresses numerically rather than symbolically
+(this option is intended to get around serious brain damage in Sun's yp
+server -- usually it hangs forever translating non-local internet numbers).</td>
+</tr>
+
+<tr>
+<td>-F</td>
+
+<td>Use <b>file</b> as input for the filter expression. An additional expression
+given on the command line is ignored.</td>
+</tr>
+
+<tr>
+<td>-i</td>
+
+<td>Listen on <b>interface</b>. If unspecified, tcpdump searches the system
+interface list for the lowest numbered, configured up interface (excluding
+loopback). Ties are broken by choosing the earliest match.</td>
+</tr>
+
+<tr>
+<td>-l</td>
+
+<td>Make stdout line buffered. Useful if you want to see the data while
+capturing it. E.g., "tcpdump -l | tee dat" or "tcpdump -l > dat &amp; tail
+-f dat".</td>
+</tr>
+
+<tr>
+<td>-m</td>
+
+<td>Load SMI MIB module definitions from file <b>module</b>. This option
+can be used several times to load several MIB modules into tcpdump.</td>
+</tr>
+
+<tr>
+<td>-n</td>
+
+<td>Don't convert addresses (i.e., host addresses, port numbers, etc.)
+to names.</td>
+</tr>
+
+<tr>
+<td>-N</td>
+
+<td>Don't print domain name qualification of host names. E.g., if you give
+this flag then tcpdump will print "nic" instead of "nic.ddn.mil".</td>
+</tr>
+
+<tr>
+<td>-O</td>
+
+<td>Do not run the packet-matching code optimizer. This is useful only
+if you suspect a bug in the optimizer.</td>
+</tr>
+
+<tr>
+<td>-p</td>
+
+<td>Don't put the interface into promiscuous mode. Note that the interface
+might be in promiscuous mode for some other reason; hence, '-p' cannot
+be used as an abbreviation for 'ether host {local-hw-addr} or ether broadcast'.</td>
+</tr>
+
+<tr>
+<td>-q</td>
+
+<td>Quick (quiet?) output. Print less protocol information so output lines
+are shorter.</td>
+</tr>
+
+<tr>
+<td>-r</td>
+
+<td>Read packets from <b>file</b> (which was created with the -w option).
+Standard input is used if <b>file</b> is "-".</td>
+</tr>
+
+<tr>
+<td>-R</td>
+
+<td>Assume ESP/AH packets to be based on specification (RFC1825 to RFC1829).
+If specified, <b>tcpdump</b> will not print replay prevention field. Since
+there is no protocol version field in ESP/AH specification, <b>tcpdump</b>
+cannot deduce the version of ESP/AH protocol.</td>
+</tr>
+
+<tr>
+<td>-s</td>
+
+<td>Snarf <b>snaplen</b> bytes of data from each packet rather than the
+default of 68 (with SunOS's NIT, the minimum is actually 96). 68 bytes
+is adequate for IP, ICMP, TCP and UDP but may truncate protocol information
+from name server and NFS packets (see below). Packets truncated because
+of a limited snapshot are indicated in the output with "[|proto]", where
+<b>proto</b>
+is the name of the protocol level at which the truncation has occurred.
+Note that taking larger snapshots both increases the amount of time it
+takes to process packets and, effectively, decreases the amount of packet
+buffering. This may cause packets to be lost. You should limit
+<b>snaplen</b>
+to the smallest number that will capture the protocol information you're
+interested in.</td>
+</tr>
+
+<tr>
+<td>-T</td>
+
+<td>Force packets selected by "expression" to be interpreted the specified
+type. Currently known types are <b>rpc</b> (Remote Procedure Call), <b>rtp</b>
+(Real-Time Applications protocol), <b>rtcp</b> (Real-Time Applications
+control protocol), <b>snmp</b> (Simple Network Management Protocol), <b>vat</b>
+(Visual Audio Tool), and <b>wb</b> (distributed White Board).</td>
+</tr>
+
+<tr>
+<td>-S</td>
+
+<td>Print absolute, rather than relative, TCP sequence numbers.</td>
+</tr>
+
+<tr>
+<td>-t</td>
+
+<td>Don't print a timestamp on each dump line.</td>
+</tr>
+
+<tr>
+<td>-tt</td>
+
+<td>Print an unformatted timestamp on each dump line.</td>
+</tr>
+
+<tr>
+<td>-v</td>
+
+<td>(Slightly more) verbose output. For example, the time to live and type
+of service information in an IP packet is printed.</td>
+</tr>
+
+<tr>
+<td>-vv</td>
+
+<td>Even more verbose output. For example, additional fields are printed
+from NFS reply packets.</td>
+</tr>
+
+<tr>
+<td>-vvv</td>
+
+<td>Even more verbose output. For example, telnet <b>SB</b>...<b>SE</b>
+options are printed in full. With <b>-X</b> telnet options are printed
+in hex as well.</td>
+</tr>
+
+<tr>
+<td>-w</td>
+
+<td>Write the raw packets to <b>file</b> rather than parsing and printing
+them out. They can later be printed with the -r option. Standard output
+is used if file is "-".</td>
+</tr>
+
+<tr>
+<td>-x</td>
+
+<td>Print each packet (minus its link level header) in hex. The smaller
+of the entire packet or <b>snaplen</b> bytes will be printed.</td>
+</tr>
+
+<tr>
+<td>-X</td>
+
+<td>When printing hex, print ascii too. Thus if <b>-x</b> is also set,
+the packet is printed in hex/ascii. This is very handy for analysing new
+protocols. Even if <b>-x</b> is not also set, some parts of some protocols
+may be printed in hex/ascii.</td>
+</tr>
+</table>
+<p>
+<table BORDER CELLPADDING=5 >
+<tr>
+<td WIDTH="80">Expression</td>
+
+<td>Selects which packets will be dumped. If no expression is given, all
+packets on the net will be dumped. Otherwise, only packets for which expression
+is 'true' will be dumped. The expression consists of one or more primitives.
+Primitives usually consist of an id (name or number) preceded by one or
+more qualifiers. There are three different kinds of qualifier:</td>
+</tr>
+
+<tr>
+<td><b>Qualifier</b></td>
+
+<td><b>Description</b></td>
+</tr>
+
+<tr>
+<td>type</td>
+
+<td>Specify what kind of thing the <b>id</b> name or number refers to.
+Possible types are <b>host</b>, <b>net</b> and <b>port</b>. E.g., 'host
+foo', 'net 128.3', 'port 20'. If there is no type qualifier, <b>host</b>
+is assumed.</td>
+</tr>
+
+<tr>
+<td>dir</td>
+
+<td>Specify a particular transfer direction to and/or from <b>id</b>. Possible
+directions are <b>src</b>, <b>dst</b>, <b>src</b> or <b>dst</b> and <b>src</b>
+and <b>dst</b>. E.g., 'src foo', 'dst net 128.3', 'src or dst port ftp-data'.
+If there is no dir qualifier, <b>src</b> or <b>dst</b> is assumed. For
+'null' link layers (i.e., point to point protocols such as slip) the inbound
+and outbound qualifiers can be used to specify a desired direction.</td>
+</tr>
+
+<tr>
+<td>proto</td>
+
+<td>Restrict the match to a particular protocol. Possible protos are: <b>ether</b>,
+<b>fddi</b>, <b>ip</b>, <b>arp</b>, <b>rarp</b>, <b>decnet</b>, <b>lat</b>,
+<b>sca</b>, <b>moprc</b>, <b>mopdl</b>, <b>tcp</b> and <b>udp</b>. E.g.,
+'ether src foo', 'arp net 128.3', 'tcp port 21'. If there is no proto qualifier,
+all protocols consistent with the type are assumed. E.g., 'src foo' means
+'(ip or arp or rarp) src foo' (except the latter is not legal syntax),
+'net bar' means '(ip or arp or rarp) net bar' and 'port 53' means '(tcp
+or udp) port 53'.&nbsp;</td>
+</tr>
+</table>
+<p>
+<table BORDER CELLPADDING=5 >
+<tr>
+<td WIDTH="80"><b>Primitive</b></td>
+
+<td><b>Description</b></td>
+</tr>
+
+<tr>
+<td>dst host <b>host</b></td>
+
+<td>True if the IPv4/v6 destination field of the packet is <b>host</b>,
+which may be either an address or a name.</td>
+</tr>
+
+<tr>
+<td>src host <b>host</b></td>
+
+<td>True if the IPv4/v6 source field of the packet is host.</td>
+</tr>
+
+<tr>
+<td>host <b>host</b></td>
+
+<td>True if either the IP source or destination of the packet is <b>host</b>.
+Any of the above host expressions can be prepended with the keywords <b>ip</b>,
+<b>arp</b>, <b>rarp</b>, or <b>ip6</b> as in:&nbsp;
+<p>ip host <b>host</b> which is equivalent to:&nbsp;
+<p>ether proto \ip and host <b>host</b>
+<p>If <b>host</b> is a name with multiple IP addresses, each address will
+be checked for a match.</td>
+</tr>
+
+<tr>
+<td>ether dst <b>ehost</b></td>
+
+<td>True if the Ethernet destination address is <b>ehost</b>.&nbsp;
+<p>Ehost may be either a name from /etc/ethers or a number (see ethers
+(3N) for numeric format).</td>
+</tr>
+
+<tr>
+<td>ether src <b>ehost</b></td>
+
+<td>True if the Ethernet source address is <b>ehost</b>.</td>
+</tr>
+
+<tr>
+<td>ether host <b>ehost</b></td>
+
+<td>True if either the Ethernet source or destination address is <b>ehost</b>.</td>
+</tr>
+
+<tr>
+<td>gateway <b>host</b></td>
+
+<td>True if the packet used [<b>host</b>] as a gateway. I.e., the Ethernet
+source or destination address was [<b>host</b>] but neither the IP source
+nor the IP destination was [<b>host</b>]. [<b>host</b>] must be a name
+and must be found in both /etc/hosts and /etc/ethers. (An equivalent expression
+is ether host [ehost] and not host [<b>host</b>] which can be used with
+either names or numbers for [<b>host</b>] / [<b>ehost</b>].)</td>
+</tr>
+
+<tr>
+<td>dst net <b>net</b></td>
+
+<td>True if the IPv4/v6 destination address of the packet has a network
+number of <b>net</b>. <b>Net</b> may be either a name from /etc/networks
+or a network number (see networks (4) for details).</td>
+</tr>
+
+<tr>
+<td>src net <b>net</b></td>
+
+<td>True if the IPv4/v6 source address of the packet has a network number
+of <b>net</b>.</td>
+</tr>
+
+<tr>
+<td>net <b>net</b></td>
+
+<td>True if either the IPv4/v6 source or destination address of the packet
+has a network number of <b>net</b>.</td>
+</tr>
+
+<tr>
+<td>net <b>net</b> mask <b>mask</b></td>
+
+<td>True if the IP address matches <b>net</b> with the specific netmask.
+May be qualified with <b>src</b> or <b>dst</b>. Note that htis syntax is
+not valid for IPv6 <b>net</b>.</td>
+</tr>
+
+<tr>
+<td>net <b>net</b>/<b>len</b></td>
+
+<td>True if the IPv4/v6 address matches net a netmask <b>len</b> bits wide.
+May be qualified with <b>src</b> or <b>dst</b>.</td>
+</tr>
+
+<tr>
+<td>dst port <b>port</b></td>
+
+<td>True if the packet is ip/tcp or ip/udp and has a destination port value
+of <b>port</b>. The <b>port</b> can be a number or a name used in /etc/services
+(see <b>tcp</b>(4P) and <b>udp</b>(4P)). If a name is used, both the port
+number and protocol are checked. If a number or ambiguous name is used,
+only the port number is checked (e.g., <b>dst port 513</b> will print both
+tcp/login traffic and udp/who traffic, and <b>port</b> <b>domain</b> will
+print both tcp/domain and udp/domain traffic).</td>
+</tr>
+
+<tr>
+<td>src port <b>port</b></td>
+
+<td>True if the packet has a source port value of <b>port</b>.</td>
+</tr>
+
+<tr>
+<td>port <b>port</b></td>
+
+<td>True if either the source or destination port of the packet is <b>port</b>.
+Any of the above <b>port</b> expressions can be prepended with the keywords,
+<b>tcp</b> or <b>udp</b>, as in: <b>tcp src port port</b> which matches
+only tcp packets whose source port is <b>port</b>.</td>
+</tr>
+
+<tr>
+<td>less <b>length</b></td>
+
+<td>True if the packet has a length less than or equal to <b>length</b>.
+This is equivalent to: <b>len &lt;= length</b>.</td>
+</tr>
+
+<tr>
+<td>greater <b>length</b></td>
+
+<td>True if the packet has a length greater than or equal to <b>length</b>.
+This is equivalent to: <b>len >= length</b>.</td>
+</tr>
+
+<tr>
+<td>ip proto <b>protocol</b></td>
+
+<td>True if the packet is an ip packet (see ip(4P)) of protocol type <b>protocol</b>.
+<b>Protocol</b> can be a number or one of the names <b>icmp</b>, <b>igrp</b>,
+<b>udp</b>, <b>nd</b>, or <b>tcp</b>. Note that the identifiers <b>tcp</b>,
+<b>udp</b>, and <b>icmp</b> are also keywords and must be escaped via backslash
+(\), which is \\ in the C-shell. Note that this primitive does not chase
+protocol header chain.</td>
+</tr>
+
+<tr>
+<td>ip6 proto <b>protocol</b></td>
+
+<td>True if the packet is an IPv6 packet of protocol type <b>protocol</b>.
+Note that this primitive does not chase protocol header chain.</td>
+</tr>
+
+<tr>
+<td>ip6 protochain <b>protocol</b></td>
+
+<td>True if the packet is an IPv6 packet, and contains protocol header
+with type <b>protocol</b> in its protocol header chain.&nbsp; For example,
+<br>&nbsp;&nbsp;&nbsp; <b>ip6 protocol 6</b>
+<br>Matches any IPv6 packet with TCP protocol header in the protocol header
+chain.&nbsp; The packet may contain, for example, authentication header,
+routing header, or hop-by-hop option header, between IPv6 header and TCP
+header.&nbsp; The BPF code emitted by this primitive is complex and cannot
+be optimized by BPF optimizer code in <b>tcpdump</b>, so this can be somewhat
+slow.
+<br>&nbsp;</td>
+</tr>
+
+<tr>
+<td>ip protochain <b>protocol</b></td>
+
+<td>Equivalent to <b>ip6 protochain protocol</b>, but this is for IPv4.</td>
+</tr>
+
+<tr>
+<td>ether broadcast</td>
+
+<td>True if the packet is an ethernet broadcast packet. The <b>ether</b>
+keyword is optional.</td>
+</tr>
+
+<tr>
+<td>ip broadcast</td>
+
+<td>True if the packet is an IP broadcast packet. It checks for both the
+all zeroes and all-ones broadcast conventions, and looks up the local subnet
+mask.</td>
+</tr>
+
+<tr>
+<td>ether multicast</td>
+
+<td>True if the packet is an ethernet multicast packet. The <b>ether</b>
+keyword is optional. This is shorthand for '<b>ether[0] &amp; 1 != 0</b>'.</td>
+</tr>
+
+<tr>
+<td>ip multicast</td>
+
+<td>True if the packet is an IP multicast packet.</td>
+</tr>
+
+<tr>
+<td>ip6 multicast</td>
+
+<td>True if the packet is an IPv6 multicast packet.</td>
+</tr>
+
+<tr>
+<td>ether proto <b>protocol</b></td>
+
+<td>True if the packet is of ether type <b>protocol</b>. Protocol can be
+a number or a name like <b>ip</b>, <b>ip6</b>, <b>arp</b>, or <b>rarp</b>.
+Note these identifiers are also keywords and must be escaped via backslash
+(\). [In the case of FDDI (e.g., '<b>fddi protocol arp</b>'), the protocol
+identification comes from the 802.2 Logical Link Control (LLC) header,
+which is usually layered on top of the FDDI header. Tcpdump assumes, when
+filtering on the protocol identifier, that all FDDI packets include an
+LLC header, and that the LLC header is in so-called SNAP format.]</td>
+</tr>
+
+<tr>
+<td>decnet src <b>host</b></td>
+
+<td>True if the DECNET source address is <b>host</b>, which may be an address
+of the form "10.123", or a DECNET host name. [DECNET host name support
+is only available on Ultrix systems that are configured to run DECNET.]</td>
+</tr>
+
+<tr>
+<td>decnet dst <b>host</b></td>
+
+<td>True if the DECNET destination address is <b>host</b>.</td>
+</tr>
+
+<tr>
+<td>decnet host <b>host</b></td>
+
+<td>True if either the DECNET source or destination address is <b>host</b>.</td>
+</tr>
+
+<tr>
+<td>ip, ip6, arp, rarp, decnet</td>
+
+<td>Abbreviations for:
+<p><b>ether proto p</b>
+<p>where <b>p</b> is one of the above protocols.</td>
+</tr>
+
+<tr>
+<td>lat, moprc, mopdl</td>
+
+<td>Abbreviations for:
+<p><b>ether proto p</b>
+<p>where <b>p</b> is one of the above protocols. Note that tcpdump does
+not currently know how to parse these protocols.</td>
+</tr>
+
+<tr>
+<td>tcp, udp, icmp</td>
+
+<td>Abbreviations for:
+<p><b>ip proto p </b>or<b> ip6 proto p</b>
+<p>where <b>p</b> is one of the above protocols.</td>
+</tr>
+
+<tr>
+<td>[expr] [relop] [expr]</td>
+
+<td>True if the relation holds, where [relop] is one of >, &lt;, >=, &lt;=,
+=, !=, and <b>expr</b> is an arithmetic expression composed of integer
+constants (expressed in standard C syntax), the normal binary operators
+[+, -, *, /, &amp;, |], a length operator, and special packet data accessors.
+To access data inside the packet, use the following syntax: <b>proto</b>
+[ <b>expr</b> : <b>size</b> ]&nbsp;
+<p>Proto is one of <b>ether</b>, <b>fddi</b>, <b>ip</b>, <b>arp</b>, <b>rarp</b>,
+<b>tcp</b>, <b>udp</b>, <b>icmp</b>, or <b>ip6</b>, and indicates the protocol
+layer for the index operation. Note that the <b>tcp</b>,<b> udp</b>, and
+upper-layer protocol types only apply to IPv4, not IPv6 (this will be fixed
+in the future). The byte offset, relative to the indicated protocol layer,
+is given by <b>expr</b>. <b>Size</b> is optional and indicates the number
+of bytes in the field of interest; it can be either one, two, or four,
+and defaults to one. The length operator, indicated by the keyword len,
+gives the length of the packet.&nbsp;
+<p>For example, '<b>ether[0] &amp; 1 != 0</b>' catches all multicast traffic.
+The expression '<b>ip[0] &amp; 0xf != 5</b>' catches all IP packets with
+options. The expression '<b>ip[6:2] &amp; 0x1fff = 0</b>' catches only
+unfragmented datagrams and frag zero of fragmented datagrams. This check
+is implicitly applied to the <b>tcp</b> and <b>udp</b> index operations.
+For instance, <b>tcp[0]</b> always means the first byte of the TCP <b>header</b>,
+and never means the first byte of an intervening fragment.</td>
+</tr>
+</table>
+
+<p>Applying command line arguments
+to <b><font face="courier">tcpdump</font></b> at execution allows you to begin to characterize the normal behavior of
+packets traversing your network. Specifically, <b><font face="courier">tcpdump</font></b> will allow you to recognize the normal patterns of traffic on your network
+by producing the types of protocols used, internal to external connections
+made, and traffic inbound to and outbound from specific hosts. Again the
+tool only enables you to collect information about network traffic; the
+formation of heuristics and the notion of an expected norm is the responsibility
+of you as the administrator. The following examples allow you to begin
+to form the heuristics of normal behavior.
+</td></tr>
+<tr valign="top">
+<td align="right"><br>
+
+</td>
+<td valign="top"><br>
+<h4>
+<font face="helvetica, geneva, arial"><font color="#008000">Examples of
+Recommended Use</font></font></h4>
+To display all inbound and outbound
+packets from the host [hostA.dom.org]:
+<pre><font face="courier"><font size=-1># tcpdump host host.dom.org</font></font></pre>
+To display packets between host [hostZ.domain.org]
+and either [hostB.dom.org] or [hostC.dom.org]:
+<pre><font face="courier"><font size=-1># tcpdump host hostA.dom.org and \( hostB.dom.org or hostC.dom.org \)</font></font></pre>
+To display all IP packets between
+[hostZ.dom.org] and any host except [hostA.dom.org]:
+<pre><font face="courier"><font size=-1># tcpdump ip host hostZ.dom.org and not hostA.dom.org</font></font></pre>
+To display all packets between local
+hosts and hosts at network [domB.org]:
+<pre><font face="courier"><font size=-1># tcpdump net domB.org</font></font></pre>
+To display all ftp traffic through
+the Internet gateway [GateA]:
+<br>(Note that the expression is
+quoted to prevent the shell from misinterpreting the parentheses.)
+<pre><font face="courier"><font size=-1># tcpdump 'gateway GateA and (port ftp or ftp-data)'</font></font></pre>
+</td>
+</tr>
+<tr valign="top">
+<td align="right">
+
+</td>
+<td valign="top">
+<h4>
+<font face="helvetica, geneva, arial"><font color="#008000">Advanced Use</font></font></h4>
+Once <b><font face="courier">tcpdump</font></b> has been applied and you have observed the normal types of traffic and
+protocols on your network, you can begin to use <b><font face="courier">tcpdump</font></b> to identify unusual or unexpected traffic. <b><font face="courier">tcpdump</font></b> can be used to filter for and recognize abnormal traffic, for example:
+<ul>
+<li>
+Apply options that filter out the
+observed, normal traffic between hosts</li>
+
+<li>
+Apply options that filter the network
+for traffic that should never exist on your network (such as "spoofed"
+ip traffic)</li>
+</ul></td>
+</tr>
+<tr valign="top">
+<td align="right"><br>
+
+</td>
+<td valign="top"><br>
+<h4>
+<font face="helvetica, geneva, arial"><font color="#008000">Advanced Examples</font></font></h4>
+These examples use <b><font face="courier">tcpdump</font></b> to filter network traffic by using advanced expressions and help you to
+recognize abnormal traffic passing by or destined to your system.
+<p>To display start and end packets
+(SYN and FIN packets) of each TCP conversation involving a non-local host:
+<pre><font face="courier"><font size=-1># tcpdump 'tcp[13] &amp; 3 != 0 and not src and dst net [localnet]'</font></font></pre>
+To print traffic that does not have
+a local host as its source or destination:
+<br><b>(Note that if your network
+has only one gateway between you and one other network, this traffic should
+never traverse your local network.)</b>
+<pre><font face="courier"><font size=-1># tcpdump ip and not net [localnet]</font></font></pre>
+To display IP packets longer than
+576 bytes sent through gateway snup:
+<pre><font face="courier"><font size=-1># tcpdump 'gateway snup and ip[2:2] > 576'</font></font></pre>
+To display IP broadcast or multicast
+packets that were not sent via ethernet broadcast or multicast:
+<pre><font face="courier"><font size=-1># tcpdump 'ether[0] &amp; 1 = 0 and ip[16] >= 224'</font></font></pre>
+To display all ICMP packets that
+are not echo requests/replies (i.e., not ping packets):
+<pre><font face="courier"><font size=-1># tcpdump 'icmp[0] != 8 and icmp[0] != 0'</font></font></pre>
+</td></tr>
+<tr valign="top">
+<td align="right">
+
+</td>
+<td valign="top">
+<h4>
+<font face="helvetica, geneva, arial"><font color="#008000">Integration
+with other administrative/security tools</font></font></h4>
+When compared with the output of
+other security tools, <b><font face="courier">tcpdump</font></b>'s
+output can
+<ol>
+<li>corroborate
+that a security activity has happened (through traffic logs) or is happening
+by displaying network traffic which may relate to a security event</li>
+<li>identify
+discrepancies and possible security events when network traffic is displayed
+but open network connections are misreported by programs such as <b>top</b>,
+<b>lsof</b>, and <b>ps</b></li></ol>
+</td></tr></table>
+<br>
+<hr size="1">
+<table>
+<tr valign="top">
+<td width="130">
+<h4>
+<font face="helvetica, geneva, arial"><small>Tripwire Configuration</small></font></h4></td>
+<td>
+The following is the <b><font face="courier">tripwire</font></b> configuration for the <b><font face="courier">tcpdump</font></b> program once installed. Only two files, the <b><font face="courier">tcpdump</font></b> executable and <b><font face="courier">tcpdump</font></b>(1)
+man page, require monitoring by tripwire. In addition, files necessary
+to implement process accounting in the Solaris OS should be watched.
+<p>The following files should not
+change, and any changes are unexpected:
+<pre><font size=-1>@@define BINARY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; E+pinugsamc1-023456789
+
+<i>/usr/local/bin/tcpdump&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </i>@@BINARY
+<i>/usr/local/man/man1/tcpdump.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </i>@@BINARY</font></font></pre>
+</td></tr></table>
+
+<hr size="1">
+<table>
+<tr valign="top">
+<td width="130">
+<h4>
+<font face="helvetica, geneva, arial"><small>Acknowledgments</small></font></h4></td>
+<td>
+The author would like to thank the
+developers of <b><font face="courier">tcpdump</font></b> and the authors of the <b><font face="courier">tcpdump</font></b> manual page. Many of the examples provide in this document can be directly
+attributed to the developer's information accompanying the <b><font face="courier">tcpdump</font></b>
+source distribution.
+</td></tr></table>
+</body>
+</html>

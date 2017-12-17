@@ -1,0 +1,1535 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns:m="http://schemas.microsoft.com/office/2004/12/omml"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 12">
+<meta name=Originator content="Microsoft Word 12">
+<link rel=File-List href="Installtomcatupdated_files/filelist.xml">
+<link rel=Edit-Time-Data href="Installtomcatupdated_files/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+<title>Installation Tomcat 6 in UNIX Lab</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Srivatsan</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>Srivatsan</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>18</o:TotalTime>
+  <o:Created>2010-04-25T15:47:00Z</o:Created>
+  <o:LastSaved>2010-04-25T15:47:00Z</o:LastSaved>
+  <o:Pages>4</o:Pages>
+  <o:Words>1452</o:Words>
+  <o:Characters>8283</o:Characters>
+  <o:Lines>69</o:Lines>
+  <o:Paragraphs>19</o:Paragraphs>
+  <o:CharactersWithSpaces>9716</o:CharactersWithSpaces>
+  <o:Version>12.00</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]-->
+<link rel=themeData href="Installtomcatupdated_files/themedata.thmx">
+<link rel=colorSchemeMapping
+href="Installtomcatupdated_files/colorschememapping.xml">
+<!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:Zoom>150</w:Zoom>
+  <w:SpellingState>Clean</w:SpellingState>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:TrackMoves>false</w:TrackMoves>
+  <w:TrackFormatting/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:DoNotPromoteQF/>
+  <w:LidThemeOther>EN-US</w:LidThemeOther>
+  <w:LidThemeAsian>X-NONE</w:LidThemeAsian>
+  <w:LidThemeComplexScript>X-NONE</w:LidThemeComplexScript>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:SplitPgBreakAndParaMark/>
+   <w:DontVertAlignCellWithSp/>
+   <w:DontBreakConstrainedForcedTables/>
+   <w:DontVertAlignInTxbx/>
+   <w:Word11KerningPairs/>
+   <w:CachedColBalance/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+  <m:mathPr>
+   <m:mathFont m:val="Cambria Math"/>
+   <m:brkBin m:val="before"/>
+   <m:brkBinSub m:val="&#45;-"/>
+   <m:smallFrac m:val="off"/>
+   <m:dispDef/>
+   <m:lMargin m:val="0"/>
+   <m:rMargin m:val="0"/>
+   <m:defJc m:val="centerGroup"/>
+   <m:wrapIndent m:val="1440"/>
+   <m:intLim m:val="subSup"/>
+   <m:naryLim m:val="undOvr"/>
+  </m:mathPr></w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" DefUnhideWhenUsed="true"
+  DefSemiHidden="true" DefQFormat="false" DefPriority="99"
+  LatentStyleCount="267">
+  <w:LsdException Locked="false" Priority="0" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Normal"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="heading 1"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="heading 2"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="heading 3"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 4"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 5"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 6"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 7"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 8"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 9"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 1"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 2"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 3"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 4"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 5"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 6"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 7"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 8"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 9"/>
+  <w:LsdException Locked="false" Priority="35" QFormat="true" Name="caption"/>
+  <w:LsdException Locked="false" Priority="10" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Title"/>
+  <w:LsdException Locked="false" Priority="1" Name="Default Paragraph Font"/>
+  <w:LsdException Locked="false" Priority="11" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Subtitle"/>
+  <w:LsdException Locked="false" Priority="22" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Strong"/>
+  <w:LsdException Locked="false" Priority="20" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Emphasis"/>
+  <w:LsdException Locked="false" Priority="59" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Table Grid"/>
+  <w:LsdException Locked="false" UnhideWhenUsed="false" Name="Placeholder Text"/>
+  <w:LsdException Locked="false" Priority="1" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="No Spacing"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 1"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 1"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 1"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 1"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 1"/>
+  <w:LsdException Locked="false" UnhideWhenUsed="false" Name="Revision"/>
+  <w:LsdException Locked="false" Priority="34" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="List Paragraph"/>
+  <w:LsdException Locked="false" Priority="29" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Quote"/>
+  <w:LsdException Locked="false" Priority="30" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Intense Quote"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 1"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 1"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 1"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 1"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 1"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 1"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 2"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 2"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 2"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 2"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 2"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 2"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 2"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 2"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 2"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 2"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 2"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 3"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 3"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 3"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 3"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 3"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 3"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 3"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 3"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 3"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 3"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 3"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 4"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 4"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 4"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 4"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 4"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 4"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 4"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 4"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 4"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 4"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 4"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 5"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 5"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 5"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 5"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 5"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 5"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 5"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 5"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 5"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 5"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 5"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 6"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 6"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 6"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 6"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 6"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 6"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 6"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 6"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 6"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 6"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 6"/>
+  <w:LsdException Locked="false" Priority="19" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Subtle Emphasis"/>
+  <w:LsdException Locked="false" Priority="21" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Intense Emphasis"/>
+  <w:LsdException Locked="false" Priority="31" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Subtle Reference"/>
+  <w:LsdException Locked="false" Priority="32" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Intense Reference"/>
+  <w:LsdException Locked="false" Priority="33" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Book Title"/>
+  <w:LsdException Locked="false" Priority="37" Name="Bibliography"/>
+  <w:LsdException Locked="false" Priority="39" QFormat="true" Name="TOC Heading"/>
+ </w:LatentStyles>
+</xml><![endif]-->
+<link rel=Stylesheet type="text/css" media=all
+href="Installtomcat_files/tomcat_install.htm">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;
+	mso-font-charset:1;
+	mso-generic-font-family:roman;
+	mso-font-format:other;
+	mso-font-pitch:variable;
+	mso-font-signature:0 0 0 0 0 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;}
+h1
+	{mso-style-priority:9;
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-link:"Heading 1 Char";
+	mso-margin-top-alt:auto;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	mso-outline-level:1;
+	font-size:24.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;
+	font-weight:bold;}
+h2
+	{mso-style-priority:9;
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-link:"Heading 2 Char";
+	mso-margin-top-alt:auto;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	mso-outline-level:2;
+	font-size:18.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;
+	font-weight:bold;}
+h3
+	{mso-style-priority:9;
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-link:"Heading 3 Char";
+	mso-margin-top-alt:auto;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	mso-outline-level:3;
+	font-size:13.5pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;
+	font-weight:bold;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+p
+	{mso-style-noshow:yes;
+	mso-style-priority:99;
+	mso-margin-top-alt:auto;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-priority:9;
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-link:"Heading 1";
+	mso-ansi-font-size:14.0pt;
+	mso-bidi-font-size:14.0pt;
+	font-family:"Cambria","serif";
+	mso-ascii-font-family:Cambria;
+	mso-ascii-theme-font:major-latin;
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:major-fareast;
+	mso-hansi-font-family:Cambria;
+	mso-hansi-theme-font:major-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:major-bidi;
+	color:#365F91;
+	mso-themecolor:accent1;
+	mso-themeshade:191;
+	font-weight:bold;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-noshow:yes;
+	mso-style-priority:9;
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-link:"Heading 2";
+	mso-ansi-font-size:13.0pt;
+	mso-bidi-font-size:13.0pt;
+	font-family:"Cambria","serif";
+	mso-ascii-font-family:Cambria;
+	mso-ascii-theme-font:major-latin;
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:major-fareast;
+	mso-hansi-font-family:Cambria;
+	mso-hansi-theme-font:major-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:major-bidi;
+	color:#4F81BD;
+	mso-themecolor:accent1;
+	font-weight:bold;}
+span.Heading3Char
+	{mso-style-name:"Heading 3 Char";
+	mso-style-noshow:yes;
+	mso-style-priority:9;
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-link:"Heading 3";
+	mso-ansi-font-size:12.0pt;
+	mso-bidi-font-size:12.0pt;
+	font-family:"Cambria","serif";
+	mso-ascii-font-family:Cambria;
+	mso-ascii-theme-font:major-latin;
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:major-fareast;
+	mso-hansi-font-family:Cambria;
+	mso-hansi-theme-font:major-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:major-bidi;
+	color:#4F81BD;
+	mso-themecolor:accent1;
+	font-weight:bold;}
+span.SpellE
+	{mso-style-name:"";
+	mso-spl-e:yes;}
+span.GramE
+	{mso-style-name:"";
+	mso-gram-e:yes;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	mso-default-props:yes;
+	font-size:10.0pt;
+	mso-ansi-font-size:10.0pt;
+	mso-bidi-font-size:10.0pt;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+ @list l0
+	{mso-list-id:275915624;
+	mso-list-template-ids:-194841640;}
+@list l1
+	{mso-list-id:313219818;
+	mso-list-template-ids:369665616;}
+@list l2
+	{mso-list-id:429542922;
+	mso-list-template-ids:667993536;}
+@list l3
+	{mso-list-id:626277067;
+	mso-list-template-ids:-1563630910;}
+@list l3:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:"Courier New";
+	mso-bidi-font-family:"Times New Roman";}
+@list l4
+	{mso-list-id:777529947;
+	mso-list-template-ids:430474798;}
+@list l5
+	{mso-list-id:850946972;
+	mso-list-template-ids:791420066;}
+@list l6
+	{mso-list-id:878709282;
+	mso-list-template-ids:-1043960718;}
+@list l7
+	{mso-list-id:895122788;
+	mso-list-template-ids:1846289894;}
+@list l8
+	{mso-list-id:1305041434;
+	mso-list-template-ids:-1369436764;}
+@list l9
+	{mso-list-id:1452822074;
+	mso-list-template-ids:-2146635686;}
+@list l10
+	{mso-list-id:1523978314;
+	mso-list-template-ids:825021736;}
+@list l11
+	{mso-list-id:1700426416;
+	mso-list-template-ids:293113368;}
+@list l12
+	{mso-list-id:1763182336;
+	mso-list-template-ids:-1796334336;}
+@list l13
+	{mso-list-id:1775318107;
+	mso-list-template-ids:-2103542932;}
+@list l14
+	{mso-list-id:1957131391;
+	mso-list-template-ids:418780282;}
+@list l15
+	{mso-list-id:1985351519;
+	mso-list-template-ids:-987462196;}
+@list l16
+	{mso-list-id:2005666108;
+	mso-list-template-ids:-878528294;}
+@list l17
+	{mso-list-id:2051609583;
+	mso-list-template-ids:-496724720;}
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-priority:99;
+	mso-style-qformat:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman","serif";}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="2050"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body lang=EN-US link=blue vlink=purple style='tab-interval:.5in'>
+
+<div class=Section1>
+
+<h1><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Installation Tomcat 6 in UNIX Lab<o:p></o:p></span></h1>
+
+<div class=MsoNormal align=center style='text-align:center'><span lang=EN
+style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:EN'>
+
+<hr size=2 width="100%" align=center>
+
+</span></div>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Select a Machine for Installation <o:p></o:p></span></h2>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l3 level1 lfo1;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Login into <a href="https://www.cse.sc.edu/" target="_blank">https://www.cse.sc.edu</a>
+<o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l3 level1 lfo1;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Select CSE Computing-&gt; <span class=GramE>Unix</span> Workstations <o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l3 level1 lfo1;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Select a machine from the workstation name list. <o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>For
+example, you may select broad.cse.sc.edu <o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l3 level1 lfo1;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Login that machine <o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>There
+are a few ways to do it <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+margin-left:1.0in;text-indent:-.25in;mso-list:l3 level2 lfo1;tab-stops:list 1.0in'><![if !supportLists]><span
+lang=EN style='font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:"Courier New";
+mso-fareast-font-family:"Courier New";mso-ansi-language:EN'><span
+style='mso-list:Ignore'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'>Go to the UNIX lab to use that machine.
+(Bad selection)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+margin-left:1.0in;text-indent:-.25in;mso-list:l3 level2 lfo1;tab-stops:list 1.0in'><![if !supportLists]><span
+lang=EN style='font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:"Courier New";
+mso-fareast-font-family:"Courier New";mso-ansi-language:EN'><span
+style='mso-list:Ignore'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'>Go to the UNIX lab, randomly select a
+machine, login and then use <span class=SpellE>ssh</span> <span class=SpellE>machine_name</span>
+command<o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+margin-left:1.0in;text-indent:-.25in;mso-list:l3 level2 lfo1;tab-stops:list 1.0in'><![if !supportLists]><span
+lang=EN style='font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:"Courier New";
+mso-fareast-font-family:"Courier New";mso-ansi-language:EN'><span
+style='mso-list:Ignore'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'>Go to a Window lab, use putty to login.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+margin-left:1.0in;text-indent:-.25in;mso-list:l3 level2 lfo1;tab-stops:list 1.0in'><![if !supportLists]><span
+lang=EN style='font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:"Courier New";
+mso-fareast-font-family:"Courier New";mso-ansi-language:EN'><span
+style='mso-list:Ignore'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'>Go to a Windows lab, use SSH Secure
+Shell to login<o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l3 level1 lfo1;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>5.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Go to directory /work with command <span class=SpellE>cd</span> /work <o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l3 level1 lfo1;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>6.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Collect information of /work directory <o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>With <span
+class=SpellE>ls</span> command, you can find out how many subdirectories have
+already been created under /work<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>With <span
+class=SpellE>df</span> -k <span class=SpellE>command<span class=GramE>,you</span></span>
+can find out disk space that machine has under /work<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>For
+example, when using <span class=SpellE><span class=GramE>df</span></span> -k on
+broad.cse.sc.edu, one line of the output is:<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>/dev/<span
+class=SpellE>dsk</span>/c0t0d0s5&nbsp;&nbsp;&nbsp;15110050&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+9 14958941 &nbsp;&nbsp;&nbsp;&nbsp;1%&nbsp;&nbsp;&nbsp;/work <o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>It means
+this machine has 14958941k byte spare space.<o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l3 level1 lfo1;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>7.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Select a machine<o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>If there
+are a lot of subdirectories under /work or the spare space is not big enough <span
+class=GramE>( 100M</span> may be needed), you may need to think about selecting
+another machine.<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>Once
+selected a machine, write down its name. You need to login that machine every
+time when you want to use Tomcat.<o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l3 level1 lfo1;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>8.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Notes:<o:p></o:p></span></h3>
+
+<p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+margin-left:1.0in;text-indent:-.25in;mso-list:l3 level2 lfo1;tab-stops:list 1.0in'><![if !supportLists]><span
+lang=EN style='font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:"Courier New";
+mso-fareast-font-family:"Courier New";mso-ansi-language:EN'><span
+style='mso-list:Ignore'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'>/work is a local directory on each
+machine (not <span class=SpellE>nfs</span> mounted). <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+margin-left:1.0in;text-indent:-.25in;mso-list:l3 level2 lfo1;tab-stops:list 1.0in'><![if !supportLists]><span
+lang=EN style='font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:"Courier New";
+mso-fareast-font-family:"Courier New";mso-ansi-language:EN'><span
+style='mso-list:Ignore'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'>/work disk space varies from machine to
+machine. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+margin-left:1.0in;text-indent:-.25in;mso-list:l3 level2 lfo1;tab-stops:list 1.0in'><![if !supportLists]><span
+lang=EN style='font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:"Courier New";
+mso-fareast-font-family:"Courier New";mso-ansi-language:EN'><span
+style='mso-list:Ignore'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'>/work is not backed up. Critical non-<span
+class=SpellE>reproducable</span> files should be saved in users home
+directories for disaster recovery. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+margin-left:1.0in;text-indent:-.25in;mso-list:l3 level2 lfo1;tab-stops:list 1.0in'><![if !supportLists]><span
+lang=EN style='font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:"Courier New";
+mso-fareast-font-family:"Courier New";mso-ansi-language:EN'><span
+style='mso-list:Ignore'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'>/work is open to any member of the
+student group. First <span class=GramE>come</span> first serve. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+margin-left:1.0in;text-indent:-.25in;mso-list:l3 level2 lfo1;tab-stops:list 1.0in'><![if !supportLists]><span
+lang=EN style='font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:"Courier New";
+mso-fareast-font-family:"Courier New";mso-ansi-language:EN'><span
+style='mso-list:Ignore'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'>/work will go away at the end of each
+semester when Disks are cleaned and OS refreshed. <o:p></o:p></span></p>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Create Install Directory<o:p></o:p></span></h2>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l13 level1 lfo2;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Login the machine you selected.<o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l13 level1 lfo2;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Go to /work directory with command <span class=SpellE>cd</span> /work<o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l13 level1 lfo2;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Make your own directory with command <span class=SpellE>mkdir</span> &lt;<span
+class=SpellE>userid</span>&gt; <o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>If you
+could not create your own directory there, please select another machine.<o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l13 level1 lfo2;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Change the access right with command <span class=SpellE>chmod</span> 701
+&lt;<span class=SpellE>userid</span>&gt; <o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>This
+will make sure other students could not get into your directory.<o:p></o:p></span></p>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Get Tomcat Distribution <o:p></o:p></span></h2>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l6 level1 lfo3;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Go to your own directory with command <span class=SpellE>cd</span>
+/work/&lt;<span class=SpellE>userid</span>&gt; <o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l6 level1 lfo3;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Next we download the latest version of tomcat, at the time of this tutorial
+the latest version is 6.0.26, so this version will be used for the rest of the
+tutorial<o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l6 level1 lfo3;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>When inside your /work/&lt;<span class=SpellE>userid</span>&gt;/ do the
+command ?<span class=SpellE>wget</span> http<span class=GramE>:/</span>/apache.cs.utah.edu/tomcat/tomcat-6/v6.0.26/bin/apache-tomcat-6.0.26.tar.gz?
+(if the above mirror doesn?t work go to the website and find a working one)<o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l6 level1 lfo3;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Extract the <span class=SpellE>gz</span> package with command <span
+class=SpellE>gunzip</span> apache-tomcat-6.0.26.tar.gz<o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l6 level1 lfo3;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>5.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Open the tar package with command <span class=SpellE>gtar</span> -<span
+class=SpellE>xvf</span> apache-tomcat-6.0.26.tar <o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l6 level1 lfo3;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>6.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Delete tar file with command <span class=SpellE>rm</span> apache-tomcat-6.0.26.tar<o:p></o:p></span></h3>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Modify Configure Files <o:p></o:p></span></h2>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Change Port <o:p></o:p></span></h2>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l16 level1 lfo4;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Go to the configure directory with command <span class=SpellE>cd</span>
+/work/&lt;<span class=SpellE>userid</span>&gt;/ apache-tomcat-6.0.26/conf <o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l16 level1 lfo4;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Open server.xml with an editor (<span class=GramE>vi</span> or <span
+class=SpellE>emacs</span>) <o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l16 level1 lfo4;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Modify default port from 8080 to 1[last 4 of student id] <o:p></o:p></span></h3>
+
+<p><span lang=EN style='mso-ansi-language:EN'>Example: 15634 for student with
+SSN: xxx-xx-5643 <o:p></o:p></span></p>
+
+<p><span lang=EN style='mso-ansi-language:EN'>You should find a line like
+&lt;Connector port=&quot;8080&quot; change it to be &lt;Connector
+port=&quot;15643&quot; <o:p></o:p></span></p>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Turn on <span class=SpellE>Servlet</span> Reloading <o:p></o:p></span></h2>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l0 level1 lfo6;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Open context.xml (this is in the same conf folder) <o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l0 level1 lfo6;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>You should see a line ?&lt;Context&gt;?<o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l0 level1 lfo6;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Change it to ?&lt;Context reloadable=?true? privileged=?true?&gt;</span><span
+lang=EN style='mso-ansi-language:EN'> <o:p></o:p></span></h3>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Enable Invoker <span class=SpellE>Servlet</span><o:p></o:p></span></h2>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l5 level1 lfo7;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Open web.xml under conf directory <o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>Note
+that the filename is web.xml, not server.xml <o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l5 level1 lfo7;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Uncomment the corresponding <span class=SpellE>servlet</span> element at
+the top of web.xml, as below: <o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>&lt;<span
+class=SpellE><span class=GramE>servlet</span></span>&gt; <o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>&lt;<span
+class=SpellE>servlet</span>-name&gt;invoker&lt;/<span class=SpellE>servlet</span>-name&gt;<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&lt;<span class=SpellE><span class=GramE>servlet</span></span><span
+class=GramE>-class</span>&gt;<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<span class=SpellE>org.apache.catalina.servlets.InvokerServlet</span><o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&lt;/<span class=SpellE>servlet</span>-class&gt;<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>...<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>&lt;/<span
+class=SpellE>servlet</span>&gt;<o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l5 level1 lfo7;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Uncomment the following <span class=SpellE>servlet</span>-mapping <o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>&lt;<span
+class=SpellE><span class=GramE>servlet</span></span><span class=GramE>-mapping</span>&gt;<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>&lt;<span
+class=SpellE>servlet</span>-name&gt;invoker&lt;/<span class=SpellE>servlet</span>-name&gt;<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>&lt;<span
+class=SpellE>url</span>-pattern&gt;/<span class=SpellE>servlet</span>/*&lt;/<span
+class=SpellE>url</span>-pattern&gt; <o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>&lt;/<span
+class=SpellE>servlet</span>-mapping&gt; <o:p></o:p></span></p>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Add Manager and Administrator Account<o:p></o:p></span></h2>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l10 level1 lfo8;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Use an editor open file tomcat-users.xml<o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l10 level1 lfo8;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Add the following after other entries<o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>&lt;user
+username=&quot;manager&quot; password=&quot;&lt;<span class=SpellE>passwd</span>&gt;&quot;
+roles=&quot;manager&quot;/&gt;<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>&lt;user
+username=&quot;admin&quot; password=&quot;&lt;<span class=SpellE>passwd</span>&gt;&quot;
+roles=&quot;admin&quot;/&gt;<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>Here,
+&lt;<span class=SpellE>passwd</span>&gt; is the password you select for
+management.<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>These
+two lines should be put just before &lt;/tomcat-users&gt; <o:p></o:p></span></p>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Setup Environment Variables <o:p></o:p></span></h2>
+
+<p><span lang=EN style='mso-ansi-language:EN'>*This step is shell dependent<o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l15 level1 lfo9;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>For <span class=SpellE>csh</span> <o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span class=SpellE><span class=GramE><span lang=EN
+style='mso-ansi-language:EN'>setenv</span></span></span><span lang=EN
+style='mso-ansi-language:EN'> CATALINA_HOME /work/&lt;<span class=SpellE>userid</span>&gt;/</span><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'> apache-tomcat-6.0.26/</span><span lang=EN style='mso-ansi-language:EN'><o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span class=SpellE><span class=GramE><span lang=EN
+style='mso-ansi-language:EN'>setenv</span></span></span><span lang=EN
+style='mso-ansi-language:EN'> JAVA_HOME /<span class=SpellE>usr</span>/lib/java/<o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l15 level1 lfo9;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>For bash <o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>export
+CATALINA_HOME=/work/&lt;<span class=SpellE>userid</span>&gt;/</span><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'> apache-tomcat-6.0.26/</span><span lang=EN style='mso-ansi-language:EN'><o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span class=GramE><span lang=EN style='mso-ansi-language:
+EN'>export</span></span><span lang=EN style='mso-ansi-language:EN'> JAVA_HOME=/<span
+class=SpellE>usr</span>/lib/java/ <o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l15 level1 lfo9;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Test Environment Variables <o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>Using
+command echo $CATALINA_HOME and echo $JAVA_HOME command do figure out what kind
+of shell you are using.<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>To avoid
+input these environment variables setting commands every time, you can put them
+in n/acct/s1/&lt;<span class=SpellE>userid</span>&gt;/SUN/.<span class=SpellE>cshrc</span>
+for <span class=SpellE>csh</span> or /acct/s1/&lt;<span class=SpellE>userid</span>&gt;/SUN/.<span
+class=SpellE>bashrc</span> for bash. <o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l15 level1 lfo9;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Note<o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>You can
+use echo $SHELL or <span class=SpellE>ps</span> command to figure out what kind
+of shell you are using. <o:p></o:p></span></p>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Startup Tomcat Server<o:p></o:p></span></h2>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l4 level1 lfo10;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Use command <span class=SpellE>cd</span> /work/&lt;<span class=SpellE>userid</span>&gt;/
+apache-tomcat-6.0.26/bin <o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l4 level1 lfo10;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Then command ./startup.sh<o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>If you
+get information like:<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>The
+JAVA_HOME environment variable is not defined correctly <span class=GramE>This</span>
+environment variable is needed to run this program<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>Using
+command <span class=SpellE>whereis</span> java for a java install directory,
+for example /<span class=SpellE>usr</span>/lib/java, <o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span class=GramE><span lang=EN style='mso-ansi-language:
+EN'>and</span></span><span lang=EN style='mso-ansi-language:EN'> reset
+JAVA_HOME environment variable <o:p></o:p></span></p>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Verify Server<o:p></o:p></span></h2>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l1 level1 lfo11;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Open a browser window<o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l1 level1 lfo11;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Input URL <span class=GramE>http:</span>//&lt;machine_name&gt; :
+&lt;1+[last 4 of student id]&gt; / <o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>Example:
+http://broad.cse.sc.edu:15643/<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>You
+should get the Tomcat management home page.<o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l1 level1 lfo11;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Note:<o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>Viewable
+on campus only, Connect to <a href="http://www.engr.sc.edu/its/isp3.html">COEIT
+VPN Server</a> for workaround for access from home.<o:p></o:p></span></p>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Try a Simple HTML Page<o:p></o:p></span></h2>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l11 level1 lfo12;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Download file <a
+href="http://www.cse.sc.edu/%7Eokeefe/tutorials/tomcat/Hello.html">Hello.html</a>
+and drop it into /work/&lt;<span class=SpellE>userid</span>&gt;/jakarta-tomcat-5.0.16/<span
+class=SpellE>webapps</span>/ROOT<o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>Be
+careful that your browser does not try to change the file extension, yielding
+Hello.htm instead of Hello.html <o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l11 level1 lfo12;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Access with URL http:// &lt;<span class=SpellE>machine_name</span><span
+class=GramE>&gt;:</span> &lt;port&gt;/Hello.html <o:p></o:p></span></h3>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Shutdown Tomcat Server <o:p></o:p></span></h2>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l8 level1 lfo13;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Use command <span class=SpellE>cd</span> /work/&lt;<span class=SpellE>userid</span>&gt;/jakarta-tomcat-5.0.16/bin&nbsp;
+<o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l8 level1 lfo13;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Then command ./shutdown.sh <o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l8 level1 lfo13;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Note<o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>You can
+add /work/&lt;<span class=SpellE>userid</span>&gt;/jakarta-tomcat-5.0.16/bin to
+PATH in your .<span class=SpellE>cshrc</span> (or .<span class=SpellE>bashrc</span>)
+file. Then you can use command startup.sh to startup and shutdown.sh to
+shutdown Tomcat server anywhere.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><o:p>&nbsp;</o:p></span></p>
+
+<h1><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Construct Developing Environment <o:p></o:p></span></h1>
+
+<div class=MsoNormal align=center style='text-align:center'><span lang=EN
+style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:EN'>
+
+<hr size=2 width="100%" align=center>
+
+</span></div>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Create Working Directory<o:p></o:p></span></h2>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l9 level1 lfo14;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Login into UNIX workstation your selected to install Tomcat<o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l9 level1 lfo14;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Input commands<o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span class=SpellE><span class=GramE><span lang=EN
+style='mso-ansi-language:EN'>cd</span></span></span><span lang=EN
+style='mso-ansi-language:EN'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //This
+command make sure current directory is /acct/s1/&lt;<span class=SpellE>userid</span>&gt;/SUN/
+<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span class=SpellE><span class=GramE><span lang=EN
+style='mso-ansi-language:EN'>mkdir</span></span></span><span lang=EN
+style='mso-ansi-language:EN'> csce590n <o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span class=SpellE><span class=GramE><span lang=EN
+style='mso-ansi-language:EN'>ln</span></span></span><span lang=EN
+style='mso-ansi-language:EN'> -s /work/&lt;<span class=SpellE>userid</span>&gt;/</span><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>apache-tomcat-6.0.26/</span><span class=SpellE><span lang=EN
+style='mso-ansi-language:EN'>webapps</span></span><span lang=EN
+style='mso-ansi-language:EN'>/ROOT/WEB-INF/classes /acct/s1/&lt;<span
+class=SpellE>userid</span>&gt;/SUN/csce590n/dev<o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>NOTE: in
+the new versions of tomcat the folder classes is not created by default under
+WEB-INF, if this is the case just <span class=SpellE>mkdir</span> classes <o:p></o:p></span></p>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>The last
+command constructs a symbol link. I recommend you use it. You can also use <span
+class=SpellE>mkdir</span> csce590n/dev instead, but that means you need to copy
+your programs to your publish directory /work/&lt;<span class=SpellE>userid</span>&gt;/</span><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>apache-tomcat-6.0.26</span><span lang=EN style='mso-ansi-language:EN'>/<span
+class=SpellE>webapps</span>/ROOT/WEB-INF/classes <span class=SpellE>everytime</span>.
+<o:p></o:p></span></p>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Set CLASSPATH <o:p></o:p></span></h2>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l7 level1 lfo15;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Since <span class=SpellE>servlets</span> is not part of the Java 2 platform
+standard edition, you have to identify the <span class=SpellE>servlet</span>
+classes to the compiler. <o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l7 level1 lfo15;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>If you use <span class=SpellE>csh</span>, you should use command <o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span class=SpellE><span class=GramE><span lang=EN
+style='mso-ansi-language:EN'>setenv</span></span></span><span lang=EN
+style='mso-ansi-language:EN'>
+CLASSPATH=.:/acct/s1/&lt;userid&gt;/SUN/csce590n/dev:/work/&lt;userid&gt;/jakarta-tomcat-5.0.16/lib/servlet-api.jar:/work/&lt;userid&gt;/jakarta-tomcat-5.0.16/common/lib/jsp-api.jar<o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l7 level1 lfo15;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>If you use bash, yon need to use command <o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span class=GramE><span lang=EN style='mso-ansi-language:
+EN'>export</span></span><span lang=EN style='mso-ansi-language:EN'>
+CLASSPATH=.:/<span class=GramE>acct/s1</span>/&lt;<span class=SpellE>userid</span>&gt;/SUN/csce590n/dev:/work/&lt;<span
+class=SpellE>userid</span>&gt;/</span><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'> apache-tomcat-6.0.26</span><span
+lang=EN style='mso-ansi-language:EN'>/lib/servlet-api.jar:/work/&lt;<span
+class=SpellE>userid</span>&gt;/</span><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'> apache-tomcat-6.0.26</span><span
+lang=EN style='mso-ansi-language:EN'>/lib/jsp-api.jar <o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l7 level1 lfo15;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Note:<o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>To avoid
+input these commands every time, you can put them in /acct/s1/&lt;<span
+class=SpellE>userid</span>&gt;/SUN/ .<span class=SpellE>cshrc</span> for <span
+class=SpellE>csh</span> or /acct/s1/&lt;<span class=SpellE>userid</span>&gt;/SUN/.<span
+class=SpellE>bashrc</span> for bash<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><o:p>&nbsp;</o:p></span></p>
+
+<h1><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Test Configuration<o:p></o:p></span></h1>
+
+<div class=MsoNormal align=center style='text-align:center'><span lang=EN
+style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:EN'>
+
+<hr size=2 width="100%" align=center>
+
+</span></div>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Test 1: A <span class=SpellE>Servlet</span> That Does Not Use Packages <o:p></o:p></span></h2>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l2 level1 lfo16;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Down load file <a
+href="http://www.cse.sc.edu/%7Eokeefe/tutorials/tomcat/HelloServlet.java">HelloServlet.java</a>,
+put it into /acct/s1/&lt;<span class=SpellE>userid</span>&gt;/SUN/csce590n/dev <o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l2 level1 lfo16;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Compile it with command: <span class=SpellE>javac</span> HelloServlet.java<o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>If you
+get compilation errors, go back and check your CLASSPATH settings. You most
+likely erred in listing the location of the JAR file that contains the <span
+class=SpellE>servlet</span> classes.<o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l2 level1 lfo16;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Access the <span class=SpellE>servlet</span> with the URL http:// &lt;<span
+class=SpellE>machine_name</span><span class=GramE>&gt;:</span>&lt;port&gt;/<span
+class=SpellE>servlet</span>/<span class=SpellE>HelloServlet</span> <o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span lang=EN style='mso-ansi-language:EN'>You need
+to copy the .class file to /acct/s1/&lt;<span class=SpellE>userid</span>&gt;/web/WEB-INF/classes/
+first if you do not use symbol link.<o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l2 level1 lfo16;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>You should get a simple HTML page that says &quot;Hello&quot; <o:p></o:p></span></h3>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Test 2: A <span class=SpellE>Servlet</span> That Uses Packages<o:p></o:p></span></h2>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l12 level1 lfo17;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Down load file <a
+href="http://www.cse.sc.edu/%7Eokeefe/tutorials/tomcat/HelloServlet2.java">HelloServlet2.java
+</a>to /acct/s1/&lt;<span class=SpellE>userid</span>&gt;/SUN/csce590n/dev/<span
+class=SpellE>coreservlets</span> <o:p></o:p></span></h3>
+
+<p style='margin-left:.5in'><span class=GramE><span lang=EN style='mso-ansi-language:
+EN'>here</span></span><span lang=EN style='mso-ansi-language:EN'>, you need to
+create subdirectory <span class=SpellE>coreservlets</span> yourself.<o:p></o:p></span></p>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l12 level1 lfo17;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Compile it <o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l12 level1 lfo17;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Access the <span class=SpellE>servlet</span> with the URL http:// &lt;<span
+class=SpellE>machine_name</span><span class=GramE>&gt;:</span>&lt;port&gt; /<span
+class=SpellE>servlet</span>/coreservlets.HelloServlet2 <o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l12 level1 lfo17;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>You should get a simple HTML page says &quot;<span class=GramE>Hello(</span>2)&quot;
+<o:p></o:p></span></h3>
+
+<h2><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Test 3: A <span class=SpellE>Servlet</span> That Uses Packages and
+Utilities <o:p></o:p></span></h2>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l14 level1 lfo18;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Down load file <a
+href="http://www.cse.sc.edu/%7Eokeefe/tutorials/tomcat/HelloServlet3.java">HelloServlet3.java</a>
+and <a
+href="http://www.cse.sc.edu/%7Eokeefe/tutorials/tomcat/ServletUtilities.java">ServletUtilities.java</a>
+to /acct/s1/&lt;<span class=SpellE>userid</span>&gt;/SUN/csce590n/dev/<span
+class=SpellE>coreservlets</span> <o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l14 level1 lfo18;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Compile HelloServlet3.java <o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l14 level1 lfo18;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Access the <span class=SpellE>servlet</span> with the URL <span
+class=GramE>http:</span>//&lt;machine_name&gt;:&lt;port&gt; /<span
+class=SpellE>servlet</span>/coreservlets.HelloServlet3 <o:p></o:p></span></h3>
+
+<h3 style='margin-left:.5in;text-indent:-.25in;mso-list:l14 level1 lfo18;
+tab-stops:list .5in'><![if !supportLists]><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><span style='mso-list:Ignore'>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>You should get a simple HTML page that says &quot;<span class=GramE>Hello(</span>3)&quot;
+<o:p></o:p></span></h3>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><o:p>&nbsp;</o:p></span></p>
+
+<h1><span lang=EN style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:
+EN'>Install Tomcat on Windows <o:p></o:p></span></h1>
+
+<div class=MsoNormal align=center style='text-align:center'><span lang=EN
+style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:EN'>
+
+<hr size=2 width="100%" align=center>
+
+</span></div>
+
+<p><span lang=EN style='mso-ansi-language:EN'>If you want to download and
+install Tomcat on your own computer, please check <a
+href="http://www.coreservlets.com/Apache-Tomcat-Tutorial">here</a> for help.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'><span lang=EN style='mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN'><o:p>&nbsp;</o:p></span></p>
+
+<p><span lang=EN style='mso-ansi-language:EN'>*For CSCE Spring 2010 students
+: <o:p></o:p></span></p>
+
+<p><span lang=EN style='mso-ansi-language:EN'>If you still have problem with
+installation and configuration, please send an email to <a
+href="mailto:help@cse.sc.edu">help@cse.sc.edu</a><o:p></o:p></span></p>
+
+<div class=MsoNormal align=center style='text-align:center'><span lang=EN
+style='mso-fareast-font-family:"Times New Roman";mso-ansi-language:EN'>
+
+<hr size=2 width="100%" align=center>
+
+</span></div>
+
+<p><span lang=EN style='mso-ansi-language:EN'>Last <span class=SpellE>modified<span
+class=GramE>:Tue</span></span> Apr 26 10:18:45 EST 2010<o:p></o:p></span></p>
+
+</div>
+
+</body>
+
+</html>

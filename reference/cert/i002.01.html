@@ -1,0 +1,145 @@
+<HTML>
+<HEAD>
+
+
+<TITLE>Using MD5 to verify the integrity of file contents</TITLE>
+</HEAD>
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+
+
+
+<font face="Helvetica, Geneva, Arial">
+<small>
+
+
+<table border="0" width="100%" cellspacing="6" cellpadding="4">
+  <tr> 
+    <td width="16%"><b><font face="Arial, Helvetica, sans-serif">Implementation 
+      Details</font></b></td>
+    <td width="84%" valign="TOP" align="LEFT"><b><font face="Arial" size=4> 
+      <p>Using MD5 to verify the integrity of file contents</p>
+      </font></b> </td>
+  </tr>
+  <tr> 
+    <td width="16%">&nbsp;</td>
+    <td width="84%"> 
+      <p></p>
+      <p> </p>
+      <table border="1" width="75%" cellspacing="0" cellpadding="8" bgcolor="#ccddff">
+        <tr> 
+          <td align="LEFT" valign="TOP" bgcolor="#ccddff"> 
+            <p>Applies to the practices: "<a href="../practices/p096.html">Inspect files and
+directories for unexpected changes</a>," "<a href="../practices/p091.html">Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior</a>"</p>
+            <p>Applicable technologies: MD5; UNIX operating system and derivatives 
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td width="16%" height="216">&nbsp;</td>
+    <td> 
+      <p></p>
+      <p> </p>
+      <p>The MD5 program generates a unique, 128-bit cryptographic message digest 
+        value derived from the contents of a file. This value is considered to 
+        be a highly reliable fingerprint that can be used to verify the integrity 
+        of the file's contents. If as little as a single bit value in the file 
+        is modified, the MD5 checksum for the file changes. Forgery of a file 
+        in a way that causes MD5 to generate the same result as that for the original 
+        file is considered to be extremely difficult.</p>
+      <p>A set of MD5 checksums for critical system, application, and data files 
+        provides a compact way of storing information for use in periodic integrity 
+        checks of those files.</p>
+      <p>Details for the MD5 cryptographic checksum program are provided in RFC 
+        1321. Source code and additional information are available via FTP from 
+        <a href="ftp://ftp.cerias.purdue.edu/pub/tools/unix/crypto/md5">ftp://ftp.cerias.purdue.edu/pub/tools/unix/crypto/md5</a></p>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" valign="TOP" align="LEFT"><b><font face="Arial">Example </font></b></td>
+    <td align="LEFT" valign="TOP"> 
+      <p>In this example, a few simple files are created and then MD5 is used 
+        to generate unique cryptographic checksums based on their contents.</p>
+      <p>First, we create a simple file and display its contents: </p>
+      <font face="Courier New" size=2> 
+      <pre>$ echo 'Hello, World!' &gt; example_1
+$ cat example_1
+Hello, World!</pre>
+      </font> 
+      <p>Next we use MD5 to generate a unique checksum for the file:</p>
+      <font face="Courier New" size=2> 
+      <pre>$ md5 example_1
+MD5 (example_1) = bea8252ff4e80f41719ea13cdf007273</pre>
+      </font> 
+      <p>Then we make a copy of the file, use the UNIX <font face="Courier New" size=3>diff</font> 
+        command to see that there are no visible content differences between the 
+        file and the copy, and verify that there are in fact no differences by 
+        comparing the MD5 checksums for the two files:</p>
+      <font face="Courier New" size=2> 
+      <pre>$ cp example_1 example_2
+$ diff example_1 example_2
+$ md5 example_1 example_2
+MD5 (example_1) = bea8252ff4e80f41719ea13cdf007273
+MD5 (example_2) = bea8252ff4e80f41719ea13cdf007273</pre>
+      </font> 
+      <p>When we make a small change to one of the files by adding a new line 
+        with a space on it, notice that the MD5 checksum for the modified file 
+        changes significantly:</p>
+      <pre><font face="Courier New, Courier, mono" size="2">$ echo ' ' &gt;&gt; example_2
+$ md5 example_1 example_2
+MD5 (example_1) = bea8252ff4e80f41719ea13cdf007273
+MD5 (example_2) = e0675e728056818b0392c0c2f5478ff0</font></pre>
+    </td>
+  </tr>
+  <tr align="LEFT" valign="TOP"> 
+    <td valign="TOP" align="LEFT" colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="16%" valign="TOP" align="LEFT"><b><font face="Arial">Comparison 
+      with &quot;sum&quot; program</font></b></td>
+    <td width="84%" align="LEFT" valign="TOP"> 
+      <p>The common UNIX sum program is not an appropriate checksum generator 
+        to use for verifying the integrity of files. Notice in the following example 
+        how the sum command produces the same result for two different files, 
+        whereas MD5 produces different results:</p>
+      <font face="Courier New" size=2> 
+      <pre>$ echo 'Hello, World!' &gt; example_1
+$ echo 'World, Hello!' &gt; example_2
+$ sum example_1
+1139 1 example_1
+$ sum example_2
+1139 1 example_2
+$ md5 example_1 example_2
+MD5 (example_1) = bea8252ff4e80f41719ea13cdf007273
+MD5 (example_2) = 27da7edf402d602fc5908d8bdd2912</pre>
+      </font></td>
+  </tr>
+  <tr> 
+    <td valign="TOP" align="LEFT" colspan="2"> 
+      <hr size="1">  
+    </td>
+  </tr>
+</table>
+
+
+
+
+
+
+</BODY>
+</HTML>
+
+

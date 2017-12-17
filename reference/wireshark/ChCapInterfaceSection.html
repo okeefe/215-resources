@@ -1,0 +1,54 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>4.4. The "Capture Interfaces" dialog box</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="ChapterCapture.html" title="Chapter 4. Capturing Live Network Data"><link rel="prev" href="ChCapCapturingSection.html" title="4.3. Start Capturing"><link rel="next" href="ChCapCaptureOptions.html" title='4.5. The "Capture Options" dialog box'></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.4. The "Capture Interfaces" dialog box</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChCapCapturingSection.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Capturing Live Network Data</th><td width="20%" align="right"> <a accesskey="n" href="ChCapCaptureOptions.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChCapInterfaceSection"></a>4.4. The "Capture Interfaces" dialog box</h2></div></div></div><p>
+	When you select "Interfaces..." from the Capture menu, Wireshark pops 
+	up the "Capture Interfaces" dialog box as shown in 
+	<a href="ChCapInterfaceSection.html#ChCapCaptureInterfacesDialogWin32" title='Figure 4.1. The "Capture Interfaces" dialog box on Microsoft Windows'>Figure 4.1, &#8220;The "Capture Interfaces" dialog box on Microsoft Windows&#8221;</a> or 
+	<a href="ChCapInterfaceSection.html#ChCapCaptureInterfacesDialog" title='Figure 4.2. The "Capture Interfaces" dialog box on Unix/Linux'>Figure 4.2, &#8220;The "Capture Interfaces" dialog box on Unix/Linux&#8221;</a>.
+	</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning: This dialog consumes lot's of system resources!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="wsug_graphics/warning.png"></td><th align="left">This dialog consumes lot's of system resources!</th></tr><tr><td align="left" valign="top"><p>
+	As the "Capture Interfaces" dialog is showing live captured data, it is 
+	consuming a lot of system resources. Close this dialog as soon as 
+	possible to prevent excessive system load.
+	</p></td></tr></table></div><p>
+	</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: Not all available interfaces may be displayed!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="wsug_graphics/note.png"></td><th align="left">Not all available interfaces may be displayed!</th></tr><tr><td align="left" valign="top"><p>
+	This dialog box will only show the local interfaces Wireshark knows 
+	of. It will not show interfaces marked as hidden in the "Interface Options" 
+	preferences dialog.
+	As Wireshark might not be able to detect all local interfaces, and it 
+	cannot detect the remote interfaces available, there could be more capture 
+	interfaces available than listed.
+	</p></td></tr></table></div><p>
+	</p><div class="figure"><a name="ChCapCaptureInterfacesDialogWin32"></a><p class="title"><b>Figure 4.1. The "Capture Interfaces" dialog box on Microsoft Windows</b></p><div><img src="wsug_graphics/ws-capture-interfaces-win32.png" alt='The "Capture Interfaces" dialog box on Microsoft Windows'></div></div><p>
+	</p><div class="figure"><a name="ChCapCaptureInterfacesDialog"></a><p class="title"><b>Figure 4.2. The "Capture Interfaces" dialog box on Unix/Linux</b></p><div><img src="wsug_graphics/ws-capture-interfaces.png" alt='The "Capture Interfaces" dialog box on Unix/Linux'></div></div><p>
+	</p><div class="variablelist"><dl><dt><span class="term"><span><strong class="command">Device (Unix/Linux only)</strong></span></span></dt><dd><p>
+		  The interface device name.
+	      </p></dd><dt><span class="term"><span><strong class="command">Description</strong></span></span></dt><dd><p>
+		  The interface description provided by the operating system.
+	      </p></dd><dt><span class="term"><span><strong class="command">IP</strong></span></span></dt><dd><p>
+		  The first IP address Wireshark could resolve from this interface. 
+		  If no address could be resolved (e.g. no DHCP server available), 
+		  "unknown" will be displayed. If more than one IP address could be 
+		  resolved, only the first is shown (unpredictable which one in that 
+		  case).
+	      </p></dd><dt><span class="term"><span><strong class="command">Packets</strong></span></span></dt><dd><p>
+		  The number of packets captured from this interface, since this 
+		  dialog was opened. Will be greyed out, if no packet was captured 
+		  in the last second.
+	      </p></dd><dt><span class="term"><span><strong class="command">Packets/s</strong></span></span></dt><dd><p>
+		  Number of packets captured in the last second. Will be greyed out, 
+		  if no packet was captured in the last second.
+	      </p></dd><dt><span class="term"><span><strong class="command">Stop</strong></span></span></dt><dd><p>
+		  Stop a currently running capture.
+	      </p></dd><dt><span class="term"><span><strong class="command">Start</strong></span></span></dt><dd><p>
+		  Start a capture on this interface immediately, using the settings 
+		  from the last capture.
+	      </p></dd><dt><span class="term"><span><strong class="command">Options</strong></span></span></dt><dd><p>
+		  Open the Capture Options dialog with this interface selected, see 
+		  <a href="ChCapCaptureOptions.html" title='4.5. The "Capture Options" dialog box'>Section 4.5, &#8220;The "Capture Options" dialog box&#8221;</a>.
+	      </p></dd><dt><span class="term"><span><strong class="command">Details (Microsoft Windows only)</strong></span></span></dt><dd><p>
+		  Open a dialog with detailed information about the interface, see
+		  <a href="ChCapInterfaceDetailsSection.html" title='4.6. The "Interface Details" dialog box'>Section 4.6, &#8220;The "Interface Details" dialog box&#8221;</a>.
+	      </p></dd><dt><span class="term"><span><strong class="command">Help</strong></span></span></dt><dd><p>
+		  Show this help page.
+	      </p></dd><dt><span class="term"><span><strong class="command">Close</strong></span></span></dt><dd><p>
+		  Close this dialog box.
+	      </p></dd></dl></div><p>
+	</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChCapCapturingSection.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ChapterCapture.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ChCapCaptureOptions.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.3. Start Capturing </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4.5. The "Capture Options" dialog box</td></tr></table></div></body></html>

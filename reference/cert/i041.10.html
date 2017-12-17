@@ -1,0 +1,216 @@
+<HTML>
+<HEAD>
+
+<TITLE>    Installing, configuring, and 
+      using logdaemon to log unauthorized login attempts                                                                                                </TITLE>
+</HEAD>
+<BODY>
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+ 
+<font face="Helvetica, Geneva, Arial">
+<small>
+
+<table border="0" width="100%" cellspacing="6" cellpadding="4">
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"><font face="helvetica, geneva, arial"><b>Implementation Details</b></font></td>
+    <td  ><b><font face="Arial" size=4>Installing, configuring, and 
+      using logdaemon to log unauthorized login attempts on systems running Solaris 
+      2.x </font></b></td>
+  </tr>
+  <tr> 
+    <td width="130">&nbsp;</td>
+    <td  > 
+      <table border="1" width="75%" cellspacing="0" cellpadding="8" bgcolor="#ccddff">
+        <tr> 
+          <td> 
+            <p>Applies to the practices:<br>
+<a href="../practices/p091.html">"Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior"</a><br> 
+<a
+href="../practices/p092.html">"Manage logging and other data collection mechanisms"</a>
+<br><a href="../practices/p095.html">"Monitor and inspect system activities for unexpected behavior"</a>
+            <p>Applicable technologies: Solaris 2.x; UNIX operating system and 
+              derivatives </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130">&nbsp;</td>
+    <td   align="LEFT" valign="TOP"> 
+      <p> </p>
+      <p>The <font face="Courier New" size=3>login </font>program that comes with 
+        most UNIX operating systems typically captures login attempts only after 
+        many unsuccessful attempts. The version of the <font face="Courier New" size=3>login 
+        </font>that is part of the logdaemon package provides much more complete 
+        logging via <font face="Courier New" size=3><a href="i041.08.html">syslogd</a></font> 
+        and additional access control mechanisms. </p>
+      <p>The logdaemon package supports one-time passwords or authentication with 
+        securenet tokens. For more information, refer to the logdaemon documentation. 
+      </p>
+      <p> The updated version of <font face="Courier New" size=3>login</font>, 
+        developed to cooperate with <a href="i041.11.html">logdaemon versions 
+        of <font face="Courier New" size=3>rshd</font> and <font face="Courier" size=3>rlogind</font></a>, 
+        supports the option <font face="Courier New" size=3>-l</font> that suppresses 
+        the interpretation of user files (.<font face="Courier New" size=3>rhosts</font>) 
+        and wildcards (*) within user files or the system <font face="Courier New" size=3>/etc/hosts.equiv</font>. 
+      </p>
+      <p>Changing the <font face="Courier New" size=3>login</font> program can 
+        affect the operation of your system. Problems can arise when application 
+        programs expect specific login features. For example, the <font face="Courier New" size=3>-p</font> 
+        option, which preserves the previous environment, is ignored by the Solaris 
+        version of this login software. You should carefully test the logdaemon 
+        version of <font face="Courier New" size=3>login </font>with current applications 
+        in an isolated test environment before installing it in your operational 
+        system. </p>
+      <p>This section describes how to install and configure the <font face="Courier New" size=3>login</font> 
+        version that is part of the logdaemon package, version 5.6, on the Sun 
+        Solaris operating system, version 2.x. </p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"><b><font face="Arial"> 
+      <p>Preparation</p>
+      </font></b> </td>
+    <td   align="LEFT" valign="TOP">For information about obtaining the logdaemon 
+      package, verifying its PGP (Pretty Good Privacy) signature, and unpacking 
+      the downloaded distribution, refer to the implementation details in <a href="i041.11.html">&quot;Installing, 
+      configuring, and using logdaemon to log unauthorized connection attempts 
+      to rshd and rlogind on systems running Solaris 2.x.&quot;</a></td>
+  </tr>
+  <tr> 
+    <td width="130" colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"><b> 
+      <p><font face="Arial">Install the new </font><font face="Courier New" size=3>login 
+        </font><font face="Arial">version</font></p>
+      </b> </td>
+    <td   align="LEFT" valign="TOP"> 
+      <p>After unpacking the logdaemon distribution, select the <font face="Courier New" size=3>login 
+        </font>subdirectory. </p>
+      <p> </p>
+      <p>Build the <font face="Courier New" size=3>login </font>binary.</p>
+      <p> </p>
+      <p> To build the binary, provide the type of operating system to the <font face="Courier New" size=3>make</font> 
+        program: </p>
+      <font face="Courier New" size=2> 
+      <p> # make sunos5</p>
+      </font></td>
+  </tr>
+  <tr> 
+    <td width="130" colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"> 
+      <p> </p>
+      <b> 
+      <p><font face="Arial" size=3>Install the </font><font face="Courier New" size=3>login</font><font face="Arial" size=3> 
+        program.</font></p>
+      </b></td>
+    <td   align="LEFT" valign="TOP"> 
+      <p>Following a successful <font face="Courier New" size=3>make</font>, you 
+        need to copy the program and configuration files to the system directories 
+        as a system administrator using root privileges. No man pages are available. 
+        A copy of the original version of the <font face="Courier New" size=3>login 
+        </font>program should be stored online. You need to securely protect the 
+        access rights to and ownership of the <font face="Courier New" size=3>login 
+        </font>program: </p>
+      <font face="Courier New" size=2> 
+      <pre># cp /bin/login /bin/login.SUNOS5
+# chmod 000 /bin/login.SUNOS5
+# cp login /bin/login
+# chmod 4755 /bin/login
+# chown root:bin /bin/login
+# cp login.access /etc/login.access</pre>
+      </font></td>
+  </tr>
+  <tr> 
+    <td width="130" colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr>
+    <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">
+      <p>Update the login.access configuration</p>
+      </font></b> </td>
+    <td   align="LEFT" valign="TOP">
+      <p></p>
+      <p>The new version of <font face="Courier New" size=3>login</font> introduces 
+        a new access control system that is not available in the default version.</p>
+      </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"> 
+      <p></p>
+      <p> </p>
+      <b><font face="Arial"> 
+      <p align="RIGHT"></p>
+      </font></b></td>
+    <td   align="LEFT" valign="TOP"> 
+      <p> <b><font face="Arial" size="3" color="#008000">Understand the new access 
+        controls that are used to restrict access.</font></b></p>
+      <p> </p>
+      <p>The configuration file <font face="Courier New" size=3>/etc/login.access</font> 
+        is provided to restrict access on a per user basis. Each rule consists 
+        of three fields separated by ":". The first field allows ("+") or denies 
+        ("-") access. The second field lists the users to which the rule applies. 
+        The keywords ALL (always matches) or EXCEPT provide for the specification 
+        of compact rules. The third field specifies the source of the login request. 
+        Valid sources are: </p>
+      <ul>
+        <li>tty names (for non-networked logins) </li>
+        <li>host names, domain names (begin with ".") </li>
+        <li>host addresses </li>
+        <li>Internet network numbers (end with ".") </li>
+        <li>ALL (always matches) </li>
+        <li>LOCAL (matches any string that does not contain a "." character) </li>
+      </ul>
+      <p>The following example illustrates these rules: </p>
+      <pre><font face="Courier New" size="2">#
+</font><font face="Courier New" size="2"># /etc/login.access - restrict logins
+</font><font face="Courier New" size="2">#
+</font><font face="Courier New" size="2">-:ALL EXCEPT wheel : console
+</font><font face="Courier New" size="2">#
+</font><font face="Courier New" size="2">-:wheel :            ALL EXCEPT LOCAL
+</font><font face="Courier New" size="2">#
+</font><font face="Courier New" size="2">-:httpd ftpd :       ALL
+</font><font face="Courier New" size="2">#
+</font><font face="Courier New" size="2"># all other accounts are allowed to login
+</font><font face="Courier New" size="2">#</font></pre>
+      <p>This example contains three rules. If there is no match between the login 
+        attempt and a defined rule, access is granted pending the outcome of any 
+        other authentication mechanism. </p>
+      <p>The first rule in the example allows only users within the group "wheel" 
+        to login to the console. The second line rule states that users of group 
+        "wheel" cannot connect from non-local machines (e.g., via the Internet). 
+        The third rule prohibits direct login access to two accounts. </p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+</table>
+
+
+
+</BODY>
+</HTML>
+
+
+
+
+

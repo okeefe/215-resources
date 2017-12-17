@@ -1,0 +1,105 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>7.7. Name Resolution</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="ChapterAdvanced.html" title="Chapter 7. Advanced Topics"><link rel="prev" href="ChAdvReassemblySection.html" title="7.6. Packet Reassembling"><link rel="next" href="ChAdvChecksums.html" title="7.8. Checksums"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">7.7. Name Resolution</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChAdvReassemblySection.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Advanced Topics</th><td width="20%" align="right"> <a accesskey="n" href="ChAdvChecksums.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChAdvNameResolutionSection"></a>7.7. Name Resolution</h2></div></div></div><p>Name resolution tries to resolve some of the numerical
+    address values into a human readable format. There are two
+    possible ways to do these conversations, depending on the
+    resolution to be done: calling system/network services (like
+    the gethostname function) and/or evaluate from Wireshark
+    specific configuration files. For details about the
+    configuration files Wireshark uses for name resolution and
+    alike, see 
+    <a href="AppFiles.html" title="Appendix A. Files and Folders">Appendix A, <i>Files and Folders</i></a>.</p><p>The name resolution feature can be en-/disabled
+    separately for the protocol layers of the following
+    sections.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4769420"></a>7.7.1. Name Resolution drawbacks</h3></div></div></div><p>Name resolution can be invaluable while working with
+      Wireshark and may even save you hours of work. Unfortunately,
+      it also has its drawbacks.</p><div class="itemizedlist"><ul type="disc"><li><p>
+          <span><strong class="command">Name resolution will often fail.</strong></span> The
+          name to be resolved might simply be unknown by the name
+          servers asked or the servers are just not available and
+          the name is also not found in Wireshark's configuration
+          files.</p></li><li><p>
+          <span><strong class="command">The resolved names are not stored in the capture
+          file or somewhere else.</strong></span> So the resolved names
+          might not be available if you open the capture file later
+          or on a different machine. Each time you open a capture
+          file it may look "slightly different", maybe simply
+          because you can't connect to a name server (which you
+          could connect before).</p></li><li><p>
+          <span><strong class="command">DNS may add additional packets to your capture
+          file.</strong></span> You may see packets to/from your machine
+          in your capture file, which are caused by name resolution
+          network services of the machine Wireshark captures from.
+          XXX - are there any other such packets than DNS
+          ones?</p></li><li><p>
+          <span><strong class="command">Resolved DNS names are cached by
+          Wireshark.</strong></span> This is required for acceptable
+          performance. However, if the name resolution information
+          should change while Wireshark is running, Wireshark won't
+          notice a change to the name resolution information once
+          it gets cached. If this information changes while
+          Wireshark is running, e.g. a new DHCP lease takes effect,
+          Wireshark won't notice it. XXX - is this true for all or
+          only for DNS info?</p></li></ul></div><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: Tip!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="wsug_graphics/tip.png"></td><th align="left">Tip!</th></tr><tr><td align="left" valign="top"><p>The name resolution in the packet list is done while
+        the list is filled. If a name could be resolved after a
+        packet was added to the list, that former entry won't be
+        changed. As the name resolution results are cached, you can
+        use "View/Reload" to rebuild the packet list, this time
+        with the correctly resolved names. However, this isn't
+        possible while a capture is in progress.</p></td></tr></table></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4769517"></a>7.7.2. Ethernet name resolution (MAC layer)</h3></div></div></div><p>Try to resolve an Ethernet MAC address (e.g.
+      00:09:5b:01:02:03) to something more "human readable".</p><p>
+      <span><strong class="command">ARP name resolution (system
+      service)</strong></span>: Wireshark will ask the operating system to
+      convert an Ethernet address to the corresponding IP address
+      (e.g. 00:09:5b:01:02:03 -&gt; 192.168.0.1).</p><p>
+      <span><strong class="command">Ethernet codes (ethers file)</strong></span>: If the ARP
+      name resolution failed, Wireshark tries to convert the
+      Ethernet address to a known device name, which has been
+      assigned by the user using an ethers file (e.g.
+      00:09:5b:01:02:03 -&gt; homerouter).</p><p>
+      <span><strong class="command">Ethernet manufacturer codes (manuf file)</strong></span>: If
+      neither ARP or ethers returns a result, Wireshark tries
+      to convert the first 3 bytes of an ethernet address to an
+      abbreviated manufacturer name, which has been assigned by the
+      IEEE (e.g. 00:09:5b:01:02:03 -&gt; Netgear_01:02:03).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4769571"></a>7.7.3. IP name resolution (network layer)</h3></div></div></div><p>Try to resolve an IP address (e.g. 216.239.37.99) to
+      something more "human readable".</p><p>
+      <span><strong class="command">DNS/ADNS name resolution (system/library
+      service)</strong></span>: Wireshark will ask the operating system (or
+      the ADNS library), to convert an IP address to the hostname
+      associated with it (e.g. 216.239.37.99 -&gt;
+      www.1.google.com). The DNS service is using synchronous calls
+      to the DNS server. So Wireshark will stop responding until a
+      response to a DNS request is returned. If possible, you might
+      consider using the ADNS library (which won't wait for a
+      network response).</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning: Warning!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="wsug_graphics/warning.png"></td><th align="left">Warning!</th></tr><tr><td align="left" valign="top"><p>Enabling network name resolution when your name
+        server is unavailable may significantly slow down Wireshark
+        while it waits for all of the name server requests to time
+        out. Use ADNS in that case.</p></td></tr></table></div><p>
+      <span><strong class="command">DNS vs. ADNS</strong></span>: here's a short comparison:
+      Both mechanisms are used to convert an IP address to some
+      human readable (domain) name. The usual DNS call
+      gethostname() will try to convert the address to a name. To
+      do this, it will first ask the systems hosts file (e.g.
+      /etc/hosts) if it finds a matching entry. If that fails, it
+      will ask the configured DNS server(s) about the name.</p><p>So the real difference between DNS and ADNS comes when
+      the system has to wait for the DNS server about a name
+      resolution. The system call gethostname() will wait until a
+      name is resolved or an error occurs. If the DNS server is
+      unavailable, this might take quite a while (several seconds).
+      The ADNS service will work a bit differently. It will also
+      ask the DNS server, but it won't wait for the answer. It will
+      just return to Wireshark in a very short amount of time. The
+      actual (and the following) address fields won't show the
+      resolved name until the ADNS call returned. As mentioned
+      above, the values get cached, so you can use View/Reload to
+      "update" these fields to show the resolved values.</p><p>
+      <span><strong class="command">hosts name resolution (hosts file)</strong></span>: If DNS
+      name resolution failed, Wireshark will try to convert an IP
+      address to the hostname associated with it, using a hosts
+      file provided by the user (e.g. 216.239.37.99 -&gt;
+      www.google.com).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4769668"></a>7.7.4. IPX name resolution (network layer)</h3></div></div></div><p>
+      <span><strong class="command">ipxnet name resolution (ipxnets file)</strong></span>: XXX -
+      add ipxnets name resolution explanation.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4769683"></a>7.7.5. TCP/UDP port name resolution (transport layer)</h3></div></div></div><p>Try to resolve a TCP/UDP port (e.g. 80) to something
+      more "human readable".</p><p>
+      <span><strong class="command">TCP/UDP port conversion (system
+      service)</strong></span>: Wireshark will ask the operating system to
+      convert a TCP or UDP port to its well known name (e.g. 80
+      -&gt; http).</p><p>XXX - mention the role of the /etc/services file (but
+      don't forget the files and folders section)!</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChAdvReassemblySection.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ChapterAdvanced.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ChAdvChecksums.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">7.6. Packet Reassembling </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 7.8. Checksums</td></tr></table></div></body></html>

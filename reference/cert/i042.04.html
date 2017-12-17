@@ -1,0 +1,439 @@
+<html>
+<head>
+<title>Installing, configuring, and using spar 1.3 on systems running Solaris 2.x</title>
+</head>
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+<font face="Helvetica, Geneva, Arial">
+<small>
+
+
+<table border="0" width="100%" cellspacing="1" cellpadding="1">
+<tr>
+<td width="110" align="left" valign="top"><font face="helvetica, geneva, arial">
+<h3>Implementation Details<h3></td>
+<td align="left" valign="top"><font face="helvetica, geneva, arial">
+<h2>Installing, configuring, and using spar 1.3 on systems running Solaris 2.x</h2></td></tr>
+
+<tr>
+<td width="110"></td>
+
+<td align="left" valign="top">
+<table border="1" width="75%" cellspacing="0" cellpadding="8" bgcolor="#ccddff">
+<tr>
+<td align="left" valign="top">
+<p>Applies to the practices: "<a href="../practices/p095.html">Monitor and inspect system   
+activities for unexpected behavior</a>," "<a
+href="../practices/p091.html">Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior</a>"
+<p>Applicable technologies: Solaris 2.x; UNIX operating system and derivatives
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td width="110"></td>
+<td align="left" valign="top">
+<p><font face="courier"><b>spar</b></font>, or show process accounting records, is a freely available tool used to process the
+ accounting records on UNIX systems produced when process accounting is enabled.  The program parses information from the
+accounting records created by <b><i>accton</i></b> by using command line expressions to query accounting logs into human readable
+form.  <font face="courier"><b>spar</b></font> is similar to the Solaris <font face="courier"><b>lastcomm</b></font> program but
+requires less processor time
+ to return queries.
+
+<p><font face="courier"><b>spar</b></font> is a useful security tool for system administrators.
+ It preserves raw data to aid in determining if unauthorized processes have been executed.  For example, you can use spar to create
+a baseline for later comparisons by recording the normal execution of system processes.  This helps you characterize the normal behavior
+of a system and ultimately recognize behaviors that fall outside of normal or expected bounds.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="110" align="left"><font face="helvetica, geneva, arial">
+<h3>Effort Estimates</h3>
+</td>
+<td>
+Time to retrieve the README and archive files from the distribution site will vary depending on connection speed. The expected time is five seconds or less with a T1 connection.  Building and installing <font face="courier"><b>spar</b></font> usually takes around 30 seconds, depending on machine performance. 
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="110" align="left"><font face="helvetica, geneva, arial">
+<h3>System Prerequisites</h3>
+</td>
+<td>
+<font face="courier"><b>spar</b></font> can be built and installed on many UNIX systems. The following list is taken from the <i>INSTALL</i> file that comes with the <font face="courier"><b>spar</b></font> distribution:
+<pre><font face="courier" size="2">
+<b>spar</b> is known to compile and run on:
+
+SunOS 4.x, SunOS 5.x
+
+<b>spar</b> should also compile on:
+
+AIX 3.x
+IRIX 4.x
+HPUX 7.x
+NeXT 3.x
+</pre></font>
+
+<tr valign="top">
+<td width="110" align="right"></td>
+></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Software Prerequisites</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="110"></td>
+<td align="left">
+To build and run <font face="courier"><b>spar</b></font> on your system, you need internet access to retrieve the software and the following software tools:
+<ul>
+<li>An MD5 cryptographic checksum program (refer to <a href="/security-improvement/implementations/i002.01.html">Using MD5 to verify the integrity of file contents</a>).<p>
+<li>GZIP to uncompress the downloaded files (<a href="ftp://ftp.gnu.org/gnu/gzip/">ftp://ftp.gnu.org/gnu/gzip/</a>).<p>
+<li>a C compiler; either the Sun C Computer or the free GNU C Compiler (<a href="ftp://ftp.gnu.org/gnu/gcc/">ftp://ftp.gnu.org/gnu/gcc/</a>).<p>
+<li>Solaris 2.6 process accounting packages, SUNWacctu and SUNWacctr
+</td>
+</tr>
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="110" align="left"><font face="helvetica, geneva, arial">
+<h3>Downloading and Verifying</h3>
+</td>
+<td>
+Download the following files into the same directory and verify their checksums with an MD5 checksum program.<p>
+<table border="1" align="left" cellpadding="1">
+<tr>
+<td><b>File to Download</b></td>
+<td><b>MD5 Checksum</b></td>
+<tr>
+<td><small><a
+href="http://www.zcu.cz/ftp/mirrors/security-tamu/">http://www.zcu.cz/ftp/mirrors/security-tamu/</a>
+<br>[spar.README]</small></td> <td><pre><small>546e9c1a182fe41b693dbf53da4e3843</small></pre></td></tr>
+<tr>
+<td><small><a
+href="http://www.zcu.cz/ftp/mirrors/security-tamu/">http://www.zcu.cz/ftp/mirrors/security-tamu/</a>
+<br>[spar-1.3.tar.gz]</small></td> <td><pre><small>362dffbbe9844d0046f08c0ae18eeffa</small></pre></td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="110" align="left"><font face="helvetica, geneva, arial">
+<h3>Building</h3>
+</td>
+<td>
+Unpack the <font face="courier"><b>spar</b></font> distribution with<br>
+<pre><font face="courier" size="2"> 
+	# gunzip -c spar-1.3.tar.gz | tar xf -
+</pre></font>
+<p>This creates a directory named <i>spar-1.2</i>.
+<p>Link to the appropriate <i>config.h</i> file.<br> 
+<pre><font face="courier" size="2">
+	# rm -f config.h
+	# ln -s config/sunos5.h config.h
+</pre></font> 
+
+<p>You should review the Makefile to ensure that there are no configuration variables set that you do not want as part of the build.  In particular, make sure the specified compiler (for example, cc) is the one that you want and that the compiler options are set appropriately for your site. On Solaris 2.x, the defaults should produce a satisfactory build. 
+
+<p>Build <font face="courier"><b>spar</b></font> with<br>
+<pre><font face="courier" size="2">
+	# make
+</pre></font>
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="110" align="left"><font face="helvetica, geneva, arial">
+<h3>Testing Before Installation</h3>
+</td>
+<td>
+To test the correct operation of <font face="courier"><b>spar</b></font>, execute <font face="courier"><b>spar</b></font> with no options from the install location, as follows:<br>
+<pre><font face="courier" size="2">
+	# ./spar
+</pre></font>
+<p>You should receive output to the terminal similar to the following:<br>
+<pre><small>
+02/02/2000 12:21:36  P	accton	root    tty:100.0 00:00  00:00	00:00:00
+02/02/2000 12:36:15 F	cron	root	&lt;notty&gt;   00:00	 00:00  05:01:00  KILL
+02/02/2000 12:47:28 FP	snmpdx	root	&lt;notty&gt;   00:00	 00:00  05:00:03  KILL
+</small></pre>
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="110" align="left"><font face="helvetica, geneva, arial">
+<h3>Installation</h3>
+</td>
+<td>
+You may want to choose a directory for the <font face="courier"><b>spar</b></font> binary, such as <i>/usr/local/bin</i>, that is not part of the standard OS binary tree instead of copying it to <i>/sbin</i>. The <font face="courier"><b>spar</b></font> binary and man page can be copied directly to their respective subdirectories without additional install steps.  For example, copy <i>spar</i> to <i>/usr/local/bin/</i> and <i>spar.1</i> to <i>/usr/local/man/man1/</i>.  You should check their ownership and file protections once they have been copied to ensure that they cannot be modified or executed by unprivileged accounts.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="110" align="left"><font face="helvetica, geneva, arial">
+<h3>Configuration</h3>
+</td>
+<td>
+The <font face="courier"><b>spar</b></font> program does not require you to configure any of the distribution files. Procedures for configuring dependent services related to <font face="courier"><b>spar</b></font> are described in the following section.
+
+<tr valign="top">
+<td width="110" align="right"></td>
+></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Turn on process accounting.</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="110"></td>
+<td align="left">
+The <font face="courier"><b>spar</b></font> tool requires that process accounting be turned on and assumes that the process accounting information is written to the file <i>/var/adm/pacct</i>.  If you have not already enabled process accounting on your system and are not familiar with how to do so, see <a href="/security-improvement/implementations/i041.06.html">Enabling process accounting on systems running Solaris 2.x</a>. 
+</td>
+</tr>
+
+<tr valign="top">
+<td width="110" align="right"></td>
+></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Test the spar system.</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="110"></td>
+<td align="left">
+Once <font face="courier"><b>spar</b></font> has been installed and process accounting has been turned on, you can issue basic commands and see output that is similar to what follows.  
+
+<p>The following <font face="courier"><b>spar</b></font> command prints information on processes run by root from a tty<br>  
+<pre><font face="courier" size="2">
+# spar -e 'user=root && tty != notty {print}'
+</pre></font>
+<p>and produces output similar to the following:<br>  
+<pre><small>
+10/19/1999 14:34:48	F  	sh	root  pts/0  00:00   00:00 00:00:00  
+10/19/1999 14:34:52	        ls	root  pts/0  00:00   00:00 00:00:00  
+10/19/1999 14:36:09		accton	root  pts/0  00:00   00:00 00:00:00  
+10/19/1999 14:36:31	F 	which	root  pts/0  00:00   00:00 00:00:00  
+10/19/1999 14:36:31		which	root  pts/0  00:00   00:00 00:00:00  
+10/19/1999 14:34:37	 P 	sh	root  pts/0  00:00   00:00 05:15:44
+</small></pre>
+</td>
+</tr>
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="110" align="left"><font face="helvetica, geneva, arial">
+<h3>Using spar</h3>
+</td>
+<td>
+
+<tr valign="top">
+<td width="110" align="right"></td>
+></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Common Use</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="110"></td>
+<td align="left">
+<font face="courier"><b>spar</b></font> is run with or without options from the command line.  Under basic execution with no options, <font face="courier"><b>spar</b></font> returns ASCII output to the terminal, similar to:<br>
+<pre><small>
+02/02/2000 12:21:36  P accton   root   tty:100.0  00:00   00:00  00:00:00
+02/02/2000 12:36:15 F  cron     root   &lt;notty&gt;    00:00   00:00  05:01:00 KILL
+02/02/2000 12:47:28 FP snmpdx   root   &lt;notty&gt;    00:00   00:00  05:00:03 KILL
+</small></pre></font>
+</td>
+</tr>
+
+<tr valign="top">
+<td width="110" align="right"></td>
+></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+
+<h4>Recommended Use</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="110"></td>
+<td align="left">
+<font face="courier"><b>spar</b></font> is more useful when combined with other command line options such as <font face="courier">-e {script}</font>.  This option allows <font face="courier"><b>spar</b></font> to run with an inline script.  For example, <font face="courier"><b>spar</b></font> could be executed to report only those processes that root or another privileged user has run, between certain dates and times, and from what locations.  See the <font face="courier"><b>spar</b></font> man page, <font face="courier"><b>spar</b></font> -h (help), or below for more advanced options.
+</td>
+</tr>
+<p>
+<p><br>
+<tr valign="top">
+<td width="110" align="right"></td>
+></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<p>
+<h4>Advanced Use</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="110"></td>
+<td align="left">
+<font face="courier"><b>spar</b></font> can be combined with other tools, or its output can be compared against the output of other tools, to create a more complete picture of a system and help recognize unexpected events.
+</td>
+</tr>
+<p>
+<p><br>
+<tr valign="top">
+<td width="110" align="right"></td>
+></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Use with other commands</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="110"></td>
+<td align="left">
+When integrated with native text tools, <font face="courier"><b>spar</b></font> can be used to immediately return possible potential security events of interest.  Some examples of combined use are:<br>
+<pre><font face="courier" size="2">
+# spar -e 'user=root {print}' | grep passwd
+# spar -e 'user=root {print}' | grep useradd
+</pre></font>
+</td>
+</tr>
+
+<tr valign="top">
+<td width="110" align="right"></td>
+></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+
+<h4>Advanced Examples</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="110"></td>
+<td align="left">
+While these examples use <font face="courier"><b>spar</b></font> to track down privileged commands by using an expression in conjunction with the grep command, using advanced expressions with <font face="courier"><b>spar</b></font> can help to capture those processes running under abnormal circumstances.  Examples of abnormal events or occurrences might be the following.
+
+<p>Processes executed by users or administrators not within the normal business hours and on weekends, for example<br>
+<pre><font face="courier" size="2">
+# spar -r -e 'time>=18:00:00 || time<=08:00:00 {print}'
+# spar -r -e 'date>=01/01/2000 || date<=02/02/2000 {print}'
+</pre></font>
+<p>Processes executed by users from remote locations, for example<br>
+<pre><font face="courier" size="2">
+# spar -r -e 'tty=notty'
+</pre></font>
+</td>
+</tr>
+
+<tr valign="top">
+<td width="110" align="right"></td>
+></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Automated Use</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="110"></td>
+<td align="left">
+Process accounting records log information to the file <i>/var/adm/pacct</i> (or other specified file).
+ <font face="courier"><b>newsyslog</b></font> can be used to rotate the accounting logs on a periodic basis
+ to keep the logs down to a manageable size for use with <font face="courier"><b>spar</b></font>.
+ <font face="courier"><b>spar</b></font> can therefore be automated through addition of the tool to a daily or weekly
+ <b><i>cron</i></b> job where the tool is set to search for specific expressions as mentioned above. 
+ For help in configuring <font face="courier"><b>newsyslog</b></font> in rotating logs,
+ see <a href="/security-improvement/implementations/i041.09.html">Using newsyslog to rotate files containing logging messages on systems running Solaris 2.x</a>.
+<p>
+</td>
+</tr>
+
+<tr valign="top">
+<td width="110" align="right"></td>
+></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Integration with Other Administrative/Security Tools</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="110"></td>
+<td align="left">
+When compared with the output of other security tools, <font face="courier"><b>spar</b></font>'s output can do the following.
+<ol>
+<li>corroborate a security event that happened by returning the process and user information of the event<p>
+<li>identify discrepancies when processes that are reported by programs such as <b>top</b>, <b>sps</b>, and <b>ps</b> are not properly logged by process accounting
+</td>
+</tr>
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="110" align="left"><font face="helvetica, geneva, arial">
+<h3>Tripwire Configuration</h3>
+</td>
+<td>
+The following is the <font face="courier"><b>tripwire</b></font> configuration for the <font face="courier"><b>spar</b></font> program once installed.  Only two files, the <font face="courier"><b>spar</b></font> executable and <font face="courier"><b>spar</b></font> (1) man page, require monitoring by <font face="courier"><b>tripwire</b></font>.  In addition, files necessary to implement process accounting in the Solaris OS should be monitored.
+
+<p>The following files should not change, as any changes are unexpected:<br>
+<pre><font face="courier" size="2">
+@@define BINARY				E+pinugsamc1-023456789
+
+<i>/usr/local/bin/spar</i>   		        @@BINARY
+<i>/usr/local/man/man1/spar.1</i>	        @@BINARY
+</pre></font>
+</td>
+</tr>
+
+</table>
+
+
+
+
+</body>
+</html>
+
+

@@ -1,0 +1,1115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="unix.util_files/lecture-wiki.css" type="text/css">
+<title>How To Look Like A UNIX Guru</title></head><body>
+<h1>How To Look Like A UNIX Guru</h1>
+
+
+<p><a href="http://www.cs.usfca.edu/%7Eparrt"><b> Terence Parr</b></a>
+
+</p><p>Last updated: August 30, 2006
+
+</p><p>UNIX is an extremely popular platform for deploying server software
+partly because of its security and stability, but also because it has
+a rich set of command line and scripting tools.  Programmers use these
+tools for manipulating the file system, processing log files, and
+generally automating as much as possible.
+
+</p><p>If you want to be a serious server developer, you will need to have a
+certain facility with a number of UNIX tools; about 15.  You will
+start to see similarities among them, particularly regular
+expressions, and soon you will feel very comfortable.  Combining the
+simple commands, you can build very powerful tools very quickly--much
+faster than you could build the equivalent functionality in C or Java,
+for example.
+
+</p><p>This lecture takes you through the basic commands and then shows you
+how to combine them in simple patterns or idioms to provide
+sophisticated functionality like histogramming.  This lecture assumes
+you know what a shell is and that you have some basic familiarity with
+UNIX.
+
+</p><p> [By the way, this page gets a lot of attention on the net and
+unfortunately I get mail from lots of people that have better
+solutions or stuff I should add.  I'm only showing what I've learned
+from watching good UNIX people so I am not saying these tips are the
+optimal solutions.  I'd make a pretty ignorant sys admin.]
+</p><h2>Everything is a stream</h2>
+
+
+<p>The first thing you need to know is that UNIX is based upon the idea
+of a <em>stream</em>.  Everything is a <em>stream</em>, or appears to be.  Device
+drivers look like streams, terminals look like streams, processes
+communicate via streams, etc...  The input and output of a program are
+streams that you can redirect into a device, a file, or another
+program.
+
+</p><p>Here is an example device, the null device, that lets you throw
+output away. For example, you might want to run a program but ignore
+the output.
+</p><div class="code"><pre>$ ls &gt; /dev/null # ignore output of ls
+</pre></div>
+
+
+
+<p>where "<tt># ignore output of ls</tt>" is a comment.
+
+</p><p>Most of the commands covered in this lecture process <tt>stdin</tt> and send results to <tt>stdout</tt>.  In this manner, you can incrementally process a data stream by hooking the output of one tool to the input of another via a <em>pipe</em>.  For example, the following piped sequence prints the number of files in the current directory modified in August.
+
+</p><div class="code"><pre>$ ls -l | grep Aug | wc -l
+</pre></div>
+
+
+
+<p>Imagine how long it would take you to write the equivalent C or Java
+program. You can become an extremely productive UNIX programmer if you
+learn to combine the simple command-line tools. Even when programming
+on a PC, I use MKS's UNIX shell and command library to make it look
+like a UNIX box. Worth the cash.
+</p><h2>Getting help</h2>
+
+
+<p>If you need to know about a command, ask for the "man" page.  For example, to find out about the <tt>ls</tt> command, type
+
+</p><div class="code"><pre>$ man ls
+LS(1)                   System General Commands Manual                   LS(1)
+
+NAME
+     ls - list directory contents
+
+SYNOPSIS
+     ls [-ACFLRSTWacdfgiklnoqrstux1] [file ...]
+
+DESCRIPTION
+     For each operand that names a file of a type other than directory, ls
+...
+</pre></div>
+
+
+
+<p>You will get a summary of the command and any arguments.
+
+</p><p>If you cannot remember the command's name, try using <tt>apropos</tt> which finds commands and library routines related to that word.  For example, to find out how to do checksums, type
+
+</p><div class="code"><pre>$ apropos checksum
+cksum(1), sum(1)         - display file checksums and block counts
+md5(1)                   - calculate a message-digest fingerprint (checksum) for a file
+</pre></div>
+
+
+<h2>Special Directories and files</h2>
+
+
+<p>A shortcut for you home directory, <tt>/home/</tt><em>username</em>, is
+<tt>~</tt><em>username</em>.  For example, <tt>~parrt</tt> is my home directory,
+<tt>/home/parrt</tt>.
+
+</p><p>When you are using the shell, there is the notion of <em>current
+directory</em>.  The dot '<tt>.</tt>' character is a shorthand for the current
+directory and '<tt>..</tt>' is a shorthand for the directory above the
+current.  So to access file <tt>test</tt> in the current directory, <tt>./test</tt>
+is the same as plain <tt>test</tt>.  If <tt>test</tt> is a directory above, use
+<tt>../test</tt>.
+
+</p><p><tt>/</tt> is the root directory; there is no drive specification in UNIX.
+
+</p><p>The <tt>.bash_profile</tt> file is very important as it is how your shell
+session is initialized including your ever-important <tt>CLASSPATH</tt>
+environment variable.  Your <tt>bash</tt> shell initialization file is
+<tt>~</tt><em>username</em><tt>/.bash_profile</tt> and has set up code like the following:
+
+</p><div class="code"><pre>PATH=$PATH:$HOME/bin
+</pre></div>
+
+
+
+<p>Typically, you will go in and set your <tt>CLASSPATH</tt> so that you don't
+have to set it all the time.
+
+</p><div class="code"><pre>export CLASSPATH=".:/home/public/cs601/junit.jar"
+</pre></div>
+
+
+
+<p>The <tt>export</tt> means that the assignment to <tt>CLASSPATH</tt> is visible to
+all child processes (that is, visible to all programs you run from the
+shell).
+</p><h2>The basics</h2>
+
+<h3>cd</h3>
+
+
+<p>Changing a directory is done with <tt>cd</tt> <em>dir</em> where <em>dir</em> can be "." or
+".." to move to current directory (do nothing) or go up a directory.
+</p><h3>ls</h3>
+
+
+<p>Display files in a directory with <tt>ls</tt>.  The <tt>-l</tt> option is used to
+display details of the files:
+
+</p><div class="code"><pre>total 9592
+-rw-r--r--    1 parrt  staff     5600 Aug 19  2005 C-Java-relationship.html
+...
+drwxr-xr-x   13 parrt  staff      442 Oct 19  2005 sessions
+-rw-r--r--    1 parrt  staff     2488 Oct 19  2005 sessions.html
+...
+</pre></div>
+
+
+
+<p>"staff" is parrt's group.
+
+</p><p>If you want to see hidden files (those starting with "."), use "-a".
+
+</p><p>Combinations are possible: use "ls -la" to see details of all files
+including hidden ones.
+</p><h3>displaying files</h3>
+
+
+<p>There are 4 useful ways to display the contents or portions of a file.
+The first is the very commonly used command <tt>cat</tt>.  For example, to
+display my list of object-oriented keywords used in this course, type:
+
+</p><div class="code"><pre>$ cat /home/public/cs601/oo.keywords.txt
+</pre></div>
+
+
+
+<p>If a file is really big, you will probably want to use <tt>more</tt>, which
+spits the file out in screen-size chunks.
+
+</p><div class="code"><pre>$ more /var/log/mail.log
+</pre></div>
+
+
+
+<p>If you only want to see the first few lines of a file or the last few
+lines use <tt>head</tt> and <tt>tail</tt>.
+
+</p><div class="code"><pre>$ head /var/log/mail.log
+$ tail /var/log/mail.log
+</pre></div>
+
+
+
+<p>You can specify a number as an argument to get a specific number of lines:
+
+</p><div class="code"><pre>$ head -30 /var/log/mail.log
+</pre></div>
+
+
+
+<p>The most useful incantation of <tt>tail</tt> prints the last few lines of a
+file and then waits, printing new lines as they are appended to the
+file.  This is great for watching a log file:
+
+</p><div class="code"><pre>$ tail -f /var/log/mail.log
+</pre></div>
+
+
+
+<p>If you need to know how many characters, words, or lines are in a
+file, use <tt>wc</tt>:
+
+</p><div class="code"><pre>$ wc /var/log/mail.log
+     164    2916   37896 /var/log/mail.log
+</pre></div>
+
+
+
+<p>Where the numbers are, in order, lines, words, then characters.  For
+clarity, you can use <tt>wc -l</tt> to print just the number of lines.
+</p><h3>pushd, popd</h3>
+
+
+<p>Instead of <tt>cd</tt> you can use <tt>pushd</tt> to save the current dir and then automatically <tt>cd</tt> to the specified directory.  For example, 
+
+</p><div class="code"><pre>$ pwd
+/Users/parrt
+$ pushd /tmp
+/tmp ~
+$ pwd
+/tmp
+$ popd
+~
+$ pwd
+/Users/parrt
+</pre></div>
+
+
+<h3>top</h3>
+
+
+<p>To watch a dynamic display of the processes on your box in action, use <tt>top</tt>.
+</p><h3>ps</h3>
+
+
+<p>To print out (wide display) all processes running on a box, use <tt>ps auxwww</tt>.
+</p><h3>chmod</h3>
+
+
+<p>To change the privileges of a file or directory, use <tt>chmod</tt>.  The
+privileges are 3 digit octal words with 3 bits per digit: rwxrwxrwx
+where the first digit is for the file owner, the 2nd for the group,
+and 3rd for anybody.  644 is a common word value file which means
+110100100 or rw-r--r--.  When you do <tt>ls -l</tt> you will see these
+bits. 755 is a common word value for directories: rwxr-xr-x where
+directories need to be executable for <tt>cd</tt> to be able to enter that
+dir. 755 is a shorthand for the more readable argument <tt>u=rwx,go=rx</tt>.
+u is user, g is group, o is other.
+
+</p><p>Use <tt>chmod -R</tt> for recursively applying to all the dirs below the
+argument as well.
+
+</p><p>
+</p><h2>Searching streams</h2>
+
+
+<p>One of the most useful tools available on UNIX and the one you may use the most is <tt>grep</tt>.  This tool matches regular expressions (which includes simple words) and prints matching lines to <tt>stdout</tt>.
+
+</p><p>The simplest incantation looks for a particular character
+sequence in a set of files. Here is an example that looks for any
+reference to <tt>System</tt> in the java files in the current directory.
+
+</p><div class="code"><pre>grep System *.java
+</pre></div>
+
+
+
+<p>You may find the dot '.' regular expression useful.  It matches any
+single character but is typically combined with the star, which
+matches zero or more of the preceding item.  Be careful to enclose the
+expression in single quotes so the command-line expansion doesn't
+modify the argument.  The following example, looks for references to
+any a forum page in a server log file:
+
+</p><div class="code"><pre>$ grep '/forum/.*' /home/public/cs601/unix/access.log
+</pre></div>
+
+
+
+<p>or equivalently:
+
+</p><div class="code"><pre>$ cat /home/public/cs601/unix/access.log | grep '/forum/.*' 
+</pre></div>
+
+
+
+<p>The second form is useful when you want to process a collection of files as a single stream as in:
+
+</p><div class="code"><pre>cat /home/public/cs601/unix/access*.log | grep '/forum/.*'
+</pre></div>
+
+
+
+<p>If you need to look for a string at the beginning of a line, use caret '^':
+
+</p><div class="code"><pre>$ grep '^195.77.105.200' /home/public/cs601/unix/access*.log
+</pre></div>
+
+
+
+<p>This finds all lines in all access logs that begin with IP address
+195.77.105.200.
+
+</p><p>If you would like to invert the pattern matching to find lines that do not match a pattern, use <tt>-v</tt>.  Here is an example that finds references to non image <tt>GET</tt>s in a log file:
+
+</p><div class="code"><pre>$ cat /home/public/cs601/unix/access.log | grep -v '/images'
+</pre></div>
+
+
+
+<p>Now imagine that you have an http log file and you would like to
+filter out page requests made by nonhuman spiders. If you have a file
+called <tt>spider.IPs</tt>, you can find all nonspider page views via:
+
+</p><div class="code"><pre>$ cat /home/public/cs601/unix/access.log | grep -v -f /tmp/spider.IPs
+</pre></div>
+
+
+
+<p>Finally, to ignore the case of the input stream, use <tt>-i</tt>.
+</p><h2>Translating streams</h2>
+
+
+<p>Morphing a text stream is a fundamental UNIX operation. PERL is a
+good tool for this, but since I don't like PERL I stick with three
+tools: <tt>tr</tt>, <tt>sed</tt>, and <tt>awk</tt>. PERL and these
+tools are line-by-line tools in that they operate well only on patterns
+fully contained within a single line. If you need to process more
+complicated patterns like XML or you need to parse a programming
+language, use a context-free grammar tool like <a href="http://www.antlr.org/"><b> ANTLR</b></a>.
+</p><h3>tr</h3>
+
+
+<p>For manipulating whitespace, you will find <tt>tr</tt> very useful.
+
+</p><p>If you have columns of data separated by spaces and you would
+like the columns to collapse so there is a single column of data, tell <tt>tr</tt> to replace space with newline <tt>tr ' ' '\n'</tt>.  Consider input file <tt>/home/public/cs601/unix/names</tt>:
+
+</p><div class="code"><pre>jim scott mike
+bill randy tom
+</pre></div>
+
+
+
+<p>To get all those names in a column, use
+
+</p><div class="code"><pre>$ cat /home/public/cs601/unix/names | tr ' ' '\n'
+</pre></div>
+
+
+
+<p>If you would like to collapse all sequences of spaces into one single space, use <tt>tr -s ' '</tt>.
+
+</p><p>To convert a PC file to UNIX, you have to get rid of the '\r' characters.  Use <tt>tr -d '\r'</tt>.
+</p><h3>sed</h3>
+
+
+<p>If dropping or translating single characters is not enough, you can
+use <tt>sed</tt> (stream editor) to replace or delete text chunks matched by
+regular expressions.  For example, to delete all references to word
+<tt>scott</tt> in the names file from above, use
+
+</p><div class="code"><pre>$ cat /home/public/cs601/unix/names | sed 's/scott//'
+</pre></div>
+
+
+
+<p>which substitutes <tt>scott</tt> for nothing.  If there are multiple references to <tt>scott</tt> on a single line, use the <tt>g</tt> suffix to indicate "global" on that line otherwise only the first occurrence will be removed:
+
+</p><div class="code"><pre>$ ... | sed 's/scott//g'
+</pre></div>
+
+
+
+<p>If you would like to replace references to <tt>view.jsp</tt> with <tt>index.jsp</tt>, use
+
+</p><div class="code"><pre>$ ... | sed 's/view.jsp/index.jsp/'
+</pre></div>
+
+
+
+<p>If you want any <tt>.asp</tt> file converted to <tt>.jsp</tt>, you must match the file name with a regular expression and refer to it via <tt>\1</tt>:
+ 
+
+</p><div class="code"><pre>$ ... | sed 's/\(.*\).asp/\1.jsp/'
+</pre></div>
+
+
+
+<p>The <tt>\(...\)</tt> grouping collects text that you can refer to with <tt>\1</tt>.
+
+</p><p>If you want to kill everything from the ',' character to end of line, use the end-of-line marker <tt>$</tt>:
+
+</p><div class="code"><pre>$ ... | sed 's/,.*$//' # kill from comma to end of line
+</pre></div>
+
+
+<h3>awk</h3>
+
+
+<p>When you need to work with columns of data or execute a little bit of code for each line matching a pattern, use <tt>awk</tt>.  <tt>awk</tt> programs are pattern-action pairs.  While some <tt>awk</tt>
+programs are complicated enough to require a separate file containing
+the program, you can do some amazing things using an argument on the
+command-line.
+</p><p><tt>awk</tt> thinks input lines are broken up into fields (i.e., columns) separate by whitespace.  Fields are referenced in an action via <tt>$1</tt>, <tt>$2</tt>, ... while <tt>$0</tt> refers to the entire input line.
+
+</p><p>A pattern-action pair looks like:
+
+</p><div class="code"><pre>pattern {action}
+</pre></div>
+
+
+
+<p>If you omit the pattern, the action is executed for each input line.
+Omitting the action means print the line. You can separate the pairs by
+newline or semicolon.
+</p><p>Consider input
+
+</p><div class="code"><pre>aasghar Asghar, Ali
+wchen   Chen, Wei
+zchen   Chen, Zhen-Jian
+</pre></div>
+
+
+
+<p>If you want a list of login names, ask <tt>awk</tt> to print the first column:
+
+</p><div class="code"><pre>$ cat /home/public/cs601/unix/emails.txt | awk '{print $1;}'
+</pre></div>
+
+ 
+
+<p>If you want to convert the login names to email addresses, use the <tt>printf</tt> C-lookalike function:
+
+</p><div class="code"><pre>$ cat /home/public/cs601/unix/emails.txt | awk '{printf("%s@cs.usfca.edu,",$1);}'
+</pre></div>
+
+
+
+<p>Because of the missing <tt>\n</tt> in the <tt>printf</tt> string, you'll see the output all on one line ready for pasting into a mail program: 
+
+</p><div class="code"><pre>aasghar@cs.usfca.edu,wchen@cs.usfca.edu,zchen@cs.usfca.edu
+</pre></div>
+
+
+
+<p>You might also want to reorder columns of data.  To print firstname, lastname, you might try:
+
+</p><div class="code"><pre>$ cat /home/public/cs601/unix/emails.txt | awk '{printf("%s %s\n", $3, $2);}'
+</pre></div>
+
+
+
+<p>but you'll notice that the comma is still there as it is part of the column:
+
+</p><div class="code"><pre>Ali Asghar,
+Wei Chen,
+Zhen-Jian Chen,
+</pre></div>
+
+
+
+<p>You need to pipe the output thru <tt>tr</tt> (or <tt>sed</tt>) to strip the comma:
+
+</p><div class="code"><pre>$ cat /home/public/cs601/unix/emails.txt | \
+  awk '{printf("%s %s\n", $3, $2);}' | \
+  tr -d ','
+</pre></div>
+
+
+
+<p>Then you will see:
+
+</p><div class="code"><pre>Ali Asghar
+Wei Chen
+Zhen-Jian Chen
+</pre></div>
+
+
+
+<p>You can also use <tt>awk</tt> to examine the value of content.  To sum up the first column of the following data (in file <tt>/home/public/cs601/unix/coffee</tt>):
+
+</p><div class="code"><pre>3 parrt
+2 jcoker
+8 tombu
+</pre></div>
+
+
+
+<p>use the following simple command:
+
+</p><div class="code"><pre>$ awk '{n+=$1;} ; END {print n;}' &lt; /home/public/cs601/unix/coffee
+</pre></div>
+
+
+
+<p>where <tt>END</tt> is a special pattern that means "after processing the stream."
+
+</p><p>If you want to filter or sum all values less than or equal to, say 3, use an <tt>if</tt> statement:
+
+</p><div class="code"><pre>$ awk '{if ($1&lt;=3) n+=$1;} END {print n;}' &lt; /home/public/cs601/unix/coffee
+</pre></div>
+
+
+
+<p>In this case, you will see output <tt>5</tt> (3+2);
+
+</p><p>Using <tt>awk</tt> to grab a particular column is very common when processing log files.  Consider a <a href="http://www.jguru.com/"><b>http://www.jguru.com</b></a> page view log file, <tt>/home/public/cs601/unix/pageview-20021022.log</tt>, that are of the form:
+
+</p><div class="code"><pre>date-stamp(thread-name): userID-or-IPaddr URL site-section
+</pre></div>
+
+
+
+<p>So, the data looks like this:
+
+</p><div class="code"><pre>20021022_00.00.04(tcpConnection-80-3019):       203.6.152.30    /faq/subtopic.jsp?topicID=472&amp;page=2    FAQs     
+20021022_00.00.07(tcpConnection-80-2981):       995134  /index.jsp      Home 
+20021022_00.00.08(tcpConnection-80-2901):       66.67.34.44     /faq/subtopic.jsp?topicID=364   FAQs     
+20021022_00.00.12(tcpConnection-80-3003):       217.65.96.13    /faq/view.jsp?EID=736437        FAQs     
+20021022_00.00.13(tcpConnection-80-3019):       203.124.210.98  /faq/topicindex.jsp?topic=JSP   FAQs/JSP         
+20021022_00.00.15(tcpConnection-80-2988):       202.56.231.154  /faq/index.jsp FAQs     
+20021022_00.00.19(tcpConnection-80-2976):       66.67.34.44     /faq/view.jsp?EID=225150        FAQs     
+220021022_00.00.21(tcpConnection-80-2974):       143.89.192.5    /forums/most_active.jsp?topic=EJB       Forums/EJB       
+20021022_00.00.21(tcpConnection-80-2996):       193.108.239.34  /guru/edit_account.jsp  Guru     
+20021022_00.00.21(tcpConnection-80-2996):       193.108.239.34  /misc/login.jsp Misc     
+...
+</pre></div>
+
+
+
+<p>When a user is logged in, the log file has their user ID rather than their IP address.
+
+</p><p>Here is how you get a list of URLs that people view on say October 22, 2002:
+
+</p><div class="code"><pre>$ awk '{print $3;}' &lt; /home/public/cs601/unix/pageview-20021022.log
+/faq/subtopic.jsp?topicID=472&amp;page=2
+/index.jsp
+/faq/subtopic.jsp?topicID=364
+/faq/view.jsp?EID=736437
+/faq/topicindex.jsp?topic=JSP
+/faq/index.jsp
+/faq/view.jsp?EID=225150
+/forums/most_active.jsp?topic=EJB
+/guru/edit_account.jsp
+/misc/login.jsp
+...
+</pre></div>
+
+
+
+<p>If you want to count how many page views there were that day that
+were not processing pages (my processing pages are all of the form <tt>process_</tt><em>xxx</em>), pipe the results through <tt>grep</tt> and <tt>wc</tt>:
+
+</p><div class="code"><pre>$ awk '{print $3;}' &lt; /home/public/cs601/unix/pageview-20021022.log | \
+  grep -v process | \
+  wc -l
+67850
+</pre></div>
+
+
+
+<p>If you want a unique list of URLs, you can sort the output and then use <tt>uniq</tt>:
+
+</p><div class="code"><pre>$ awk '{print $3;}' &lt; /home/public/cs601/unix/pageview-20021022.log | \
+  sort | \
+  uniq
+</pre></div>
+
+
+
+<p><tt>uniq</tt> just collapses all repeated lines into a single line--that is why you must sort the output first.  You'll get output like:
+
+</p><div class="code"><pre>/article/index.jsp
+/article/index.jsp?page=1
+/article/index.jsp?page=10
+/article/index.jsp?page=2
+...
+</pre></div>
+
+
+<h2>Tarballs</h2>
+
+
+<p>Note: <em>The name comes from a similar word, hairball (stuff that cats throw up), I'm pretty sure</em>.
+
+</p><p>To collect a bunch of files and directories together, use <tt>tar</tt>.  For example, to tar up your entire home directory and put the tarball into <tt>/tmp</tt>, do this
+
+</p><div class="code"><pre>$ cd ~parrt
+$ cd .. # go one dir above dir you want to tar
+$ tar cvf /tmp/parrt.backup.tar parrt
+</pre></div>
+
+
+
+<p>By convention, use <tt>.tar</tt> as the extension.  To untar this file use
+
+</p><div class="code"><pre>$ cd /tmp
+$ tar xvf parrt.backup.tar
+</pre></div>
+
+
+
+<p><tt>tar</tt> untars things in the <b>current</b> directory!
+
+</p><p>After running the untar, you will find a new directory, <tt>/tmp/parrt</tt>,
+that is a copy of your home directory. Note that the way you tar things
+up dictates the directory structure when untarred. The fact that I
+mentioned <tt>parrt</tt> in the tar creation means that I'll have that
+dir when untarred. In contrast, the following will also make a copy of
+my home directory, but without having a <tt>parrt</tt> root dir:
+
+</p><div class="code"><pre>$ cd ~parrt
+$ tar cvf /tmp/parrt.backup.tar *
+</pre></div>
+
+
+
+<p>It is a good idea to tar things up with a root directory so that
+when you untar you don't generate a million files in the current
+directly. To see what's in a tarball, use
+</p><div class="code"><pre>$ tar tvf /tmp/parrt.backup.tar
+</pre></div>
+
+
+
+<p>Most of the time you can save space by using the <tt>z</tt> argument.  The tarball will then be <tt>gzip</tt>'d and you should use file extension <tt>.tar.gz</tt>:
+
+</p><div class="code"><pre>$ cd ~parrt
+$ cd .. # go one dir above dir you want to tar
+$ tar cvfz /tmp/parrt.backup.tar.gz parrt
+</pre></div>
+
+
+
+<p>Unzipping requires the <tt>z</tt> argument also:
+
+</p><div class="code"><pre>$ cd /tmp
+$ tar xvfz parrt.backup.tar.gz
+</pre></div>
+
+
+
+<p>If you have a big file to compress, use <tt>gzip</tt>:
+
+</p><div class="code"><pre>$ gzip bigfile
+</pre></div>
+
+
+
+<p>After execution, your file will have been renamed <tt>bigfile.gz</tt>.  To uncompress, use 
+
+</p><div class="code"><pre>$ gzip -d bigfile.gz
+</pre></div>
+
+
+
+<p>To display a text file that is currently <tt>gzip</tt>'d, use <tt>zcat</tt>:
+
+</p><div class="code"><pre>$ zcat bigfile.gz
+</pre></div>
+
+
+<h2>Moving files between machines</h2>
+
+<h3>rsync</h3>
+
+
+<p>When you need to have a directory on one machine mirrored on another machine, use <tt>rsync</tt>.
+It compares all the files in a directory subtree and copies over any
+that have changed to the mirrored directory on the other machine. For
+example, here is how you could "pull" all logs files from <tt>livebox.jguru.com</tt> to the box from which you execute the <tt>rsync</tt> command:
+
+</p><div class="code"><pre>$ hostname
+jazz.jguru.com
+$ rsync -rabz -e ssh -v 'parrt@livebox.jguru.com:/var/log/jguru/*' \
+  /backup/web/logs
+</pre></div>
+
+
+
+<p><tt>rsync</tt> will delete or truncate files to ensure the files
+stay the same. This is bad if you erase a file by mistake--it will wipe
+out your backup file. Add an argument called <tt>--suffix</tt> to tell <tt>rsync</tt> to make a copy of any existing file before it overwrites it:
+
+</p><div class="code"><pre>$ hostname
+jazz.jguru.com
+$ rsync -rabz -e ssh -v --suffix .rsync_`date '+%Y%m%d'` \
+ 'parrt@livebox.jguru.com:/var/log/jguru/*' /backup/web/logs
+</pre></div>
+
+
+
+<p>where <tt>`date '+%Y%m%d'`</tt> (in reverse single quotes) means "execute this <tt>date</tt> command".
+
+</p><p>To exclude certain patterns from the sync, use <tt>--exclude</tt>:
+
+</p><div class="code"><pre>$ rsync -rabz --exclude=entitymanager/ --suffix .rsync_`date '+%Y%m%d'` \
+  -e ssh -v 'parrt@livebox.jguru.com:/var/log/jguru/*' /backup/web/logs
+</pre></div>
+
+
+<h3>scp</h3>
+
+
+<p>To copy a file or directory manually, use <tt>scp</tt>:
+
+</p><div class="code"><pre>$ scp lecture.html parrt@nexus.cs.usfca.edu:~parrt/lectures
+</pre></div>
+
+
+
+<p>Just like <tt>cp</tt>, use <tt>-r</tt> to copy a directory recursively.
+</p><h2>Miscellaneous</h2>
+
+<h3>find</h3>
+
+
+<p>Most GUIs for Linux or PCs have a search facility, but from the command-line you can use <tt>find</tt>.  To find all files named <tt>.p4</tt> starting in directory <tt>~/antlr/depot/projects</tt>, use:
+
+</p><div class="code"><pre>$ find  ~/antlr/depot/projects -name '.p4'
+</pre></div>
+
+
+
+<p>The default "action" is to <tt>-print</tt>.
+
+</p><p>You can specify a regular expression to match.  For example, to look under your home directory for any xml files, use:
+
+</p><div class="code"><pre>$ find ~ -name '*.xml' -print
+</pre></div>
+
+
+
+<p>Note the use of the single quotes to prevent command-line expansion--you want the '*' to go to the <tt>find</tt> command.
+
+</p><p>You can execute a command for every file or directory found that matches a name.  For example, do delete all xml files, do this:
+
+</p><div class="code"><pre>$ find ~ -name '*.xml' -exec rm {} \;
+</pre></div>
+
+
+
+<p>where "{}" stands for "current file that matches". The end of the
+command must be terminated with ';' but because of the command-line
+expansion, you'll need to escape the ';'.
+</p><p>You can also specify time information in your query.  Here is a shell script that uses <tt>find</tt> to delete all files older than 14 days.
+
+</p><div class="code"><pre>#!/bin/sh
+
+BACKUP_DIR=/var/data/backup
+
+# number of days to keep backups
+AGE=14 # days
+AGE_MINS=$[ $AGE * 60 * 24 ]
+
+# delete dirs/files
+find $BACKUP_DIR/* -cmin +$AGE_MINS -type d -exec rm -rf {} \;
+</pre></div>
+
+
+<h3>fuser</h3>
+
+
+<p>If you want to know who is using a port such as HTTP (80), use <tt>fuser</tt>.  You must be root to use this:
+
+</p><div class="code"><pre>$ sudo /sbin/fuser -n tcp 80
+80/tcp:              13476 13477 13478 13479 13480
+13481 13482 13483 13484 13486 13487 13489 13490 13491
+13492 13493 13495 13496 13497 13498 13499 13500 13501 13608
+</pre></div>
+
+
+
+<p>The output indicates the list of processes associated with that port.
+</p><h3>whereis</h3>
+
+
+<p>Sometimes you want to use a command but it's not in your <tt>PATH</tt> and you can't remember where it is.  Use <tt>whereis</tt> to look in standard unix locations for the command.
+
+</p><div class="code"><pre>$ whereis fuser
+fuser: /sbin/fuser /usr/man/man1/fuser.1 /usr/man/man1/fuser.1.gz
+$ whereis ls   
+ls: /bin/ls /usr/man/man1/ls.1 /usr/man/man1/ls.1.gz
+</pre></div>
+
+
+
+<p><tt>whereis</tt> also shows <tt>man</tt> pages.
+</p><h3>which</h3>
+
+
+<p>Sometimes you might be executing the wrong version of a command and you want to know which version of the command your <tt>PATH</tt> indicates should be run. Use <tt>which</tt> to ask:
+
+</p><div class="code"><pre>$ which ls
+alias ls='ls --color=tty'
+        /bin/ls
+$ which java
+/usr/local/java/bin/java
+</pre></div>
+
+
+
+<p>If nothing is found in your path, you'll see:
+
+</p><div class="code"><pre>$ which fuser
+/usr/bin/which: no fuser in (/usr/local/bin:/usr/local/java/bin:/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/X11R6/bin:/home/parrt/bin)
+</pre></div>
+
+
+<h3>kill</h3>
+
+
+<p>To send a signal to a process, use <tt>kill</tt>.  Typically you'll want to just say <tt>kill pid</tt> where <tt>pid</tt> can be found from <tt>ps</tt> or <tt>top</tt> (see below).
+
+</p><p>Use <tt>kill -9 pid</tt> when you can't get the process to die; this means kill it with "extreme prejudice".
+</p><h3>traceroute</h3>
+
+
+<p>If you are having trouble getting to a site, use <tt>traceroute</tt> to watch the sequence of hops used to get to a site:
+
+</p><div class="code"><pre>$ /usr/sbin/traceroute www.cnn.com
+ 1  65.219.20.145 (65.219.20.145)  2.348 ms  1.87 ms  1.814 ms
+ 2  loopback0.gw5.sfo4.alter.net (137.39.11.23)  3.667 ms  3.741 ms  3.695 ms
+ 3  160.atm3-0.xr1.sfo4.alter.net (152.63.51.190)  3.855 ms  3.825 ms  3.993 ms
+...
+</pre></div>
+
+
+<h3>What is my IP address?</h3>
+
+
+<div class="code"><pre>$ /sbin/ifconfig
+</pre></div>
+
+
+
+<p>Under the <tt>eth0</tt> interface, you'll see the <tt>inet addr</tt>:
+
+</p><div class="code"><pre>eth0      Link encap:Ethernet  HWaddr 00:10:DC:58:B1:F0  
+          inet addr:138.202.170.4  Bcast:138.202.170.255  Mask:255.255.255.0
+          ...
+</pre></div>
+
+
+<h2>Useful combinations</h2>
+
+<h3>How to kill a set of processes</h3>
+
+
+<p>If you want to kill all <tt>java</tt> processes running for <tt>parrt</tt>, you can
+either run <tt>killall java</tt> if you are <tt>parrt</tt> or generate a "kill"
+script via:
+
+</p><div class="code"><pre>$ ps auxwww|grep java|grep parrt|awk '{print "kill -9 ",$2;}' &gt; /tmp/killparrt
+$ bash /tmp/killparrt # run resulting script
+</pre></div>
+
+
+
+<p>The <tt>/tmp/killparrt</tt> file would look something like:
+
+</p><div class="code"><pre>kill -9 1021
+kill -9 1023
+kill -9 1024
+</pre></div>
+
+
+
+<p>Note: you can also do this common task with:
+
+</p><div class="code"><pre>$ killall java
+</pre></div>
+
+
+
+<p>Please be aware that this is linux specific; i'm told that it will kill all processing on UNIXen like Solaris!
+</p><h3>How to make a histogram</h3>
+
+
+<p>A histogram is set of count, value pairs indicating how often the
+value occurs. The basic operation will be to sort, then count how many
+values occur in a row and then reverse sort so that the value with the
+highest count is at the top of the report.
+</p><div class="code"><pre>$ ... | sort |uniq -c|sort -r -n 
+</pre></div>
+
+
+
+<p>Note that <tt>sort</tt> sorts on the whole line, but the first
+column is obviously significant just as the first letter in someone's
+last name significantly positions their name in a sorted list.
+</p><p><tt>uniq -c</tt> collapses all repeated sequences of values but
+prints the number of occurrences in front of the value. Recall the
+previous sorting:
+</p><div class="code"><pre>$ awk '{print $3;}' &lt; /home/public/cs601/unix/pageview-20021022.log | \
+  sort | \
+  uniq
+/article/index.jsp
+/article/index.jsp?page=1
+/article/index.jsp?page=10
+/article/index.jsp?page=2
+...
+</pre></div>
+
+
+
+<p>Now add <tt>-c</tt> to <tt>uniq</tt>:
+
+</p><div class="code"><pre>$ awk '{print $3;}' &lt; /home/public/cs601/unix/pageview-20021022.log | \
+  sort | \
+  uniq -c
+ 623 /article/index.jsp
+   6 /article/index.jsp?page=1
+  10 /article/index.jsp?page=10
+ 109 /article/index.jsp?page=2
+...
+</pre></div>
+
+
+
+<p>Now all you have to do is reverse sort the lines according to the first column numerically.
+
+</p><div class="code"><pre>$ awk '{print $3;}' &lt; /home/public/cs601/unix/pageview-20021022.log | \
+  sort | \
+  uniq -c | \
+  sort -r -n
+6170 /index.jsp
+2916 /search/results.jsp
+1397 /faq/index.jsp
+1018 /forums/index.jsp
+ 884 /faq/home.jsp?topic=Tomcat
+...
+</pre></div>
+
+
+
+<p>In practice, you might want to get a histogram that has been
+"despidered" and only has faq related views. You can filter out all
+page view lines associated with spider IPs and filter in only faq
+lines:
+</p><div class="code"><pre>$ grep -v -f /tmp/spider.IPs /home/public/cs601/unix/pageview-20021022.log | \
+  awk '{print $3;}'| \
+  grep '/faq' | \
+  sort | \
+  uniq -c | \
+  sort -r -n
+1397 /faq/index.jsp
+ 884 /faq/home.jsp?topic=Tomcat
+ 525 /faq/home.jsp?topic=Struts
+ 501 /faq/home.jsp?topic=JSP
+ 423 /faq/home.jsp?topic=EJB
+...
+</pre></div>
+
+
+
+<p>If you want to only see despidered faq pages that were referenced more than 500 times, add an <tt>awk</tt> command to the end.
+
+</p><div class="code"><pre>$ grep -v -f /tmp/spider.IPs /home/public/cs601/unix/pageview-20021022.log | \
+  awk '{print $3;}'| \
+  grep '/faq' | \
+  sort | \
+  uniq -c | \
+  sort -r -n | \
+  awk '{if ($1&gt;500) print $0;}'
+1397 /faq/index.jsp
+ 884 /faq/home.jsp?topic=Tomcat
+ 525 /faq/home.jsp?topic=Struts
+ 501 /faq/home.jsp?topic=JSP
+</pre></div>
+
+
+<h3>Generating Java class hierarchy diagrams</h3>
+
+
+<p>A student asked if I knew of a program that generated class hierarchy
+diagrams.  I said "no", but then realized we don't need one.  Here's
+the one liner to do it:
+
+</p><div class="code"><pre># pulls out superclass and class as $5 and $3:
+# public class A extends B ...
+# only works for public classes and usual formatting
+cat *.java | grep 'public class' $1 | \
+    awk 'BEGIN {print "digraph foo {";} {print $5 "-&gt;" $3;} END {print "}"}'
+</pre></div>
+
+
+
+<p>It generates <a href="http://www.cs.usfca.edu/%7Eparrt/course/601/lectures/www.graphviz.org"><b>DOT</b></a> format graph files.  Try it.
+It's amazing.  Works for most cases.  Output looks like:
+
+</p><div class="code"><pre>digraph foo {
+antlr.CharScanner-&gt;JavaLexer
+antlr.LLkParser-&gt;Mantra
+-&gt;TestLexer
+}
+</pre></div>
+
+
+<h3>Generating scripts and programs</h3>
+
+
+<p>I like to automate as much as possible.  Sometimes that means writing a program that generates another program or script.
+</p><h4>Processing mail files</h4>
+
+
+<p>I wanted to get a sequence of SQL commands that would update our
+database whenever someone's email bounced. Processing the mail file is
+pretty easy since you can look for the error code followed by the email
+address. A bounced email looks like:
+</p><div class="code"><pre>From MAILER-DAEMON@localhost.localdomain  Wed Jan  9 17:32:33 2002
+Return-Path: &lt;&gt;
+Received: from web.jguru.com (web.jguru.com [64.49.216.133])
+        by localhost.localdomain (8.9.3/8.9.3) with ESMTP id RAA18767
+        for &lt;notifications@jguru.com&gt;; Wed, 9 Jan 2002 17:32:32 -0800
+Received: from localhost (localhost)
+        by web.jguru.com (8.11.6/8.11.6) id g0A1W2o02285;
+        Wed, 9 Jan 2002 17:32:02 -0800
+Date: Wed, 9 Jan 2002 17:32:02 -0800
+From: Mail Delivery Subsystem &lt;MAILER-DAEMON@web.jguru.com&gt;
+Message-Id: &lt;200201100132.g0A1W2o02285@web.jguru.com&gt;
+To: &lt;notifications@jguru.com&gt;
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+        boundary="g0A1W2o02285.1010626322/web.jguru.com"
+Subject: Returned mail: see transcript for details
+Auto-Submitted: auto-generated (failure)
+
+This is a MIME-encapsulated message
+
+--g0A1W2o02285.1010626322/web.jguru.com
+
+The original message was received at Wed, 9 Jan 2002 17:32:02 -0800
+from localhost [127.0.0.1]
+
+   ----- The following addresses had permanent fatal errors -----
+&lt;pain@intheneck.com&gt;
+    (reason: 550 Host unknown)
+
+   ----- Transcript of session follows -----
+550 5.1.2 &lt;pain@intheneck.com&gt;... Host unknown (Name server: intheneck.com: host not found)
+...
+</pre></div>
+
+
+
+<p>Notice the SMTP 550 error message.  Look for that at the start of a line then kill the angle brackets, remove the <tt>...</tt> and use <tt>awk</tt> to print out the SQL:
+
+</p><div class="code"><pre># This script works on one email or a file full of other emails
+# since it just looks for the SMTP 550 or 554 results and then
+# converts them to SQL commands.
+grep -E '^(550|554)' | \
+        sed 's/[&lt;&gt;]//g' | \
+        sed 's/\.\.\.//' | \
+        awk "{printf(\"UPDATE PERSON SET bounce=1 WHERE email='%s';\n\",\$3);}" &gt;&gt; bounces.sql
+</pre></div>
+
+
+
+<p>I have to escape the <tt>$3</tt> because it means something to the surround bash shell script and I want <tt>awk</tt> to see the dollar sign.
+</p><h4>Generating getter/setters</h4>
+
+
+<div class="code"><pre>#!/bin/bash
+# From a type and name (plus firstlettercap version),
+# generate a Java getter and setter
+#
+# Example: getter.setter String name Name
+#
+
+TYPE=$1
+NAME=$2
+UPPER_NAME=$3
+
+echo "public $TYPE get$UPPER_NAME() {"
+echo "  return $NAME;"
+echo "}"
+echo
+echo "void set$UPPER_NAME($TYPE $NAME) {"
+echo "  this.$NAME = $NAME;"
+echo "}"
+echo
+</pre></div>
+
+
+<h2>Have I been hacked?</h2>
+
+
+<p>Failed logins: /var/log/messages
+
+</p><p>last, w, uptime
+
+</p><p>/etc/passwd changed?
+
+</p><p>fuser for ports
+
+</p><p>portscans in server report
+
+</p><p>weird processing hogging CPU?
+</p></body></html>

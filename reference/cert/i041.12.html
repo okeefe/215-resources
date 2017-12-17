@@ -1,0 +1,341 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+
+<TITLE>  Understanding system log files on a Solaris                                                                                                   </TITLE>
+</HEAD>
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+<font face="Helvetica, Geneva, Arial">
+<small>
+<table border="0" width="100%" cellspacing="6" cellpadding="4">
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"> 
+      <p align="LEFT"><b><font face="Arial">Implementation Details</font></b></p>
+    </td>
+    <td align="LEFT" valign="TOP"><b><font face="Arial" size=4> 
+      <p>Understanding system log files on a Solaris 2.x operating system</p>
+      </font></b> </td>
+  </tr>
+  <tr> 
+    <td width="130">&nbsp;</td>
+    <td align="LEFT" valign="TOP"> 
+      <table border="1" width="75%" cellspacing="0" cellpadding="8" bgcolor="#ccddff">
+        <tr> 
+          <td> 
+            <p>Applies to the practices:<br>
+<a href="../practices/p095.html">"Monitor and inspect system 
+activities for unexpected behavior</a><br>
+<a href="../practices/p091.html">"Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior"</a><br> 
+<a
+href="../practices/p092.html">"Manage logging and other data collection mechanisms"</a></p>
+            <p>Applicable technologies: Solaris 2.x; UNIX operating operating 
+              system and derivatives</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130">&nbsp;</td>
+    <td>This section describes the system log files on the Sun Solaris operating 
+      system, version 2.x.</td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">The /var system 
+      directory</font></b></td>
+    <td align="LEFT" valign="TOP"> 
+      <p>Solaris systems use the /var directory to store logs and other local 
+        files so that the operating system can support other directories being 
+        mounted as read only, sometimes from file servers elsewhere on the network. 
+        The /var directory is thus often on a partition that is local to the system. 
+      </p>
+      <p>All of the log files described below can be found in subdirectories under 
+        /var. There may be other application-specific log files that you will 
+        also need to inspect. However, it is beyond the scope of this implementation 
+        to describe all of the log files that you might want to inspect for your 
+        specific Solaris installation.</p>
+      <p>Because log files often provide the only indication of an intrusion, 
+        intruders often attempt to erase any evidence of their activities by removing 
+        or modifying the log files. For this reason, it is very important that 
+        your log files be adequately protected to make it as difficult as possible 
+        for intruders to change or remove then. See the practice 
+	<a href="/security-improvement/practices/p092.html">&quot;Managing logging and other data collection mechanisms&quot;</a> for
+more
+information 
+        on this topic.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">/var/adm</font></b></td>
+    <td align="LEFT" valign="TOP">This directory is usually also available as 
+      a symbolic link named /usr/adm. In earlier versions of the UNIX operating 
+      system, /usr/adm was a directory that contained most of the administrative 
+      log files, along with a number of other configuration tools and files useful 
+      for the administration of the operating system.</td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"> 
+      <div align="RIGHT">
+         
+      </div>
+    </td>
+    <td align="LEFT" valign="TOP"><b><font face="Arial" size="3" color="#008000">adm/log/asppp.log</font></b> 
+      <p>This is the log file associated with the Asynchronous PPP Link Manager 
+        <font face="Courier New" size=3>aspppd(1M)</font>, a user-level daemon 
+        that works in concert with the IP-Dialup driver (<font face="Courier New" size=3>ipdcm</font>) 
+        and PPP streams module (ppp(7M)) to provide IP network services over an 
+        analog modem using dialed voice-grade telephone lines. </p>
+      <p>The log file is text based, and the level of logging is based on an entry 
+        in the /etc/asppp.cf file or a command line argument to <font face="Courier New" size=3>aspppd</font>. 
+        See the man page <font face="Courier New" size=3>aspppd(1M)</font> for 
+        specific information about this file and the available logging levels.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"> 
+      <div align="RIGHT">
+         
+      </div>
+    </td>
+    <td align="LEFT" valign="TOP"> 
+      <p><b><font face="Arial" size="3" color="#008000">adm/utmp, adm/utmpx, /adm/wtmp, 
+        and adm/wtmpx </font></b></p>
+      <p>These files contain user and accounting information that is recorded 
+        when a user logs in, logs out, or starts a new shell process with an application 
+        such as <font face="Courier New" size=3>xterm</font> or <font face="Courier New" size=3>screen.</font>Records 
+        written to these log files by the managing application contain account 
+        activity for the system. </p>
+      <p>The data in these files are written as binary data so they must be read 
+        by a tool specifically designed to do so, such as <font face="Courier New" size=3>last(1)</font> 
+        and <font face="Courier New" size=3>who(1)</font>. See the system man 
+        pages for <font face="Courier New" size=3>last(1)</font> and <font face="Courier" size=3>who(1)</font> 
+        for additional information on the data and display formats available with 
+        these tools.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"> 
+      <div align="RIGHT">
+         
+      </div>
+    </td>
+    <td align="LEFT" valign="TOP"> 
+      <p><b><font face="Arial" size="3" color="#008000">adm/lastlog</font> </b></p>
+      <p>This binary log file stores information about a user who has logged into 
+        the system. It is kept up to date by utilities such as <font face="Courier New" size=3>login(1) 
+        </font>and <font face="Courier New" size=3>in.uucpd(1M)</font>. The data 
+        are viewable with tools such <font size=3>as</font><font face="Courier New" size=3> 
+        last(1)</font>, <font face="Courier New" size=3>who(1)</font>, and <font face="Courier New" size=3>finger(1)</font>. 
+        Refer to the system man pages for more information.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"> 
+      <div align="RIGHT">
+         
+      </div>
+    </td>
+    <td align="LEFT" valign="TOP"> 
+      <p><b><font face="Arial" size="3" color="#008000">adm/sulog </font></b></p>
+      <p>The sulog file is a record of all attempts by users on the system to 
+        execute the <font face="Courier New" size=3>su(1M)</font> command. Each 
+        time <font face="Courier New" size=3>su(1M)</font> is executed, an entry 
+        is added to the sulog file. </p>
+      <p>The format of this human-readable text file includes date, time, success/failure 
+        (+/-), and both the current and requested account. The following is a 
+        sample excerpt from a sulog file: </p>
+<Font size=2>      
+<pre> 
+SU 08/28 11:41 - pts/1 jxk-root
+SU 08/28 11:41 + pts/1 jxk-root
+SU 09/14 13:05 + pts/0 thimbl-root
+SU 09/14 14:58 + pts/0 thimbl-root
+SU 09/16 13:52 + pts/0 thimbl-root
+SU 09/16 15:16 + pts/2 thimbl-guest
+SU 10/19 14:17 - pts/2 marchok-root
+SU 10/19 14:17 + pts/2 marchok-root
+</pre>
+</font>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"> 
+      <div align="RIGHT">
+         
+      </div>
+    </td>
+    <td align="LEFT" valign="TOP"> 
+      <p><b><font face="Arial" size="3" color="#008000">adm/messages </font></b></p>
+      <p>This file is a catch-all log file for a number of messages from the UNIX 
+        kernel as well as for other logging applications such as <font face="Courier New" size=3>syslogd</font>. 
+        The file is formatted as an ASCII text file and entries are usually one 
+        record per line with new entries appended to the end of the file. </p>
+      <p>The following is a sample excerpt from a messages file. Each pair of lines 
+        shown below appears as one line in the file: </p>
+      <pre><font face="Courier New, Courier, mono" size="2">Oct 31 04:05:01 unix.fghij.net syslogd:restart
+Oct 31 04:05:02 unix.fghij.net named[112]: unapproved query
+from  [10.10.0.1].32768 for "loghost.local.net"
+Oct 31 04:05:02 unix.fghij.net named[112]: unapproved 
+query from [10.10.0.1].32768 for "loghost.local.net"
+Oct 31 04:05:42 unix.fghij.net printd[207]: send_job failed job 203
+(lw_land@lw.fghij.net)check status
+Oct 31 04:06:00 unix.fghij.net sendmail[14602]: EAA14602: from=ih_cron, 
+size=456, class=0, pri=30456, ...
+Oct 31 04:06:01 unix.fghij.net sendmail[14604]: EAA14602: to=ih_cron, 
+delay=00:00:01, xdelay=00:00:00, ...
+Oct 31 04:06:42 unix.fghij.net printd[207]: send_job failed job 203 
+(lw_land@lw.fghij.net) check status
+Oct 31 04:07:42 unix.fghij.net printd[207]: send_job failed job 203
+(lw_port@lw.jghij.net)check status</font><font face="Courier New, Courier, mono" size="2"></font></pre>
+      <p><font face="Courier New" size="2"></font></p>
+      <p>Note that the messages file can get very large quickly and should be 
+        rotated regularly to ensure that it does not consume too much local disk 
+        space. Refer to <a href="i041.09.html">&quot;Using newsyslog to rotate 
+        files containing logging messages on systems running Solaris 2.x&quot;</a> 
+        for more information.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">/var/log</font></b></td>
+    <td align="LEFT" valign="TOP">This log directory is sometimes used to store 
+      miscellaneous log files, including log files ceated by syslog for messages 
+      that are not written to /usr/adm/messages or to the system console.</td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"> 
+      <div align="RIGHT">
+         
+      </div>
+    </td>
+    <td align="LEFT" valign="TOP"><b><font face="Arial" size=3 color="#008000"> 
+      <p>Syslog files </p>
+      </font></b> 
+      <p>Often a number of miscellaneous syslog files are written to /var/log 
+        for logging events that are not logged elsewhere such as main, news, and 
+        user events. You can view which of these events are written to this directory 
+        (or any other log files) by reviewing the syslog config file /etc/syslog.conf. 
+        For example, the following syslog.conf file writes several specific log 
+        files to the /var/log directory: </p>
+      <font face="Courier New" size=2> 
+      <pre>#
+syslog configuration file (loghost)
+#
+#output to console
+*.err;mail,kern.notice;daemon,auth.debug;user.info    /dev/console
+#output to local file "messages" for automatic log file analysis
+*.err;auth,daemon,mark,kern.debug;mail,user.notice    var/adm/messages
+#output to local files for archiving messages of potential interest
+auth.debug /var/log/auth.log
+daemon.debug /var/log/daemon.log
+lpr.debug   /var/log/lpr.log
+mail.debug  /var/log/mail.log
+news.debug  /var/log/news.log
+uucp.debug  /var/log/uucp.log
+user.debug  /var/log/user.log
+#
+#end of /etc/syslog.conf
+#</pre>
+      </font></td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"> 
+      <div align="RIGHT">
+         
+      </div>
+    </td>
+    <td align="LEFT" valign="TOP"><b><font face="Arial" size=3 color="#008000"> 
+      <p>log/sysidconfig.log </p>
+      </font></b> 
+      <p>This log file is created by the <font face="Courier New" size=3>sysidconfig(1M) 
+        </font>command, which executes system configuration applications or defines 
+        a set of system configuration applications. Specific information about 
+        this and other related system configuration tools can be found in the 
+        system man pages for <font face="Courier New" size=3>sysidconfig.</font></p>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"><b><font face="Arial" size=3>/var/cron</font></b></td>
+    <td align="LEFT" valign="TOP">This directory contains the files that you would 
+      find associated with the system's cron(1M) and at(1) functions.</td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"> 
+      <div align="RIGHT">
+         
+      </div>
+    </td>
+    <td align="LEFT" valign="TOP"><b><font face="Arial" size=3 color="#008000"> 
+      <p>cron/log </p>
+      </font></b> 
+      <p>This file contain log entries for <font face="Courier New" size=3>cron(1M)</font> 
+        and <font face="Courier New" size=3>at(1)</font> jobs that have been run 
+        on the local machine. This file is a text file that lists the command 
+        that was run, at what time, and as what user. The following example log 
+        file contains both a <font face="Courier New" size=3>cron</font> and <font face="Courier New" size=3>at</font> 
+        job entry: </p>
+      <font face="Courier New" size=2> 
+      <pre>&gt; CMD: /usr/lib/uucp/uudemon.hour
+&gt; uucp 14572 c Mon Nov 9 19:11:00 1998
+&lt; uucp 14572 c Mon Nov 9 19:11:00 1998
+&gt; CMD: 910656780.a
+&gt; root 14592 a Mon Nov 9 19:13:00 1998
+&lt; root 14592 a Mon Nov 9 19:13:01 1998</pre>
+      </font> </td>
+  </tr>
+  <tr> 
+    <td align="LEFT" colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">Other log 
+      directories under /var and elsewhere</font></b></td>
+    <td align="LEFT" valign="TOP">There are other tools that may have specific 
+      log directories under /var. It is beyond the scope of this implementation 
+      to attempt to catalog even a collection of the most popular ones such as 
+      ftp and samba. We recommend that you familiarize yourself with the specific 
+      log files for all such applications and review them regularly.</td>
+  </tr>
+  <tr> 
+    <td align="LEFT" colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+</table>
+
+
+</BODY>
+</HTML>
+
+
+
+
+
+
+
+
+
+
+

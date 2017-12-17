@@ -1,0 +1,1137 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.61 [en] (WinNT; U) [Netscape]">
+   <title>Implementation Details Configuring and installing sps on systems running Solaris 5</title>
+</head>
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+<table BORDER=0 CELLSPACING=6 CELLPADDING=4 WIDTH="100%" >
+<tr VALIGN=TOP>
+<td ALIGN=LEFT><b><font face="Arial"><font size=+0>Implementation Details</font></font></b></td>
+
+<td ALIGN=LEFT><b><font face="Arial"><font size=+1>Installing and configuring
+sps to examine processes on systems running Solaris 2.x</font></font></b></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td HEIGHT="117">&nbsp;</td>
+
+<td ALIGN=LEFT>
+<table BORDER CELLSPACING=0 CELLPADDING=8 WIDTH="75%" BGCOLOR="#CCDDFF" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP HEIGHT="103">Applies to the practices:<br> 
+<a
+href="../practices/p095.html">"Monitor and inspect system   
+activities for unexpected behavior"</a>
+<br><a href="../practices/p091.html">"Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior"</a>
+
+<p>Applicable technologies:<br>Solaris 2.x; UNIX operating system and derivatives&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>&nbsp;</td>
+
+<td ALIGN=LEFT>This section describes the information necessary to download,
+configure, and use <font face="Courier New"><font size=+0>sps</font></font>
+on the Sun Solaris operating system, version 2.x. <font face="Courier New"><font size=+0>sps</font></font>
+is a utility that displays a list of processes in a fashion that is more
+easy to understand, in particular, <font face="Courier New"><font size=+0>sps</font></font>
+shows the hierarchical relationships between processes which can be very
+useful in identifying anomalous program execution. The list may be incomplete.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT><b><font face="Arial">Preparation</font></b></td>
+
+<td ALIGN=LEFT HEIGHT="54">Your installation of <font face="Courier New"><font size=+0>sps</font></font>
+will be easier if you have the following information before you begin.
+You need to determine the answers to the questions in this section before
+proceeding on to the next section.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT></td>
+
+<td ALIGN=LEFT HEIGHT="267"><b><font face="Arial"><font color="#008000"><font size=+0>Ensure
+you can meet installation requirements.</font></font></font></b>
+<p>In order to build <font face="Courier New"><font size=+0>sps</font></font>,
+you need:&nbsp;
+<ul>
+<li>
+Internet access to retrieve the latest version of the sps software&nbsp;</li>
+
+<li>
+The <font face="Courier New"><font size=+0>sps</font></font> distribution
+is available by ftp in the newer <font face="Courier New"><font size=+0>gzipped</font></font>
+(ending in .gz) format. The default compression utility available with
+most Unix systems, including Solaris, is the compressed (ending in .Z)
+format. If you do not have the <font face="Courier New"><font size=+0>gzip</font></font>
+utility, you need to have installed the <font face="Courier New"><font size=+0>gunzip</font></font>
+application which is available as part of the GNU tools distribution at
+the <font face="Courier New"><font size=+0><a href="http://www.gzip.org">gzip</a></font></font>
+home page.</li>
+
+<li>
+a C compiler to build the executable program. Here we assume that you have
+access either to the GCC compiler or Sun's proprietary C compiler. We include
+instructions for building <font face="Courier New"><font size=+0>sps</font></font>
+using the portable C compiler or other variants.&nbsp;</li>
+
+<li>
+While not strictly necessary, these instructions assume that you have access
+to the <font face="Courier New"><font size=+0>make</font></font> utility.
+If you do not, you can get a publicly available version from the GNU distribution</li>
+</ul>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT><b><font size=+0><font face="Arial">Download </font><font face="Courier New">sps</font></font></b></td>
+
+<td ALIGN=LEFT>While there are several available distributions of <font face="Courier New, Courier, mono">sps</font>,
+the one used here appears to be the most recent and is available via anonymous
+ftp from
+<p><a href="ftp://ftp.csv.warwick.ac.uk/pub/solaris2/sps-sol2.tar.gz">ftp://ftp.csv.warwick.ac.uk/pub/solaris2/sps-sol2.tar.gz</a>
+<p>Download the <font face="Courier New"><font size=+0>sps</font></font>
+distribution on a clean system.&nbsp;
+<p>Download the gzipped <font face="Courier New"><font size=+0>tar</font></font>
+file from the above location and uncompress the file in a directory appropriate
+for creating <font face="Courier New"><font size=+0>sps</font></font>.
+Do this on a machine that you have verified to be free of threat so as
+not to compromise the building of the <font face="Courier New"><font size=+0>sps</font></font>
+system.&nbsp;
+<p>Unpack and untar the <font face="Courier New"><font size=+0>sps</font></font>
+distribution.&nbsp;
+<p>Once you have downloaded the <font face="Courier New"><font size=+0>sps</font></font>
+distribution, extract the files with the following command:&nbsp;
+<blockquote><font face="Courier New, Courier, mono"><font size=-1>gzip
+-d -c sps-sol2.tar.gz |tar xvf -&nbsp;</font></font></blockquote>
+This creates a <font face="Courier New"><font size=+0>sps-sol2</font></font>
+subdirectory that contains all of the files that come with the distribution.
+You can safely remove the <font face="Courier New"><font size=+0>sps-sol2.tar.gz</font></font>
+file as it is not used again during the building or installation of the
+<font face="Courier New"><font size=+0>sps</font></font>
+system.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2" HEIGHT="19">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT><b><font face="Arial">Build and install</font></b></td>
+
+<td ALIGN=LEFT HEIGHT="67">The <font face="Courier New"><font size=+0>sps</font></font>
+system is now ready for building and installing, including any local configuration
+changes that you need to make. It is assumed that all operations are performed
+from within the <font face="Courier New"><font size=+0>sps-sol2</font></font>
+source subdirectory, created by <font face="Courier New"><font size=+0>tar</font></font>
+from the distribution tar file in the previous step.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT>
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT><b><font color="#008000"><font size=+0><font face="Arial">Configure
+the </font><font face="Courier New">Makefile.</font></font></font></b>
+<p>As distributed, there are a number of <font face="Courier New"><font size=+0>Makefiles</font></font>
+including one for Solaris 5 named <font face="Courier New"><font size=+0>Makefile.sun.5</font></font>.
+If you are using Sun's C compiler, add
+<p><font face="Courier New"><font size=-1>- DFILE_INFO=\"/var/sps/spsinfo\"</font></font>
+<p><font size=+0>to the definition of CFLAGS in Makefile.sun.5. That is,
+the line</font>
+<p><font face="Courier New"><font size=-1>CFLAGS = -DNFS -DVPRINTF -DKVM
+-DSVR4 -DSUNOS=$(SUNOS) \&nbsp;</font></font>
+<br><font face="Courier New"><font size=-1>-DMAXUSERS=30000 -DMAXTTYS=2500</font></font>
+<p>should look like&nbsp;
+<p><font face="Courier New"><font size=-1>CFLAGS = -DNFS -DVPRINTF -DKVM
+-DSVR4 -DSUNOS=$(SUNOS) \&nbsp;</font></font>
+<br><font face="Courier New"><font size=-1>-DMAXUSERS=30000 -DMAXTTYS=2500
+-DFILE_INFO=\"/var/sps/spsinfo\"</font></font>
+<p>If you are using GNU's C compiler (GCC), there are several changes required
+to the <font face="Courier New, Courier, mono"><font size=+0>make</font>file
+</font>(<font face="Courier New"><font size=+0>Makefile.sun.5</font></font>).
+First, comment out the lines pertaining to Sun's C compiler and uncomment
+those pertaining to the GCC compiler. The <font face="Courier New, Courier, mono"><font size=+0>make</font>file</font>
+has the two sections commented. Second, you need to add two defines <font face="Courier New"><font size=-1>(-D_LARGEFILE64_SOURCE-DFILE_INFO=\"/var/sps/spsinfo\"</font></font>)
+to the <font face="Courier New"><font size=+0>cflags</font></font> definition.
+When you get done, what used to look like&nbsp;
+<pre><font face="Courier New, Courier, mono"><font size=-1>#Choose the following 4 lines for gcc
+
+# CC = gcc&nbsp;
+
+# OPT = -g -O2 -Wall&nbsp;
+
+# READONLY =&nbsp;
+
+# READWRITE = -fwritable-strings&nbsp;
+
+# LINT = lint&nbsp;
+
+#Choose the following 4 lines for cc&nbsp;
+
+CC = cc&nbsp;
+
+OPT = -O&nbsp;
+
+READONLY = -xstrconst&nbsp;
+
+READWRITE =&nbsp;
+
+LINT = lint -errchk=%all&nbsp;
+
+SUNOS = `uname -r | sed 's/^5.\(.\).*/5\1/'`&nbsp;
+
+CFLAGS = -DNFS -DVPRINTF -DKVM -DSVR4 -DSUNOS=$(SUNOS) \&nbsp;
+
+-DMAXUSERS=30000 -DMAXTTYS=2500&nbsp;</font></font></pre>
+
+<pre><font face="Courier New, Courier, mono"><font size=-1>LIBS = ltermlib -lkvm -lelf</font></font></pre>
+
+<pre><font face="Courier New, Courier, mono"><font size=-1>DIRINSTALL = /usr/local/bin</font></font></pre>
+should look like
+<pre>&nbsp;<font face="Courier New, Courier, mono"><font size=-1>#Choose the following 4 lines for gcc&nbsp;
+
+&nbsp;CC = gcc&nbsp;
+
+&nbsp;OPT = -g -O2 -Wall&nbsp;
+
+&nbsp;READONLY =&nbsp;
+
+&nbsp;READWRITE = -fwritable-strings&nbsp;
+
+&nbsp;# LINT = lint&nbsp;
+
+&nbsp;#Choose the following 4 lines for cc&nbsp;
+
+&nbsp;# CC = cc&nbsp;
+
+&nbsp;# OPT = -O&nbsp;
+
+&nbsp;# READONLY = -xstrconst&nbsp;
+
+&nbsp;# READWRITE =&nbsp;
+
+&nbsp;LINT = lint -errchk=%all&nbsp;
+
+&nbsp;SUNOS = `uname -r | sed 's/^5.\(.\).*/5\1/'`&nbsp;
+
+&nbsp;CFLAGS = -DNFS -DVPRINTF -DKVM -DSVR4 -DSUNOS=$(SUNOS) \&nbsp;
+
+&nbsp;-DMAXUSERS=30000 -DMAXTTYS=2500 -D_LARGEFILE64_SOURCE \&nbsp;
+
+&nbsp;-DFILE_INFO=\"/var/sps/spsinfo\"&nbsp;&nbsp;</font></font></pre>
+
+<pre><font face="Courier New, Courier, mono"><font size=-1>&nbsp;LIBS = -ltermlib -lkvm -lelf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></font></pre>
+
+<pre><font face="Courier New, Courier, mono"><font size=-1>&nbsp;DIRINSTALL = /usr/bin&nbsp;</font></font></pre>
+You may wish to use a different location and name for the information file
+generated and used by <font face="Courier New"><font size=+0>sps</font></font>.
+We suggest <font face="Courier New"><font size=+0>/var/sps/spsinfo</font></font>
+as being a common location/name for such a file. More about this information
+file can be found below in the Maintenance section.
+<p>In either case, you can <font face="Courier New"><font size=+0>make</font></font>
+the tool using the command&nbsp;
+<blockquote><font face="Courier New, Courier, mono"><font size=-1>% make
+-f Makefile.sun.5 all</font></font></blockquote>
+NOTE: We show the "%" character as a shell prompt -- you should not type
+it on the command line. The build typically takes a minute or so to complete.
+Depending upon the compiler you are using, you receive one or more warnings,
+which can be ignored.&nbsp;
+<p>From a security perspective, we recommend that diagnostic and logging
+tools be linked statically. That is, the binary resulting from the linking
+operation can function without having to load external libraries at run
+time to work properly. This means that even if these libraries were to
+be compromised, the tool functions as expected. Unfortunately, on Solaris
+2.x, this is not possible with <font face="Courier New"><font size=+0>sps</font></font>
+since two of the libraries are not provided in a format amenable to static
+linking. As a result, extra care needs to be taken when using <font face="Courier New"><font size=+0>sps</font></font>
+diagnostically to ensure that the required shared libraries, in addition
+to <font face="Courier New"><font size=+0>sps </font></font>itself, are
+not compromised.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT><b><font face="Arial">Test the </font><font face="Courier New"><font size=+0>sps</font></font><font face="Arial">
+tool&nbsp;</font></b></td>
+
+<td ALIGN=LEFT>In order to test <font face="Courier New"><font size=+0>sps</font></font>
+you first need to change the group (to <font face="Courier New"><font size=+0>sys</font></font>)
+and file modes (to be <font face="Courier New"><font size=+0>setgid</font></font>
+-- set group id) for the <font face="Courier New"><font size=+0>sps</font></font>
+binary. This is required so that <font face="Courier New"><font size=+0>sps
+</font></font>is
+authorized to read the <font face="Courier New"><font size=+0>/dev/kmem</font></font>
+device to get the information it requires. As the superuser (<font face="Courier New"><font size=+0>root</font></font>),
+do the following&nbsp;
+<p><font face="Courier New, Courier, mono"><font size=-1>chgrp sys ./sps&nbsp;</font></font>
+<br><font face="Courier New, Courier, mono"><font size=-1>chmod 4755 ./sps&nbsp;</font></font>
+<p>Next, construct the <font face="Courier New"><font size=+0>sps</font></font>
+information file in a temporary location using the <font face="Courier New"><font size=+0>-i</font></font>
+and <font face="Courier New"><font size=+0>-j</font></font> switches
+<p><font size=-1>.<font face="Courier New, Courier, mono">/sps -i -j /tmp/.spsinfo&nbsp;</font></font>
+<p>You should get the message
+<p><font face="Courier New, Courier, mono"><font size=-1>sps is initialised&nbsp;</font></font>
+<p>If you have any conflicts in the <font face="Courier New"><font size=+0>/etc/passwd</font></font>
+file, you are warned by <font face="Courier New"><font size=+0>sps</font></font>.
+For example, when <font face="Courier New"><font size=+0>sps</font></font>
+was built while testing this implementation, the test computer re-used
+uid 0 for two accounts resulting in the following warning from <font face="Courier New"><font size=+0>sps</font></font>:&nbsp;
+<p><font face="Courier New"><font size=-1>sps - Names root and smtp conflict
+in passwd file for uid 0</font></font>
+<p>Now, you can test <font face="Courier New"><font size=+0>sps</font></font>
+with various command line options (see the <font face="Courier New"><font size=+0>man</font></font>
+pages at the end of this implementation). While there are many options
+available with <font face="Courier New"><font size=+0>sps</font></font>,
+the following table lists a few of the more commonly used and useful ones:&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>&nbsp;</td>
+
+<td ALIGN=LEFT>
+<table BORDER CELLPADDING=7 WIDTH="75%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="19%" BGCOLOR="#CCDDFF">Option&nbsp;</td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="81%" BGCOLOR="#CCDDFF">Effect&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="19%">-A&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="81%">List information about all processes.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="19%">-c&nbsp;</td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="81%">Report the system's idea of the command
+rather than what the user invoked. While this is less informative in certain
+ways (for example, the environment variables
+<p>passed to each process are not listed), it is a very important option
+in detecting potential breaches since it lists the actual program being
+run rather than what the user called the program.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="19%">-e&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="81%">List the environment variables passed to each
+process.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="19%">-f&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="81%">Include the process-id of the parent of each
+process.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="19%" HEIGHT="54">-l (or -v)&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="81%" HEIGHT="54">Report additional information for
+each process, in a verbose format. See also the -w option.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="19%">-P pidList&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="81%">Report only on processes whose identities are
+specified in the following pidlist.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="19%">-T termList&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="81%">Report only processes associated with the terminals
+specified in termList.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="19%">-U uidList&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="81%">Report only processes whose real user ID numbers
+or login names are specified in uidList.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="19%">-w&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="81%">Use a wide format ignoring terminal width limits.&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>&nbsp;</td>
+
+<td ALIGN=LEFT>For example, the following command produces a verbose listing
+of all processes:
+<p><font face="Courier New, Courier, mono"><font size=-1>% ./sps va&nbsp;</font></font>
+<p>On the system used to test this implementation, the above command produced
+the following output:&nbsp;
+<pre><font face="Courier New, Courier, mono"><font size=-1>Tty User Status Fl Nice Virt Res %M Time Child %C Proc# Command&nbsp;
+
+root STOP U -20 0 0 0 196 M 0 0 sched&nbsp;
+
+root X57800 680 360 1 0.1+ 5.9 1 /etc/init -&nbsp;
+
+root X361FC U -20 0 0 0 0.0 2 pageout&nbsp;
+
+root X392BC U -20 0 0 0 0.0 3 fsflush&nbsp;
+
+root XC3016 1856 1088 2 0.0 141 /usr/sbin/rpcb&nbsp;
+
+root XC2F9E 2016 1288 2 0.0 143 /usr/sbin/keys&nbsp;
+
+root XC2F26 2976 1624 3 0.0 176 /usr/cert/sbin&nbsp;
+
+root XDA45E U -20 0 0 0 0.0 195 /usr/vice/etc/&nbsp;</font></font></pre>
+( ...... several lines of output removed ......)&nbsp;
+<pre><font face="Courier New, Courier, mono"><font size=-1>root XC2AC6 1896 1528 2 0.1 343 /usr/sbin/inet&nbsp;
+
+root XC29D6 2344 2032 3 1.0 0 350 /usr/sbin/vold
+
+root XC2846 2080 1104 2 6.4 0 366 /usr/cert/sbin&nbsp;
+
+pts/0 *slk X24F66 2264 1888 3 0.1 496 -tcsh&nbsp;
+
+pts/0 * XC277E 10232 8816 14 9.1 0 517 xemacs&nbsp;
+
+pts/1 * X8F818 2248 1840 3 0.1+ 11.8 519 /bin/tcsh -i
+
+pts/1 * CPU 2568 1712 3 0.1 835 sps va&nbsp;
+
+*root XC286E 2184 1688 3 0.6 523 /usr/cert/sbin&nbsp;
+
+pts/2 * X8E910 304 296 0 0.0 526 -sh&nbsp;
+
+pts/2 | XC2666 2152 1688 3 0.1 832 top&nbsp;
+
+root XDFC78 1496 1152 2 0.0 444 /usr/lib/saf/s&nbsp;
+
+| X8DD18 1568 1264 2 0.0 447 /usr/lib/saf/t&nbsp;
+
+console root XC312E 1560 1160 2 0.0 445 /usr/lib/saf/t&nbsp;
+
+36 (55520k) processes, 1 (2568k) busy, 36 (39904k) loaded, 0 (0k) swapped</font></font><font size=+0>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></pre>
+A particularly useful combination of options is <font face="Courier New"><font size=+0>vfwcA</font></font>,
+which specifies a wide verbose listing of all processes using the systems
+idea of the command, and includes the parents' process id. On the above
+system, the invocation and the result are given below:&nbsp;
+<pre><font face="Courier New, Courier, mono"><font size=-1>% ./sps vfwcA
+
+
+Tty User Status Fl Nice Virt Res %M Time Child %C Proc# Ppid# Command&nbsp;
+
+root STOP U -20 0 0 0 555 M 0 0 0 sched&nbsp;
+root X57800 680 360 1 0.1+ 42.7 1 0 init&nbsp;
+root X361FC U -20 0 0 0 0.0 2 0 pageout&nbsp;
+root X392BC U -20 0 0 0 0.0 3 0 fsflush&nbsp;
+root XC3016 1856 1088 2 0.0 141 1 rpcbind&nbsp;
+root XC2F9E 2016 1288 2 0.0 143 1 keyserv&nbsp;
+root XC2F26 2976 1624 3 0.0 176 1 in.named&nbsp;
+root XDA45E U -20 0 0 0 0.0 195 1 afsd</font></font></pre>
+( ...... several lines of output removed ......)&nbsp;
+<pre><font face="Courier New"><font size=-1>root XC2AC6 1896 1528 2 0.1 343 1 inetd&nbsp;
+
+root XC29D6 2344 2032 3 1.0 0 350 1 vold&nbsp;
+
+root XDFC78 1496 1152 2 0.0 444 1 sac&nbsp;
+
+| X8DD18 1568 1264 2 0.0 447 444 ttymon&nbsp;
+
+console root XC312E 1560 1160 2 0.0 445 1 ttymon&nbsp;
+
+root XC22A6 1984 1152 2 5.3 0 917 1 sshd1&nbsp;
+
+| XC3796 2232 1840 3 2.2 0 992 917 sshd1&nbsp;
+
+pts/0 *slk XB9076 2264 1888 3 0.1 995 992 tcsh&nbsp;
+
+pts/0 * XC385E 10600 9144 15 19.2 0 1017 995 xemacs-20.4&nbsp;
+
+pts/1 * X54F80 2248 1840 3 0.1+ 8.9 1022 1017 tcsh&nbsp;
+
+pts/1 * X8CE10 920 752 1 0.0 2018 1022 snoop&nbsp;
+
+pts/1 | X363E0 824 592 1 0.0 2050 2018 sleep
+
+pts/1 * CPU 2568 1704 3 0.1 2051 1022 sps&nbsp;
+
+35 (52808k) processes, 1 (2568k) busy, 35 (37968k) loaded, 0 (0k)&nbsp;
+
+swapped&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></font></pre>
+For more information on how <font face="Courier New"><font size=+0>sps
+</font></font>can
+be used to detect signs of intrusion, see <a href="i005.01.html">"Using
+the ps program to examine processes for signs of intrusive activity."</a>
+In reading that implementation, keep in mind that the options for the <font face="Courier New"><font size=+0>sps
+</font></font>program
+are different from those for the <font face="Courier New"><font size=+0>ps</font></font>
+program. In particular, the following mapping is important:</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td HEIGHT="543">&nbsp;</td>
+
+<td HEIGHT="543">
+<table BORDER CELLPADDING=7 WIDTH="75%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="19%" BGCOLOR="#CCDDFF"><b><font face="Courier New">ps</font>
+Option&nbsp;</b></td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="21%" BGCOLOR="#CCDDFF"><b><font face="Courier New"><font size=+0>sps
+</font></font>Option
+Equivalent&nbsp;</b></td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="60%" BGCOLOR="#CCDDFF"><b>Effect&nbsp;</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="19%">-e&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="21%">-A&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="60%">Include information about all processes currently
+running.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="19%">-l&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="21%">-c&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="60%">For <font face="Courier New"><font size=+0>sps</font></font>,
+this option prints the command name knows to the system rather than the
+name given by the user. The equivalent information in <font face="Courier New">ps</font>
+is given by the -l option which also reports additional information for
+each process, including its current state.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="19%">-f&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="21%">-f&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="60%">For <font face="Courier New">ps</font>, report
+additional information for each process, including its current state while
+for <font face="Courier New"><font size=+0>sps</font></font> this asks
+for the parent's process id.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="19%">-t termList&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="21%">-T termList&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="60%">Report only on processes associated with terminals
+specified in the following termList.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="19%">-p pidList&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="21%">-P pidList&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="60%">Report only on processes whose identifiers are
+specified in the following pidList.&nbsp;</td>
+</tr>
+</table>
+
+<p>&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT><b><font face="Arial">Install the </font><font face="Courier New"><font size=+0>sps</font></font><font face="Arial">system</font></b></td>
+
+<td ALIGN=LEFT>Once you are satisfied that <font face="Courier New"><font size=+0>sps</font></font>
+is running appropriately, you need to install it in a location that is
+accessible to the selected user community. Most commonly, this is in <font face="Courier New"><font size=+0>/usr/bin</font></font>
+or <font face="Courier New"><font size=+0>/usr/local/bin</font></font>.
+By default, the <font face="Courier New, Courier, mono"><font size=+0>make</font>file</font>
+installs it in <font face="Courier New"><font size=+0>/usr/local/bin</font></font>.
+If you do not like this location, change the definition of <font face="Courier New"><font size=+0>DIRINSTALL</font></font>
+from <font face="Courier New"><font size=+0>/usr/local/bin</font></font>
+to whatever you choose. Running a <font face="Courier New"><font size=+0>make
+install</font></font> installs the binary and produces the following output:&nbsp;
+<pre><font face="Courier New, Courier, mono"><font size=-1>% make -f Makefile.sun.5 install&nbsp;
+
+strip sps&nbsp;
+
+mv sps /usr/bin/sps&nbsp;
+
+chown root /usr/bin/sps&nbsp;
+
+chgrp sys /usr/bin/sps&nbsp;
+
+chmod 4755 /usr/bin/sps&nbsp;</font></font></pre>
+Your output may appear slightly different based on your choices of install
+locations for the <font face="Courier New"><font size=+0>sps</font></font>
+binary. The default <font face="Courier New"><font size=+0>makefile</font></font>
+does not install the <font face="Courier New"><font size=+0>man</font></font>
+page. To do this, do the installation manually using the following commands
+(again, remember that all of this is done from the chosen <font face="Courier New"><font size=+0>sps</font></font>
+location):&nbsp;
+<pre><font face="Courier New, Courier, mono"><font size=-1> p sps.1 /usr/man/man1
+
+ hmod 644 /usr/man/man1/sps.1&nbsp;</font></font></pre>
+Again, the example command assumes that you have installed <font face="Courier New"><font size=+0>sps</font></font>
+in <font face="Courier New"><font size=+0>/usr/bin </font></font>and hence,
+the <font face="Courier New"><font size=+0>man</font></font> page should
+be in <font face="Courier New"><font size=+0>/usr/man/man1</font></font>.
+Finally, build the <font face="Courier New"><font size=+0>sps</font></font>
+information file for general use with the following command:&nbsp;
+<pre><font face="Courier New, Courier, mono"><font size=-1>% mkdir /var/sps&nbsp;
+
+% /usr/bin/sps -i -f /var/sps/spsinfo&nbsp;</font></font></pre>
+This creates a world readable information file in <font face="Courier New"><font size=+0>/var/sps/spsinfo</font></font>.
+Now <font face="Courier New"><font size=+0>sps</font></font> can be used
+by any user of the system (directly if <font face="Courier New"><font size=+0>/usr/bin</font></font>
+is on the path or by invoking <font face="Courier New"><font size=+0>sps</font></font>
+with the full path specified as in the example above).&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT><b><font face="Arial">Maintenance</font></b></td>
+
+<td ALIGN=LEFT><font face="Courier New"><font size=+0>sps</font></font>
+should be maintained securely especially since it can be used to identify
+anomalies indicating potential system compromise. The commands used to
+install <font face="Courier New"><font size=+0>sps</font></font> above
+ensure that the binary (sps), the information file /var/sps/spsinfo), and
+the man page (/usr/man/man1/sps.1) have suitable permissions.&nbsp;
+<p><font face="Courier New"><font size=+0>sps</font></font> keeps its information
+in an information file, <font face="Courier New"><font size=+0>/var/sps/</font></font>spsinfo,
+if you follow these instructions. This means that <font face="Courier New"><font size=+0>sps</font></font>
+can avoid having to do an expensive <font face="Courier New"><font size=+0>nlist()</font></font>
+operation each time it is run. However, this also means that the information
+file must be re-built (with the "i" option) if new users are added to <font face="Courier New"><font size=+0>/etc/passwd</font></font>.&nbsp;
+<p>Finally, ensure that <font face="Courier New"><font size=+0>sps</font></font>,
+the libraries it depends on (<font face="Courier New"><font size=+0>libelf.so,
+libc.so, libdl.so, libkvm.so</font></font>) and <font face="Courier New"><font size=+0>/var/sps/spsinfo</font></font>
+have not been tampered with. The recommended procedure to detect any such
+tampering is to obtain the digital signatures of all these files. Obtain
+the signatures using md5, md4, or other cryptographic checksum algorithms
+and not the checksum utility that comes with most Unix systems. Once you
+have these checksums, ensure that they cannot be modified and periodically
+compare these securely stored digital signatures against signatures of
+the files currently on the system. For more information on how to do this
+see <a href="i002.01.html">"Using MD5 to verify the integrity of file contents"</a>
+which covers the use of the MD5 digital signature algorithm to check file
+integrity.&nbsp;
+<p>You can also "automate" such checks using the Tripwire utility. See
+<a href="i002.02.html">"Using
+Tripwire to verify the integrity of directories and files on systems running
+Solaris 2.x."</a></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT><a NAME="appendixA"></a><b><font face="Arial">Appendix A
+</font><font face="Courier New"><font size=+0>sps</font></font><font face="Arial">
+- Show Process Status</font></b></td>
+
+<td ALIGN=LEFT>This appendix contains the following sections:
+<br>NAME
+<br>SYNOPSIS
+<br>DESCRIPTION
+<br>OPTIONS
+<br>OUTPUT
+<br>DIAGNOSTICS
+<br>EXAMPLES
+<br>FILES
+<br>SEE ALSO
+<br>AUTHORS
+<br>BUGS&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT><b><font face="Arial">Description</font></b></td>
+
+<td ALIGN=LEFT><font face="Courier New"><font size=+0>sps</font></font>
+reports information concerning system processes. It shows the current state
+of any process by listing information such as ownership, CPU time usage,
+memory usage and disc activity.
+<p><font face="Courier New, Courier, mono">sps</font> should be used in
+preference to <font face="Courier New, Courier, mono">ps(1)</font> because
+it is faster and the output is more comprehensive and more comprehensible.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT><b><font face="Arial">Options</font></b></td>
+
+<td ALIGN=LEFT>By default, <font face="Courier New, Courier, mono">sps</font>
+prints basic information about one's own processes. The various options
+described below select other processes or make sps more verbose.
+<p>Upper case options select processes to be described. Lower case options
+specify the format of the output. For instance, the options Bv specify
+that <font face="Courier New, Courier, mono">sps</font> should list "busy"
+processes in a verbose format. Unless there is any conflict, lower case
+options may be used instead of upper case options, and vice versa.
+<p>The following options specify the format of the listed output&nbsp;
+<p><b>-c&nbsp;</b>
+<br>Use the system's idea of the command, rather than getting the arguments
+from user space. While somewhat less informative, this is faster and more
+reliable.&nbsp;
+<p><b>-d</b>
+<br>List output reflecting how each process affects the disc and paging
+activity of the system.
+<p><b>-e&nbsp;</b>
+<br>List the environment passed to each process.
+<p><b>-f&nbsp;</b>
+<br>Include the process-id of the parent of each process.
+<p><b>-g&nbsp;</b>
+<br>Include the process group of each process.
+<p><b>-o&nbsp;</b>
+<br>Avoid looking at the swap device (/dev/drum). This tends to make <font face="Courier New, Courier, mono">sps</font>
+run faster, although no information concerning swapped processes can be
+obtained.
+<p><b>-q</b>
+<br>By default, <font face="Courier New, Courier, mono">sps</font> lists
+the sum of the user plus system times under the Time and Child fields.
+This option forces sps to list only the user times.
+<p><b>-r&nbsp;</b>
+<br>Repeat the output indefinitely. If the next argument is numeric, sps
+repeats the output with that many seconds delay between each repetition.
+Otherwise the output is repeated with no delay.
+<p><b>-l (or -v)</b>
+<br>List additional information in a verbose format. See below.
+<p><b>-w&nbsp;</b>
+<br>List output in a wide format. This option forces sps to print all the
+command arguments, even if doing so extends the output beyond one line.
+<p><b>-y&nbsp;</b>
+<br>Show the status of each terminal line.
+<br>&nbsp;
+<br>&nbsp;
+<p>The following options specify which processes are to be described -
+<p><b>-A&nbsp;</b>
+<br>List all processes.
+<p><b>-B</b>
+<br>List busy processes. A process is considered to be busy if it is immediately
+runnable or awaiting a fast event such as disc I/O.
+<p><b>-D&nbsp;</b>
+<br>List detached processes.
+<p><b>-F</b>
+<br>List foreground processes.
+<p><b>-N&nbsp;</b>
+<br>Show no processes at all. Only the summary line is printed.
+<p><b>-P&nbsp;</b>
+<br>List only processes whose identifiers are specified in the following
+arguments.
+<p><b>-S&nbsp;</b>
+<br>List stopped processes.
+<p><b>-T&nbsp;</b>
+<br>List only processes attached to the following specified terminals.
+<p><b>-U&nbsp;</b>
+<br>List only processes belonging to the following specified users.
+<p><b>-W</b>
+<br>List waiting processes.
+<p><b>-Z&nbsp;</b>
+<br>List zomby (exiting) processes.
+<br>&nbsp;
+<br>&nbsp;
+<p>The following are miscellaneous options -
+<p><b>-I&nbsp;</b>
+<br>Initialize <font face="Courier New, Courier, mono">sps</font>. This
+is necessary if new users are added to the password file, or if a new version
+of UNIX is installed. Sps builds a new information file summarizing pertinent
+information read from the password file (/etc/passwd), the executable kernel
+image (/vmunix) and the directory of tty devices (/dev). See also the -j
+and -s options.
+<p><b>-j&nbsp;</b>
+<br>Specify an information file other than the default (/etc/spsinfo).
+The next argument is taken to be the name of a suitable information file.
+If the –i flag is also specified, sps builds a new information file with
+the given name. Otherwise, sps reads previously created summarizing information
+from that file.
+<p><b>-k&nbsp;</b>
+<br>Use a specific disc file rather than the default physical memory (/dev/mem)
+and kernel virtual memory (/dev/kmem) files. The next argument is taken
+to be the name of a suitable memory dump file. This flag automatically
+sets the -o flag.
+<p><b>-s&nbsp;</b>
+<br>This option is used in conjunction with the -i option. The next argument
+is taken to be the name of a suitable kernel executable file, rather than
+the default (/vmunix). Sps looks at the symbol table of this file to determine
+the virtual addresses of various kernel structures.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT><b><font face="Arial">Output</font></b></td>
+
+<td ALIGN=LEFT><font face="Courier New"><font size=+0>sps</font></font>
+produces output in the following fields -
+<p><b>Ty&nbsp;</b>
+<br>The terminal identifier to which the process is attached.
+<p>If this is followed by an underscore, the process is detached. If it
+is followed by a period, the process is running in the foreground. Otherwise
+the process is running in the background but is still attached to a terminal.
+<p><b>User&nbsp;</b>
+<br>The symbolic name of the process' effective user-id (see exec(2) and
+setuid(2)).
+<p>This name is defined by the system password file (/etc/passwd) when
+sps was last initialized. Otherwise, an asterisk (*) or vertical bar (|)
+appearing in this column denotes that the process is an immediate relative
+of the preceding process. A bar is listed, rather than an asterisk, if
+both processes belong to the same process group. A user name is listed
+only if the effective user-id differs from that of the preceding process
+or if it is a top-level process (immediate offspring of process 1).
+<p><b>Proc#&nbsp;</b>
+<br>The unique process identifier.
+<p><b>Ppid#</b>
+<br>The process-id of the process' parent.
+<p><b>Pgrp#&nbsp;</b>
+<br>The process group to which the process belongs.
+<p><b>Command&nbsp;</b>
+<br>The command arguments obtained from the process' own address space.&nbsp;
+<p>(If the command name appears in parentheses, <font face="Courier New, Courier, mono">sps</font>
+was unable to locate the arguments in user space and so reports the system's
+idea of the command name.)
+<p>The following additional fields are listed when <font face="Courier New, Courier, mono">sps</font>
+is invoked with one of the -l or -v options -&nbsp;
+<p><b>Status&nbsp;</b>
+<br>The process' current state.
+<p>If this field is listed in upper-case letters, the process is currently
+loaded in real memory space; otherwise it has been swapped out. The status
+field may contain one of the following descriptions:&nbsp;
+<p><b>run&nbsp;</b>
+<br>The process can be run immediately.
+<p><b>stop&nbsp;</b>
+<br>The process is stopped. See sigvec(2).
+<p><b>exit&nbsp;</b>
+<br>The process is a zomby.
+<p>Any other entry in the status field indicates the process is waiting
+for some external event to occur. This is usually for one of the reasons
+listed below. (If <font face="Courier New, Courier, mono">sps</font> does
+not know why a process is waiting, it lists the hexadecimal address of
+the process' wait channel, with the initial 80000000 trimmed off.) A process
+may be waiting for one of the following reasons -
+<p><b>child&nbsp;</b>
+<br>The process is waiting for a child to terminate. See wait(2).
+<p><b>pause&nbsp;</b>
+<br>Waiting for a signal to be received. See sigpause(2).
+<p><b>swap&nbsp;</b>
+<br>Waiting for a page to be swapped in.
+<p><b>rswbuf&nbsp;</b>
+<br>Waiting for a read from the swap device /dev/drum.
+<p><b>discio&nbsp;</b>
+<br>Waiting for a disc read or write operation.&nbsp;
+<p>(Actually, this means that the process is waiting for an operation through
+the kernel's I/O buffering mechanism to complete, but discio is what is
+generally meant here).
+<p><b>rpipe</b>
+<p><b>wpipe&nbsp;</b>
+<br>Waiting for a read from an empty pipe.&nbsp;
+<p>Alternatively, the process is waiting to write to a full pipe. See pipe(2).
+<p><b>rsockt</b>
+<p><b>wsockt</b>
+<br>Waiting for a read from an empty socket.&nbsp;
+<p>Alternatively, the process is waiting to write to a full socket (4.[2-]bsd
+only).
+<p><b>accept</b>
+<br>Waiting to accept a stream-based socket connection (4.[2-]bsd only).
+See accept(2).
+<p><b>connct&nbsp;</b>
+<br>Waiting to establish a connection through a stream-based socket to
+a remote process (4.[2-]bsd only). See connect(2).
+<p><b>socket</b>
+<br>Waiting for some other time-out event on a socket (4.[2-]bsd only).
+<p><b>select&nbsp;</b>
+<br>Blocked by a select(2) system call (4.[2-]bsd only).
+<p><b>rmux&nbsp;</b>
+<br>Waiting for a read from a multiplexor file (4.1bsd only).
+<p><b>inode&nbsp;</b>
+<br>Waiting for an inode to be allocated or unlocked.
+<p><b>exlock</b>
+<p><b>shlock</b>
+<br>Waiting for a file to become unlocked. See flock(2).
+<p><b>rtty??</b>
+<p><b>wtty??</b>
+<p><b>otty??&nbsp;</b>
+<br>Waiting for a read or write to the specified terminal, or for the terminal
+to be switched on. See tty(4). Alternatively, waiting for a read or write
+to the specified slave pty device. See pty(4).
+<p><b>itty??</b>
+<br>Under SunOS, waiting perform I/O to an iconified window.
+<p><b>rpty??</b>
+<p><b>wpty??&nbsp;</b>
+<br>Waiting for a read or write to the specified master pty device. See
+pty(4).
+<p><b>ptrace&nbsp;</b>
+<br>This is a parent process tracing its child.
+<p><b>vfork</b>
+<br>This is a vforking parent process waiting for its child to relinquish
+memory resources. See vfork(2).
+<p><b>floppY</b>
+<p><b>printr</b>
+<p><b>r??buf&nbsp;</b>
+<br>Waiting for the specified device to complete an I/O operation.
+<p><b>Fl</b>
+<br>Flags associated with the current state of the process. These flags
+may be any of the following -
+<p><b>U</b>
+<br>The process is a UNIX system process.
+<p><b>T</b>
+<br>The process is being traced or debugged.
+<p><b>V&nbsp;</b>
+<br>The process is a child currently being vforked. See vfork(2).
+<p><b>I&nbsp;</b>
+<br>The process is undergoing physical I/O.
+<p><b>A&nbsp;</b>
+<br>The system has detected, or the user has warned of anomalous paging
+behaviour. See vadvise(2).
+<p><b>Nice&nbsp;</b>
+<br>The "niceness" of the process. See nice(2).
+<p><b>Virtual&nbsp;</b>
+<br>The virtual memory size of the process in kilobytes. The first figure
+indicates the sum of the data and stack segments, the second figure that
+of the text segment.
+<p><b>Resident</b>
+<br>The resident memory size of the process in kilobytes, representing
+the real memory devoted to the process.
+<p><b>%M</b>
+<br>The percentage of available real memory allocated to this process.
+<p><b>Time&nbsp;</b>
+<br>The total CPU time accumulated by this process. (This is the sum of
+the system plus user times, unless the -q flag is specified in which case
+only the user time is listed.)
+<p><b>Child&nbsp;</b>
+<br>The total CPU time accumulated by the process' children. (This is the
+sum of the system plus user times, unless the -q flag is specified.)
+<p><b>%C</b>
+<br>The percentage of available CPU time devoted to the process. This figure
+is a decaying average, computed over the past second.
+<br>&nbsp;
+<br>&nbsp;
+<p>The following fields are listed when sps is invoked with the -d option:
+<p><b>Files</b>
+<br>The number of open files for this process.
+<p><b>PageFaults</b>
+<br>The number of major and minor page faults incurred by the process.
+<p><b>Swap</b>
+<br>The number of swaps incurred by the process.
+<p><b>BlockI/O&nbsp;</b>
+<br>The number of block read or write operations performed on behalf of
+the process.
+<p><b>Kbytesecs</b>
+<br>The integral of real memory usage over time. Thus, if a process uses
+60 kilobytes of real memory for 3 seconds, this figure is incremented by
+180.
+<br>&nbsp;
+<br>&nbsp;
+<p>The following fields are listed when <font face="Courier New, Courier, mono">sps</font>
+is invoked with the -y option:
+<p><b>Dev</b>
+<br>The major and minor device numbers of the terminal.
+<p><b>Addr</b>
+<br>The virtual address of the associated struct tty in /dev/kmem.
+<p><b>Rawq</b>
+<p><b>Canq</b>
+<p><b>Outq</b>
+<br>The number of characters in the terminal I/O queues. These refer to
+the raw input queue, the canonical input queue and the output queue.
+<p><b>Pgrp</b>
+<br>The process group associated with the terminal.
+<p>After listing the requested output, <font face="Courier New, Courier, mono">sps</font>
+prints a summary line. This indicates the number and total virtual memory
+size of all processes, the number and total virtual size of busy processes,
+the number and real memory size of loaded processes and the number and
+real size of swapped processes.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT><b><font face="Arial">Diagnostics</font></b></td>
+
+<td ALIGN=LEFT><font face="Courier New"><font size=+0>sps</font></font>
+reports a self-explanatory message if it is given an invalid argument list.
+The program also complains if it cannot find necessary system information.
+<p>At initialization, <font face="Courier New,Courier">sps</font> complains
+if it cannot find the addresses of requisite system structures in the kernel
+symbol file. This is usually the case because the system is rarely configured
+to support all known devices. <font face="Courier New,Courier">sps</font>
+also complains if more than one user shares the same user-id in the password
+file (/etc/passwd).</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT><b><font face="Arial">Examples</font></b></td>
+
+<td ALIGN=LEFT>sps vb <font face="Courier New, Courier, mono">Sps</font>
+describes all busy processes in a verbose manner.
+<p><font face="Courier New, Courier, mono"><font size=-1>sps dtg 9 h1 co</font></font>
+<p><font face="Courier New, Courier, mono">sps</font> lists processes associated
+with terminals 9, h1 and the console. The output reflects the disc activity
+caused by these processes. The process group of each process is also included
+in the output.
+<p><font face="Courier New, Courier, mono"><font size=-1>sps weu robert
+fred -r 2</font></font>
+<p><font face="Courier New, Courier, mono">sps</font> reports processes
+belonging to the specified users. It lists the environment as well as all
+the command arguments in a wide format. The output is produced indefinitely,
+with a delay of two seconds between each listing.
+<p><font face="Courier New, Courier, mono"><font size=-1>sps is /vmunix.new</font></font>
+<p><font face="Courier New, Courier, mono">sps</font> is initialized. It
+reads its symbol information from the specified file.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial">Files</font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>
+<pre>/dev/console&nbsp; Console
+
+/dev/tty??&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Terminal and pty devices
+
+/dev/kmem&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Kernel virtual memory
+
+/dev/mem&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Physical memory
+
+/dev/drum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Paging and swap device
+
+/etc/passwd&nbsp;&nbsp;&nbsp;&nbsp; Password file
+
+/etc/spsinfo&nbsp;&nbsp;&nbsp; Information file
+
+/vmunix&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Symbol file of /dev/kmem addresses
+
+/etc/termcap&nbsp;&nbsp;&nbsp; To determine the output terminal width</pre>
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial">See Also</font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>iostat(1), kill(1), ps(1), vmstat(1), exec(2),
+flock(2), nice(2), pause(2), select(2), setuid(2), sigvec(2), vadvise(2),
+vfork(2), wait(2), pty(4),tty(4), pstat(8).</td>
+</tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial">Authors</font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>J. E. Kulp and J. Robert Ward, &lt;robert@olsen.uucp>.
+<br>NFS changes incorporated by Alexander Dupuy, &lt;dupuy@amsterdam.columbia.edu>
+<br>SunOS 4.0 implementation by Alexander Dupuy and Charlie Kim &lt;cck@cunixc.cc.columbia.edu>.
+<br>Ultrix 2.x additions incorporated by Rob Lehman at CUUCA.
+<br>SunOS 4.1 additions incorporated by Sakari Jalovaara, &lt;sja@sirius.hut.fi>.
+<br>Ultrix 4.0 additions incorporated by Stefano Diomedi, &lt;sdiomedi@tecsiel.it>.
+<br>Currently maintained by J. Robert Ward, &lt;robert@olsen.uu.ch></td>
+</tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial">Bugs</font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>Because the system is continually changing, the
+information reported by <font face="Courier New, Courier, mono">sps</font>
+is only an approximation to reality. If invoked by root, <font face="Courier New, Courier, mono">sps</font>
+renices itself to -20 in an attempt to run as fast as possible.
+<p><font face="Courier New, Courier, mono">sps</font> recognizes the sizes
+and addresses of internal kernel tables whenever it is invoked. However,
+it must be recompiled if major modifications are made to the kernel.
+<p><font face="Courier New, Courier, mono">sps</font> does not list all
+the detailed information shown by <font face="Courier New, Courier, mono">ps(1)</font>.
+Nor are all the options supported by <font face="Courier New, Courier, mono">ps(1)</font>
+available from <font face="Courier New, Courier, mono">sps</font>.
+<p><font face="Courier New, Courier, mono">sps</font> does not understand
+all the possible reasons why a process may be sleeping.
+<p>The code of <font face="Courier New, Courier, mono">sps</font> is inherently
+machine-dependent and non-portable.
+<p>The number of options to <font face="Courier New, Courier, mono">sps</font>
+is ridiculous.</td>
+</tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+</table>
+</body>
+</html>

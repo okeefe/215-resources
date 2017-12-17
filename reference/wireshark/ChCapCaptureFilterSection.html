@@ -1,0 +1,143 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>4.9. Filtering while capturing</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="ChapterCapture.html" title="Chapter 4. Capturing Live Network Data"><link rel="prev" href="ChCapLinkLayerHeader.html" title="4.8. Link-layer header type"><link rel="next" href="ChCapRunningSection.html" title="4.10. While a Capture is running ..."></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.9. Filtering while capturing</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChCapLinkLayerHeader.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Capturing Live Network Data</th><td width="20%" align="right"> <a accesskey="n" href="ChCapRunningSection.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChCapCaptureFilterSection"></a>4.9. Filtering while capturing</h2></div></div></div><p>
+      Wireshark uses the libpcap filter language for capture filters. 
+      This is explained in the tcpdump man page, which can be hard to 
+	  understand, so it's explained here to some extent.
+    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: Tip!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="wsug_graphics/tip.png"></td><th align="left">Tip!</th></tr><tr><td align="left" valign="top"><p>
+	  You will find a lot of Capture Filter examples at <a href="http://wiki.wireshark.org/CaptureFilters" target="_top">http://wiki.wireshark.org/CaptureFilters</a>.
+      </p></td></tr></table></div><p>
+      You enter the capture filter into the Filter field of the Wireshark 
+      Capture Options dialog box, as shown in 
+      <a href="ChCapCaptureOptions.html#ChCapCaptureOptionsDialog" title='Figure 4.3. The "Capture Options" dialog box'>Figure 4.3, &#8220;The "Capture Options" dialog box&#8221;</a>. The following is an outline 
+	  of the syntax of the <span><strong class="command">tcpdump</strong></span> capture filter language. 
+	  See the expression option at the tcpdump manual page for details:
+	  <a href="http://www.tcpdump.org/tcpdump_man.html" target="_top">http://www.tcpdump.org/tcpdump_man.html</a>.
+    </p><p>
+      A capture filter takes the form of a series of primitive expressions 
+      connected by conjunctions (<span><strong class="command">and/or</strong></span>) and optionally 
+      preceded by <span><strong class="command">not</strong></span>:
+      </p><pre class="programlisting">
+[not] <span><strong class="command">primitive</strong></span> [and|or [not] <span><strong class="command">primitive</strong></span> ...]
+      </pre><p>
+      An example is shown in <a href="ChCapCaptureFilterSection.html#ChCapExFilt1" title="Example 4.1. 
+	  A capture filter for telnet that captures traffic to and from a 
+	  particular host
+	">Example 4.1, &#8220;
+	  A capture filter for telnet that captures traffic to and from a 
+	  particular host
+	&#8221;</a>.
+
+      </p><div class="example"><a name="ChCapExFilt1"></a><p class="title"><b>Example 4.1. 
+	  A capture filter for telnet that captures traffic to and from a 
+	  particular host
+	</b></p><pre class="programlisting">
+tcp port 23 and host 10.0.0.5
+	</pre></div><p>
+      This example captures telnet traffic to and from the host 
+      10.0.0.5, and shows how to use two primitives and the 
+      <span><strong class="command">and</strong></span> conjunction.  Another example is shown in 
+      <a href="ChCapCaptureFilterSection.html#ChCapExFilt2" title="Example 4.2. 
+	    Capturing all telnet traffic not from 10.0.0.5">Example 4.2, &#8220;
+	    Capturing all telnet traffic not from 10.0.0.5&#8221;</a>, and shows how to capture all 
+	telnet traffic except that from 10.0.0.5.
+	</p><div class="example"><a name="ChCapExFilt2"></a><p class="title"><b>Example 4.2. 
+	    Capturing all telnet traffic not from 10.0.0.5</b></p><pre class="programlisting">
+tcp port 23 and not src host 10.0.0.5
+	  </pre></div><p>
+      </p><p>
+	  XXX - add examples to the following list.
+      </p><p>
+      A primitive is simply one of the following:
+      </p><div class="variablelist"><dl><dt><span class="term"><span><strong class="command">[src|dst] host &lt;host&gt;</strong></span></span></dt><dd><p>
+	      This primitive allows you to filter on a host IP 
+	      address or name. You can optionally precede the 
+	      primitive with the keyword <span><strong class="command">src|dst</strong></span> 
+	      to specify that you are only interested in source or 
+	      destination addresses. If these are not present, 
+	      packets where the specified address appears as either 
+	      the source or the destination address will be selected.
+	    </p></dd><dt><span class="term">
+	    <span><strong class="command">ether [src|dst] host &lt;ehost&gt;</strong></span>
+	  </span></dt><dd><p>
+	      This primitive allows you to filter on Ethernet host 
+	      addresses. You can optionally include the keyword 
+	      <span><strong class="command">src|dst</strong></span> between the keywords 
+	      <span><strong class="command">ether</strong></span> and <span><strong class="command">host</strong></span> 
+	      to specify that you are only interested in source 
+	      or destination addresses.  If these are not present, 
+	      packets where the specified address appears in either 
+	      the source or destination address will be selected.
+	    </p></dd><dt><span class="term"><span><strong class="command">gateway host &lt;host&gt;</strong></span></span></dt><dd><p>
+	      This primitive allows you to filter on packets that 
+	      used <span><strong class="command">host</strong></span> as a gateway. That is, where 
+	      the Ethernet source or destination was 
+	      <span><strong class="command">host</strong></span> but neither the source nor 
+	      destination IP address was <span><strong class="command">host</strong></span>.
+	    </p></dd><dt><span class="term">
+	    <span><strong class="command">
+	      [src|dst] net &lt;net&gt; [{mask &lt;mask&gt;}|{len &lt;len&gt;}]
+	    </strong></span>
+	  </span></dt><dd><p>
+	      This primitive allows you to filter on network numbers. 
+	      You can optionally precede this primitive with the 
+	      keyword <span><strong class="command">src|dst</strong></span> to specify that you 
+	      are only interested in a source or destination network. 
+	      If neither of these are present, packets will be 
+	      selected that have the specified network in either the
+	      source or destination address.  In addition, you can 
+	      specify either the netmask or the CIDR prefix for the 
+	      network if they are different from your own. 
+	    </p></dd><dt><span class="term">
+	    <span><strong class="command">[tcp|udp] [src|dst] port &lt;port&gt;</strong></span>
+	  </span></dt><dd><p>
+	      This primitive allows you to filter on TCP and UDP port 
+	      numbers. You can optionally precede this primitive with 
+	      the keywords <span><strong class="command">src|dst</strong></span> and 
+	      <span><strong class="command">tcp|udp</strong></span> which allow you to specify 
+	      that you are only interested in source or destination 
+	      ports and TCP or UDP packets respectively.  The 
+	      keywords <span><strong class="command">tcp|udp</strong></span> must appear before 
+	      <span><strong class="command">src|dst</strong></span>.
+	    </p><p>
+	      If these are not specified, packets will be selected 
+	      for both the TCP and UDP protocols and when the 
+	      specified address appears in either the source or 
+	      destination port field.
+	    </p></dd><dt><span class="term"><span><strong class="command">less|greater &lt;length&gt;</strong></span></span></dt><dd><p>
+	      This primitive allows you to filter on packets whose 
+	      length was less than or equal to the specified length, 
+	      or greater than or equal to the specified length, 
+	      respectively.
+	    </p></dd><dt><span class="term"><span><strong class="command">ip|ether proto &lt;protocol&gt;</strong></span></span></dt><dd><p>
+	      This primitive allows you to filter on the specified 
+	      protocol at either the Ethernet layer or the IP layer.
+	    </p></dd><dt><span class="term"><span><strong class="command">ether|ip broadcast|multicast</strong></span></span></dt><dd><p>
+	      This primitive allows you to filter on either 
+	      Ethernet or IP broadcasts or multicasts.
+	    </p></dd><dt><span class="term"><span><strong class="command">&lt;expr&gt; relop &lt;expr&gt;</strong></span></span></dt><dd><p>
+	      This primitive allows you to create complex filter 
+	      expressions that select bytes or ranges of bytes in 
+	      packets.  Please see the tcpdump man page at
+		  <a href="http://www.tcpdump.org/tcpdump_man.html" target="_top">http://www.tcpdump.org/tcpdump_man.html</a> for more details.
+	    </p></dd></dl></div><p>
+    </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ChCapCaptureAutoFilterSection"></a>4.9.1. Automatic Remote Traffic Filtering</h3></div></div></div><p>
+	If Wireshark is running remotely (using e.g. SSH, an exported X11 window, 
+	a terminal server, ...), the remote content has to be transported over 
+	the network, adding a lot of (usually unimportant) packets to the actually 
+	interesting traffic.
+    </p><p>	
+	To avoid this, Wireshark tries to figure out if it's remotely connected 
+	(by looking at some specific environment variables) and automatically 
+	creates a capture filter that matches aspects of the connection.  
+    </p><p>		
+	The following environment variables are analyzed:
+    </p><div class="variablelist"><dl><dt><span class="term"><span><strong class="command">SSH_CONNECTION</strong></span> (ssh)</span></dt><dd><p>	
+   	&lt;remote IP&gt; &lt;remote port&gt; &lt;local IP&gt; &lt;local port&gt;
+    </p></dd><dt><span class="term"><span><strong class="command">SSH_CLIENT</strong></span> (ssh)</span></dt><dd><p>	
+   	&lt;remote IP&gt; &lt;remote port&gt; &lt;local port&gt;
+    </p></dd><dt><span class="term"><span><strong class="command">REMOTEHOST</strong></span> (tcsh, others?)</span></dt><dd><p>	
+   	&lt;remote name&gt;
+    </p></dd><dt><span class="term"><span><strong class="command">DISPLAY</strong></span> (x11)</span></dt><dd><p>	
+   	[remote name]:&lt;display num&gt;
+    </p></dd><dt><span class="term"><span><strong class="command">SESSIONNAME</strong></span> (terminal server)</span></dt><dd><p>	
+   	&lt;remote name&gt;
+    </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChCapLinkLayerHeader.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ChapterCapture.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ChCapRunningSection.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.8. Link-layer header type </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4.10. While a Capture is running ...</td></tr></table></div></body></html>
