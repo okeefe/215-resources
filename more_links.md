@@ -173,6 +173,7 @@ See .bashrc/.profile in your home directory
 
 - [Homepage](https://isocpp.org/)
 - [Getting started](https://isocpp.org/get-started)
+- [Tour](https://isocpp.org/tour)
 - [Further resources](https://stackoverflow.com/questions/388242/the-definitive-c-book-guide-and-list)
 - [Styleguide](http://www.stroustrup.com/bs_faq2.html)
 - Draft of [official standard](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4296.pdf)
