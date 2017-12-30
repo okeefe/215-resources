@@ -32,7 +32,7 @@ Vaguely in order of how much I recommend them.
 - [bash][bash man page]:
 One of many [shells](https://en.wikipedia.org/wiki/Command-line_interface), which
 take input and execute programs. Has its own syntax.
-I've made a very [simple shell](https://keybase.pub/jyn514/Programming/C-plus-plus/interpreter/)
+I've made a very [simple shell](https://github.com/jyn514/C-plus-plus/blob/master/interpreter/interpreter.cpp)
 in C++ if you'd like to see an example.
 See also the original [sh](https://en.wikipedia.org/wiki/Bourne_shell).
 
