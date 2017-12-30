@@ -233,10 +233,23 @@ I refuse to start an editor war. Find the editor wars on your own.
 - [Mozilla intro](developer.mozilla.org/en-US/docs/Learn)
 - [XSS](www.google.com/about/appsecurity/learning/xss/)
 
-### Misc
+## Algorithms
+- [Urbana-Champaign](http://web.engr.illinois.edu/~jeffe/teaching/algorithms/),
+various helpful resources
+- [Princeton](https://algs4.cs.princeton.edu/home/)
+- [Princeton, 2](https://www.cs.princeton.edu/~wayne/kleinberg-tardos/)
+- [Approximation](https://www.cc.gatech.edu/fac/Vijay.Vazirani/book.pdf)
+- [UCal](http://www.cse.iitd.ernet.in/~naveen/courses/CSL630/all.pdf) (with Quantum!)
+- [Elementary algorithms](https://github.com/liuxinyu95/AlgoXY)
+- MIT [Video lectures](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/)
+- [Reference](http://www3.cs.stonybrook.edu/~algorith/) links
+
+## Misc
 - [Google guide](https://techdevguide.withgoogle.com), very career oriented
 - [Course](http://mooc.fi/english.html) by U of Helsinki
 - [Intro to Programming](http://pine.fm/LearnToProgram/) with Ruby
+- [Intro to Programming](https://introcs.cs.princeton.edu/java/home/) with Java
+- [Intro to Programming](https://introcs.cs.princeton.edu/python/home/) with Python
 - LOTS of [links](http://freeprogrammingresources.com/)
 - [Online compiler](https://repl.it/)
 - [Reddit API](https:// praw.readthedocs.io)
