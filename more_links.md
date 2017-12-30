@@ -17,47 +17,84 @@ Various useful resources from around the web.
 - [Linux](https://linux.die.net/man/)
 - [Coreutils](https://www.gnu.org/manual/)
 
-## [UNIX](http://www.opengroup.org/unix) <sup>[(What is UNIX?)][unix]</sup>
-
-### Tutorials
-Vaguely in order of how much I recommend them.
-
-1. http://www.ee.surrey.ac.uk/Teaching/Unix/
-2. https://heather.cs.ucdavis.edu/~matloff/unix.html
-3. http://www.tutorialspoint.com/unix/
+## Tools
 
 
-### Tools
+### [Bash][bash man page]:
 
-- [bash][bash man page]:
-One of many [shells](https://en.wikipedia.org/wiki/Command-line_interface), which
-take input and execute programs. Has its own syntax.
+Bash is one of many [shells](https://en.wikipedia.org/wiki/Command-line_interface), which
+take input and execute programs.
 I've made a very [simple shell](https://github.com/jyn514/C-plus-plus/blob/master/interpreter/interpreter.cpp)
 in C++ if you'd like to see an example.
 See also the original [sh](https://en.wikipedia.org/wiki/Bourne_shell).
 
-- [ssh](https://www.openssh.com/):
-'Secure shell'; connects to a remote computer and executes programs
+- [Guide](http://tldp.org/LDP/abs/html/)
+- [Configuration files](http://wiki.bash-hackers.org/howto/conffile);
+for bash, `~/.bashrc` and `~/.profile`
+- [Bash vs sh](https://stackoverflow.com/questions/5725296/difference-between-sh-and-bash#5725402)
+- [Scripting](https://en.wikibooks.org/wiki/Bash_Shell_Scripting)
 
-- [make](https://www.gnu.org/software/make/manual/html_node/index.html#Top):
-Automated build tool (so you don't have to type as much)
+### Shell built-ins
+- `help`: Gives instructions for shell built-ins
+- `quit` or `exit` or 
+[`<Control>-d`](https://www.gnu.org/software/emacs/manual/html_node/emacs/User-Input.html#User-Input):
+exit the current process
+- `~`: `$HOME`, the directory you start in when you log in.
+- `cd`: change directory. Defaults to `~`.
+- `pwd`: 'print working directory'
+- `echo`: Echo literal strings to the terminal
+- [`printf`](https://en.wikipedia.org/wiki/Printf_format_string#Format_placeholder_specification):
+Echo interpreted strings to the terminal
+- `history`: Command history; uses `~/.bash_history`
+Generally used with the 'symbolic' `-s` flag, which allows directories to be linked.
+- `kill`: force a background process to stop
+- `umask`: Set default [file permissions][file permissions]
+
+### Commands on disk
+- `man` or `info`: Gives instructions for everything else
+- `cat`: 'catenate' a file
+- `mkdir`: Make directory
+- `ls`: list (contents of  directory). Defaults to `ls $(pwd)`.
+- `rm`: Remove. Be careful with this command, it has no undo button.
+- `rmdir`: Remove directory. You'll use `rm -r` (remove recursive) much more than this.
+- `chmod`: 'change mode', change [file permissions][file permissions]
+- `ps`: 'process', shows current processes
+- `which`: find where a command is located on disk; see also `type` and `command`
+- `less` or `more` or `pg`: 'pager', shows part of a file at a time then returns you to command line
+- `ln`: Link (make two files refer to the same piece of memory).
+- `touch`: Create an empty file
+- `date`: Output the current time and date, in various formats.
+- `cal`: Print a graphical calander to the terminal
+- `calendar`: BSD version of `cal`, prints events for the next few days
+- `zip`: Compress and decompress `.zip` files
+- `tar`: Archive and extract `.tar` files
+- `gzip`: compress and decompress files
+- `bzip2`: compress and decompress files. More efficient but slower than `gzip`.
+- `wget`: 'webget', download files without interaction
+- `curl`: More modern `wget`
+- [`telnet`](https://en.wikipedia.org/wiki/Telnet): 'Teletype network',
+access remote servers at the lowest application level
+- `links` or `lynx` or `elinks`: terminal based web browsers
+- `dhclient`: Negotiates an IP address from a router. For ethernet exclusively.
+- `ip` or `ipconfig`: Various ip related config, information, and commands
+- `cron` or `anacron` or `crond`: Executes background tasks at scheduled times. See also `crontab`.
+
+#### Advanced commands
+- [`ssh`](https://www.openssh.com/):
+'Secure shell'; connects to a remote computer and executes programs.
+This is the way you will usually log on to the lab computers, i.e.
+`ssh <network username>@<ip address> -p <port>`.
+See also options for [config files](https://www.ssh.com/ssh/config/)
+
+- [`make`](https://www.gnu.org/software/make/manual/html_node/index.html#Top):
+Automated build tool so you don't have to type as much.
 See my [template](https://github.com/okeefe/215-resources/blob/master/template.makefile)
-for a (fairly complicated) example.
+for a (fairly complicated) example,
+or my [working makefile](https://github.com/jyn514/C-plus-plus/blob/master/makefile) for a simpler one.
 
-- [apt](https://wiki.debian.org/Apt):
-[package manager](https://en.wikipedia.org/wiki/Package_manager),
-in some ways similar to an app store
-
-- [coreutils](https://www.gnu.org/software/coreutils/manual/html_node/index.html):
-The basic tools of the [GNU project](https://www.gnu.org/software/software.html)
-and most of the tools we will use in this course
-
-- [gcc](gcc.gnu.org/onlinedocs/gcc-7.2.0/gcc/):
-multi-language compiler. In this course we will be using g++,
+- [`gcc`](gcc.gnu.org/onlinedocs/gcc-7.2.0/gcc/):
+multi-language compiler. In this course we will be using `g++`,
 but all of the gnu compilers are often used.
-
-- [binutils](https://www.gnu.org/software/binutils/):
-tools necessary for compiling programs (assemblers, hexdumps, etc).
 
 - [git](https://git-scm.com/book/en/v2):
 [version control](https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control)
@@ -72,21 +109,29 @@ free online hosting for your git repos.
 [This page](https://github.com/okeefe/215-resources)
 is hosted there, as are various other resources.
 
-#### Misc commands
-- which
-- type
-- help
-- umask
-- zip
-- tar
-- gzip/bzip2
-- wget/curl/telnet
-- less/more/pg
-- screen
-- cron/crond/crontab/anacron
-- gnupg
-- ip/ipconfig/dhclient
-- links/lynx/elinks
+- [`gpg`](https://gnupg.org): Encrypt and decrypt messages.
+`gpg` was used by Snowden during the leaks of 2013
+([Source](https://theintercept.com/2014/10/28/smuggling-snowden-secrets/))
+
+- [`apt`](https://wiki.debian.org/Apt):
+[package manager](https://en.wikipedia.org/wiki/Package_manager),
+in some ways similar to an app store.
+Most tools in this course are provided by the
+[coreutils](https://www.gnu.org/software/coreutils/manual/html_node/index.html)
+package, created by the [GNU project](https://www.gnu.org/software/software.html).
+`g++` (and most other free compilers) use the [binutils](https://www.gnu.org/software/binutils/)
+package, which contains tools necessary for compiling and debugging (assemblers, hexdumps, etc).
+
+- [`screen`](http://aperiodic.net/screen/): Run multiple processes (in the foreground) at once
+
+## [UNIX](http://www.opengroup.org/unix) <sup>[(What is UNIX?)][unix]</sup>
+
+### Tutorials
+Vaguely in order of how much I recommend them.
+
+1. http://www.ee.surrey.ac.uk/Teaching/Unix/
+2. https://heather.cs.ucdavis.edu/~matloff/unix.html
+3. http://www.tutorialspoint.com/unix/
 
 ### History
 - [Overview](https://www.cse.sc.edu/~pokeefe/tutorials/UnixHistory.html)
@@ -149,27 +194,6 @@ I refuse to start an editor war. Find the editor wars on your own.
 
 
 ## [Languages](https://en.wikipedia.org/wiki/Programming_language)
-
-### [Bash][bash man page]:
-
-- [Guide](http://tldp.org/LDP/abs/html/)
-- [Configuration files](http://wiki.bash-hackers.org/howto/conffile)
-See .bashrc/.profile in your home directory
-- [Bash vs sh](https://stackoverflow.com/questions/5725296/difference-between-sh-and-bash#5725402)
-- [Scripting](https://en.wikibooks.org/wiki/Bash_Shell_Scripting)
-
-#### Basic commands
-- cd, pwd
-- ls
-- rm, rmdir
-- cat
-- echo or printf
-- rmdir
-- history
-- touch
-- ln
-- date, cal, calendar
-- ps, kill, quit
 
 ### C++
 
@@ -248,3 +272,5 @@ See .bashrc/.profile in your home directory
 [bash man page]: https://www.gnu.org/software/bash/
 [github]: https://github.com
 [unix]: https://en.wikipedia.org/wiki/Unix
+[file permissions]: https://www.linux.org/threads/file-permissions-chmod.4124/
+
