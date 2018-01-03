@@ -7,7 +7,7 @@ Various useful resources from around the web.
 - [Wikipedia](https://en.wikipedia.org)
 - [IRC](https://webchat.freenode.net)
 <sup>[(What is IRC?)](https://en.wikipedia.org/wiki/Internet_Relay_Chat)</sup>
-- [Linux](http://tldp.org/)
+- [Linux](https://www.tldp.org/)
 
 
 ## Manual pages
@@ -28,7 +28,7 @@ I've made a very [simple shell](https://github.com/jyn514/C-plus-plus/blob/maste
 in C++ if you'd like to see an example.
 See also the original [sh](https://en.wikipedia.org/wiki/Bourne_shell).
 
-- [Guide](http://tldp.org/LDP/abs/html/)
+- [Guide](https://www.tldp.org/LDP/abs/html/)
 - [Configuration files](http://wiki.bash-hackers.org/howto/conffile);
 for bash, `~/.bashrc` and `~/.profile`
 - [Bash vs sh](https://stackoverflow.com/questions/5725296/difference-between-sh-and-bash#5725402)
@@ -124,19 +124,19 @@ package, which contains tools necessary for compiling and debugging (assemblers,
 
 - [`screen`](http://aperiodic.net/screen/): Run multiple processes (in the foreground) at once
 
-## [UNIX](http://www.opengroup.org/unix) <sup>[(What is UNIX?)][unix]</sup>
+## [UNIX](https://www.opengroup.org/unix) <sup>[(What is UNIX?)][unix]</sup>
 
 ### Tutorials
 Vaguely in order of how much I recommend them.
 
-1. http://www.ee.surrey.ac.uk/Teaching/Unix/
+1. https://www.ee.surrey.ac.uk/Teaching/Unix/
 2. https://heather.cs.ucdavis.edu/~matloff/unix.html
-3. http://www.tutorialspoint.com/unix/
+3. https://www.tutorialspoint.com/unix/
 
 ### History
 - [Overview](https://www.cse.sc.edu/~pokeefe/tutorials/UnixHistory.html)
 - [Wikipedia][unix] page
-- [Development history](http://www.bell-labs.com/history/unix/)
+- [Development history](https://www.bell-labs.com/history/unix/)
 - [Timeline](http://www.unix.org/what_is_unix/history_timeline.html)
 
 #### Linux
@@ -179,7 +179,7 @@ I refuse to start an editor war. Find the editor wars on your own.
 - [ed](https://www.gnu.org/fun/jokes/ed-msg.html)
 
 ### For Linux
-- [kate](http://kate-editor.org/)
+- [kate](https://kate-editor.org/)
 - [gedit](https://wiki.gnome.org/Apps/Gedit)
 
 ### For Windows
@@ -206,21 +206,22 @@ I refuse to start an editor war. Find the editor wars on your own.
 - Detailed [discussion](http://www.stroustrup.com/new_learning.pdf) (Article, PDF) of very basics
 
 #### Tutorials
-- http://www.cplusplus.com/doc/tutorial/
-- http://www.learncpp.com/
-- http://www.tutorialspoint.com/cplusplus/
+- https://www.cplusplus.com/doc/tutorial/
+- https://www.learncpp.com/
+- https://www.tutorialspoint.com/cplusplus/
 
 #### Reference
-- http://en.cppreference.com/wv/cpp
-- http://www.cplusplus.com/doc/
+- http://en.cppreference.com/w/cpp
+([secure site](https://en.cppreference.com/w/cpp) looks ugly)
+- https://www.cplusplus.com/doc/
 - Wikimedia [ebook](https://en.wikibooks.org/wiki/C%2B%2B_Programming)
 
 
 ### Perl
-- [Homepage](https://www.perl.org/) and [Intro](http://learn.perl.org/)
+- [Homepage](https://www.perl.org/) and [Intro](https://learn.perl.org/)
 - [Wikipedia article](https://en.wikipedia.org/wiki/Perl)
 - [Tutorial](https://users.cs.cf.ac.uk/Dave.Marshall/PERL/node1.html), HTML
-- [Beginning Perl](http://learn.perl.org/books/beginning-perl/) (Book, HTML)
+- [Beginning Perl](https://learn.perl.org/books/beginning-perl/) (Book, HTML)
 - Modern Perl (Book, [PDF](http://onyxneon.com/books/modern_perl/modern_perl_2016_a4.pdf),
 [HTML](http://modernperlbooks.com/books/modern_perl_2016/))
 - Various other tutorials: [1](https://www.tutorialspoint.com/perl/), 
@@ -234,20 +235,20 @@ I refuse to start an editor war. Find the editor wars on your own.
 - [XSS](www.google.com/about/appsecurity/learning/xss/)
 
 ## Algorithms
-- [Urbana-Champaign](http://web.engr.illinois.edu/~jeffe/teaching/algorithms/),
+- [Urbana-Champaign](https://web.engr.illinois.edu/~jeffe/teaching/algorithms/),
 various helpful resources
 - [Princeton](https://algs4.cs.princeton.edu/home/)
 - [Princeton, 2](https://www.cs.princeton.edu/~wayne/kleinberg-tardos/)
 - [Approximation](https://www.cc.gatech.edu/fac/Vijay.Vazirani/book.pdf)
-- [UCal](http://www.cse.iitd.ernet.in/~naveen/courses/CSL630/all.pdf) (with Quantum!)
+- [UCal](https://www.cse.iitd.ernet.in/~naveen/courses/CSL630/all.pdf) (with Quantum!)
 - [Elementary algorithms](https://github.com/liuxinyu95/AlgoXY)
 - MIT [Video lectures](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/)
-- [Reference](http://www3.cs.stonybrook.edu/~algorith/) links
+- [Reference](https://www3.cs.stonybrook.edu/~algorith/) links
 
 ## Misc
 - [Google guide](https://techdevguide.withgoogle.com), very career oriented
 - [Course](http://mooc.fi/english.html) by U of Helsinki
-- [Intro to Programming](http://pine.fm/LearnToProgram/) with Ruby
+- [Intro to Programming](https://pine.fm/LearnToProgram/) with Ruby
 - [Intro to Programming](https://introcs.cs.princeton.edu/java/home/) with Java
 - [Intro to Programming](https://introcs.cs.princeton.edu/python/home/) with Python
 - LOTS of [links](http://freeprogrammingresources.com/)
@@ -257,7 +258,7 @@ various helpful resources
 - [Java](https://docs.oracle.com/javase/8/docs/api/)
 - [Ruby](https://www.ruby-lang.org/en/documentation/)
 - Misc open-source [docs](https://readthedocs.io)
-- Obfuscate [email addresses](http://www.codeproject.com/KB/aspnet/spambot.aspx) (to prevent spambots)
+- Obfuscate [email addresses](https://www.codeproject.com/Articles/8088/Avoiding-spam-bots) (to prevent spambots)
 
 ## Neural Networks:
 - [Courses by MIT](https://courses.csail.mit.edu/)
