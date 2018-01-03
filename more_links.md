@@ -92,7 +92,7 @@ See my [template](https://github.com/okeefe/215-resources/blob/master/template.m
 for a (fairly complicated) example,
 or my [working makefile](https://github.com/jyn514/C-plus-plus/blob/master/makefile) for a simpler one.
 
-- [`gcc`](gcc.gnu.org/onlinedocs/gcc-7.2.0/gcc/):
+- [`gcc`](https://gcc.gnu.org/onlinedocs/gcc-7.2.0/gcc/):
 multi-language compiler. In this course we will be using `g++`,
 but all of the gnu compilers are often used.
 
@@ -146,7 +146,7 @@ Vaguely in order of how much I recommend them.
 - [Wikipedia entry](https://en.wikipedia.org/wiki/History_of_Linux)
 - [First mailing lists](https://groups.google.com/forum/#!msg/comp.os.minix/dlNtH7RRrGA/SwRavCzVE7gJ)
 (not original site)
-- [Kernel wars](web.archive.org/web/20121003060514/http://www.dina.dk/~abraham/Linus_vs_Tanenbaum.html)
+- [Kernel wars](https://web.archive.org/web/20121003060514/http://www.dina.dk/~abraham/Linus_vs_Tanenbaum.html)
 - [GNU Project](https://en.wikipedia.org/wiki/GNU_Project)
 - [Free software](https://en.wikipedia.org/wiki/History_of_free_and_open-source_software)
 - [Stallman](https://en.wikipedia.org/wiki/Richard_Stallman); see also https://stallman.org
@@ -230,9 +230,9 @@ I refuse to start an editor war. Find the editor wars on your own.
 
 ### Web
 - [Handy infographic](https://i.redd.it/0nodknkfbxcz.jpg)
-- [HTML reference](www.w3schools.com/html/default.asp )
-- [Mozilla intro](developer.mozilla.org/en-US/docs/Learn)
-- [XSS](www.google.com/about/appsecurity/learning/xss/)
+- [HTML reference](https://www.w3schools.com/html/default.asp )
+- [Mozilla intro](https://developer.mozilla.org/en-US/docs/Learn)
+- [XSS](https://www.google.com/about/appsecurity/learning/xss/)
 
 ## Algorithms
 - [Urbana-Champaign](https://web.engr.illinois.edu/~jeffe/teaching/algorithms/),
@@ -268,13 +268,13 @@ various helpful resources
 
 ## Challenge sites
 - [Simple intro to challenge sites](http://codingbat.com)
-- [Exercism](https://exercism.io): challenges of every level in every language
+- [Exercism](http://exercism.io): challenges of every level in every language
 - [Project Euler](https://projecteuler.net), heavily math-based
 - [Over the Wire](https://overthewire.org)
 - [CodeWars](https://codewars.com)
 - [Community pentests](https://vulnhub.com)
-- [Python interactive challenges](github.com/donnemartin/interactive-coding-challenges/), heavy download
-- [More links](softwareengineering.stackexchange.com/questions/756)
+- [Python interactive challenges](https://github.com/donnemartin/interactive-coding-challenges/), heavy download
+- [More links](https://softwareengineering.stackexchange.com/questions/756)
 
 ## Hosting
 - [GitHub][github]
