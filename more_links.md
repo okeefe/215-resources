@@ -4,7 +4,7 @@ Various useful resources from around the web.
 
 ## General documentation
 
-- [Wikipedia](https://en.wikipedia.or)
+- [Wikipedia](https://en.wikipedia.org)
 - [IRC](https://webchat.freenode.net)
 <sup>[(What is IRC?)](https://en.wikipedia.org/wiki/Internet_Relay_Chat)</sup>
 - [Linux](http://tldp.org/)
