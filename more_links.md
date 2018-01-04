@@ -2,23 +2,23 @@
 
 Various useful resources from around the web.
 
-## General documentation
+## Getting help
 
 - [Wikipedia](https://en.wikipedia.org)
+- [Stack Overflow](https://stackexchange.com/)
 - [IRC](https://webchat.freenode.net)
 <sup>[(What is IRC?)](https://en.wikipedia.org/wiki/Internet_Relay_Chat)</sup>
 - [Linux](https://www.tldp.org/)
+- [Using `man` pages](https://askubuntu.com/questions/991946/how-can-i-get-help-on-terminal-commands)
+on StackOverflow. I learned some things from this.
 
-
-## Manual pages
-
+### More on man pages
 - [Intro](https://ryanstutorials.net/linuxtutorial/manual.php)
 - [Format](https://liw.fi/manpages/)
 - [Linux](https://linux.die.net/man/)
 - [Coreutils](https://www.gnu.org/manual/)
 
 ## Tools
-
 
 ### [Bash][bash man page]:
 
