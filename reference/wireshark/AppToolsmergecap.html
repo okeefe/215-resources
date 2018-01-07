@@ -1,0 +1,179 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>D.7. mergecap:
+      Merging multiple capture files into one
+    </title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="AppTools.html" title="Appendix D. Related command line tools"><link rel="prev" href="AppToolseditcap.html" title="D.6. editcap: Edit capture files"><link rel="next" href="AppToolstext2pcap.html" title="D.8. text2pcap: Converting ASCII hexdumps to network
+	captures
+    "></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">D.7. <span><strong class="command">mergecap</strong></span>:
+      Merging multiple capture files into one
+    </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="AppToolseditcap.html">Prev</a> </td><th width="60%" align="center">Appendix D. Related command line tools</th><td width="20%" align="right"> <a accesskey="n" href="AppToolstext2pcap.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="AppToolsmergecap"></a>D.7. <span><strong class="command">mergecap</strong></span>:
+      Merging multiple capture files into one
+    </h2></div></div></div><p>
+      Mergecap is a program that combines multiple saved capture files
+      into a single output file specified by the -w argument.  Mergecap
+      knows how to read libpcap capture files, including those of tcpdump.
+      In addition, Mergecap can read capture files from snoop (including
+      Shomiti) and atmsnoop, LanAlyzer, Sniffer (compressed or
+      uncompressed), Microsoft Network Monitor, AIX's iptrace, NetXray,
+      Sniffer Pro, RADCOM's WAN/LAN analyzer, Lucent/Ascend router debug
+      output, HP-UX's nettl, and the dump output from Toshiba's ISDN
+      routers.  There is no need to tell Mergecap what type of file you are
+      reading; it will determine the file type by itself.  Mergecap is also
+      capable of reading any of these file formats if they are compressed
+      using gzip.  Mergecap recognizes this directly from the file; the '.gz'
+      extension is not required for this purpose.
+    </p><p>
+      By default, it writes the capture file in libpcap format, and writes
+      all of the packets in both input capture files to the output file.
+      The -F flag can be used to specify the format in which to write the
+      capture file; it can write the file in libpcap format (standard
+      libpcap format, a modified format used by some patched versions of
+      libpcap, the format used by Red Hat Linux 6.1, or the format used
+      by SuSE Linux 6.3), snoop format, uncompressed Sniffer format,
+      Microsoft Network Monitor 1.x format, and the format used by
+      Windows-based versions of the Sniffer software.
+    </p><p>
+      Packets from the input files are merged in chronological order based
+      on each frame's timestamp, unless the -a flag is specified.  Mergecap
+      assumes that frames within a single capture file are already stored
+      in chronological order.  When the -a flag is specified, packets are
+      copied directly from each input file to the output file, independent
+      of each frame's timestamp.
+    </p><p>
+      If the -s flag is used to specify a snapshot length, frames in the
+      input file with more captured data than the specified snapshot length
+      will have only the amount of data specified by the snapshot length
+      written to the output file.  This may be useful if the program that
+      is to read the output file cannot handle packets larger than a
+      certain size (for example, the versions of snoop in Solaris 2.5.1 and
+      Solaris 2.6 appear to reject Ethernet frames larger than the standard
+      Ethernet MTU, making them incapable of handling gigabit Ethernet
+      captures if jumbo frames were used).
+    </p><p>
+      If the -T flag is used to specify an encapsulation type, the
+      encapsulation type of the output capture file will be forced to
+      the specified type, rather than being the type appropriate to the
+      encapsulation type of the input capture file.  Note that this merely
+      forces the encapsulation type of the output file to be the specified
+      type; the packet headers of the packets will not be translated from the
+      encapsulation type of the input capture file to the specified
+      encapsulation type (for example, it will not translate an Ethernet
+      capture to an FDDI capture if an Ethernet capture is read
+      and '-T fddi' is specified).
+    </p><div class="example"><a name="AppToolsmergecapEx"></a><p class="title"><b>Example D.4. Help information available from mergecap</b></p><pre class="programlisting">
+$ mergecap -h
+Mergecap version 0.99.6
+Merge two or more capture files into one.
+See http://www.wireshark.org for more information.
+
+Usage: mergecap [-hva] [-s &lt;snaplen&gt;] [-T &lt;encap type&gt;]
+          [-F &lt;capture type&gt;] -w &lt;outfile&gt; &lt;infile&gt; [...]
+
+  where -h produces this help listing.
+        -v verbose operation, default is silent
+        -a files should be concatenated, not merged
+             Default merges based on frame timestamps
+        -s &lt;snaplen&gt;: truncate packets to &lt;snaplen&gt; bytes of data
+        -w &lt;outfile&gt;: sets output filename to &lt;outfile&gt;
+        -T &lt;encap type&gt; encapsulation type to use:
+             ether - Ethernet
+             tr - Token Ring
+             slip - SLIP
+             ppp - PPP
+             fddi - FDDI
+             fddi-swapped - FDDI with bit-swapped MAC addresses
+             rawip - Raw IP
+             arcnet - ARCNET
+             arcnet_linux - Linux ARCNET
+             atm-rfc1483 - RFC 1483 ATM
+             linux-atm-clip - Linux ATM CLIP
+             lapb - LAPB
+             atm-pdus - ATM PDUs
+             atm-pdus-untruncated - ATM PDUs - untruncated
+             null - NULL
+             ascend - Lucent/Ascend access equipment
+             isdn - ISDN
+             ip-over-fc - RFC 2625 IP-over-Fibre Channel
+             ppp-with-direction - PPP with Directional Info
+             ieee-802-11 - IEEE 802.11 Wireless LAN
+             prism - IEEE 802.11 plus Prism II monitor mode header
+             ieee-802-11-radio - IEEE 802.11 Wireless LAN with radio information
+             ieee-802-11-bsd - IEEE 802.11 plus BSD WLAN header
+             ieee-802-11-avs - IEEE 802.11 plus AVS WLAN header
+             linux-sll - Linux cooked-mode capture
+             frelay - Frame Relay
+             frelay-with-direction - Frame Relay with Directional Info
+             chdlc - Cisco HDLC
+             ios - Cisco IOS internal
+             ltalk - Localtalk
+             pflog-old - OpenBSD PF Firewall logs, pre-3.4
+             hhdlc - HiPath HDLC
+             docsis - Data Over Cable Service Interface Specification
+             cosine - CoSine L2 debug log
+             whdlc - Wellfleet HDLC
+             sdlc - SDLC
+             tzsp - Tazmen sniffer protocol
+             enc - OpenBSD enc(4) encapsulating interface
+             pflog - OpenBSD PF Firewall logs
+             chdlc-with-direction - Cisco HDLC with Directional Info
+             bluetooth-h4 - Bluetooth H4
+             mtp2 - SS7 MTP2
+             mtp3 - SS7 MTP3
+             irda - IrDA
+             user0 - USER 0
+             user1 - USER 1
+             user2 - USER 2
+             user3 - USER 3
+             user4 - USER 4
+             user5 - USER 5
+             user6 - USER 6
+             user7 - USER 7
+             user8 - USER 8
+             user9 - USER 9
+             user10 - USER 10
+             user11 - USER 11
+             user12 - USER 12
+             user13 - USER 13
+             user14 - USER 14
+             user15 - USER 15
+             symantec - Symantec Enterprise Firewall
+             ap1394 - Apple IP-over-IEEE 1394
+             bacnet-ms-tp - BACnet MS/TP
+             default is the same as the first input file
+        -F &lt;capture type&gt; capture file type to write:
+             libpcap - libpcap (tcpdump, Wireshark, etc.)
+             rh6_1libpcap - Red Hat Linux 6.1 libpcap (tcpdump)
+             suse6_3libpcap - SuSE Linux 6.3 libpcap (tcpdump)
+             modlibpcap - modified libpcap (tcpdump)
+             nokialibpcap - Nokia libpcap (tcpdump)
+             lanalyzer - Novell LANalyzer
+             ngsniffer - Network Associates Sniffer (DOS-based)
+             snoop - Sun snoop
+             netmon1 - Microsoft Network Monitor 1.x
+             netmon2 - Microsoft Network Monitor 2.x
+             ngwsniffer_1_1 - Network Associates Sniffer (Windows-based) 1.1
+             ngwsniffer_2_0 - Network Associates Sniffer (Windows-based) 2.00x
+             visual - Visual Networks traffic capture
+             5views - Accellent 5Views capture
+             niobserverv9 - Network Instruments Observer version 9
+             default is libpcap
+      </pre></div><div class="variablelist"><dl><dt><span class="term"><span><strong class="command">-h</strong></span></span></dt><dd><p>Prints the version and options and exits.</p></dd><dt><span class="term"><span><strong class="command">-v</strong></span></span></dt><dd><p>
+	    Causes <span><strong class="command">mergecap</strong></span> to print a number of messages
+	    while it's working.
+	  </p></dd><dt><span class="term"><span><strong class="command">-a</strong></span></span></dt><dd><p>
+	    Causes the frame timestamps to be ignored, writing all packets
+	    from the first input file followed by all packets from the second
+	    input file.  By default, when <span><strong class="command">-a</strong></span> is not
+	    specified, the contents
+	    of the input files are merged in chronological order based on
+	    each frame's timestamp.  Note: when merging, mergecap assumes
+	    that packets within a capture file are already in chronological
+	    order.
+	  </p></dd><dt><span class="term"><span><strong class="command">-s</strong></span></span></dt><dd><p>Sets the snapshot length to use when writing the data.</p></dd><dt><span class="term"><span><strong class="command">-w</strong></span></span></dt><dd><p>Sets the output filename.</p></dd><dt><span class="term"><span><strong class="command">-T</strong></span></span></dt><dd><p>
+	    Sets the packet encapsulation type of the output capture file.
+	  </p></dd><dt><span class="term"><span><strong class="command">-F</strong></span></span></dt><dd><p>Sets the file format of the output capture file.</p></dd></dl></div><p>
+      A simple example merging <code class="filename">dhcp-capture.libpcap</code>
+      and <code class="filename">imap-1.libpcap</code> into
+      <code class="filename">outfile.libpcap</code> is shown below.
+    </p><div class="example"><a name="AppToolsmergecapExSimple"></a><p class="title"><b>Example D.5. Simple example of using mergecap</b></p><pre class="programlisting">$ mergecap -w outfile.libpcap dhcp-capture.libpcap imap-1.libpcap
+      </pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="AppToolseditcap.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="AppTools.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="AppToolstext2pcap.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">D.6. <span><strong class="command">editcap</strong></span>: Edit capture files </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> D.8. <span><strong class="command">text2pcap</strong></span>: Converting ASCII hexdumps to network
+	captures
+    </td></tr></table></div></body></html>

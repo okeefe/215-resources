@@ -1,0 +1,502 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.61 [en] (WinNT; U) [Netscape]">
+   <title>   Installing, configuring and using top 3.5beta12 
+</title>
+</head>
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+<table BORDER=0 CELLSPACING=6 CELLPADDING=4 WIDTH="100%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial">Implementation
+Details</font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font face="Arial"><font size=+1>Installing,
+configuring and using top 3.5beta12 to display a list of sorted processes on
+systems running Solaris 2.x</font></font></b></td>
+</tr>
+
+<tr>
+<td WIDTH="130">&nbsp;</td>
+
+<td ALIGN=LEFT VALIGN=TOP>
+<table BORDER CELLSPACING=0 CELLPADDING=8 WIDTH="75%" BGCOLOR="#CCDDFF" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP HEIGHT="101">Applies to the practices: "<a
+href="../practices/p095.html">Monitor and inspect system   
+activities for unexpected behavior</a>," "<a
+href="../practices/p091.html">Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior</a>".
+<p>Applicable technologies: Solaris 2.x; UNIX operating system and derivatives</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="130">&nbsp;</td>
+
+<td ALIGN=LEFT VALIGN=TOP>This section describes the information necessary
+to download, configure, and use <font face="Courier New"><font size=+0>top</font></font>,
+version 3.5beta12, on the Sun Solaris operating system, version 2.x. <font face="Courier New"><font
+size=+0>top</font></font>
+is a utility that displays a list of sorted processes. The list may be
+incomplete.</td>
+</tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130" HEIGHT="72"><b><font face="Arial">Preparation</font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="83%" HEIGHT="72">Your installation of
+<font face="Courier New"><font size=+0>top</font></font> version 3.5beta12 will
+be easier if you have the following information before you begin. You need
+to determine the answers to the questions in this section before proceeding
+on to the next section.</td>
+</tr>
+
+<tr>
+<td ALIGN=RIGHT VALIGN=TOP WIDTH="130"></td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="83%"><b><font face="Arial"><font color="#008000"><font size=+0>Determine
+your system configuration information.&nbsp;</font></font></font></b>
+<p>If the system that you are building and installing uses AFS(R) (a commercial,
+distributed file system available from Transarc Corporation), you need
+to know what version of AFS is currently installed on your systems and
+where the AFS include files are located. The version of AFS can be found
+with the software distribution documentation. On Solaris, the include files
+are found in /usr/afsws/include (by default).</td>
+</tr>
+
+<tr>
+<td ALIGN=RIGHT VALIGN=TOP WIDTH="130"></td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font face="Arial"><font color="#008000"><font size=+0>uncompress
+vs. gunzip.&nbsp;</font></font></font></b>
+<p>The <font face="Courier New"><font size=+0>top</font></font> distribution
+is available by ftp in one of two formats: compressed (ending in .Z) and
+gzipped (ending in .gz). While the gzipped version is smaller, you need
+to have installed the gunzip application to read it. The gunzip application
+is available as part of the GNU tools distribution at the <a href="http://www.gzip.org/">gzip</a>
+home page. The uncompress tool is a standard part of the Solaris distribution.
+If you have not previously acquired gunzip, you should download the compressed
+version of the <font face="Courier New"><font size=+0>top</font></font>
+distribution.</td>
+</tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="17%"><b><font face="Arial">Downloading
+</font><font face="Courier New"><font size=+0>top</font></font></b></td>
+
+<td ALIGN=LEFT>The latest release of top is available via anonymous ftp
+from <a href="ftp://ftp.groupsys.com/pub/top">ftp://ftp.groupsys.com/pub/top</a>.</td>
+</tr>
+
+<tr>
+<td ALIGN=RIGHT VALIGN=TOP WIDTH="17%"></td>
+
+<td ALIGN=LEFT><b><font face="Arial"><font color="#008000"><font size=+0>Ensure
+you can meet installation requirements.&nbsp;</font></font></font></b>
+<p>In order to build <font face="Courier New"><font size=+0>top</font></font>,
+you need:&nbsp;
+<ul>
+<li>
+Internet access to retrieve the latest version of the <font face="Courier New"><font size=+0>top
+</font></font>software&nbsp;</li>
+
+<li>
+GZIP to uncompress the downloaded file&nbsp;</li>
+
+<li>
+a C compiler to build the executable program&nbsp;</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td ALIGN=RIGHT VALIGN=TOP WIDTH="17%"></td>
+
+<td ALIGN=LEFT><b><font color="#008000"><font size=+0><font face="Arial">Download
+the </font><font face="Courier New">top</font><font face="Arial"> 3.5beta12 distribution
+on a clean system.</font></font></font></b>
+<p>The tar file can be downloaded in one of 2 forms: compressed using the
+UNIX <font face="Courier New"><font size=+0>compress</font></font> utility
+and compressed with the UNIX <font face="Courier New"><font size=+0>gzip
+</font></font>utility. Download the one that is most appropriate for your
+site, and uncompress the file in a directory appropriate for creating the
+system. Do this on a machine that you have verified to be free of threat
+so as not to compromise the building of the <font face="Courier New"><font size=+0>top</font></font>
+system.</td>
+</tr>
+
+<tr>
+<td ALIGN=RIGHT VALIGN=TOP WIDTH="130"></td>
+
+<td ALIGN=LEFT><b><font color="#008000"><font size=+0><font face="Arial">Unpack
+and untar the </font><font face="Courier New">top </font><font face="Arial">distribution.&nbsp;</font></font></font></b>
+<p>Once you have uncompressed the downloaded <font face="Courier New"><font size=+0>top</font></font>
+distribution, extract the files with the following command:&nbsp;
+<p><font face="Courier New"><font size=+0>tar xvf top.3.5beta12.tar</font></font>
+<p>This creates a <font face="Courier New"><font size=+0>top-3.5beta12</font></font>
+subdirectory that contains all of the files that come with the distribution.
+You can safely remove the <font face="Courier New"><font size=+0>top.3.5beta12.tar</font></font>
+file as it is not used again during the building or installation of the
+<font face="Courier New"><font size=+0>top</font></font> system.</td>
+</tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP HEIGHT="69"><b><font face="Arial">Build and install</font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP HEIGHT="69">The <font size=+0>top</font> system
+is now ready for building and installing, including any local configuration
+changes that you need to make. It is assumed that all operations are performed
+from within the <font size=+0>top-3.5beta12</font> source subdirectory, created
+by <font size=+0>tar</font> from the distribution tar file in the previous
+step.</td>
+</tr>
+
+<tr>
+<td ALIGN=RIGHT VALIGN=TOP></td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font color="#008000"><font size=+0><font face="Arial">Configure
+the sources using the </font><font face="Courier New, Courier, mono">Configure</font><font face="Arial">
+command.</font></font></font></b>
+<p>Run the <font face="Courier New"><font size=+0>Configure</font></font>
+command to prepare the <font face="Courier New"><font size=+0>top</font></font>
+distribution for the system build by creating site-specific Makefiles.
+You use the following command to begin the configuration process:&nbsp;
+<p><font face="Courier New"><font size=-1>./Configure</font></font>
+<p>After an initial pause, <font face="Courier New"><font size=+0>Configure</font></font>
+lists a number of OS types and asks you to choose the one appropriate for
+your specific build. You should respond with <font face="Courier New"><font size=+0>sunos54</font></font>
+as shown below:&nbsp;
+<pre><font face="Courier New"><font size=-1>What module is appropriate for this machine? sunos54</font></font></pre>
+You then see the following message:&nbsp;
+<pre><font face="Courier New"><font size=-1>This is the machine-dependent module for SunOS 5.4 and 5.5.
+
+There is some support for MP architectures.
+
+This makes top work on the following systems:
+
+SunOS 5.4
+
+SunOS 5.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></font></pre>
+
+<pre><font face="Courier New"><font size=-1>Is this what you want to use? [yes]:&nbsp;</font></font></pre>
+You should hit the return key at this point. You are then prompted for
+information about the placement of certain default UNIX tools. The following
+table lists the questions that are asked, the default response, and the
+response you should provide:&nbsp;</td>
+</tr>
+
+<tr>
+<td WIDTH="130">&nbsp;</td>
+
+<td ALIGN=LEFT VALIGN=TOP>
+<table BORDER CELLPADDING=7 WIDTH="75%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="46%" BGCOLOR="#CCDDFF"><b>Prompt&nbsp;</b></td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="54%" BGCOLOR="#CCDDFF"><b>Response&nbsp;</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">What is the full path name for the Bourne shell
+[/bin/sh]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">&lt;RETURN>&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">AWK Interpreter [awk]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">&lt;RETURN>&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">C Compiler [cc]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">gcc if you have the GNU C compiler installed&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">Installer [./install]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">&lt;RETURN>&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">Compiler options [-O]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">&lt;RETURN>&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">LoadMax [5.0]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">&lt;RETURN>&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">Default TOPN [15]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">&lt;RETURN>&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">Nominal TOPN [18]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">&lt;RETURN>&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">Default Delay [5]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">&lt;RETURN>&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">Do you want top to assume that accesses to the
+file /etc/passwd are done with random access rather than sequential? [no]:</td>
+
+<td VALIGN=TOP WIDTH="54%">&lt;RETURN></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">Enter the hash table size [307]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">&lt;RETURN>&nbsp;</td>
+</tr>
+</table>
+
+<p>&nbsp;</td>
+</tr>
+
+<tr>
+<td WIDTH="130" HEIGHT="531">&nbsp;</td>
+
+<td ALIGN=LEFT VALIGN=TOP HEIGHT="531">
+<table BORDER CELLPADDING=7 WIDTH="75%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="46%" BGCOLOR="#CCDDFF"><b>Prompt&nbsp;</b></td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="54%" BGCOLOR="#CCDDFF"><b>Response&nbsp;</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">Tell me how to set the following when top is
+installed:&nbsp;
+<p>Owner [root]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">&lt;RETURN></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">Group owner [other]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">&lt;RETURN>&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">Mode [4711]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">&lt;RETURN>&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">Install the executable in this directory [/usr/local/bin]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">Use an appropriate site-specific path such as
+/usr/bin.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">Install the manual page in this directory [/usr/man/manl]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">Use an appropriate site-specific path such as
+/usr/man/man1.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">Install the manual page with this extension
+[l]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">Use an appropriate site-specific extension such
+as 1.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="46%">Install the manual page as 'man' or 'catman'
+[man]:&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="54%">&lt;RETURN></td>
+</tr>
+</table>
+
+<br>&nbsp;
+<p>The script then prints out the following:</td>
+</tr>
+
+<tr>
+<td WIDTH="130" HEIGHT="167">&nbsp;</td>
+
+<td HEIGHT="167">
+<pre><font face="Courier New"><font size=-1>We are done with the questions.
+
+Saving configuration...
+
+Building Makefile...
+
+Building top.local.h...
+
+Building top.1...
+
+Doing a "make clean".
+
+rm -f *.o top core core.* sigdesc.h
+
+To create the executable, type "make".
+
+To install the executable, type "make install".</font></font></pre>
+</td>
+</tr>
+
+<tr>
+<td ALIGN=RIGHT VALIGN=TOP WIDTH="130"></td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font color="#008000"><font size=+0><font face="Arial">Build
+the </font><font face="Courier New">top</font><font face="Arial"> system.&nbsp;</font></font></font></b>
+<p>Once you have configured the system, you can build the system with the
+make command as follows:&nbsp;
+<p><font face="Courier New"><font size=-1>make</font></font>
+<p>The build typically takes a minute or so to complete.</td>
+</tr>
+
+<tr>
+<td ALIGN=RIGHT VALIGN=TOP WIDTH="130"></td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font color="#008000"><font size=+0><font face="Arial">Install
+the </font><font face="Courier New">top</font><font face="Arial"> system.&nbsp;</font></font></font></b>
+<p>Running a make install produces the following:&nbsp;
+<pre><font face="Courier New"><font size=-1>% make install
+
+&nbsp;./install -o root -m 4711 -g other top /usr/bin
+
+./install top.1 /usr/man/manl/top.l
+
+`install' is up to date.</font></font></pre>
+Your output may appear slightly different based on your choices of install
+locations for the <font face="Courier New"><font size=+0>top</font></font>
+binary and man page.</td>
+</tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial">Using </font><font face="Courier">top</font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>While <font face="Courier"><font size=+0>top</font></font>
+is probably considered more of a general system administration tool, it
+can be effectively used to aid in detecting signs of intrusion. This is
+because <font face="Courier"><font size=+0>top</font></font> combines a
+wide range of features in a single tool and interface. Another of <font face="Courier"><font size=+0>top’s</font></font>
+strengths comes from its scope, which is focused on the real-time display
+and update of information about the top processes that are consuming the
+most cpu resources.&nbsp;
+<p><font face="Courier"><font size=+0>Top</font></font> by default displays
+the top 15 processes (based on cpu resource consumption) on the system
+and periodically updates this information. Raw cpu use percentage is used
+to rank the processes.
+<p><font face="Courier"><font size=+0>Top</font></font> runs in two modes:
+an interactive mode and a batch mode. The interactive mode allows the user
+to dynamically monitor and adjust processes running on the system. The
+batch mode is for single "glances" at the system processes or sending the
+output to a file.&nbsp;
+<p>In interactive mode, the user can kill processes, adjust their priority,
+and issue a variety of other commands. In batch mode, all of the interactive
+mode commands are disabled.</td>
+</tr>
+
+<tr>
+<td ALIGN=RIGHT VALIGN=TOP WIDTH="130"></td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font color="#008000"><font size=+0><font face="Arial">Common
+</font><font face="Courier">top </font><font face="Arial">options.</font></font></font></b>
+<p><font face="Courier">top [ -SbiInquv ] [ -d<i>count</i> ] [ -s<i>time</i>
+] [ -o<i>field</i> ] [-U<i>username</i> ] [ <i>number</i> ]</font>
+<p>While <font face="Courier"><font size=+0>top</font></font> has other
+options, we describe the six options that we believe are the most useful.&nbsp;
+<p>[-I ]:&nbsp;
+<p>The capital I option prevents <font face="Courier New"><font size=+0>top</font></font>
+from displaying idle system processes. The display of idle processes is
+the default.
+<p>[-d<i>count</i> ]:&nbsp;
+<p>The –d &lt;count> option allows a user to specify the number of times
+that <font face="Courier"><font size=+0>top</font></font> refreshes its
+display before exiting. Count is a positive integer. This option allows
+you to get a variable length glimpse of current processes ranked by raw
+cpu usage. The default count is infinite.
+<p>[-s<i>time</i> ]:
+<p>The –s &lt;time> option allows the admin to specify the time, in seconds,
+in which <font face="Courier"><font size=+0>top</font></font> updates its
+information about the processes on the system.&nbsp;
+<p>[-o<i>field</i> ]
+<p>The –o &lt;field> option sorts the process display area by the specified
+field. The &lt;field> name is the name of the column as seen in the output,
+but in lower case. Likely values are "cpu", "size", "res", and "time",
+but these may vary on different operating systems.&nbsp;
+<p>[-U<i>username </i>]&nbsp;
+<p>The –U &lt;username> option allows you to specify a user and then view
+just their processes.
+<p>[<i>number</i> ]
+<p>The &lt;number> option when used displays that number of processes instead
+of the default (15) number of processes.
+<p><font face="Courier"><font size=+0>Top’s </font></font>interactive mode
+has its own set of commands, some of which are the same or similar to the
+above options. For a complete list of top’s interactive commands, consult
+the top man page.</td>
+</tr>
+
+<tr>
+<td ALIGN=RIGHT VALIGN=TOP WIDTH="130"></td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font face="Arial"><font color="#008000"><font size=+0>Ideas
+for use.</font></font></font></b>
+<p><font face="Courier"><font size=+0>Top</font></font> allows a system
+administrator flexibility in controlling processes and the relative amounts
+of system resources they consume. For example, you can use<font face="Courier"><font size=+0>
+top</font></font> to spot processes or users that are consuming unusual
+amounts of cpu time. This functionality will increasingly become more useful
+to the administrator as it is used to supplement and is supported by other
+security tools. That is, sometimes, <font face="Courier New"><font size=+0>top</font></font>
+will reveal something unusual, but you might need another security tool
+to track the source or it could be the other way around. Security tool
+outputs tend to build on one another to enhance understanding.</td>
+</tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+</table>
+</body>
+</html>

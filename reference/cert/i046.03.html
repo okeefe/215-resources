@@ -1,0 +1,503 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
+   <title>Using The Coroner's Toolkit : Rescuing files with lazarus</title>
+</head>
+
+
+<body bgcolor="#FFFFFF" link="#004A6B" vlink="#C7AA05" alink="#DDB30B">
+<table CELLSPACING=6 WIDTH="100%" >
+<tr>
+<td VALIGN=TOP WIDTH="120"> </td>
+
+<td VALIGN=TOP>
+<h2>
+<font face="Helvetica, Geneva, Arial">Using The Coroner's Toolkit : Rescuing
+files with lazarus</font></h2>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="120" valign="top"><b><font face="helvetica, geneva, arial"><font size=-1>Implementation
+Details</font></font></b></td>
+
+<td VALIGN=TOP>
+<table BORDER CELLSPACING=0 CELLPADDING=4 WIDTH="80%" >
+<tr>
+<td BGCOLOR="#CCDDFF"><font size=-1>Applies to the practice:</font>
+<br><font size=-1><a href="http://www.cert.org/security-improvement/practices/p046.html">Analyze
+all available information to characterize an intrusion</a></font>
+<p><font size=-1>Applicable technologies:</font>
+<br><font size=-1>Sun Solaris 2.x; UNIX operating systems and derivatives</font></td>
+</tr>
+</table>
+&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><font face="helvetica, geneva, arial"><b><font size=-1>Introduction</font></b></td>
+
+<td VALIGN=TOP>In the aftermath of a network break-in, system administrators
+are often asked to explain what happened. The Coroner's Toolkit (TCT) is
+a collection of tools that gather and analyze data on a UNIX system and
+help the administrator answer this question. <tt>unrm</tt> and <tt>lazarus</tt>
+are part of the toolkit and can be used to restore deleted files and data
+that can not be easily accessed.&nbsp;
+<ul>
+<li>
+<tt>unrm</tt> provides access to the unallocated portions of a UNIX file
+system and writes the raw data into an output file.</li>
+
+<li>
+<tt>lazarus</tt> attempts to reconstruct files or data from raw data. Usually
+this raw data is provided by <tt>unrm</tt>. In addition, <tt>lazarus</tt>
+can be used to reconstruct data objects from other sources such as system
+memory and swap space. The tool has been used with data from UFS, EXT2,
+NTFS, and FAT32 file systems, but it can be used on just about any type
+of file system. Your success will vary with the way the data is stored.</li>
+</ul>
+Together both tools provide important assistance whenever files are accidentally
+deleted. For the forensic analyst, these tools provide access to files
+an intruder may have deleted to hide his attack tools or eliminate important
+log information.&nbsp;
+<p>As the TCT authors point out, "If there was a theme, it would be the
+reconstruction of the past - determining as much as possible what happened
+with a static snapshot of a system." Certainly such activities require
+an experienced and committed system administrator during the forensic investigation
+phase of an intrusion. No software can replace someone who knows his or
+her system, but TCT is a start.&nbsp;
+<p>In addition to <tt>unrm</tt> and <tt>lazarus,</tt> TCT contains another
+tool, called grave-robber, that can aid in identifying what happened after
+a break-in. Grave-robber controls several other tools in an attempt to
+capture as much information as possible about a potentially compromised
+system and its files. Its use is explained in the implementation
+ <a href="http://www.cert.org/security-improvement/implementations/i046.02.html">Using the 
+Coroner's Toolkit: Harvesting information with grave-robber.</a>
+<p>Using the TCT tools can require a great deal of time and effort. You
+need to review all documentation carefully and test all parts before use
+so that you can understand and take full advantage of their features. In
+particular, when using <tt>unrm</tt> and <tt>lazarus,</tt> you need to
+read the file <tt>help-recovering-file</tt> and <tt>docs/lazarus.README</tt>
+which comes as part of the TCT package.&nbsp;
+<p>The installation of the TCT toolkit is explained within the implementation
+<a href="http://www.cert.org/security-improvement/implementations/i046.01.html">Installing
+The Coroner's Toolkit and using the mactime utility.</a>
+<p>This implementation discusses the use of two TCT tools, <tt>unrm</tt>
+and <tt>lazarus,</tt> on the Sun Solaris operating system, version 2.x.
+You can use this approach with other UNIX operating systems and hosts.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="120"><b><font face="helvetica, geneva, arial"><font color="#000000"><font size=-1>Effort
+Estimates</font></font></font></b></td>
+
+<td>The time needed to retrieve unallocated disk space by <tt>unrm</tt>
+depends on the underlying system, its processor, and required disk space.
+The time needed to analyze the raw data by <tt>lazarus</tt> depends on
+this as well.&nbsp;
+<p>Using these tools can take considerable time and create a very large
+number of output files. The space needed for the output of <tt>unrm</tt>
+is 1000f the unallocated blocks that should be recovered. <tt>lazarus</tt>
+will also use approximately 1200f this space.&nbsp;
+<p>The technical analysis of this output can easily take days.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="120"><b><font face="helvetica, geneva, arial"><font color="#000000"><font size=-1>Prerequisites</font></font></font></b></td>
+
+<td>The output of <tt>unrm</tt> and <tt>lazarus</tt> can take considerable
+space. For example, for a system with 1.0 GB of unallocated disk space,
+<tt>unrm</tt> and <tt>lazarus </tt>will need approximately 2.2 GB of free
+space to store all output data. You need to create this output data on
+another file system; otherwise the unallocated disk space will be used
+for the newly created files, thereby destroying the files you are attempting
+to recover. In addition, during forensic analysis, you want to minimize
+changes to the system under investigation.&nbsp;
+<p>Make sure that spare disks are reserved and available when you need
+them to store the <tt>unrm</tt> and <tt>lazarus</tt> output. Make sure
+you know how to connect such disks to a live system such that minimal changes
+occur on the system being analyzed. Ensure that you mount the disk that
+needs to be analyzed as read only on a different system to minimize the
+risk of losing interesting data as a result of normal system events. This
+implies that <tt>unrm</tt> and <tt>lazarus</tt> are used after <tt><a href="http://www.cert.org/security-improvement/implementations/i046.02.html">grave-robber</a></tt>.&nbsp;
+<p>To reliably analyze any system, you must use unmodified, authentic tools.
+Therefore, use write-protected media to store tools like the TCT and others
+used during forensic analysis.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="helvetica, geneva, arial"><font size=-1>Recovering
+data from the unallocated section with <tt>unrm</tt>.</font></font></b></td>
+
+<td VALIGN=TOP>To run <tt>unrm,</tt> you first need to identify the appropriate
+system device from which to recover the unallocated disk space. Then you
+need to identify a safe place to store the retrieved raw data.&nbsp;
+<p>For our example, we assume that the system device you want to recover
+raw data from is mounted read-only as <tt>/dev/sd6</tt>. To create a safe
+place for the analysis results, first create a new directory for all results.
+Then assign another account, not the root account, as owner of this directory.
+<tt>lazarus</tt> does not depend on root privileges. Check that the output
+will be stored on a local disk (<tt>/dev/sd2</tt>) which&nbsp; hosts the
+<tt>/spare/tct-data</tt> directory and that enough free space is available:&nbsp;
+<p><font face="Courier New"><font size=-1># mkdir /spare/tct-data</font></font>
+<br><font face="Courier New"><font size=-1># chmod 750 /spare/tct-data</font></font>
+<br><font face="Courier New"><font size=-1># chown kpk:wheel /spare/tct-data</font></font>
+<p>Based on this information, <tt>unrm</tt> is invoked with the following
+command line. We can use the local copy of the TCT tools as we are working
+from a secure workstation with the potentially compromised disk mounted
+. Additional commands are necessary to arrange the right access controls
+as well the ownership and location of the created file:&nbsp;
+<p><font face="Courier New"><font size=-1># cd /spare/tct-data</font></font>
+<br><font face="Courier New"><font size=-1># /usr/local/tct/bin/unrm /dev/sd6
+>> unrm-20010303.out</font></font>
+<br><font face="Courier New"><font size=-1># chmod 440 unrm-20010303.out</font></font>
+<br><font face="Courier New"><font size=-1># chown kpk:wheel unrm-20010303.out</font></font>
+<p>If you are interested in the whole disk, use <tt>dd</tt> instead of
+<tt>unrm</tt>. Invoke the following command line with the correct values:&nbsp;
+<p><font face="Courier New"><font size=-1># /bin/dd bs=1024k if=/dev/sd6
+> dd-20010303.out</font></font>
+<p>The overall size of the output file together with the <tt>lazarus</tt>
+output will be 2200f the size of the entire disk.&nbsp;
+<p>The <tt>dd</tt> command can also be used to retrieve raw data from other
+devices. Use the correct device name as the argument for the <tt>if</tt>
+option in the command line above. Be aware that direct interference with
+critical files such as kernel memory has the potential to crash your system.&nbsp;
+<p>At this stage you have all raw data within a single file and you can
+start to use other tools to review this data - such as <tt>od</tt>, <tt>strings</tt>
+or <tt>less</tt>.&nbsp;
+<p>For the forensic analyst it usually will be helpful to use <tt>lazarus</tt>
+to split the huge binary file into several smaller files in addition to
+any other method to review the raw data.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="helvetica, geneva, arial"><font size=-1>Running
+<tt>lazarus</tt> to split the raw data into smaller blocks</font></font></b></td>
+
+<td VALIGN=TOP><tt>lazarus</tt> will operate on any binary file and try
+to break it into smaller blocks. While splitting the data into blocks,
+<tt>lazarus</tt> will try to identify which kind of data the blocks belong
+to. The size of the blocks is 1 KB by default and can be modified by changing
+the variable <tt>$BLOCK_SIZE</tt> in the TCT configuration file <tt>/usr/local/tct/conf/lazarus.cf</tt>
+(if TCT was installed in <tt>/usr/local/tct/</tt>).&nbsp;
+<p>We recommend that you create separate directories to be able to separate
+all output data. After changing the user id (to <tt>kpk</tt> as assumed
+for our example), change to the directory containing the raw data file
+and create two subdirectories for <tt>lazarus-</tt>specific files:&nbsp;
+<p><font face="Courier New"><font size=-1># su kpk</font></font>
+<br><font face="Courier New"><font size=-1>$ cd /spare/tct-data</font></font>
+<br><font face="Courier New"><font size=-1>$ mkdir blocks</font></font>
+<br><font face="Courier New"><font size=-1>$ mkdir html</font></font>
+<p>You can start <tt>lazarus</tt> using the following options:&nbsp;
+<p><tt>-h</tt> creates a HTML-based view that can be used with any browser
+to ease access to individual blocks&nbsp;
+<br><tt>-D &lt;dir></tt> directs that all blocks be written to the given
+directory&nbsp;
+<br><tt>-H &lt;dir></tt> directs the main HTML files that provide the overall
+navigation to the specified directory&nbsp;
+<br><tt>-w &lt;dir></tt> directs that all other HTML output be written
+to the given directory&nbsp;
+<p>The last argument is the binary file that serves as input for <tt>lazarus</tt>.
+After the command terminates, make sure to remove write access to the created
+files.&nbsp;
+<p><font face="Courier New"><font size=-1>$ /usr/local/tct/bin/lazarus
+-h -H . -D /spare/tct-data/blocks -w /spare/tct-data/html unrm-20010303.out</font></font>
+<br><font face="Courier New"><font size=-1>$ chmod 440 *.html html/*.html</font></font>
+<p><tt>lazarus</tt> takes a considerable amount of time to split the input
+file into smaller blocks. After this step, the directory will look similar
+to the output below:&nbsp;
+<pre><font face="Courier New"><font size=-1>$ ls -la /spare/tct-data
+
+
+total 24
+
+
+drwxr-x---&nbsp;&nbsp; 4 kpk&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1024 Mar&nbsp; 3 22:36 .
+
+
+drwxr-xr-x&nbsp; 23 kpk&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1024 Mar&nbsp; 3 22:25 ..
+
+
+drwx------&nbsp;&nbsp; 2 kpk&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2048 Mar&nbsp; 3 22:36 blocks
+
+
+drwx------&nbsp;&nbsp; 2 kpk&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5120 Mar&nbsp; 3 22:36 html&nbsp;&nbsp;&nbsp;
+
+
+-r--r-----&nbsp;&nbsp; 1 kpk&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; 545611359 Mar&nbsp; 3 22:16 unrm-20010303.out
+
+
+-r--r-----&nbsp;&nbsp; 1 kpk&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 233 Mar&nbsp; 3 22:35 unrm-20010303.out.frame.html
+
+
+-r--r-----&nbsp;&nbsp; 1 kpk&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 11359 Mar&nbsp; 3 22:36 unrm-20010303.out.html
+
+
+-r--r-----&nbsp;&nbsp; 1 kpk&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1472 Mar&nbsp; 3 22:35 unrm-20010303.out.menu.html</font></font></pre>
+Start reviewing the smaller blocks by loading the file <tt>unrm-20010303.out.html</tt>
+into your browser and go from there.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="helvetica, geneva, arial"><font size=-1>Understanding
+the <tt>lazarus</tt> output</font></font></b></td>
+
+<td VALIGN=TOP><tt>lazarus</tt> handles the input file as follows:&nbsp;
+<ol>
+<li>
+A block of the input file is read and the first 100f the data is analyzed
+to see if it is text or binary.</li>
+
+<li>
+If it consists of printable characters only, it is assumed to be text and
+it is then tested against a number of regular expressions to identify C,
+HTML or other specific text formats.</li>
+
+<li>
+If the block is considered to be binary, a TCT-specific version of the
+<tt>file(1)</tt> command is run over this block. If this gives no results,
+the first few bytes are analyzed to see if the block is in ELF format.</li>
+</ol>
+Each block is then written to an output file. If the block has the same
+type as the previous block, it is appended. It is also appended if the
+block was not recognized as any other known data type. This is based on
+the assumption that data from the same file will often be stored continuously
+on a disk. Otherwise, a new file is opened and the block is written to
+it.&nbsp;
+<p>The files written to disk are named according to a specific name scheme.
+The first part of the name is based on the actual number of the analyzed
+block. The second part (separated by ".") shows the type using a single
+letter as defined in the table below. All files are assigned a "txt" extension
+(again separated by ".") other than graphic files that are given the extension
+"gif" or "jpg".&nbsp;
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="90%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="50%" BGCOLOR="#CCDDFF"><b>Key Letter and
+Color Code</b></td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="50%" BGCOLOR="#CCDDFF"><b>Explanation</b></td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#D19275">A</font></td>
+
+<td>archive</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#336666">C</font></td>
+
+<td>C code</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#D9D909">E</font></td>
+
+<td>ELF</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#FF0000">f</font></td>
+
+<td>sniffers</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#FF99FF">H</font></td>
+
+<td>HTML</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#238E68">I</font></td>
+
+<td>image/pix</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#CC9900">L</font></td>
+
+<td>logs</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#0066FF">M</font></td>
+
+<td>mail</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#BBBBBB">O</font></td>
+
+<td>null</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#CC6666">P</font></td>
+
+<td>programs</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#6633FF">Q</font></td>
+
+<td>mailq</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#000000">R</font></td>
+
+<td>removed</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#6699FF">S</font></td>
+
+<td>lisp</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#777777">T</font></td>
+
+<td>text</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#000000">U</font></td>
+
+<td>uuencoded</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#CC3333">W</font></td>
+
+<td>password file</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#000000">X</font></td>
+
+<td>exe</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#336633">Z</font></td>
+
+<td>compressed</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#000000">.</font></td>
+
+<td>binary</td>
+</tr>
+
+<tr>
+<td ALIGN=CENTER><font color="#000000">!</font></td>
+
+<td>sound</td>
+</tr>
+</table>
+
+<p>Links to all files are collected in a kind of map that is presented
+as a HTML page. This allows you to access the files by simply selecting
+one link and clicking to it. The map uses the same approach to represent
+the type of each file as it is used for assigning the file names. The first
+block of a sequence of blocks is shown as a capitalized letter. The number
+of blocks that are represented within the map is encoded to save space.
+The first character represents one block or less, the second from 0 to
+2 blocks, the third from 0 to 4 and so on. If five characters are displayed
+for one type, this reflects 16 to 31 blocks of data.&nbsp;
+<p>A typical result might look like the following example (please note,
+that the example does not contain active links but underlined characters
+only).&nbsp;
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="100%" >
+<tr>
+<td><tt><font color="#000000">...<u>!</u>!!<u>!</u>!!</font><u><font color="#777777">Tttt.!!Ttt...TtMmmm</font></u></tt></td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="helvetica, geneva, arial"><font size=-1>Analyzing
+the <tt>lazarus</tt> output</font></font></b></td>
+
+<td VALIGN=TOP>The analysis is far from being automated. The level and
+success of the analysis depends on the ability of the analyst as well as
+the way the data was originally stored on the analyzed system. Therefore,
+we can provide no meaningful estimates on how long it will take to go through
+the data or how good the results will be.&nbsp;
+<p>The <tt>lazarus</tt> documentation suggest various approaches for reviewing
+the output:&nbsp;
+<ul>
+<li>
+If your looking for specific files with known content, search for this
+content by characteristic key words etc. The best tool for this is <tt>grep</tt>
+or <tt>egrep</tt>. The results will depend on the quality of the key words.</li>
+
+<li>
+If you know nothing at all about what might be contained in the raw data,
+use some tool such as <tt>less</tt> which can display binary data and can
+also be used to go through the data. The HTML navigation map will help
+in this task as well.</li>
+
+<li>
+If you are only interested in readable output, you might use a tool like
+<tt>strings. Use</tt> either the single binary file as input for <tt>strings</tt>
+or the split blocks.</li>
+
+<li>
+Review specific file types by using the name convention to separate all
+files which contain C code. List them using <tt>ls *.c.txt</tt> and then
+review the files produced.</li>
+
+<li>
+Graphic files could be viewed with a graphical browser.</li>
+</ul>
+The tools you are using should be capable of handling binary data.&nbsp;
+<p>No assistance is provided by <tt>lazarus</tt> to help the analyst re-arrange
+single blocks to build larger aggregations. This can be done by concatenating
+files manually and editing them to remove raw data not belonging to the
+file. This involves making decisions about what blocks belong to each other.
+This task is difficult and&nbsp; might affect the overall correctness and
+result of the analysis.&nbsp;</td>
+</tr>
+</table>
+
+</body>
+</html>

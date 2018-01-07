@@ -1,0 +1,1127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Other Commands</TITLE>
+<META NAME="description" CONTENT="Other Commands">
+<META NAME="keywords" CONTENT="501">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="501.css">
+
+<LINK REL="next" HREF="node12.html">
+<LINK REL="previous" HREF="node9.html">
+<LINK REL="up" HREF="501.html">
+<LINK REL="next" HREF="node12.html">
+</HEAD>
+
+<BODY  BGCOLOR="#FFFFFF">
+<!--Navigation Panel-->
+<A NAME="tex2html159"
+  HREF="node12.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="icons/next.png"></A> 
+<A NAME="tex2html155"
+  HREF="501.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="icons/up.png"></A> 
+<A NAME="tex2html149"
+  HREF="node10.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="icons/prev.png"></A> 
+<A NAME="tex2html157"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="icons/contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html160"
+  HREF="node12.html">About this document ...</A>
+<B> Up:</B> <A NAME="tex2html156"
+  HREF="501.html">The Vi Editor</A>
+<B> Previous:</B> <A NAME="tex2html150"
+  HREF="node10.html">Finishing Up</A>
+ &nbsp <B>  <A NAME="tex2html158"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00060000000000000000">
+Other Commands</A>
+</H1>
+
+<P>
+<TT>Vi/ex</TT>
+is a very powerful editor.  This document should have given you
+enough information to perform simple edits.
+
+<P>
+See the attached <TT>vi</TT> and <TT>ex</TT> <I>Quick References</I> for a fuller list of commands.
+
+<P>
+
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="CENTER" COLSPAN=2><B>Vi Quick Reference</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>&nbsp;</TD>
+</TR>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Entering/leaving vi</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>% vi <I>name</I></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>edit <I>name</I> at top</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>% vi +<I>n name</I></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>edit <I>name</I> at line <I>n</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>% vi + <I>name</I></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>edit <I>name</I> at end</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>% vi -r</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>list saved files</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>% vi -r <I>name</I></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>recover file <I>name</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>% vi <I>name ...</I></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>edit first; rest via <I>:n</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>&nbsp;</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>% vi -t <I>tag</I></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>start at <I>tag</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>% vi +/<I>pat name</I></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>search for <I>pat</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>% view <I>name</I></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>read only mode</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>ZZ</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>exit from vi, saving changes</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>^Z</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>stop vi for later resumption</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>The display</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>Last line</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>Error messages, echoing input to
+<B>: / ? !</B>,
+feedback about i/o and large changes.</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>@ lines</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>On screen only, not in file.</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>~ lines</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>Lines past end of file.</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>^<I>x</I></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>Control characters, ^? is delete.</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>tabs</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>Expand to spaces, cursor at last.</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>&nbsp;</TD>
+</TR>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Vi states</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>Command</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>Normal and initial state.  Others return here.
+ESC (escape) cancels partial command.</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>Insert</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>Entered by <B>a i A I o O c C s S R</B>.
+Arbitrary text then terminates with ESC character,
+or abnormally with interrupt.</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>Last line</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>Reading input for <B>: / ? !</B>;
+terminate with ESC or CR to execute, interrupt to cancel.</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Counts before vi commands</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>line/column number</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115><B>z G |</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>scroll amount</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115><B>^D ^U</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>replicate insert</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115><B>a i A I</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>repeat effect</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>most rest</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Simple commands</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>dw</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>delete a word</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>de</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>... leaving punctuation</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>dd</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>delete a line</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>3dd</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>... 3 lines</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>i</B><B><EM>text</EM>ESC</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>insert text <EM>text</EM></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>cw</B><B><EM>new</EM>ESC</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>change word to <EM>new</EM></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>ea</B><B><EM>s</EM>ESC</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>pluralize word</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>xp</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>transpose characters</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Interrupting, cancelling</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>ESC</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>end insert or incomplete cmd</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^C</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>Control-C interrupts</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^R</B> or <B>^L</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>redraw screen if scrambled</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>File manipulation</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:w</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>write back changes</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:wq</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>write and quit</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:q</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>quit</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:q!</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>quit, discard changes</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:e </B><B><I>name</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>edit file <I>name</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:e!</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>reedit, discard changes</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:e + </B><B><I>name</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>edit, starting at end</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:e +</B><B><I>n</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>edit starting at line <I>n</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:e #</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>edit alternate file</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>|/B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>synonym for <B>:e #</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:w </B><B><I>name</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>write file <I>name</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:w! </B><B><I>name</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>overwrite file <I>name</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:sh</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>run shell, then return</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:!</B><B><I>cmd</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>run <I>cmd</I>, then return</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:n</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>edit next file in arglist</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:n </B><B><I>args</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>specify new arglist</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:f</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>show current file and line</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^G</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>synonym for <B>:f</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>:ta </B><B><I>tag</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>to tag file entry <I>tag</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^]</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115><B>:ta</B>, following word is <I>tag</I></TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Positioning within file</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^F</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>forward screenfull</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^B</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>backward screenfull</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^D</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>scroll down half screen</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^U</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>scroll up half screen</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>G</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>goto line (end default)</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>/</B><B><I>pat</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>next line matching <I>pat</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>?</B><B><I>pat</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>prev line matching <I>pat</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>n</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>repeat last <B>/</B> or <B>?</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>N</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>reverse last <B>/</B> or <B>?</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>/</B><B><I>pat</I>/+</B><B><I>n</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>n'th line after <I>pat</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>?</B><B><I>pat</I>?</B><B><I>n</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>n'th line before <I>pat</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>]]</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>next section/function</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>[[</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>previous section/function</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>%</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>find matching <B>( ) {</B> or <B>}</B></TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Adjusting the screen</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^R</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>redraw, eliminate @ lines</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>z</B>CR</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>redraw, current at window top</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>z</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>... at bottom</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>z.</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>... at center</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>/</B><B><I>pat</I>/z</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115><I>pat</I> line at bottom</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>z</B><B><I>n</I>.</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>use <I>n</I> line window</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^E</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>scroll window down 1 line</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^Y</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>scroll window up 1 line</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Marking and returning</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>``</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>previous context</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>''</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>... at first non-white in line</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>m</B><B><I>x</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>mark position with letter <I>x</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>`</B><B><I>x</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>to mark <I>x</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>'</B><B><I>x</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>... at first non-white in line</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Line positioning</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>H</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>home window line</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>L</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>last window line</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>M</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>middle window line</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>+</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>next line, at first non-white</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>-</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>previous line, at first non-white</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>CR</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>return, same as +</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img9.png"
+ ALT="$\downarrow$"></B> or <B>j</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>next line, same column</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B><IMG
+ WIDTH="11" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img6.png"
+ ALT="$\uparrow$"></B> or <B>k</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>previous line, same column</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Character positioning</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B><IMG
+ WIDTH="11" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img6.png"
+ ALT="$\uparrow$"></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>first non white</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>0</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>beginning of line</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>$</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>end of line</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>h</B> or <B><IMG
+ WIDTH="19" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img8.png"
+ ALT="$\rightarrow$"></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>forward</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>l</B> or <B><IMG
+ WIDTH="20" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img7.png"
+ ALT="$\leftarrow$"></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>backwards</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^H</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>same as <B><IMG
+ WIDTH="20" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img7.png"
+ ALT="$\leftarrow$"></B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>space</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>same as <B><IMG
+ WIDTH="19" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img8.png"
+ ALT="$\rightarrow$"></B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>f</B><B><I>x</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>find <I>x</I> forward</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>F</B><B><I>x</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115><B>f</B> backward</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>t</B><B><I>x</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>upto <I>x</I> forward</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>T</B><B><I>x</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>back upto <I>x</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>;</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>repeat last <B>f F t</B> or <B>T</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>,</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>inverse of <B>;</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>|</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>to specified column</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>%</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>find matching <B>( { )</B> or <B>}</B></TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Words, sentences, paragraphs</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>w</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>word forward</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>b</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>back word</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>e</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>end of word</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>)</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>to next sentence</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>}</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>to next paragraph</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>(</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>back sentence</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>{</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>back paragraph</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>W</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>blank delimited word</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>B</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>back <B>W</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>E</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>to end of <B>W</B></TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Commands for LISP</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>)</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>Forward s-expression</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>}</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>... but don't stop at atoms</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>(</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>Back s-expression</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>{</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>... but don't stop at atoms</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Corrections during insert</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^H</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>erase last character</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^W</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>erases last word</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>erase</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>your erase, same as <B>^H</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>kill</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>your kill, erase input this line</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B><IMG
+ WIDTH="11" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img10.png"
+ ALT="$\backslash$"></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>escapes <B>^H</B>, your erase and kill</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>ESC</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>ends insertion, back to command</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^[</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>(alternative way of typing <B>ESC</B>)</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^C</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>interrupt, terminates insert</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^D</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>backtab over <I>autoindent</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B><IMG
+ WIDTH="11" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img6.png"
+ ALT="$\uparrow$">^D</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>kill <I>autoindent</I>, save for next</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>0^D</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>... but at margin next also</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^V</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>quote non-printing character</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Insert and replace</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>a</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>append after cursor</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>i</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>insert before</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>A</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>append at end of line</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>I</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>insert before first non-blank</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>o</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>open line below</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>O</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>open above</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>r</B><B><I>x</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>replace single char with <I>x</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>R</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>replace characters</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Operators (double to affect lines)</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>d</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>delete</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>c</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>change</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>&lt;</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>left shift</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>&gt;</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>right shift</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>!</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>filter through command</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>=</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>indent for LISP</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>y</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>yank lines to buffer</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Miscellaneous operations</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>C</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>change rest of line</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>D</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>delete rest of line</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>s</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>substitute chars</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>S</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>substitute lines</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>J</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>join lines</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>x</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>delete characters</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>X</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>... before cursor</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>Y</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>yank lines</TD>
+</TR>
+</TABLE>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Yank and put</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>p</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>put back lines</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>P</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>put before</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>"</B><B><I>x</I>p</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>put from buffer <I>x</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>"</B><B><I>x</I>y</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>yank to buffer <I>x</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>"</B><B><I>x</I>d</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>delete into buffer <I>x</I></TD>
+</TR>
+</TABLE>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Undo, redo, retrieve</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>u</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>undo last change</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>U</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>restore current line</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>.</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>repeat last change</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>"</B><B><I>d</I>p</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>retrieve <I>d</I>'th last delete</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="CENTER" COLSPAN=2><B>Ex Quick Reference</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=55>&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>&nbsp;</TD>
+</TR>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Entering/leaving ex</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=55>% ex <I>name</I></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>edit <I>name</I>, start at end</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=55>% ex +<I>n</I> <I>name</I></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>... at line <I>n</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=55>% ex -t <I>tag</I></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>start at <I>tag</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=55>% ex -r</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>list saved files</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=55>% ex -r <I>name</I></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>recover file <I>name</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=55>% ex <I>name</I> ...</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>edit first; rest via <B>:n</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=55>% ex -R <I>name</I></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>read only mode</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=55>:x</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>exit, saving changes</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=55>:q!</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>exit, discarding changes</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Ex states</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>Command</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>Normal and initial state.  Input prompted for by <B>:</B>.
+Your kill character cancels partial command.</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>Insert</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>Entered by <B>a</B> <B>i</B> and <B>c</B>.
+Arbitrary text then terminates with line having only <B>.</B>
+character on it or abnormally with interrupt.</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43>Open/visual</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>Entered by <B>open</B> or <B>vi</B>, terminates with <B>Q</B>
+or <B>^<IMG
+ WIDTH="11" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img10.png"
+ ALT="$\backslash$"></B>.</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=6><B>Ex commands</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>abbrev</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>ab</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>next</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>n</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>unabbrev</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>una</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>append</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>a</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>number</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>nu</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>undo</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>u</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>args</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>ar</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>open</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>o</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>unmap</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>unm</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>change</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>c</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>preserve</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>pre</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>version</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>ve</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>copy</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>co</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>print</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>p</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>visual</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>vi</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>delete</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>d</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>put</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>pu</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>write</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>w</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>edit</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>e</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>quit</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>q</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>xit</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>x</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>file</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>f</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>read</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>re</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>yank</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>ya</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>global</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>g</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>recover</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>rec</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>window</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>z</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>insert</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>i</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>rewind</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>rew</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>escape</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>!</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>join</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>j</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>set</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>se</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>lshift</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>&lt;</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>list</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>l</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>shell</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>sh</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>print next</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>CR</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>map</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7>&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>source</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>so</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>resubst</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>&amp;</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>mark</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>ma</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>stop</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>st</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>rshift</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>&gt;</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>move</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>m</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>substitute</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>s</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=29>scroll</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=7><B>^D</B></TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=4><B>Ex command addresses</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>n</I></TD>
+<TD ALIGN="LEFT">line <I>n</I></TD>
+<TD ALIGN="LEFT">/<I>pat</I></TD>
+<TD ALIGN="LEFT">next with <I>pat</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT">&amp;.</TD>
+<TD ALIGN="LEFT">current</TD>
+<TD ALIGN="LEFT">?<I>pat</I></TD>
+<TD ALIGN="LEFT">previous with <I>pat</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT">$</TD>
+<TD ALIGN="LEFT">last</TD>
+<TD ALIGN="LEFT"><I>x</I>-<I>n</I></TD>
+<TD ALIGN="LEFT"><I>n</I> before <I>x</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT">+</TD>
+<TD ALIGN="LEFT">next</TD>
+<TD ALIGN="LEFT"><I>x</I>,<I>y</I></TD>
+<TD ALIGN="LEFT"><I>x</I> through <I>y</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT">previous</TD>
+<TD ALIGN="LEFT">'<I>x</I></TD>
+<TD ALIGN="LEFT">marked with <I>x</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT">+<I>n</I></TD>
+<TD ALIGN="LEFT"><I>n</I> forward</TD>
+<TD ALIGN="LEFT">''</TD>
+<TD ALIGN="LEFT">previous context</TD>
+</TR>
+<TR><TD ALIGN="LEFT">%</TD>
+<TD ALIGN="LEFT">1,$</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Specifying terminal type</B></TD>
+</TR>
+<TR><TD ALIGN="CENTER" COLSPAN=2><TT>set term=</TT><I>type</I></TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=5><B>Some terminal types</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT">tvi912c</TD>
+<TD ALIGN="LEFT">tvi905</TD>
+<TD ALIGN="LEFT">tvi925</TD>
+<TD ALIGN="LEFT">tvi950</TD>
+<TD ALIGN="LEFT">tvi910+</TD>
+</TR>
+<TR><TD ALIGN="LEFT">NL</TD>
+<TD ALIGN="LEFT">vt100</TD>
+<TD ALIGN="LEFT">kermit</TD>
+<TD ALIGN="LEFT">4014</TD>
+<TD ALIGN="LEFT">vt52</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Initializing options</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>EXINIT</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>place <B>set</B>'s here in environment var.</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>set </B><B><I>x</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>enable option</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>set no</B><B><I>x</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>disable option</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>set </B><B><I>x</I>=</B><B><I>val</I></B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>give value <I>val</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>set</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>show changed options</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>set all</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>show all options</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>set </B><B><I>x</I>?</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>show value of option <I>x</I></TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=3><B>Useful options</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>autoindent</B></TD>
+<TD ALIGN="LEFT">ai</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>supply indent</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>autowrite</B></TD>
+<TD ALIGN="LEFT">aw</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>write before changing files</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>ignorecase</B></TD>
+<TD ALIGN="LEFT">ic</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>in scanning</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>lisp</B></TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115><B>( ) { }</B> are s-exp's</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>list</B></TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>print ^I for tab, $ at end</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>magic</B></TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115><B>. [ *</B> special in patterns</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>number</B></TD>
+<TD ALIGN="LEFT">nu</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>number lines</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>paragraphs</B></TD>
+<TD ALIGN="LEFT">para</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>macro names which start ...</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>redraw</B></TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>simulate smart terminal</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>scroll</B></TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>command mode lines</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>sections</B></TD>
+<TD ALIGN="LEFT">sect</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>macro names ...</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>shiftwidth</B></TD>
+<TD ALIGN="LEFT">sw</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>for <B>&lt; &gt;</B>, and input <B>^D</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>showmatch</B></TD>
+<TD ALIGN="LEFT">sm</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>to <B>)</B> and <B>}</B> as typed</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>slowopen</B></TD>
+<TD ALIGN="LEFT">slow</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>choke updates during insert</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>window</B></TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>visual mode lines</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>wrapscan</B></TD>
+<TD ALIGN="LEFT">ws</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>around end of buffer?</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><B>wrapmargin</B></TD>
+<TD ALIGN="LEFT">wm</TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>automatic line splitting</TD>
+</TR>
+</TABLE>
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT" COLSPAN=2><B>Scanning pattern formation</B></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>^</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>beginning of line</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>$</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>end of line</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>.</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>any character</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B><IMG
+ WIDTH="11" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img10.png"
+ ALT="$\backslash$">&lt;</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>beginning of word</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B><IMG
+ WIDTH="11" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img10.png"
+ ALT="$\backslash$">&gt;</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>end of word</TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>[</B><B><I>str</I>]</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>any char in <I>str</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>[^</B><B><I>str</I>]</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>... not in <I>str</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>[</B><B><I>xy</I>]</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>... between <I>x</I> and <I>y</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT" VALIGN="TOP" WIDTH=43><B>*</B></TD>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH=115>any number of preceding</TD>
+</TR>
+</TABLE>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html159"
+  HREF="node12.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="icons/next.png"></A> 
+<A NAME="tex2html155"
+  HREF="501.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="icons/up.png"></A> 
+<A NAME="tex2html149"
+  HREF="node10.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="icons/prev.png"></A> 
+<A NAME="tex2html157"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="icons/contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html160"
+  HREF="node12.html">About this document ...</A>
+<B> Up:</B> <A NAME="tex2html156"
+  HREF="501.html">The Vi Editor</A>
+<B> Previous:</B> <A NAME="tex2html150"
+  HREF="node10.html">Finishing Up</A>
+ &nbsp <B>  <A NAME="tex2html158"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+&#169 Robert Evans, <a href=http://www.cs.cf.ac.uk/>Cardiff School of Computer Science</a>, <a href=http://www.cf.ac.uk/>Cardiff University</a>, 2003-09-18
+</ADDRESS>
+</BODY>
+</HTML>

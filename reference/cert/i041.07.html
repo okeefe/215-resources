@@ -1,0 +1,685 @@
+<html>
+<head>
+<title>Installing, configuring, and using tcp wrapper to log unauthorized
+                    connection attempts on systems running Solaris 2.x</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+<table CELLSPACING=4 CELLPADDING=4 WIDTH="100%" >
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Implementation Details</font></b></td>
+
+<td><b><font face="Arial"><font size=+1>Installing, configuring, and using
+tcp wrapper to log unauthorized connection attempts on systems running
+Solaris 2.x</font></font></b></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130">&nbsp;</td>
+
+<td>
+<table BORDER CELLSPACING=0 CELLPADDING=8 WIDTH="75%" BGCOLOR="#CCDDFF" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP HEIGHT="85">Applies to the practices: 
+<br><a
+href="../practices/p094.html">"Monitor and inspect network activities for unexpected behavior"</a> 
+<br><a
+href="../practices/p091.html">"Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior"</a> 
+<br><a
+href="/security-improvement/practices/p092.html">"Manage logging and other data collection mechanisms"</a>
+<br><a href="/security-improvement/practices/p068.html">"Offer only essential network services and operating system services on the server host machine"</a>
+
+<p>Applicable technologies: Solaris 2.x; UNIX operating system and derivatives</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130">&nbsp;</td>
+
+<td>Servers on UNIX systems usually either provide their services via the
+TCP/IP protocol stack to everyone or no one. In addition to this conceptual
+weakness, logging of connections is minimal and does not include, for example,
+source or timestamp. Connection attempts can be an early warning signal
+that a site is under attack so you want to capture as much information
+as possible.&nbsp;
+<p><font face="Courier New"><font size=+0>tcpd</font></font>- the program
+implementing the tcp wrapper - was developed as a result of an actual attack.
+It provides (1) some level of access control based on the source and destination
+of the connection request and (2) logging for successful and unsuccessful
+connections. tcp wrapper starts a filter program before the requested server
+process is started, assuming the connection request is permitted by the
+access control lists. All messages about connections and connection attempts
+are logged via syslogd (<a href="i041.08.html">"Configuring and using syslogd
+to collect logging messages on systems running Solaris 2.x"</a>).&nbsp;
+<p>This section describes the information necessary to download, install,
+and configure the tcp wrapper <font face="Courier New"><font size=+0>tcpd</font></font>tool,
+version 7.6, on the Sun Solaris operating system, version 2.x.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Preparation</font></b></td>
+
+<td>The latest release of tcp wrapper is available via anonymous ftp from<a href="ftp://ftp.porcupine.org/pub/security/">
+ftp://ftp.porcupine.org/pub/security/</a>.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Ensure that
+you can meet installation requirements.</font></font></font></b>
+<p>In order to build tcp wrapper, you need:&nbsp;
+<ul>
+<li>
+Internet access to retrieve the latest version&nbsp;</li>
+
+<li>
+<a href="%20http://www.pgp.com">PGP</a> to verify the authenticity of the
+software&nbsp;</li>
+
+<li>
+GZIP to uncompress the downloaded file&nbsp;</li>
+
+<li>
+a C compiler to build the executable program</li>
+</ul>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Download
+the tcp wrapper distribution.</font></font></font></b>
+<p>Perform an anonymous file transfer from
+<br><a href="ftp://ftp.porcupine.org/pub/security/tcp_wrappers_7.6.tar.gz">ftp://ftp.porcupine.org/pub/security/tcp_wrappers_7.6.tar.gz</a>.
+<p>For the next step, you also need the file <a href="ftp://ftp.porcupine.org/pub/security/tcp_wrappers_7.6.tar.gz.sig">ftp://ftp.porcupine.org/pub/security/tcp_wrappers_7.6.tar.gz.sig</a>.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Verify the
+authenticity of the tcp wrapper distribution.</font></font></font></b>
+<p>To perform this step, you need the PGP public key from "wietse venema
+" within your own PGP public key ring. W. Venema is the author of the tcp
+wrapper software program, and a match with his digital signature ensures
+that the software was downloaded successfully without modification. To
+verify the digital signature, the following command is issued in a directory
+containing the downloaded files:&nbsp;
+<p><font face="Courier New"><font size=-1>$ pgp tcp_wrappers_7.6.tar.gz.sig
+tcp_wrappers_7.6.tar.gz</font></font>
+<p>If the signature doesn't match, the software has likely been compromised.
+You should not use this version.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Unpack the
+tcp wrapper distribution.</font></font></font></b>
+<p>The compressed file can be uncompressed using the GNU gunzip utility
+and unpacked using the system tar command:&nbsp;
+<p><font face="Courier New"><font size=-1>$ gunzip tcp_wrappers_7.6.tar.gz</font></font>
+<br><font face="Courier New"><font size=-1>$ tar xvf tcp_wrappers_7.6.tar</font></font>
+<p>These commands create a subdirectory named <font face="Courier New"><font size=+0>tcp_wrappers_7.6</font></font>.
+All operations are to be performed within this subdirectory.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2" WIDTH="130">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Build and install</font></b></td>
+
+<td><font size=+0><font face="Courier New,Courier">Makefile</font> </font>works
+successfully for many different operating systems including Solaris 2.x.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font color="#008000"><font size=+0><font face="Arial">Update </font><font face="Courier New">Makefile.</font></font></font></b>
+<p>You need to make one change to <font face="Courier New"><font size=+0>Makefile</font></font>
+to ensure that log messages are handled under facility LOG_DAEMON instead
+of LOG_MAIL. By default, <font face="Courier New"><font size=+0>tcpd</font></font>
+logs all messages using the LOG_MAIL facility. We recommend storing messages
+generated by network servers in a separate file from that used by LOG_MAIL.
+Replace line 517 shown below:&nbsp;
+<p>FACILITY= LOG_MAIL # LOG_MAIL is what most&nbsp; <font face="Courier New"><font size=+0>sendmail</font></font>
+daemons use&nbsp;
+<p>with the following:&nbsp;
+<p>FACILITY= LOG_DAEMON # LOG_MAIL is what most&nbsp; <font face="Courier New"><font size=+0>sendmail</font></font>
+daemons use</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Build the
+tcp wrapper binary.</font></font></font></b>
+<p>You need to specify several options when executing the make command
+to successfully generate the binaries for <font face="Courier New"><font size=+0>tcpd</font></font>and
+<font face="Courier New"><font size=+0>libwrap.a</font></font> library:
+<p><font face="Courier New"><font size=-1>$ make REAL_DAEMON_DIR=/usr/sbin
+STYLE=-DPROCESS_OPTIONS FACILITY=LOG_DAEMON sunos5</font></font></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130">&nbsp;</td>
+
+<td>
+<table BORDER CELLPADDING=7 WIDTH="75%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="34%" BGCOLOR="#CCDDFF"><b>Options&nbsp;</b></td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="66%" BGCOLOR="#CCDDFF"><b>Description&nbsp;</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="34%">REAL_DAEMON_DIR&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="66%">path to default network daemon programs like
+telnetd&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="34%">STYLE&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="66%">Activates additional configuration options&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="34%">FACILITY&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="66%">used for syslog messages&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="34%">sunos5&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="66%">Specifies the operating system&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130">&nbsp;</td>
+
+<td>Note: if you have installed the GNU C compiler (gcc) on your system
+instead of the Sun C compiler (cc), you will need to call the <font face="Courier New"><font size=+0>make</font></font>
+command as follows:&nbsp;
+<p><font face="Courier New"><font size=+0>$ make REAL_DAEMON_DIR=/usr/sbin
+STYLE=-DPROCESS_OPTIONS CC=gcc sunos5</font></font>
+<p>Netgroups can be used within access rules to control access to the services
+managed by tcpd if NIS (Network Information Service, formerly known as
+YP - Yellow Pages) is used. To enable this, the make call must include:
+"NETGROUP= -DNETGROUP".</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Install tcp
+wrapper and supporting files.</font></font></font></b>
+<p>After a successful make, copy the programs and man pages to the system
+directories:&nbsp;
+<pre><font face="Courier New"><font size=-1>$ cp tcpd /usr/sbin
+
+$ cp safe_finger /usr/sbin
+
+$ cp tcpdchk /usr/sbin
+
+$ cp tcpdmatch /usr/sbin
+
+$ cp try-from /usr/sbin
+
+$ cp hosts_access.3 /usr/man/man3
+
+$ cp hosts_access.5 /usr/man/man5
+
+$ cp hosts_options.5 /usr/man/man5
+
+$ cp tcpd.8 /usr/man/man8
+
+$ cp tcpdchk.8 /usr/man/man8
+
+$ cp tcpdmatch.8 /usr/man/man8</font></font></pre>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Install the
+tcp wrapper library.</font></font></font></b>
+<p>You need to execute the following commands if other programs that depend
+on the tcp wrapper library are used, for example, logdaemon (<a href="i041.10.html">"Installing,
+configuring, and using logdaemon to log unauthorized login attempts on
+systems running Solaris 2.x"</a>):&nbsp;
+<p><font face="Courier New"><font size=-1>$ cp libwrap.a /usr/lib</font></font>
+<br><font face="Courier New"><font size=-1>$ cp tcpd.h /usr/include</font></font>
+<p>Note that having <font face="Courier New"><font size=-1>tcpd.h</font></font>
+reside in a different directory than the library requires minor changes
+when installing other tools that depend on the library. Placing the header
+file in the usual system directory is much cleaner than any other solution.
+If you dislike this approach, copy the header file to <font face="Courier New"><font size=+0>/usr/local/lib</font>.</font></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2" WIDTH="130">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Configure </font><font face="Courier New">tcpd</font></b></td>
+
+<td>After the <font face="Courier New"><font size=+0>tcpd</font> </font>program
+is installed, you need to update its configuration files. If <font face="Courier New"><font size=+0>tcpd</font></font>is
+used for both access control and logging, two configuration files should
+be used. We include an example that illustrates the structure, selected
+options, and keywords. More information is available from the man pages:
+<font face="Courier New"><font size=+0>hosts_options</font></font>
+(3),
+<font face="Courier New"><font size=+0>host_options</font></font>
+(5), and <font face="Courier New"><font size=+0>hosts_access</font></font>
+(5).&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Understand
+that not all network daemons can be protected by tcp wrapper.</font></font></font></b>
+<p>All servers cannot be protected by <font face="Courier New"><font size=+0>tcpd</font></font>
+due to the specific details of the network protocols and the different
+services:&nbsp;
+<ul>
+<li>
+<font face="Courier New"><font size=+0>tcpd </font></font>is designed to
+be started with each new connection in order to log the connections. Servers
+such as sendmail that have a high overhead are typically started once to
+reduce startup overhead; therefore they are not easily managed by tcpd
+which only logs the first connection.&nbsp;</li>
+
+<li>
+<font face="Courier New"><font size=+0>tcpd</font></font> can only protect
+servers that use TCP (transmission control protocol) and UDP (user datagram
+protocol).&nbsp;</li>
+
+<li>
+Some servers use both TCP and RPC (remote procedure call) protocols. These
+cannot be protected by tcp wrapper. These servers specify the protocols
+as <font face="Courier New"><font size=+0>rpc/tcp</font></font> in the
+third field of <font face="Courier New"><font size=+0>inetd.conf</font></font>
+(4).&nbsp;</li>
+
+<li>
+Only servers that operate on one connection at a time can be protected.
+(Note that there may be multiple instances of such server processes at
+any given time, but each instance is only activated for exactly one connection
+and terminates upon completion. This is different from having one instance
+handle multiple incoming connections.) Other servers stay active after
+finishing the initiating connection waiting for other connection requests.
+Such servers can be recognized by the flag "wait" in the fourth field of
+<font face="Courier New"><font size=+0>inetd.conf</font></font>.</li>
+</ul>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Understand
+the use of the configuration files</font></font></font></b>
+<p>All rules are stored in configuration files. They are applied in the
+order they occur. If a rule matches the connection, no other rules are
+subsequently considered. Two files are defined by default. If the connection
+matches no rule in either file, access is granted:&nbsp;
+<ul>
+<li>
+<font face="Courier New"><font size=+0>hosts.allow&nbsp;</font></font></li>
+
+<br><font size=+0>By definition, all rules allow access.</font></ul>
+
+<ul>
+<li>
+<font face="Courier New"><font size=+0>hosts.deny&nbsp;</font></font></li>
+
+<br><font size=+0>By definition, all rules deny access. We advise including
+a "catch all" rule to deny any connection not explicitly allowed.</font></ul>
+As an alternative to having two files, all rules can be placed in one file
+by using the keywords "ALLOW" and "DENY" as options to specify how each
+rule is to be applied.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Understand
+the structure of the configuration files</font></font></font></b>
+<p>Each rule occurs on a single line and contains a minimum of three fields
+separated by the character ":" as follows:&nbsp;
+<ul>
+<li>
+The first field specifies a service, listed in the <font face="Courier New"><font size=+0>inetd.conf</font></font>,
+as the program that carries out the service. For example, the service "telnet"
+is provided by the program "in.telnetd". Therefore, the rule for the service
+must start with "in.telnetd". The keyword "ALL" matches all services.&nbsp;</li>
+
+<li>
+The second field specifies the source address for which the rule is valid.
+While host names and domain names can be used, the use of IP (Internet
+protocol) addresses and IP address ranges is more appropriate. Host names
+and domain names require additional DNS lookups, incurring the risk of
+DNS (domain name system) spoofing attacks (giving back a host name within
+the organization for an IP address of an external host). Two keywords can
+be used: (1) "LOCAL" specifies all hosts that are in the same subnet or
+subdomain and (2) "ALL" specifies all hosts regardless of their address.&nbsp;</li>
+
+<li>
+The third field specifies options. Multiple options are separated by the
+character ":".&nbsp;</li>
+</ul>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Understand
+the options available for the configuration files</font></font></font></b>
+<p>The options in the example are those most commonly used. They are described
+below. They can be used in any order and combination within any rule.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130">&nbsp;</td>
+
+<td>
+<table BORDER CELLPADDING=7 WIDTH="75%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="30%" BGCOLOR="#CCDDFF"><b>Options&nbsp;</b></td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="70%" BGCOLOR="#CCDDFF"><b>Explanation&nbsp;</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="30%">RFC931</td>
+
+<td VALIGN=TOP WIDTH="70%">For each connection, an ident lookup is performed
+using a protocol originally documented in RFC 931 (now RFC 1413). If an
+ident service is running on the system from which the connection originates,
+the user name can be requested. This is by no means sufficient for user
+authentication but it can provide useful information during the analysis
+of an intrusion. This request may delay the connection and could be noticed
+by the user.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="30%">BANNERS &lt;directory></td>
+
+<td VALIGN=TOP WIDTH="70%">This option can be used to display additional
+text informing the user about access restrictions, logging, etc., for some
+protocols such as telnet, ftp and rlogin. A file with the name of the service
+for which the banner is to be displayed has to exist within the specified
+directory. (More information is available from the program documentation
+together with a tool to create banners for different services.)&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="30%">SPAWN &lt;command></td>
+
+<td VALIGN=TOP WIDTH="70%">A process is created to execute the specified
+command. The IP address or host name of the connection source can be used
+within the command (%h) by using variables. Variables specify the service
+(0), the result of an ident lookup (0), or "UNKNOWN" if no result is
+available. (Note that if variable 0 is used, an ident lookup is initiated
+even without the option <font face="Courier New"><font size=+0>RFC931</font></font>.)&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2" WIDTH="130">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Example</font></b></td>
+
+<td>The following example is based on three subnetworks. Department A has
+the network address of 10.0.1.0 with netmask 255.255.255.0. The computer
+center has the same netmask but a network address of 10.0.250.0. A server
+in Department B is providing remote access and has an IP address of 10.0.2.15.&nbsp;
+<p>The following configuration is used for Department B:</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial, Helvetica, sans-serif"><font color="#008000"><font size=+0>/etc/hosts.allow</font></font></font></b>
+<p>Access to all services is allowed from the local subnet, Department
+A, and the computer center. Access to telnet and ftp is allowed for users
+connecting from the remote access server.&nbsp;
+<pre><font face="Courier New"><font size=-1>ALL:&nbsp; LOCAL 10.0.1.0/255.255.255.0 10.0.250.0/255.255.255.0: RFC931:
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BANNERS /usr/sbin/sec/banners&nbsp;&nbsp;&nbsp;&nbsp;</font></font></pre>
+
+<pre><font face="Courier New"><font size=-1>in.telnetd: 10.0.2.15:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RFC931 : BANNERS&nbsp;
+
+/usr/sbin/sec/banners
+
+in.ftpd: 10.0.2.15:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RFC931 : BANNERS&nbsp;
+
+/usr/sbin/sec/banners</font></font></pre>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial, Helvetica, sans-serif"><font color="#008000"><font size=+0>/etc/hosts.deny</font></font></font></b>
+<p>All other connections are denied.&nbsp;
+<pre><font face="Courier New"><font size=-1>ALL: ALL: RFC931 : BANNERS /usr/sbin/sec/reject :&nbsp;
+
+&nbsp;&nbsp;&nbsp; SPAWN (/usr/sbin/sec/safe_finger -l @%h | /usr/ucb/mail -s 0-%h&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp; root)&amp;</font></font></pre>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial, Helvetica, sans-serif"><font color="#008000"><font size=+0>More
+detailed explanation</font></font></font></b>
+<p>In the sample configuration, <font face="Courier New"><font size=+0>RFC931</font></font>
+and <font face="Courier New"><font size=+0>BANNERS</font></font> are used
+for all connections. The corporation supports the ident server so no serious
+delays are noticed by users. The banners are required due to the use of
+extensive logging for security purposes. If the connection is not accepted,
+a specific "reject" banner is displayed to discourage further access.&nbsp;
+<p>The <font face="Courier New"><font size=+0>SPAWN</font></font> command
+is used for denied connections. It retrieves more information about the
+source and alerts the administrator so manual analysis can be performed
+if needed. <font face="Courier New"><font size=+0>SPAWN </font></font>calls
+the <font face="Courier New"><font size=+0>safe_finger </font></font>program,
+part of the tcp wrapper, to initiate a finger lookup and pipe the results
+to a mail program. The mail program lists the requested service and the
+host or IP address of the connection from which it originated.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2" WIDTH="130">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Prepare the </font><font face="Courier New,Courier">inetd</font><font face="Arial">
+configuration</font></b></td>
+
+<td><font face="Courier New, Courier, mono">tcp wrapper</font> is configured
+for a number of TCP services via updates to <font face="Courier New"><font size=+0>inetd.conf.</font></font>
+Connections to these services are logged and access controls are applied.
+<font face="Courier New"><font size=+0>tcpd</font></font>
+protects those services that are specified via rules in the <font face="Courier New"><font size=+0>hosts.allow</font></font>
+or <font face="Courier New"><font size=+0>hosts.deny</font></font> files.
+Other services are protected via the use of "ALL" . All connections are
+logged independent of the rules if <font face="Courier New"><font size=+0>tcpd
+is</font></font> called from <font face="Courier New"><font size=+0>inetd.conf.</font></font></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font color="#008000"><font size=+0><font face="Arial">Call </font><font face="Courier New">tcpd</font><font face="Arial">
+from within </font><font face="Courier New">inetd.</font></font></font></b>
+<p>The following statements are extracted from a sample <font face="Courier New"><font size=+0>inetd.conf</font></font>
+configuration:&nbsp;
+<pre><font face="Courier New"><font size=-1>ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stream&nbsp; tcp&nbsp; nowait root&nbsp;&nbsp; /usr/sbin/tcpd&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; in.ftpd
+
+telnet&nbsp;&nbsp; stream&nbsp; tcp&nbsp; nowait root&nbsp;&nbsp; /usr/sbin/tcpd in.telnetd
+
+shell&nbsp;&nbsp;&nbsp; stream&nbsp; tcp&nbsp; nowait root&nbsp;&nbsp; /usr/sbin/tcpd in.rshd
+
+login&nbsp;&nbsp;&nbsp; stream&nbsp; tcp&nbsp; nowait root&nbsp;&nbsp; /usr/sbin/tcpd in.rlogind
+
+finger&nbsp;&nbsp; stream&nbsp; tcp&nbsp; nowait nobody /usr/sbin/tcpd in.fingerd</font></font>
+
+</pre>
+These statements are consistent with the above example. In addition to
+ftp and telnet, three other services (rsh, rlogin and finger) are protected
+by <font face="Courier"><font size=+0>tcpd</font></font>. In the example,
+only the two "ALL" rules apply for these services since they are not explicitly
+identified. These rules provide access to users on systems in the same
+subnet/subdomain, Departments A and B, and the computer center. The rules
+deny access to all others.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Activate
+the updated configuration.</font></font></font></b>
+<p><font face="Courier New"><font size=+0>inetd </font></font>is re-initiated
+to apply the changes:&nbsp;
+<p><font face="Courier New"><font size=-1>$ kill -HUP &lt;pid of inetd></font></font></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT COLSPAN="2" WIDTH="130">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Background and additional information</font></b></td>
+
+<td>The following paragraphs discuss several additional areas that need
+to be considered.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Preparing
+traps.</font></font></font></b>
+<p>Traps can be established to provide an early warning. This is accomplished
+by enabling services not needed in the configuration, using <font face="Courier New"><font size=+0>tcpd</font></font>
+to log each connection and then denying the service after the logging occurs.
+This may be useful in the event intruders try well-known attacks first
+before attempting more advanced techniques.&nbsp;
+<p>This approach should be used on a restricted basis. The following lines
+allow a connection to two services to provide information about the system:&nbsp;
+<pre><font size=-1>Systat&nbsp;&nbsp; stream&nbsp; tcp&nbsp; nowait&nbsp; nobody&nbsp; /usr/sbin/tcpd&nbsp; /bin/false
+
+Netstat&nbsp; stream&nbsp; tcp&nbsp; nowait&nbsp; nobody&nbsp; /usr/sbin/tcpd&nbsp; /bin/false</font>
+
+</pre>
+It is important not to list the actual program providing the service as
+an argument of <font face="Courier New"><font size=+0>tcpd</font></font>.
+If access is granted in error (due to misconfiguration, for example), you
+do not want any service to be inadvertently provided. Listing <font face="Courier New"><font size=+0>/bin/false</font></font>
+is a reasonably secure way to achieve this as this program immediatly terminates
+and accepts no user input.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Check the
+configuration.</font></font></font></b>
+<p>The configuration of tcp wrapper is critical to the security of the
+host. Two important check programs are provided as part of the software:&nbsp;
+<ul>
+<li>
+<font face="Courier New"><font size=+0>tcpdchk(8)</font></font> analyzes
+the <font face="Courier New"><font size=+0>inetd.conf</font></font> and
+lists all errors related to the tcp wrapper.&nbsp;</li>
+
+<li>
+<font face="Courier New"><font size=+0>tcpdmatch(8)</font></font> checks
+the configuration for a given IP address and prints out the results indicating
+if access is granted or denied.</li>
+</ul>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Danger of
+IP spoofing.</font></font></font></b>
+<p>Access control and logging are based on the IP addresses listed in the
+IP protocols. IP addresses can be faked under certain circumstances, potentially
+allowing an intruder to gain access. To limit this vulnerability, tcp wrapper
+attempts to identify this type of attack by performing two DNS lookups:
+it looks up both the host name for the source IP address and the IP address
+for the retrieved host name. If the resulting IP address does not match
+the actual source address, the connection is denied. This mode is called
+"PARANOID" and can be disabled at compile time. (Note that if no host name
+is provided for the source IP address via DNS system, the connection is
+refused even though it may be for a valid host. This can especially affect
+sites where reverse lookups are not provided.) In addition, all addresses
+where you want to restrict access should be given an IP address. Host names
+should only be used if there is no other way to use the IP address from
+which you are attempting to restrict access.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Protect the
+integrity of the configuration.</font></font></font></b>
+<p>Configuration files are stored on the system and subject to compromise.
+You need to generate and retain an authoritative copy of these files and
+transfer them to a physically write-protected medium. You need to include
+all configuration files in any integrity-checking procedure such as the
+use of Tripwire (<a href="i002.02.html">"Using Tripwire to verify the integrity
+of directories and files on systems running Solaris 2.x"</a>).&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2" WIDTH="130">
+<hr size="1"></td>
+</tr>
+</table>
+</body>
+</html>

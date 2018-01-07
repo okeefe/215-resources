@@ -1,0 +1,600 @@
+<HTML>
+<HEAD>
+
+<TITLE>    >Installing, configuring and using lsof 4.50 
+</TITLE>
+</HEAD>
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+<font face="Helvetica, Geneva, Arial">
+<small>
+<table border="0" cellspacing="6" cellpadding="4" width="100%">
+  <tr> 
+    <td width="121" align="LEFT" valign="TOP"> 
+      <p><b><font face="Arial">Implementation Details</font></b></p>
+    </td>
+    <td align="LEFT" valign="TOP"><b><font face="Arial" size=4> 
+      <p>Installing, configuring and using lsof 4.50 to list open files on systems 
+        running Solaris 2.x</p>
+      </font></b> </td>
+  </tr>
+  <tr> 
+    <td width="121">&nbsp;</td>
+    <td> 
+      <table border="1" cellspacing="0" cellpadding="8" width="75%">
+        <tr> 
+          <td align="LEFT" valign="TOP" bgcolor="#ccddff"> 
+            <p>Applies to the practices: "<a href="../practices/p095.html">Monitor and inspect system 
+  
+activities for unexpected behavior</a>," "<a href="../practices/p091.html">Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior</a>"</p>
+            <p>Applicable technologies: Solaris 2.x; UNIX operating system and 
+              derivatives</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td width=121>&nbsp;</td>
+    <td  align="LEFT" valign="TOP"> 
+      <p> </p>
+      <p>This section describes the information necessary to download, configure, 
+        and install the <font face="Courier New" size=3>lsof </font> (list open 
+        files) UNIX system tool, version 4.50, on the Sun Solaris operating system, 
+        version 2.x. Open files include open Internet connections that all services 
+        are listening on and open ports that rpc programs are using.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width=121 align="left" valign="TOP"> 
+      <p></p>
+      <b> 
+      <p><font face="Arial">Downloading </font><font face="Courier New" size=3>lsof</font></p>
+      </b> </td>
+    <td  align="LEFT" valign="TOP"> 
+      <p></p>
+      <p>The latest release of <font face="Courier New" size=3>lsof </font>is 
+        available via anonymous ftp from</p>
+      <p><a href="ftp://vic.cc.purdue.edu/pub/tools/unix/lsof">ftp://vic.cc.purdue.edu/pub/tools/unix/lsof</a></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width=121 align="right" valign="TOP"> <b></b> 
+    </td>
+    <td  align="LEFT" valign="TOP"><b><font face="Arial" size=3 color="#008000"> 
+      <p>Ensure you can meet installation requirements. </p>
+      </font></b> 
+      <p>In order to build <font face="Courier New" size=3>lsof</font>, you need: 
+      </p>
+      <ul>
+        <li>Internet access to retrieve the latest version of the logdaemon software 
+        </li>
+        <li><a href="http://www.pgp.com">PGP</a> (Pretty Good Privacy) to verify 
+          the authenticity of the software distribution </li>
+        <li><a href="http://www.gzip.org">GZIP</a>  to uncompress the downloaded file </li>
+        <li>a C compiler to build the executable program</li>
+      </ul>
+    </td>
+  </tr>
+  <tr> 
+    <td width=121 align="right" valign="TOP"><b></b></td>
+    <td  align="LEFT" valign="TOP"><b><font face="Arial" size=3> 
+      <p><font face="Arial" size=3 color="#008000">Download the </font><font face="Courier New" size="3" color="#008000">lsof</font><font face="Arial" size="3" color="#008000"> 
+        4.50 distribution. </font></p>
+      </font></b> 
+      <p>You should download <font face="Courier New, Courier, mono">lsof</font> 
+        onto a system that contains pgp to allow you to verify the distribution 
+        before building. The tar file can be downloaded in one of two forms: compressed 
+        using the UNIX <font face="Courier New, Courier, mono">compress</font> 
+        utility and compressed with the UNIX <font face="Courier New, Courier, mono">gzip</font> 
+        utility. Download the one that is most appropriate for your site (the 
+        gzip'd version is much smaller in size but requires the GNU <font face="Courier New, Courier, mono">gunzip</font> 
+        utility to be uncompressed), and uncompress the file in a directory appropriate 
+        for creating the system.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width=121 align="right" valign="TOP"><b></b></td>
+    <td  align="LEFT" valign="TOP"><b> 
+      <p><font face="Arial" size=3 color="#008000">Unpack the </font><font face="Courier New" size="3" color="#008000">lsof 
+        </font><font face="Arial" size="3" color="#008000">distribution. </font></p>
+      </b> 
+      <p>Once you have uncompressed the downloaded tar file, extract the files 
+        with the following command: </p>
+      <font face="Courier New" size=2> 
+      <p>tar xvf lsof_4.50.tar</p>
+      </font> 
+      <p> This creates several files in the current directory: </p>
+    </td>
+  </tr>
+  <tr> 
+    <td width=121 align="right">&nbsp;</td>
+    <td align="LEFT" valign="TOP"> 
+      <table border cellspacing=1 cellpadding=4 width=75%>
+        <tr> 
+          <td width="49%" valign="TOP" bgcolor="#ccddff" align="LEFT"> 
+            <p><b>File Name </b> 
+          </td>
+          <td width="51%" valign="TOP" bgcolor="#ccddff" align="LEFT"> 
+            <p><b>Description </b> 
+          </td>
+        </tr>
+        <tr> 
+          <td width="49%" valign="TOP"> 
+            <p>00.README.FIRST_4.50</p>
+          </td>
+          <td width="51%" valign="TOP"> 
+            <p>A README file for the distribution that contains high-level descriptions 
+              and directions for building the <font face="Courier New" size=3>lsof 
+              </font>system 
+          </td>
+        </tr>
+        <tr> 
+          <td width="49%" valign="TOP"> 
+            <p>README.lsof_4.50</p>
+          </td>
+          <td width="51%" valign="TOP"> 
+            <p>A README file containing information about the <font face="Courier New" size=3>lsof</font> 
+              distribution 
+          </td>
+        </tr>
+        <tr> 
+          <td width="49%" valign="TOP"> 
+            <p>RELEASE.SUMMARY_4.50 
+          </td>
+          <td width="51%" valign="TOP"> 
+            <p>Release notes for the <font face="Courier New" size=3>lsof </font>system 
+          </td>
+        </tr>
+        <tr> 
+          <td width="49%" valign="TOP"> 
+            <p>lsof_4.50.tar</p>
+          </td>
+          <td width="51%" valign="TOP"> 
+            <p>A UNIX tar file containing the source files for the <font face="Courier New" size=3>lsof</font> 
+              distribution 
+          </td>
+        </tr>
+        <tr> 
+          <td width="49%" valign="TOP"> 
+            <p>lsof_4.50.tar.asc</p>
+          </td>
+          <td width="51%" valign="TOP"> 
+            <p>A PGP signature file for verifying the <font face="Courier New" size=3>lsof 
+              </font>distribution 
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td width=121 align="right" valign="TOP"><b></b> 
+      <div align="RIGHT"> </div>
+    </td>
+    <td  align="LEFT" valign="TOP" width="603"><b> 
+      <p><font face="Arial" size=3 color="#008000">Verify the authenticity of 
+        the </font><font face="Courier New" size="3" color="#008000">lsof </font><font face="Arial" size="3" color="#008000">distribution. 
+        </font></p>
+      </b> 
+      <p>The PGP signature file was generated by Victor A. Abell, Associate Director 
+        of the Purdue University Computing Center. Once you have downloaded a 
+        copy of his public key (available at <a href="ftp://vic.cc.purdue.edu/pub/tools/unix/lsof/Victor_A_Abell.pgp">ftp://vic.cc.purdue.edu/pub/tools/unix/lsof/Victor_A_Abell.pgp</a> 
+        or from public key servers under the name "Victor A. Abell &lt;abe@cc.purdue.edu&gt;") 
+        and have added it to your public key ring, you can verify the distribution 
+        with the following command: </p>
+      <font face="Courier New" size=2> 
+      <p>pgp lsof_4.50.tar.asc lsof_4.50.tar</p>
+      </font> 
+      <p>If the signatures don't match, the distribution has likely been compromised 
+        and should not be used.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width=121 align="right" valign="TOP"><b></b> 
+      <div align="RIGHT"> </div>
+    </td>
+    <td  align="LEFT" valign="TOP"><b> 
+      <p><font face="Arial" size=3 color="#008000">Untar the </font><font face="Courier New" size="3" color="#008000">lsof 
+        </font><font face="Arial" size="3" color="#008000">distribution. </font></p>
+      </b> 
+      <p>Unpack the <font face="Courier New" size=3>lsof </font>source files in 
+        the directory where the sources are built with the following command: 
+      </p>
+      <font face="Courier New" size=2> 
+      <p>tar xvf lsof_4.50.tar</p>
+      </font> 
+      <p>This creates a subdirectory named <font face="Courier New" size=3>lsof</font>_4.50 
+        which contains the actual source distribution and related files for building, 
+        installing, and using <font face="Courier New" size=3>lsof</font>.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width=121 align="LEFT" valign="TOP" height="69"><b> 
+      <p><font face="Arial">Build and install </font><font face="Courier New" size=3>lsof</font></p>
+      </b> </td>
+    <td  align="left" valign="TOP"> 
+      <p>The <font face="Courier New" size=3>lsof</font> system is now ready for 
+        building and installing. It also includes any local configuration changes 
+        that you need to make. It is assumed that all operations are performed 
+        from within the <font face="Courier New" size=2>lsof_4.50</font> source 
+        subdirectory created by tar from the distribution tar file in the previous 
+        step.</p>
+    </td>
+  </tr>
+  <tr align="right"> 
+    <td width=121 valign="TOP"><b></b> 
+    </td>
+    <td valign="TOP"  align="left"> 
+      <p><b><font face="Arial" size="3" color="#008000">Check the distribution 
+        for completeness. </font></b></p>
+      <p>Following the unpacking of the distribution, you can verify that the 
+        source tree is complete with the following command: </p>
+      <p><font face="Courier New" size="2">./Inventory</font></p>
+      <p>You are asked if you want to take the inventory; you should answer 'y' 
+        to continue. You then see a list of directories followed by "OK" if the 
+        inventory completed as expected</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width=121 align="right" valign="TOP"><b></b> 
+    </td>
+    <td  align="left" valign="TOP"> 
+      <p><b><font face="Arial" size="3" color="#008000">Review </font></b><font size="3" color="#008000" face="Courier New, Courier, mono"><b>./dialects/sun/machine.h</b></font><b><font face="Arial" size="3" color="#008000"> 
+        for possible site-specific modifications. </font></b></p>
+      <p>While the ./dialects/sun/machine.h file is likely configured appropriately 
+        for your Solaris system, you should review it specifically to determine 
+        the status of the HASSECURITY option, which is disabled by default. This 
+        option, when enabled, allows only root to view other user's open files. 
+        It limits the output of <font face="Courier New" size=3>lsof</font> to 
+        be only those files and processes that a normal user can access without 
+        privileges. We suggest that you enable the HASSECURITY option to disable 
+        the ability of non-privileged users to see what files other users have 
+        open. This does not limit a user's ability to inspect what files they 
+        have opened or root's ability to inspect all open files on the system. 
+      </p>
+    </td>
+  </tr>
+  <tr> 
+    <td width=121 align="right" valign="TOP"><b></b></td>
+    <td  align="left" valign="TOP"> 
+      <p><b><font face="Arial" size="3" color="#008000">Configure the distribution 
+        using the "Configure" command. </font></b></p>
+      <p>Run the <font face="Courier New" size=3>Configure</font> command to (1) 
+        prepare the <font face="Courier New" size=3>lsof</font> distribution for 
+        the system build by creating site-specific Makefiles and (2) execute any 
+        other necessary, build-specific setup scripts. Depending on whether you 
+        wish to use cc or gcc for the system build, you need to use either the 
+        <font face="Courier New" size=3>solariscc</font> or <font face="Courier New" size=3>solaris 
+        </font>options to Configure, respectively. For example, if you wish to 
+        use gcc for the system build, you use the following command: </p>
+      <p><font face="Courier New" size="2">./Configure solaris</font></p>
+      <p>If you are running AFS (Andrew File System), <font face="Courier New" size=3>Configure</font><font face="Courier New"> 
+        </font>asks you for information concerning the AFS installation at your 
+        site. To configure <font size=3>lsof</font> to work with AFS, you need 
+        to provide it with information about the directory that includes the AFS 
+        header files and the version of AFS that is installed. If your AFS distribution 
+        is configured to be in the standard place <font face="Courier New" size=3>(/usr/afsws</font>), 
+        the <font face="Courier New" size=3>Configure</font> command is able to 
+        find it and you are prompted to accept this as the distribution you are 
+        using. <font face="Courier New" size=3>Configure</font> is likely able 
+        to determine what version of AFS you are using and prompt you to confirm 
+        the information. If you are using AFS, you should configure <font face="Courier New" size=3>lsof</font> 
+        to use AFS as well. </p>
+      <p>Next, <font face="Courier New" size=3>Configure</font> asks you if you 
+        wish to perform an inventory. If you have already performed one, and generated 
+        a 00MANIFEST file, <font face="Courier New" size=3>Configure</font> asks 
+        you if you wish to re-run the inventory. You do not have to re-run the 
+        inventory unless you have changed the structure of the file tree. </p>
+      <p>The system now asks you if you wish to customize <font face="Courier New" size=3>lsof</font>. 
+        Answering 'yes' walks you though a series of yes/no questions about the 
+        state of several variables within the machine.h file that you inspected 
+        in the step Review ./dialects/sun/machine.h above for possible site-specific 
+        modifications above. In each case, it describes the use of the variable, 
+        its current state, and asks you if you wish to change them. The list of 
+        variables and their default values are described below: </p>
+    </td>
+  </tr>
+  <tr> 
+    <td width=121>&nbsp;</td>
+    <td align="left" valign="TOP"> 
+      <table border cellspacing=1 cellpadding=7 width=90%>
+        <tr> 
+          <td width="23%" valign="TOP" bgcolor="#ccddff" align="LEFT"> <b> 
+            <p>Name 
+            </b></td>
+          <td width="63%" valign="TOP" bgcolor="#ccddff" align="LEFT"> <b> 
+            <p>Description 
+            </b></td>
+          <td width="14%" valign="TOP" bgcolor="#ccddff" align="LEFT"> <b> 
+            <p>Default value 
+            </b></td>
+        </tr>
+        <tr> 
+          <td width="23%" valign="TOP"> 
+            <p>HASSECURITY</p>
+          </td>
+          <td width="63%" valign="TOP"> 
+            <p>When HASSECURITY is enabled, only the root user may use <font face="Courier New" size=3>lsof 
+              </font>to examine all open files; other users may examine only the 
+              files belonging to the real user ID of their <font face="Courier New" size=3>lsof 
+              </font> process.</p>
+            <p>When HASSECURITY is disabled, anyone may use <font face="Courier New" size=3>lsof</font> 
+              to examine all open files. 
+          </td>
+          <td width="14%" valign="TOP"> 
+            <p>Disabled 
+          </td>
+        </tr>
+        <tr> 
+          <td width="23%" valign="TOP"> 
+            <p>WARNINGSTATE</p>
+          </td>
+          <td width="63%" valign="TOP"> 
+            <p>When WARNINGSTATE is enabled, <font face="Courier New" size=3>lsof</font> 
+              issues whatever warning messages it finds necessary. When WARNINGSTATE 
+              is disabled, <font face="Courier New" size=3>lsof</font> issues 
+              no warning messages. The <font face="Courier New" size=3>lsof</font> 
+              -h option output indicates what WARNINGSTATE is in effect with the 
+              -w option description; -w may be used to reverse the WARNINGSTATE. 
+            </p>
+            </td>
+          <td width="14%" valign="TOP"> 
+            <p>Enabled 
+          </td>
+        </tr>
+        <tr> 
+          <td width="23%" valign="TOP"> 
+            <p>WARNDEVACCESS</p>
+          </td>
+          <td width="63%" valign="TOP"> 
+            <p>When WARNDEVACCESS is enabled, <font face="Courier New" size=3>lsof</font> 
+              issues warning messages when it can't access nodes in /dev (or /devices), 
+              subject to the default or explicit (-w) WARNINGSTATE.</p>
+            <p> </p>
+            <p>When WARNDEVACCESS is disabled, <font face="Courier New" size=3>lsof 
+              </font>silently skips nodes in /dev (or /devices) that it can't 
+              access.</p>
+          </td>
+          <td width="14%" valign="TOP"> 
+            <p>Enabled 
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td width=121>&nbsp;</td>
+    <td align="left" valign="TOP"> 
+      <table width="90%" border="1" cellpadding="4">
+        <tr valign="top" bgcolor="#ccddff"> 
+          <td><b>Name </b></td>
+          <td><b>Description </b></td>
+          <td><b>Default value </b></td>
+        </tr>
+        <tr valign="top"> 
+          <td>HASDCACHE</td>
+          <td> 
+            <p>When HASDCACHE is enabled, <font face="Courier New" size=3>lsof</font> 
+              writes a device cache file that contains information about the nodes 
+              in /dev (or /devices). The options HASENVDC, HASPERSDC, HASPERSDCPATH, 
+              and HASSYSDC define the device cache file path. </p>
+            <p>When HASDCACHE is disabled, <font face="Courier New" size=3>lsof</font> 
+              won't write a device cache file. </p>
+            <p>Consult the 00DCACHE and 00FAQ files of the <font face="Courier New" size=3>lsof 
+              </font>distribution for more information. 
+          </td>
+          <td>Enabled </td>
+        </tr>
+        <tr valign="top"> 
+          <td> 
+            <p>HASENVDC </p>
+            <p>HASPERSDC </p>
+            <p>HASPERSDCPATH
+          </td>
+          <td> 
+            <p>If you have decided to leave HASDCACHE defined, there are a number 
+              of other definitions associated with HASDCACHE that specify options 
+              for the formation of the device cache file path. You may change 
+              them. </p>
+            <p> Consult the 00DCACHE and 00FAQ files of the <font face="Courier New" size=3>lsof 
+              </font>distribution for more information. 
+          </td>
+          <td> 
+            <p>"LSOFDEVCACHE" </p>
+            <p> "%h/0.lsof_%L" </p>
+            <p> "LSOFPERSDCPATH"</p>
+          </td>
+        </tr>
+        <tr valign="top"> 
+          <td>HASKERNIDCK </td>
+          <td> 
+            <p>When HASKERNIDCK is enabled, <font face="Courier New" size=3>lsof</font> 
+              compares the identity of the kernel where it was built to the identity 
+              of the kernel where it is running. This check can detect an <font face="Courier New" size=3>lsof</font> 
+              executable inappropriate for the system on which it is being run. 
+            </p>
+            <p>The kernel identity check can take considerable time on some UNIX 
+              dialects, e.g., AIX – so there may be occasions when it is desirable 
+              to disable it, in spite of the increased risk of using an inappropriate 
+              <font face="Courier New" size=3>lsof</font> executable. 
+          </td>
+          <td>Enabled </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr> 
+    <td width=121 height="90">&nbsp;</td>
+    <td  align="left" valign="TOP"> 
+      <p>You can use the defaults provided with the distribution for building 
+        <font face="Courier New" size=3>lsof</font>. However, if you change any 
+        of the above states, such as enabling HASSECURITY, <font face="Courier New" size=3>Configure</font> 
+        creates a new machine.h file and then offers to rename the old machine.h 
+        and replaces it with the newly created one. It is safe to allow <font face="Courier New" size=3>Configure</font> 
+        to do this before performing the build operation, described next.</p>
+      </td>
+  </tr>
+  <tr> 
+    <td width=121 align="right" valign="TOP"><b></b> 
+    </td>
+    <td  align="left" valign="TOP"> 
+      <p><b><font face="Arial" size=3 color="#008000">Build the </font><font face="Courier New" size="3" color="#008000">lsof</font><font face="Arial" size="3" color="#008000"> 
+        system.</font></b></p>
+      <p>Once you have configured the system, you can build the system with the 
+        <font face="Courier New" size=3>make</font> command as follows: </p>
+      <p><font face="Courier New" size="2">make</font></p>
+      <p>The build normally takes a few minutes to complete.</p>
+      </td>
+  </tr>
+  <tr>
+    <td width=121 align="right" valign="TOP" height="585"><b></b> 
+    </td>
+    <td  align="left" valign="TOP"> 
+      <p><b><font face="Arial" size=3 color="#008000">Install the </font><font face="Courier New" size="3" color="#008000">lsof</font><font face="Arial" size="3" color="#008000"> 
+        system. </font></b></p>
+      <p>The author of lsof decided to forgo a general install rule for where/how 
+        to install the lsof files. lsof provides general instructions after compiling 
+        and linking in a version parameter into the lsof binary. Running a make 
+        install produces the following: </p>
+      <pre><font face="Courier New" size="2">
+% make install
+(cd lib; make DEBUG="-O")
+Constructing version.h
+gcc -O -Dsolaris=20501 -DHAS_AFS=304 -I/usr/afsws/include -c usage.c
+gcc -o lsof -O -Dsolaris=20501 -DHAS_AFS=304 -I/usr/afsws/include ddev.o \
+dfile.o dmnt.o dnode.o dnode1.o  dnode2.o dproc.o dsock.o dstore.o arg.o \
+main.o misc.o node.o print.o  proc.o store.o usage.o -L./lib -llsof -lkvm \
+-lelf -lsocket -lnsl
+
+Please write your own install rule. Lsof should be 
+installed setgid to the group that can read /dev/kmem. 
+Normally that is the kmem (SunOS) or sys (Solaris) group. 
+Your SunOS install rule actions might look something 
+like this: 
+      
+     install &lt;options&gt; -m 2755 -g  kmem lsof &lt;binary_destination&gt;
+     install &lt;options&gt; -m 444 lsof.8 &lt;man_destination&gt;
+    
+You may have to put additional values in &lt;options&gt;, 
+as required by the install application in your version of 
+SunOS or Solaris. You will have to set the appropriate 
+destination for the lsof executable in &lt;binary_destination&gt;; 
+the appropriate destination for the man page in &lt;man_destination&gt;.
+</font></pre>
+      <p>You likely want to choose a directory for the Font face="Courier"> lsof</font> command that is not 
+        part of the standard operating system binary tree, such as /sbin. If you 
+        do not already have an area for installed tools (such as /usr/local), 
+        you should consider creating such an area for tools that are not part 
+        of the OS distribution before adding such tools to the OS directories. 
+      </p>
+      <p>For this Solaris installation, no additional options are required. Be 
+        sure to check that the group specified in the install of the lsof binary 
+        is appropriate for your installation.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td  colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width=121 align="LEFT" valign="TOP"><b><font face="Arial"> 
+      <p>Using<i> </i><font face="Courier" size="+1">lsof</font></p>
+      </font></b></td>
+    <td  align="LEFT" valign="TOP"> 
+      <p><font face="Courier" size=2>lsof</font> has been called the Swiss Army 
+        knife of intrusion detection because of the range in which the tool can 
+        be employed to aid in detecting signs of intrusion. But as with most tools 
+        it is only as useful as its operator is trained. This might even be truer 
+        of <font face="Courier" size=2>lsof</font> because of its versatility. 
+        Our focus here is not to exhaustively run through <font face="Courier" size=2>lsof</font> 
+        options (there are man pages for that), but provide a more systemic approach 
+        to using <font face="Courier" size=2>lsof</font> for intrusion detection. 
+      </p>
+      <p><b><font face="Arial" size=3>Common </font><font face="Courier" size="3">lsof</font><font face="Courier" size=2> 
+        </font><font face="Arial" size=3>options</font></b></p>
+      <p>Running <font face="Courier" size=2>lsof</font> with no options will 
+        likely generate a huge list of open files (depending on your system) that 
+        is too big to be useful. However, this list could help you understand 
+        what is &quot;normal&quot; behavior for a given system. In the day-to-day 
+        use of <font face="Courier" size=2>lsof</font> as an intrusion detection 
+        tool, there are two options that are initially most useful; the <font face="Courier" size=2>-p</font> 
+        and <font face="Courier" size=2>-i </font>options. The <font face="Courier" size=2>-p</font> 
+        option lists open files for a given process id. For example, to view <font face="Courier New" size=2>init</font> 
+        associated processes, you enter:<font face="Courier" size=2> lsof -p 1.</font> 
+        The capital <font face="Courier" size=2>-P</font> option instructs the 
+        tool to not convert raw port numbers to the names of the programs that 
+        they are normally associated with. The<font face="Courier" size=2> -i 
+        </font>option allows one to just examine the Internet processes. With 
+        this option, one can examine the open ports waiting (listening) for connection 
+        attempts. This aids in detecting signs of intrusion and points out unnecessary 
+        open services.</p>
+      <p><b><font face="Arial" size="3">Ideas for advanced use</font></b></p>
+      <p><font face="Courier" size=2>lsof</font> will become increasing more useful 
+        as both your understanding of it and your system grow. In this section, 
+        we describe two advanced uses o<font face="Courier" size=2>f lsof</font>: 
+        using it with other commands and automating its use through scripts.</p>
+      <p><b><font face="Arial" size=3>Using </font><font face="Courier" size="3">lsof</font><font face="Arial" size=3> 
+        with other commands</font></b></p>
+      <p><font face="Courier" size=2>lsof's</font> output can be used as input 
+        for other commands. Probably the most obvious of these is using <font face="Courier" size=2>lsof</font> 
+        with <font face="Courier" size=2>grep</font>. <font face="Courier" size=2>lsof</font> 
+        data can be manipulated against specific criteria using <font face="Courier" size=2>grep</font>, 
+        thus tailoring searches more specifically. For example,<font face="Courier" size=2> 
+        lsof -i </font>can be then <font face="Courier" size=2>&quot;grep&quot;ed</font> 
+        for a certain protocol or a port range. </p>
+      <p><b><font face="Arial" size=3>Automating</font><font face="Courier" size=2> 
+        <font size="3">lsof</font> </font><font face="Arial" size=3>through scripts</font></b></p>
+      <p>Once you become more familiar with <font face="Courier" size=2>lsof</font> 
+        and the important processes for your system, you may want to consider 
+        creating scripts to automate some of the more tedious parts of reviewing 
+        <font face="Courier" size=2>lsof</font> output. Once you have established 
+        a baseline for various processes (remembering that some processes may 
+        not be good candidates for such baselining), you want to check for deviations 
+        from the baseline. For example, you can write a script that takes a baseline 
+        of the open Internet processes using <font face="Courier" size=2>lsof 
+        -i </font>then compares that list periodically to a current<font face="Courier" size=2> 
+        lsof -i</font> list. If that comparison has differences in the number 
+        of open processes or other predefined criteria, the script can notify 
+        the administrator that something has changed. Following this logic, you 
+        can automate some very useful searches for irregularities in a wide range 
+        of system processes. Such automation is built on your assumptions about 
+        what is normal for the system. If your initial assumptions are wrong or 
+        incomplete, you could either generate a false sense of security or end 
+        up having to investigate a large number of false positives.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td  align="LEFT" valign="TOP" colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+</table>
+
+
+
+</BODY>
+</HTML>
+
+
+
+
+
+
+
+
+
+

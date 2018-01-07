@@ -1,0 +1,438 @@
+<html>
+<head>
+<title>Detecting changes in files and directories with native tools on Solaris 2.X</title>
+</head>
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+
+
+<font face="Helvetica, Geneva, Arial">
+<small>
+
+
+<table border="0" width="100%" cellspacing="2" cellpadding="2">
+<tr>
+<td width="130" align="left" valign="top"><font face="helvetica, geneva, arial">
+<h3>Implementation Details<h3></td>
+<td align="left" valign="top"><font face="helvetica, geneva, arial">
+<h2>Detecting changes in files and directories with native tools on Solaris 2.X</h2></td></tr>
+
+<tr>
+<td width="130"></td>
+
+<td align="left" valign="top">
+<table border="1" width="75%" cellspacing="0" cellpadding="8" bgcolor="#ccddff">
+<tr>
+<td align="left" valign="top">
+<p>Applies to the practice: <br><a href="../practices/p096.html">"Inspect files and 
+directories for unexpected changes"</a>
+
+<p>Applicable technologies: Solaris 2.x
+<p>Applicable scripts: <a href="/security-improvement/downloads/version1_detect">capture</a>, <a href="/security-improvement/downloads/version2_detect">ignore</a>, <a href="/security-improvement/downloads/version3a_detect">attributes</a>, <a href="/security-improvement/downloads/version3b_detect">contents</a>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td width="130"></td>
+<td align="left" valign="top">
+<p>This implementation is a companion to the one titled <a href="/security-improvement/implementations/i043.01.html">Characterizing Files and Directories with Native Tools on Solaris 2.X</a>.  Its purpose is to produce a list of differences between the current set of files and directories (and, optionally, their attributes) and the list of files and directories created during the characterizing phase. This list consists of differences that are either expected, meaning that the list of files to ignore needs to be broadened, or unexpected, meaning that there may have been an intrusion that changed files on the system. As the systems administrator, you need to reconcile these differences.
+
+<p>This native tool implementation is not a replacement for Tripwire or other similar tools. This implementation is not foolproof&#151;a knowledgeable intruder can defeat it. However, it is a good first step towards detecting changes in files and directories to learn more about how your systems operate and discovering intrusions.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>System Prerequisites</h3>
+</td>
+<td>
+This implementation requires that Solaris 2.X be installed on the system. All of the tools used in this implementation are from the Solaris Core and Extended utilities packages. You may also choose to install the Online Manual Pages package. Documentation for Solaris is available from <a href="http://docs.sun.com/">http://docs.sun.com/</a>.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Hardware Prerequisites</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">This implementation uses a floppy drive to contain the read-only file, directory, and attribute list that characterize the system under review. (Other read-only storage mechanisms are also acceptable, but a discussion of this is beyond the scope of this document.)
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Software Prerequisites</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">There are no specific software requirements beyond installation of the Solaris Core and Extended Utilities packages and, optionally, the Online Manual Pages package.
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Dependencies</h3>
+</td>
+<td>
+You will need the floppy disks containing the characterization database as created in <a href="/security-improvement/implementations/i043.01.html">Characterizing Files and Directories with Native Tools on Solaris 2.X</a>. You will also need to be root on your system so that you can read files and traverse privileged directories.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Downloading and Verifying</h3>
+</td>
+<td>
+There is no additional software or packages to download. Links to the scripts used in this implementation are available in the navigation box at the top of the page.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Building</h3>
+</td>
+<td>
+There is nothing to build for this implementation. The scripts used in this implementation need to be installed.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Testing before Installation</h3>
+</td>
+<td>
+There is nothing to test for this implementation before installation.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Installation</h3>
+</td>
+<td>
+The following sections describe several scripts that you can use to detect changes to files and directories found on a Solaris 2.X system. They are to be used during the <a href="/security-improvement/modules/m01.html">Detecting Signs of Intrusions</a> phase of administering a system.
+
+<p>Your goal is to create lists of files and directories and, optionally, some of their attributes. These lists will be compared against the lists produced during the <a href="/security-improvement/implementations/i043.01.html">characterization phase</a> to uncover any unexpected changes. The scripts should reside on media that is unchangeable by an intruder. One example is a floppy disk, marked read-only by sliding the tab on the floppy disk and mounted read-only by the operating system. Throughout this section, we assume that the floppy is mounted at <i>/floppy/native</i> and is mounted read-only.
+
+<p>Beware that the scripts shown in the sections below can be misled by changes made to your system by intruders. When using these scripts or their variations, you need to recognize their limitations and identify those system aspects that you trust.
+
+<tr valign="top">
+<td width="130" align="right"></td>
+></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Version 1 - Capture Files Without Attributes</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">
+The first version of the detecting script finds all files on a file system and ignores all of their attributes. It is a companion to the Version 1 script from the characterizing implementation. Here is the script:<br>
+<pre><font face="courier" size="2">
+mkdir /var/adm/tmp
+find / -xdev -print | 
+     sort > /var/adm/tmp/files
+echo "=====Files removed"
+zcat /floppy/native/root/files-v1.Z | comm -23 - /var/adm/tmp/files
+echo "=====Files added"
+zcat /floppy/native/root/files-v1.Z | comm -13 - /var/adm/tmp/files
+rm /var/adm/tmp/files
+</font></pre>
+<p>The script stores a temporary copy of the list of files and directories in a private location, in this case <i>/var/adm/tmp/files</i>. This reduces the likelihood that the file will be changed by an intruder during the time that the script runs.
+
+<p>After that directory is made, the list of files is found (<font face="courier">find</font>) and then sorted (<font face="courier">sort</font>). A file contents comparing program (<font face="courier">comm</font>) is used to produce the list of files that were removed (<font face="courier">comm -23</font>) and added (<font face="courier">comm -13</font>).  The script ends by cleaning up after itself (<font face="courier">rm</font>).
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Version 2 - Add An Ignore List</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">
+Next, add the functionality that defines the set of changes to files that you consider acceptable. See Version 2 - Add an Ignore List in the <a href="/security-improvement/implementations/i043.01.html">characterizing implementation</a>. Here is the updated script:<br>
+<pre><font face="courier" size="2">
+mkdir /var/adm/tmp
+find / -xdev -print | 
+     sed -f /floppy/native/root/ignore |
+     sort > /var/adm/tmp/files
+echo "=====Files removed"
+zcat /floppy/native/root/files-v2.Z | comm -23 - /var/adm/tmp/files
+echo "=====Files added"
+zcat /floppy/native/root/files-v2.Z | comm -13 - /var/adm/tmp/files
+rm -rf /var/adm/tmp
+</font></pre>
+<p>The results are the same as those from Version 1 except that they no longer contain references to the files that you have chosen to ignore.
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Version 3a - Add Attributes</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">
+The next version adds file attributes, specifically the attributes that can be delivered by the <b>ls</b> program. It uses the characterization information produced in Version 3a - Add Attributes in the <a href="/security-improvement/implementations/i043.01.html">characterizing implementation</a>.<br>
+<pre><font face="courier" size="2">
+mkdir /var/adm/tmp
+find / -xdev -print |
+     sed -f /floppy/native/root/ignore |
+     xargs -n 100 ls -ldi |
+     sort -n > /var/adm/tmp/files
+zcat /floppy/native/root/files-v3a.Z > /var/adm/tmp/files.old
+sdiff -s -w 200 /var/adm/tmp/files.old /var/adm/tmp/files
+rm -rf /var/adm/tmp
+</font></pre>
+<p>This version gives a line-by-line set of only the differences (because <font face="courier">-s</font> was given to <font face="courier">sdiff</font>) between the characterization information (<i>/floppy/native/root/files.Z</i>) and the files just discovered, including their attributes (<i>/var/adm/tmp/files</i>).  Note that the <b>sdiff</b> program does not take a dash (-) as a file name to specify that the standard input is used. This requires that the file on the floppy be uncompressed and that two disk-based files be compared.
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Version 3b - Check File Contents</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">
+You can also check file contents with programs available with Solaris 2.X.  The script below is a variation on the script given in Version 3a - Add Attributes. It uses the characterization information built from the characterization script from Version 3b - Check File Contents from the <a href="/security-improvement/implementations/i043.01.html">characterization implementation</a>.<br>
+<pre><font face="courier" size="2">
+mkdir /var/adm/tmp
+find / -xdev -print |
+sed -f /floppy/native/root/ignore |
+sort | 
+xargs -n 100 sum > /var/adm/tmp/files
+zcat /floppy/native/root/files-v3b.Z > /var/adm/tmp/files.old
+sdiff -s -w 200 /var/adm/tmp/files.old /var/adm/tmp/files
+rm -rf /var/adm/tmp
+</font></pre>
+<p>This version gives a line-by-line set of only the differences between the characterization information (<i>floppy/native/root/files.Z</i>) and the files just discovered, including their attributes (<i>/var/adm/tmp/files</i>). Again note that the <b>sdiff</b> program does not take a dash (-) as a file name to specify that the standard input should be used. This requires that the file on the floppy be uncompressed and that two disk-based files be compared.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Testing After Installation</h3>
+</td>
+<td>
+You should do the following tests to verify that the scripts are working as intended:
+<ol>
+<li>In one of the directories whose contents you are ignoring (for example <i>/tmp</i>), add a file. Run the script of your choice to verify that it did not list that file in its output.<p>
+<li>In one of the directories whose contents you are not ignoring, add a file. Run the script of your choice to verify that it found the file you just added.<p>
+<li>If you are running the script from Version 3a, touch the file with the <b>touch</b> program as follows:<br>
+<pre><font face="courier" size="2">
+touch -amc -t 199701011435 <i>file</i>
+</font></pre>
+<p>This sets the access, modified and created time to January 1, 1997 at 2:35PM. Run the script to verify that it finds that <i>file</i> has changed as expected.<p>
+<li>If you are running the script from Version 3b, change the contents of the file so that the checksum is different. It is easiest to do this with the following:<br>
+<pre><font face="courier" size="2">
+echo Testing 123 >> <i>file</i>
+</font></pre>
+<p>Run the script to verify that it finds that file has changed as expected.
+</ol>
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Maintenance</h3>
+</td>
+<td>
+The maintenance activities are the same as those described in the <a href="/security-improvement/implementations/i043.01.html">characterizing implementation</a>. When files systems are added or removed, their related detecting scripts must be created and removed, respectively.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Interpreting Logs</h3>
+</td>
+<td>
+The logs to be interpreted are those produced by the detecting scripts described in the Installation section. Each change detected by the script you selected needs to be analyzed and understood so that all unexpected changes are accounted for. Changes are either characterization updates or indications of an intrusion. Refer to the Maintenance section in the <a href="/security-improvement/implementations/i043.01.html">characterizing implementation</a> for the procedure you should use to update characterizing information.
+
+<p>For the remainder of this section, assume that the characterization operation has been done. We manipulate various files to produce logs designed to illustrate what is produced on a working system.
+</td>
+</tr>
+
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Versions 1 and 2 Log - Capture Files Without Attributes, and Optionally With An Ignore List</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">
+First, let's cause a change to see if the detecting script version 1 finds that change:<br>
+<pre><font face="courier" size="2">
+# mv /etc/remote /etc/remote.hidden
+</font></pre>
+<p>Then, run the script given in either Version 1 or Version 2. Both produce the following:<br>
+<pre><font face="courier" size="2">
+=====Files removed
+/etc/remote
+=====Files added
+/etc/remote.hidden
+</font></pre>
+<p>This is precisely what we expected. However, what was not detected was that the <i>/etc</i> directory's attributes and contents changed. The point here is to recognize what the scripts in Versions 1 and 2 can and cannot find.
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Version 3a - Add Attributes</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">
+Next, let's repeat the same experiment but use the script from Version 3a. It produces the following:<br>
+<small><pre>
+8c58
+631299 drwxrwxr-x  26 root   sys    4608 Mar 23 14:51 /etc            |
+631299 drwxrwxr-x  26 root   sys    4608 Mar 23 14:55 /etc
+181c181
+631851 -rw-r--r--   1 bin    bin    2034 Jul 16  1998 /etc/remote      |
+631851 -rw-r--r--   1 bin    bin    2034 Jul 16  1998 /etc/remote.hidden
+</pre></small>
+<p>This is also what we expected. The <i>/etc</i> directory did change and the <i>/etc/remote</i> file was replaced by <i>/etc/remote.hidden</i>.
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Version 3b - Check File Contents</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">
+Finally, let's repeat the experiment one more time using the script from Version 3b. It produces the following (slightly edited for display purposes):<br>
+<pre><font face="courier" size="2">
+337c337
+27289 4 /etc/remote             |          27289 4 /etc/remote.hidden
+</font></pre>
+<p>The checksums are the same because the file did not change, but the file name did change, again exactly what we expect. Note also that the changes to the <i>/etc</i> directory were not noted by this script.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Effort Estimates</h3>
+</td>
+<td>
+Installing the scripts takes virtually no time. However, the time it takes to run them to generate the current file and directory state information is highly variable. The times given below are for a system with 2.4Gb of file space with 69,000 i-nodes on an Intel processor clocked at 300Mhz and having 128Mb of memory:<br>
+<p>
+<table border="0" width="100%" cellpadding="2" cellspacing="2"
+align="center">
+<tr>
+<td><b><small>Script Section</small></b></td>
+<td><b><small>Elapsed Time (seconds)</small></b></td></tr>
+<tr>
+<td><small>Capture Files Without Attributes, Add an Ignore
+List</small></td>
+<td><small>13</small></td></tr>
+<tr><td><small>Add Attributes</small></td>
+<td><small>45</small></td></tr>
+<tr><td><small>Check File Contents</small></td>
+<td><small>137</small></td></tr>
+</table>
+<p>The time it takes to evaluate the logging results is unpredictable. We recommend that you take the time to carefully craft the <i>ignore</i> file so that your routine analysis of the logs is easier.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Tripwire Configuration</h3>
+</td>
+<td>
+Because this implementation assumes that Tripwire is not available, no Tripwire configuration is given.
+</td>
+</tr>
+
+
+</table>
+
+
+</html>
+
+
+ 
+

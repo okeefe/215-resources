@@ -1,0 +1,745 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
+<TITLE>Writing rules and understanding alerts for Snort
+</TITLE>
+</head>
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+<table border="0" width="100%" cellspacing="2" cellpadding="2">
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"><font face="arial"><b>Implementation
+Details</b></font></td>
+    <td><b><font face="Arial"><h2>Writing rules and understanding
+alerts for Snort, a network intrusion detection
+system</h2> </font></b></td>
+  </tr>
+  <tr> 
+    <td width="130">&nbsp;</td>
+    <td  > 
+      <table border="1" width="75%" cellspacing="0" cellpadding="8" bgcolor="#ccddff">
+        <tr> 
+          <td> 
+            <p>Applies to the practice:<br> <a
+href="/security-improvement/practices/p091.html">"Identify data that characterize systems
+and aid in dectecting signs of suspicious behavior"</a>
+<p>Applicable Technologies:<br> Solaris
+2.x; UNIX operating system and derivatives </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130">&nbsp;</td>
+    <td   align="LEFT" valign="TOP"> 
+      <p> </p>
+      <p><font face="Courier" size=3><b>Snort</b></font> is a lightweight network
+intrusion detection system created by Martin Roesch (see <a
+href="http://www.snort.org">http://www.snort.org</a>).  <font face="Courier New"
+size=3><b>Snort</b></font> is based on the <font face="Courier"><a
+href="/security-improvement/implementations/i042.11.html">libpcap</a></font> packet
+capture library, commonly used in may TCP/IP traffic sniffers and analyzers.  According 
+to the <font face="Courier New" size=3>Snort</font> web site, the program "can perform
+protocol analysis, content searching/matching, and can be used to detect a variety of
+attacks and probes, such as buffer overflow, stealth port scans, CGI attacks, SMB
+probes, OS fingerprinting attempts, and much more"
+
+<p><font face="Courier" size="3"><b>Snort</b></font> has a real-time alerting
+capability, with alerts being sent to <font face="courier" size="3"><b>syslog</b></font>, a separate
+"alert" file, or as a WinPopup 
+message via Samba's smbclient.
+
+<p>This implementation covers the basic steps to obtain
+and install the <font face="courier" size="3"><b>Snort</b></font> intrusion detection system on your
+computer. We examine how to
+write <font face="courier" size="3"><b>Snort</b></font> rules and describe how you can validate
+generated alerts. This document
+does not cover basic or advanced use of the <font face="courier" size="3"><b>Snort</b></font> system,
+customization of the
+installation, configuration of the logging and alerting system, or answer such
+questions as where to deploy <font face="courier" size="3"><b>Snort</b></font> in your network
+environment. For details on these
+subjects, ports to other operating systems, plug-ins for reporting, and pre-built rule
+sets, consult the <font face="courier" size="3"><b>Snort</b></font> web site.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" colspan="2"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP"><b><font face="Arial"> 
+      <p>Effort Estimates</p>
+      </font></b> </td>
+    <td   align="LEFT" valign="TOP">Time to retrieve the necessary archive files from
+the distribution site will vary depending on connection speed. The expected time is a
+minute or less with a high speed connection. Building and installing Snort usually
+takes a minute or two, depending on machine performance. </td>
+  </tr>
+<tr>
+ <td width="130" colspan="2">
+      <hr size="1">
+    </td>
+</td>
+<tr>  <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">
+      <p>System Prerequisites</p>
+      </font></b> </td>
+    <td   align="LEFT" valign="TOP">Snort can be built and installed on many UNIX
+systems. The following list is taken from the Snort web site: 
+
+<p>Snort is known to compile and run on:
+<pre>
+Sparc: SunOS 4.1.x, Solaris, Linux, and OpenBSD
+x86: Linux, OpenBSD, FreeBSD, NetBSD, and Solaris
+M68k/PPC: Linux, OpenBSD, NetBSD, Mac OS X Server
+</pre>
+Snort should also compile on:
+<pre>
+AIX, IRIX, HPUX, Tru64
+</pre>
+</td></tr>
+
+ <tr>
+    <td width="130" colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+
+
+<tr>  <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">
+      <p>Software Prerequisites</p>
+      </font></b> </td>
+    <td   align="LEFT" valign="TOP"><P>To build and run <B><FONT FACE="Courier"
+size="3">Snort</B></FONT>, you need internet access to retrieve the software and the following
+software tools: </P>
+
+<UL>
+<LI>An MD5 cryptographic checksum program (refer to <A
+HREF="/security-improvement/implementations/i002.01.html">Using MD5 to verify the integrity
+of file contents</A>).</LI>
+<LI>GZIP to uncompress the downloaded files (<A
+HREF="ftp://ftp.gnu.org/gnu/gzip/">ftp://ftp.gnu.org/gnu/gzip/</A>).</LI>
+<LI>A C compiler; either the Sun C Computer or the free GNU C Compiler (<A
+HREF="ftp://ftp.gnu.org/gnu/gcc/">ftp://ftp.gnu.org/gnu/gcc/</A>).</LI>
+<LI>libpcap library installed, see the implementation <A
+HREF="/security-improvement/implementations/i042.11.html">Installing libpcap to support
+network packet capturing tools on systems running Solaris 2.X</A>.</LI></UL><br> 
+</td></tr>
+ <tr>
+    <td width="130" colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+
+<tr>  <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">
+      <p>Downloading and Verifying</p>
+      </font></b> </td>
+    <td align="left" valign="top">
+</B></FONT><P>Download the following files into the same directory and verify their
+checksums with an MD5 checksum program.</P>
+
+<table width="100%" border="1" cellspacing="1" cellpadding="0">
+<tr>
+<td width="50%">
+<B><P>File to Download</P></b></td>
+<td width="50%">
+<b><P>MD5 Checksum</P></b></td>
+</tr>
+<tr>
+<td width="33%">
+</B><FONT SIZE=2>
+</FONT><P><small><A
+HREF="http://www.snort.org/Files/snort-1.6.3.tar.gz">http://www.snort.org/Files/snort-1.6.3.tar.gz</A><br>
+Source distribution for UNIX</small></P></td>
+<td width="33%">
+<small><pre><P>5d628b08c0bf42af3affc9fcfca7ea69</P></pre></small>
+</td>
+</tr>
+<tr>
+<td width="33%">
+<FONT SIZE=2>
+</FONT><P><small><A
+HREF="http://www.snort.org/Files/snort-1.6.3-sol-2.6-sparc-local">http://www.snort.org/Files/snort-1.6.3-sol-2.6-sparc-local</A><br>
+Pre-compiled distribution for Solaris 2.6</small></P></td>
+<td width="33%">
+<small><PRE><P>ca491ade76253700860a6e2ac9259874</P></PRE></small>
+</td>
+</tr></table>
+<FONT SIZE=2><P>&nbsp;</P>
+</FONT><P>If the computed cryptographic checksum of the download files does not correspond
+to the information given above, verify that:</P>
+
+<UL>
+<LI>your downloaded filenames match those listed</LI>
+<LI>your checksum program computes MD5 message digests</LI></UL><br>
+
+</td></tr>
+ <tr>
+    <td width="130" colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+
+
+<tr>  <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">
+      <p>Building</p>
+      </font></b> </td>
+    <td   align="LEFT" valign="TOP">
+<P>The pre-compiled Solaris 2.6 distribution may be installed using the <B><FONT
+FACE="Courier New">pkgadd </B></FONT>program.  If you are unfamiliar with <B><FONT
+FACE="Courier New">pkgadd</B></FONT>, or distrust supplied packages and wish to examine the
+source code, we recommend installing the program using the following procedure. </P>
+<P>Unpack the <B><FONT FACE="Courier" size="3">Snort</B></FONT> source distribution.</P>
+<P> The compressed file can be uncompressed using the GNU <B><FONT FACE="Courier
+New">gunzip</B></FONT> utility and unpacked using the system <B><FONT FACE="Courier
+New">tar</B></FONT> command:  </P><DIR>
+<DIR>
+
+<FONT FACE="Courier New" SIZE=2><P># gunzip -c snort-1.6.3.tar.gz| tar xvf -</P></DIR>
+</DIR>
+
+</FONT><P>This creates a directory named<B><FONT FACE="Courier New">
+</B></FONT><I>snort-1.6.3</I>.  Change to this subdirectory because all remaining
+operations are performed there. <FONT FACE="Courier"> </P>
+</FONT><P>You should review the INSTALL file to ensure that there are no other
+prerequisites before compiling the program.  Additionally, configure-time switches are
+listed in this file, which allow such configurations as ‘flexible-response’ and SMB
+alerting.</P>
+<P>Now, configure and make the program with</P><DIR>
+<DIR>
+
+<FONT FACE="Courier New" SIZE=2><P># /bin/sh ./configure<BR>
+# /usr/ccs/bin/make</P>
+</FONT>
+<FONT SIZE=2><P>&nbsp;</P></DIR>
+</DIR>
+
+
+</td></tr>
+ <tr>
+    <td width="130" colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+
+<tr>  <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">
+      <p>Testing Before Installation</p>
+      </font></b> </td>
+    <td   align="LEFT" valign="TOP"></td></tr>
+<tr>  <td width="130" align="LEFT" valign="top"></td>
+align="right"></td>
+   
+    <td   align="LEFT" valign="TOP"><FONT FACE="HELVETICA" SIZE=4 COLOR="#008000"><P><b>Test
+the</FONT><FONT FACE="Courier New" SIZE=4 COLOR="#008000"><b> Snort</b></FONT><FONT
+FACE="HELVETICA" SIZE=4 COLOR="#008000"><b> system.</b></P>
+</FONT></font><P>To test the correct operation of<B><FONT FACE="Courier New"> Snort</B></FONT>,
+execute <B><FONT FACE="Courier New">Snort</B></FONT> with the following options from the
+install location, as follows:</P>
+
+<FONT SIZE=2><P>&#9;</FONT><FONT FACE="Courier New" SIZE=2># ./snort –c ./snort-lib –v –i
+hme<I>x</P>
+</I></FONT><FONT SIZE=2>
+</FONT><P>You should receive output to the terminal similar to that produced by <A
+HREF="http://www.cert.org/security-improvement/implementations/i042.03.html"><B><FONT
+FACE="Courier New">tcpdump</B></FONT></A> (i.e., date and time stamp, unresolved source IP,
+source port, unresolved destination IP, destination port, and other protocol specific
+information).</P>
+<FONT SIZE=2><P>&nbsp;</P>
+</FONT> </td></tr>
+ <tr>
+    <td width="130" colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+
+<tr>  <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">
+      <p>Installation</p>
+      </font></b> </td>
+    <td   align="LEFT" valign="TOP"><P>Now install the program and manual pages with the
+following command.  You should check the file ownerships and file protections once they
+have been copied to ensure that they cannot be modified or executed by unprivileged
+accounts, and that they reflect the security policy of your organization. </P>
+
+<FONT FACE="Courier New" SIZE=2><P># /usr/ccs/bin/make install</P></font> 
+</td></tr>
+
+ <tr>
+    <td width="130" colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+
+<tr>  <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">
+      <p>Create a Directory for Snort Log Files</p>
+      </font></b> </td>
+    <td   align="LEFT" valign="TOP"><P>Create a separate directory where the
+<B><FONT FACE="Courier New">Snort</B></FONT> log and alert files will be stored.
+Note that this directory will contain connection information that may expose
+potential intrusions and attempted attacks of your network. We recommend that you 
+restrict access to this directory as shown below. We further recommend that you
+store this directory within the <font face="courier" size="3">/var</font> directory because <font
+face="courier" size="3">/var</font> usually contains
+other log information:</P>
+<DIR>
+<DIR>
+
+<FONT FACE="Courier New" SIZE=2><P># /bin/mkdir /var/adm/snort<BR>
+# /bin/chmod 700 /var/adm/snort</P>
+</FONT><FONT SIZE=2><P>&nbsp;</P></DIR>
+</DIR>
+
+</FONT></td></tr>
+ <tr>
+    <td width="130" colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+
+
+<tr>  <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">
+      <p>Testing After Installation</p>
+      </font></b> </td>
+    <td   align="LEFT" valign="TOP"></td></tr>
+<tr>  <td width="130" align="LEFT" valign="top"></td>
+align="right"></td>
+
+    <td   align="LEFT" valign="TOP"><FONT FACE="HELVETICA, geneva, arial" SIZE="4" 
+COLOR="#008000"><b>Test
+the</b></FONT><FONT FACE="Courier New" SIZE=4 COLOR="#008000"> <B>Snort</B></FONT><FONT
+FACE="HELVETICA" SIZE=4 COLOR="#008000"><b> system.</b>
+</FONT><P>Test <B><FONT FACE="Courier" size="3">Snort</B></FONT> by following
+procedures similar to those under the &quot;Testing Before Installation&quot;
+section.  To get help on command line options to <B><FONT FACE="Courier" size="3">Snort</B></FONT>,
+issue the following from the command line:</P>
+
+<FONT FACE="Courier New" SIZE=2><P># ./snort -?</P>
+</FONT>
+
+</FONT></td></tr>
+ <tr>
+    <td width="130" colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+
+<tr>  <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">
+      <p>Writing Rules</p>
+      </font></b> </td>
+    <td   align="LEFT" valign="TOP"></td></tr>
+<tr>  <td width="130" align="LEFT" valign="top"></td>
+align="right"></td>
+        
+    <td   align="LEFT" valign="TOP"><FONT FACE="Courier New" SIZE=4
+COLOR="#008000"><p><B>Snort</B> </FONT><FONT
+FACE="HELVETICA" SIZE=4 COLOR="#008000"><b>Rules</b></P>
+</FONT>
+<FONT FACE="Courier" size="3"><P><b>Snort</B></FONT> allows you to write rules
+describing</P>
+
+
+<UL>
+<LI>well-known and common vulnerability exploitation attempts</LI>
+<LI>violations of your security policy</LI>
+<LI>conditions under which you think a network packet(s) might be
+anomalous</LI></UL>
+
+
+<P>Through the use of an easy-to-understand and lightweight rule-description
+language, <B><FONT FACE="Courier" size="3">Snort</B></FONT> rules can be both flexible 
+and robust; written both for protocol analysis and content searching and
+matching.</P>
+
+<P>Two basic guiding principles must be kept in mind when writing <B><FONT
+FACE="Courier" size="3">Snort</B></FONT> rules:</P>
+
+
+<UL>
+<LI>Rules must be completely contained on a single line. </LI>
+<LI>Rules are divided into two logical sections, the <I>rule header</I> and the
+<I>rule options</I>.  The rule header contains the rule's action, protocol,
+source and destination IP addresses and CIDR (Classless Inter-Domain Routing)
+block, and the source and destination ports information. The rule option section
+contains alert messages. It also contains information about which parts of the
+packet you should inspect to determine if you should take the rule action.
+</LI></UL>
+
+
+<P>An example rule: </P>
+
+
+<FONT FACE="Courier New" SIZE=2><P>alert tcp any any -&gt; 192.168.1.0/24 111
+<br>(content:"|00 01 86 a5|"; msg: "mountd access";)</P>
+</FONT>
+<P>[Example 1 - Sample <B><FONT FACE="Courier New">Snort</B></FONT> Rule]</P>
+
+
+<P>This rule describes an alert that is generated when Snort matches a network
+packet with all of the following attributes:</P>
+
+
+<UL>
+<LI>TCP packet</LI>
+<LI>Sourced from any IP address on any port</LI>
+<LI>Destined for any IP address on the 192.168.1.0 network (24 describes the CIDR 
+block and netmask used) on port 111.</LI></UL>
+
+
+<P>The text up to the first parentheses is the <I>rule header</I>:</P>
+
+
+
+<P>"<FONT FACE="Courier New" SIZE=2>alert tcp any any -&gt; 192.168.1.0/24
+111</FONT>"</P>
+
+
+<P>The section enclosed in parenthesis is the <I>rule options</I>:</P>
+
+
+<FONT FACE="Courier New" SIZE=2><P>"(content:"|00 01 86 a5|"; msg: "mountd
+access";)"</P>
+</FONT>
+
+<P>The word(s) before the colons in the <I>rule options</I> section are called
+<I>option keywords</I>. These keywords may appear once, as with ‘content’ in
+Example 1 above, or multiple times, as shown in Example 2 below:</P>
+
+<small>
+<pre>
+alert tcp any any -&gt; any 21 (content:"site exec"; content:"%"; msg:"site
+exec buffer overflow attempt";)</pre>
+</small>
+<P>[Example 2 - Sample <B><FONT FACE="Courier New">Snort</B></FONT> Rule]</P>
+
+
+<P>The above rule illustrates an FTP vulnerability.  The keyword
+&quot;content&quot; appears twice because the two strings that
+&quot;content&quot; describes are not concatenated but appear at different
+locations within the packet(s).  For this rule to be violated, the content of a
+packet(s) must contain both character strings, &quot;site exec&quot; and
+&quot;%&quot;.</P>
+
+<P>The <I>rule options</I> section is not specifically required by any rule; it is
+ used for the sake of making tighter definitions of packets to collect or to
+issue an alert. </P>
+
+<P>Elements of an individual rule are treated as forming a logical AND statement. 
+ The complete collection of rules in a <B><FONT FACE="Courier" size="3">Snort</B></FONT> rules library
+file (i.e., snort-lib) are treated as forming
+a larger logical OR statement.</P>
+<FONT SIZE=2><P>&nbsp;</P>
+</FONT></td></tr>
+<tr>  <td width="130" align="LEFT" valign="top"></td>
+align="right"></td>
+
+    <td   align="LEFT" valign="TOP"><FONT FACE="HELVETICA" SIZE=4
+COLOR="#008000"><P><b>Basics in Writing</b></FONT><FONT FACE="Courier New" SIZE=4 COLOR="#008000">
+<B>Snort</B></FONT><FONT FACE="HELVETICA" SIZE=4 COLOR="#008000"><b> Rules</b></P>
+</FONT>
+
+<P><P>Rule Actions: </P>
+<P>The <I>rule header</I> contains the information that defines the "who, where,
+and what" of a packet, as well as what to do when a packet occurs with all the
+attributes indicated in the rule.  The first field in a rule is the rule action.  
+The rule action tells <B><FONT FACE="Courier" size="3">Snort</B></FONT> what to do
+when it finds a packet that matches the rule criteria.  There are three available 
+actions in <B><FONT FACE="Courier" size="3">Snort</B></FONT> - alert, log, and pass.
+</P>
+<FONT FACE="Courier New" SIZE=2>
+<P>alert</FONT> - generates an alert using the selected alert method, and then
+log the packet </P>
+<FONT FACE="Courier New" SIZE=2><P>log</FONT> - logs the packet </P>
+<FONT FACE="Courier New" SIZE=2><P>pass</FONT> - drops (ignore) the packet </P>
+
+
+
+<P>Protocols: </P>
+<P>The next field in a rule is the protocol.  There are three IP protocols that
+<B><FONT FACE="Courier" size="3">Snort</B></FONT> currently analyzes for suspicious
+behavior, TCP, UDP, and ICMP.  In the future there may be more, such as ARP,
+IGRP, GRE, OSPF, RIP, and IPX.</P>
+<P>&nbsp;</P>
+<P>IP Addresses: </P>
+<P>The next portion of the rule header deals with the IP address and port
+information.  The keyword "any" may be used to define any address.  <B><FONT
+FACE="Courier" size="3">Snort</B></FONT> does not have a mechanism to provide host
+name lookup for the IP address fields in the rules file.  The addresses are
+formed by a straight numeric IP address and a CIDR block.  The CIDR block
+indicates the netmask that should be applied to the rule's address and any
+incoming packets that are tested against the rule.  A CIDR block mask of /24
+indicates a Class C network, /16 a Class B network, and /32 a specific machine
+address.  For example, the address/CIDR combination 192.168.1.0/24 would signify
+the block of addresses from 192.168.1.1 to 192.168.1.255.  Any rule that used
+this designation for, say, the destination address would match on any address in
+that range.  The CIDR designations give us an easy way to designate large address 
+spaces with just a few characters.</P>
+<P>In Example 1 (above), the source IP address was set to match for any computer
+communicating, and the destination address was set to match on the 192.168.1.0
+Class C network. </P>
+<P>A negation operator can be applied to IP addresses.  This operator tells
+<B><FONT FACE="Courier New">Snort</B></FONT> to match any IP address except the
+one indicated by the listed IP address.  The negation operator is indicated with
+a "!".  For example, an easy modification to the initial example is to make it
+alert on any traffic that originates outside of the local network with the
+negation operator as shown in Example 3.</P>
+
+
+<FONT FACE="Courier"><small><P>alert tcp !192.168.1.0/24 any -&gt;
+192.168.1.0/24 111 <br>(content: "|00 01 86 a5|"; msg: "external mountd access";)</P></small>
+</FONT><P><br>[Example 3 - Example IP Address Negation Rule]</P>
+
+<P>This rule's IP addresses indicate "any TCP packet with a source IP address not 
+originating from the internal network and a destination address on the internal
+network".</P>
+
+<P>Port Numbers:</P>
+<P>Port numbers may be specified in a number of ways, including "any" ports,
+static port definitions, ranges, and by negation.  "Any" ports is a wildcard
+value, meaning literally any port.  Static ports are indicated by a single port
+number, such as 111 for portmapper, 23 for telnet, or 80 for http.  Port
+ranges are indicated with the range operator ":".  The range operator may be
+applied in a number of ways, such as in Example 4.       </P>
+
+
+<FONT FACE="Courier New" SIZE=2><P>log udp any any -&gt; 192.168.1.0/24 1:1024
+</P>
+</FONT><P>Log UDP traffic coming from any port and destination ports ranging from 
+1 to 1024.</P>
+<FONT FACE="Courier New" SIZE=2><P>&nbsp;</P>
+<P>log tcp any any -&gt; 192.168.1.0/24 :6000  </P>
+</FONT><P>Log TCP traffic from any port going to ports less than or equal to
+6000.</P>
+<FONT FACE="Courier" SIZE=2><P>&nbsp;</P>
+<P>log tcp any :1024 -&gt; 192.168.1.0/24 500:  </P>
+</FONT><P>Log TCP traffic from privileged ports less than or equal to 1024 going
+to ports greater than or equal to 500.</P>
+<P>&nbsp;</P>
+<P>[Example 4 - Port Range Examples]</P>
+
+
+<P>The negation operator, &quot;!&quot;, may be applied against any of the other
+rule types (except "any", which would translate to none).  For example, if for some 
+reason you wanted to log everything except the X Windows ports, you could do
+something like the rule in Figure 5.</P>
+
+<pre>log tcp any any -&gt; 192.168.1.0/24
+!6000:6010</pre>
+<br><P>[Example 5 - Example of Port Negation]</P>
+
+
+
+<P>Direction Operator: </P>
+<P>The direction operator "-&gt;" indicates the orientation, or "direction", of
+the traffic that the rule applies to.  The IP address and port numbers on the
+left side of the direction operator designate traffic coming from the source
+host, and the address and port information on the right side of the operator
+designate destination host.  There is also a bi-directional operator, which is
+indicated with a "&lt;&gt;" symbol.  This tells <B><FONT FACE="Courier
+New">Snort</B></FONT> to consider the address/port pairs in either the source or
+destination orientation.  This is handy for recording and analyzing both sides of 
+a conversation, such as telnet or POP3 sessions.  An example of the
+bi-directional operator being used to record both sides of a telnet session is
+shown in Example 6.</P>
+
+
+<pre>
+log !192.168.1.0/24 any &lt;&gt; 192.168.1.0/24 23</pre>
+<P>[Example 6 - <font face="courier" size="3"><b>Snort</b></font> rules using the Bi-directional
+Operator]</P>
+
+<P>In Example 6, any traffic on any port originating from outside the internal
+network (192.168.1.x) with a destination of the internal network on the telnet
+port (23) is logged.  Reciprocally, any telnet traffic originating from the
+internal network with a destination outside the internal network to any port is
+logged.  Therefore, both sides of a telnet connection are logged.</P>
+<FONT SIZE=2><P>&nbsp;</P>
+</FONT></td></tr>
+ <tr>
+    <td width="130" colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+
+<tr>  <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">
+      <p>Snort Alerting</p>
+      </font></b> </td>
+    <td   align="LEFT" valign="TOP"></td></tr>
+<tr>
+<td width="130" valign="top">
+</td><td   align="LEFT" valign="TOP"><FONT FACE="HELVETICA" SIZE=4
+COLOR="#008000"><P><font face="Courier New" size="4"><B>Snort</B></font><b> Alerts and How We Trust
+Them</b></P>
+</FONT>
+<P>Alerting, part of the Alerting and Logging subsystem, is activated at run-time through
+the use of command-line options.  In this section, we do not discuss these options, as they
+are detailed in documentation on the <A HREF="http://www.snort.org/"><B><FONT FACE="Courier
+New">Snort</B></FONT></A> web site.  Instead, we describe how you, the system
+administrator, can verify that a <B><FONT FACE="Courier New">Snort</B></FONT>-generated
+alert is valid.</P>
+<P>To fully trust an intrusion detection system alert, you must be able to examine three
+complementary data points: a rule representing behavior you know or suspect of being
+anomalous, an alerting message warning you of a rule violation or of particular behavior,
+and a network packet (or series of packets) causing the rule violation.  In lieu of having
+all three components, you must be able to relate the network packet to at least one of the
+following:</P>
+
+<OL>
+<LI>the alerting message (of the proposed intrusion or intrusion attempt)</LI>
+<LI>the rule violated (of the proposed intrusion or intrusion attempt)</LI></OL>
+
+<P>If neither of these relationships occur, you are precluded from characterizing the
+security event as a positive or negative.  The network packet(s) is a critical
+point-of-examination, and without the actual, tangible packet(s) we cannot investigate
+whether a rule is violated or an alerting message displays a positive occurrence of
+violation to our security policy. Therefore, because <B><FONT FACE="Courier" size="3">Snort</B></FONT>
+allows you to configure various levels of alerting and logging, we
+recommend that <B><FONT FACE="Courier" size="3">Snort</B></FONT> be set up to log the offending
+packets causing the rule violation and to record the alerts, in separate files. </P>
+<P>&nbsp;</P>
+</td></tr>
+
+<tr>
+<td width="130" valign="top">
+</td><td   align="LEFT" valign="TOP"><FONT FACE="HELVETICA" SIZE=4 
+COLOR="#008000"><P><font face="Courier New" size="4"><B>Snort</B></font>  <b>Alerts and Logs</b></P>
+</FONT>
+<P><P>When <B><FONT FACE="Courier New">Snort</B></FONT> inspects a network packet and
+detects a match between a rule (describing a violation) and the network packet,
+<B><FONT FACE="Courier New">Snort</B></FONT> sends an alerting message to the
+user-defined facility and/or logs the packets causing the rule violation.  The alerts
+</P>
+<P>&nbsp;</P>
+"may either be sent to syslog, logged to an alert text file in two
+different formats, or sent as WinPopup messages using the Samba smbclient program.  The 
+syslog alerts are sent as security/authorization messages that are easily monitored
+with tools such as <A
+HREF="http://www.cert.org/security-improvement/implementations/i042.01.html">swatch</A> 
+[SWT93].  WinPopup alerts allow event notifications to be sent to a user-specified list 
+of Microsoft Windows consoles running the WinPopup software.  There are two options for 
+sending the alerts to a plain text file; full and fast alerting.  Full alerting writes
+the alert message and the packet header information through the transport layer
+protocol.  The fast alert option writes a condensed subset of the header information to 
+the alert file, allowing greater performance under load than  full mode.  There is a
+fifth option to completely disable alerting, which is useful when alerting is
+unnecessary or inappropriate, such as when network penetrations tests are being
+performed."</P>
+
+
+<P>Similarly, logging can be set up to </P>
+
+
+<P>"log packets in their decoded, human-readable format to an IP-based
+directory structure, or in <A
+HREF="http://www.cert.org/security-improvement/implementations/i042.13.html">tcpdump</A> 
+binary format to a single log file.  The decoded format logging allows fast analysis of 
+data collected by the system.  The tcpdump format is much faster to record to the disk
+and should be used in instances where high performance is required. Logging can also be 
+turned off completely, leaving alerts enabled for even greater performance
+improvements."</P>
+</P>
+
+<P>To put this into perspective, let’s examine the logging and alerting areas of a
+system.  For this discussion, the system sends alerts to the <B><FONT FACE="Courier
+New">syslog</B></FONT> facility and the offending network packet(s) to an IP-based
+directory structure.  All alerts are logged via <B><FONT FACE="Courier
+New">syslog</B></FONT> to a file called "alerts" in the file /var/adm/snort/alerts.
+Any alerting message found in this file will have corresponding offending network
+packets logged in the same directory as the alert file but under the IP address of the
+source packet.</P>
+
+<P>Using the rule in Figure 1, from above:</P>
+
+
+<FONT FACE="Courier"><small><P>alert tcp any any -&gt; 192.168.1.0/24 111
+<br>(content:"|00 01 86 a5|"; msg: "mountd access";)</P></small>
+</FONT>
+
+<P>When <B><FONT FACE="Courier New">Snort</B></FONT> inspects and matches the above
+rule to an offending network packet(s), an alerting message is sent to <B><FONT
+FACE="Courier New">syslog</B></FONT> stating that a "mountd access" violation has
+occurred.  This message is recorded in the file <I>/var/adm/snort/alerts</I> and the
+actual network packet(s) causing the alert is recorded in a file based on the source IP 
+address of the offending packet(s), (i.e. <I>/var/adm/snort/a.b.c.d</I>).</P>
+
+<P>Some problems may occur when filtering log entries into an IP-named file.  For one,
+multiple alerts may involve one IP address.  Under this condition, the offending
+packets violating each unique rule are sent to the same IP-named file; and mapping the
+specific alert to the offending packet(s) then demands a search and locate approach
+that could be time consuming.</P>
+<FONT SIZE=2><P>&nbsp;</P>
+</FONT></P> </td></tr>
+
+
+<tr>
+<td width="130" valign="top">
+</td><td   align="LEFT" valign="TOP"><FONT FACE="HELVETICA" SIZE=4
+COLOR="#008000"><P><font face="Courier New" size="4"><B>Snort</B></font> <b>Integration with Other
+Administrative/Security
+Tools</b></P>
+</FONT><B><FONT FACE="Courier New"><P>Snort</B></FONT>'s output can be used in concert with the
+output of other security tools to do the following: </P>
+<OL>
+
+<LI>corroborate a security event that happened by returning the process and user
+information of the event</LI>
+<LI>identify discrepancies when processes that are reported by programs such as <B>ntop
+</B>and <B>tcpdump</B>. </LI></OL></td></tr>
+ <tr>
+    <td width="130" colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+
+<tr>  <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">
+      <p>Tripwire Configuration</p>
+      </font></b> </td>
+    <td   align="LEFT" valign="TOP"><P>The following is the <B><FONT
+FACE="Courier">tripwire</B></FONT> configuration for the<B><FONT FACE="Courier" size="3">
+Snort</B></FONT> program once installed. Only a few files, the<B><FONT
+FACE="Courier New"> Snort</B></FONT> executable, <B><FONT FACE="Courier" size="3">Snort</B></FONT>(8)
+man page, and the snort alert file, require monitoring
+by <B><FONT FACE="Courier">tripwire</B></FONT>. In addition, files necessary to
+implement the software (i.e., <B><FONT FACE="Courier New">libpcap</B></FONT>) and
+the <font face="courier" size="3">/var/log/snort/</font> directory should be monitored. </P>
+<P>The following files should not change, as any changes are unexpected:</P>
+<pre>
+@@define BINARY                      E+pinugsamc1-023456789
+
+/usr/local/bin/snort                               @@BINARY
+/usr/local/man/man8/snort.8                        @@BINARY
+/var/log/snort/alerts                              @@BINARY
+</pre>
+</td></tr>
+ <tr>
+    <td width="130" colspan="2">
+      <hr size="1">
+    </td>
+  </tr>
+
+<tr>  <td width="130" align="LEFT" valign="TOP"><b><font face="Arial">
+      <p>Acknowledgements</td>
+<td valign="top">
+<P>The author would like to thank the developers of <B><FONT FACE="Courier" size="3">Snort</B></FONT>
+and the author(s) of the <B><FONT FACE="Courier" size="3">Snort</B></FONT>
+web site. Many of the examples and some documentation were reproduced in part and can be
+directly attributed to the developer's information as posted on the Snort web site (<A
+HREF="http://www.snort.org/">http://www.snort.org/</A>).  The section entitled "Basics in
+Writing Snort Rules" was taken in part from the web document "<a
+href="http://www.snort.org/writing_snort_rules.htm">Writing Snort Rules: How to
+write Snort rules and keep your sanity</a>" by Martin Roesch.</P>
+
+
+</BODY>
+</HTML>
+
+
+
+
+
+
+
+

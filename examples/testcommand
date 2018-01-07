@@ -1,0 +1,10 @@
+#!/bin/sh
+#testcommand - written by Pat OKeefe
+# for use by csce215 students.
+if [ $# -eq 1 ]; then
+   # your script command goes here
+   echo your command is $1
+else
+   echo "usage: `basename $0` [command]"
+   exit 1
+fi

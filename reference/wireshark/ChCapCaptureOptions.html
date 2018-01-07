@@ -1,0 +1,163 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>4.5. The "Capture Options" dialog box</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="ChapterCapture.html" title="Chapter 4. Capturing Live Network Data"><link rel="prev" href="ChCapInterfaceSection.html" title='4.4. The "Capture Interfaces" dialog box'><link rel="next" href="ChCapInterfaceDetailsSection.html" title='4.6. The "Interface Details" dialog box'></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.5. The "Capture Options" dialog box</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChCapInterfaceSection.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Capturing Live Network Data</th><td width="20%" align="right"> <a accesskey="n" href="ChCapInterfaceDetailsSection.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChCapCaptureOptions"></a>4.5. The "Capture Options" dialog box</h2></div></div></div><p>
+	When you select Start... from the Capture menu (or use the corresponding 
+	item in the "Main" toolbar), Wireshark pops 
+	up the "Capture Options" dialog box as shown in 
+	<a href="ChCapCaptureOptions.html#ChCapCaptureOptionsDialog" title='Figure 4.3. The "Capture Options" dialog box'>Figure 4.3, &#8220;The "Capture Options" dialog box&#8221;</a>.
+      </p><div class="figure"><a name="ChCapCaptureOptionsDialog"></a><p class="title"><b>Figure 4.3. The "Capture Options" dialog box</b></p><div><img src="wsug_graphics/ws-capture-options.png" alt='The "Capture Options" dialog box'></div></div><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: Tip!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="wsug_graphics/tip.png"></td><th align="left">Tip!</th></tr><tr><td align="left" valign="top"><p>
+	If you are unsure which options to choose in this dialog box, just try 
+	keeping the defaults as this should work well in many cases.
+	</p></td></tr></table></div><p>
+	You can set the following fields in this dialog box:
+	</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4751139"></a>4.5.1. Capture frame</h3></div></div></div><div class="variablelist"><dl><dt><span class="term"><span><strong class="command">Interface</strong></span></span></dt><dd><p>
+		This field specifies the interface you want to capture on. 
+		You can only capture on one interface, and you can only 
+		capture on interfaces that Wireshark has found on the 
+		system. It is a drop-down list, so simply click on the 
+		button on the right hand side and select the interface you 
+		want. It defaults to the first non-loopback interface that 
+		supports capturing, and if there are none, the first 
+		loopback interface. On some systems, loopback interfaces 
+		cannot be used for capturing (loopback interfaces are not available 
+		on Windows platforms).
+	      </p><p>
+		This field performs the same function as the 
+		<span><strong class="command">-i &lt;interface&gt;</strong></span> command line option.
+	      </p></dd><dt><span class="term"><span><strong class="command">IP address</strong></span></span></dt><dd><p>
+		  The IP address(es) of the selected interface. If no address could 
+		  be resolved from the system, "unknown" will be shown.
+	      </p></dd><dt><span class="term"><span><strong class="command">Link-layer header type</strong></span></span></dt><dd><p>
+		  Unless you are in the rare situation that you need this, just keep 
+		  the default. For a detailed description, see 
+		  <a href="ChCapLinkLayerHeader.html" title="4.8. Link-layer header type">Section 4.8, &#8220;Link-layer header type&#8221;</a>
+	      </p></dd><dt><span class="term"><span><strong class="command">Buffer size: n megabyte(s)</strong></span></span></dt><dd><p>
+		  Enter the buffer size to be used while capturing. This is the size 
+		  of the kernel buffer which will keep the captured packets, until 
+		  they are written to disk. If you encounter packet drops, try 
+		  increasing this value.
+	      </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="wsug_graphics/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>This option is only available on Windows platforms.</p></td></tr></table></div></dd><dt><span class="term">
+	      <span><strong class="command">Capture packets in promiscuous mode</strong></span>
+	    </span></dt><dd><p>
+		This checkbox allows you to specify that Wireshark 
+		should put the interface in promiscuous mode when capturing. 
+		If you do not specify this, Wireshark will only capture the 
+		packets going to or from your computer (not 
+		all packets on your LAN segment).
+	      </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="wsug_graphics/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+		  If some other process has put the interface in 
+		  promiscuous mode you may be capturing in promiscuous 
+		  mode even if you turn off this option
+		</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="wsug_graphics/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+		Even in promiscuous mode you still won't necessarily see all packets 
+		on your LAN segment, see <a href="http://www.wireshark.org/faq.html#promiscsniff" target="_top">http://www.wireshark.org/faq.html#promiscsniff</a> for 
+		some more explanations.
+		</p></td></tr></table></div></dd><dt><span class="term"><span><strong class="command">Limit each packet to n bytes</strong></span></span></dt><dd><p>
+		This field allows you to specify the maximum amount of 
+		data that will be captured for each packet, and is 
+		sometimes referred to as the <span><strong class="command">snaplen</strong></span>. If disabled, 
+		the default is 65535, which will be sufficient for most 
+		protocols. Some rules of thumb:
+	      </p><div class="itemizedlist"><ul type="disc"><li><p>
+			If you are unsure, just keep the default value.
+	      </p></li><li><p>
+			If you don't need all of the data in a packet - for example, if you
+			only need the link-layer, IP, and TCP headers - you might want to
+			choose a small snapshot length, as less CPU time is required for
+			copying packets, less buffer space is required for packets, and thus
+			perhaps fewer packets will be dropped if traffic is very heavy.
+	      </p></li><li><p>
+			If you don't capture all of the data in a packet, you might find that
+			the packet data you want is in the part that's dropped, or that
+			reassembly isn't possible as the data required for reassembly is
+			missing.
+	      </p></li></ul></div></dd><dt><span class="term"><span><strong class="command">Capture Filter</strong></span></span></dt><dd><p>
+		This field allows you to specify a capture filter. 
+		Capture filters are discussed in more details in 
+		<a href="ChCapCaptureFilterSection.html" title="4.9. Filtering while capturing">Section 4.9, &#8220;Filtering while capturing&#8221;</a>. It defaults to empty, or 
+		  no filter.
+	      </p><p>
+		You can also click on the button labelled Capture Filter, and Wireshark 
+		will bring up the Capture Filters dialog box and allow you to create 
+		and/or select a filter.  Please see 
+		<a href="ChWorkDefineFilterSection.html" title="6.6. Defining and saving filters">Section 6.6, &#8220;Defining and saving filters&#8221;</a>
+	      </p></dd></dl></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4751382"></a>4.5.2. Capture File(s) frame</h3></div></div></div><p>
+	An explanation about capture file usage can be found in <a href="ChCapCaptureFiles.html" title="4.7. Capture files and file modes">Section 4.7, &#8220;Capture files and file modes&#8221;</a>.
+	</p><div class="variablelist"><dl><dt><span class="term"><span><strong class="command">File</strong></span></span></dt><dd><p>
+			This field allows you to specify the file name that will be 
+			used for the capture file. This field is left blank by default.
+			If the field is left blank, the capture data will be stored in a 
+			temporary file, see <a href="ChCapCaptureFiles.html" title="4.7. Capture files and file modes">Section 4.7, &#8220;Capture files and file modes&#8221;</a> for 
+			details.
+	      </p><p>
+			You can also click on the button to the right of this field to 
+			browse through the filesystem.
+	      </p></dd><dt><span class="term"><span><strong class="command">Use multiple files</strong></span></span></dt><dd><p>
+			Instead of using a single file, Wireshark will automatically switch 
+			to a new one, if a specific trigger condition is reached.
+	      </p></dd><dt><span class="term"><span><strong class="command">Next file every n megabyte(s)</strong></span></span></dt><dd><p>
+			Multiple files only: Switch to the next file after the given 
+			number of byte(s)/kilobyte(s)/megabyte(s)/gigabyte(s) have been
+			captured. 
+	      </p></dd><dt><span class="term"><span><strong class="command">Next file every n minute(s)</strong></span></span></dt><dd><p>
+			Multiple files only: Switch to the next file after the given 
+			number of second(s)/minutes(s)/hours(s)/days(s) have elapsed.
+	      </p></dd><dt><span class="term"><span><strong class="command">Ring buffer with n files</strong></span></span></dt><dd><p>
+			Multiple files only: Form a ring buffer of the capture files, with 
+			the given number of files.
+	      </p></dd><dt><span class="term"><span><strong class="command">Stop capture after n file(s)</strong></span></span></dt><dd><p>
+			Multiple files only: Stop capturing after switching to the next 
+			file the given number of times.
+	      </p></dd></dl></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4751505"></a>4.5.3. Stop Capture... frame</h3></div></div></div><div class="variablelist"><dl><dt><span class="term"><span><strong class="command">... after n packet(s)</strong></span></span></dt><dd><p>
+			Stop capturing after the given number of packets have been
+			captured.
+	      </p></dd><dt><span class="term"><span><strong class="command">... after n megabytes(s)</strong></span></span></dt><dd><p>
+			Stop capturing after the given number of 
+			byte(s)/kilobyte(s)/megabyte(s)/gigabyte(s) have been captured.
+			This option is greyed out, if "Use multiple files" is selected.
+	      </p></dd><dt><span class="term"><span><strong class="command">... after n minute(s)</strong></span></span></dt><dd><p>
+			Stop capturing after the given number of 
+			second(s)/minutes(s)/hours(s)/days(s) have elapsed.
+	      </p></dd></dl></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4751561"></a>4.5.4. Display Options frame</h3></div></div></div><div class="variablelist"><dl><dt><span class="term">
+	      <span><strong class="command">Update list of packets in real time</strong></span>
+	    </span></dt><dd><p>
+		This option allows you to specify that Wireshark 
+		should update the packet list pane in real time. If you 
+		do not specify this, Wireshark does not display any 
+		packets until you stop the capture. When you check this,
+		Wireshark captures in a separate process 
+		and feeds the captures to the display process.
+	      </p></dd><dt><span class="term">
+	      <span><strong class="command">Automatic scrolling in live capture</strong></span>
+	    </span></dt><dd><p>
+		This option allows you to specify that Wireshark 
+		should scroll the packet list pane as new packets come 
+		in, so you are always looking at the last packet.  If you 
+		do not specify this, Wireshark simply adds new packets onto 
+		the end of the list, but does not scroll the packet list 
+		pane. This option is greyed out if 
+		"Update list of packets in real time" is disabled.
+	      </p></dd><dt><span class="term">
+	      <span><strong class="command">Hide capture info dialog</strong></span>
+	    </span></dt><dd><p>
+		If this option is checked, the capture info dialog described in 
+                <a href="ChCapRunningSection.html" title="4.10. While a Capture is running ...">Section 4.10, &#8220;While a Capture is running ...&#8221;</a> will be hidden.
+	      </p></dd></dl></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4751639"></a>4.5.5. Name Resolution frame</h3></div></div></div><div class="variablelist"><dl><dt><span class="term"><span><strong class="command">Enable MAC name resolution</strong></span></span></dt><dd><p>
+		This option allows you to control whether or not 
+		Wireshark translates MAC addresses into names, see 
+		<a href="ChAdvNameResolutionSection.html" title="7.7. Name Resolution">Section 7.7, &#8220;Name Resolution&#8221;</a>.
+	      </p></dd><dt><span class="term"><span><strong class="command">Enable network name resolution</strong></span></span></dt><dd><p>
+		This option allows you to control whether or not 
+		Wireshark translates network addresses into names, see
+		<a href="ChAdvNameResolutionSection.html" title="7.7. Name Resolution">Section 7.7, &#8220;Name Resolution&#8221;</a>.
+	      </p></dd><dt><span class="term"><span><strong class="command">Enable transport name resolution</strong></span></span></dt><dd><p>
+		This option allows you to control whether or not 
+		Wireshark translates transport addresses into protocols, see
+		<a href="ChAdvNameResolutionSection.html" title="7.7. Name Resolution">Section 7.7, &#8220;Name Resolution&#8221;</a>.
+	      </p></dd></dl></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4751712"></a>4.5.6. Buttons</h3></div></div></div><p>
+	Once you have set the values you desire and have selected the 
+	options you need, simply click on <span><strong class="command">Start</strong></span> to commence the 
+	capture, or <span><strong class="command">Cancel</strong></span> to cancel the capture.
+      </p><p>
+	If you start a capture, Wireshark allows you to stop capturing when 
+	you have enough packets captured, for details see
+		<a href="ChCapRunningSection.html" title="4.10. While a Capture is running ...">Section 4.10, &#8220;While a Capture is running ...&#8221;</a>.
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChCapInterfaceSection.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ChapterCapture.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ChCapInterfaceDetailsSection.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.4. The "Capture Interfaces" dialog box </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4.6. The "Interface Details" dialog box</td></tr></table></div></body></html>

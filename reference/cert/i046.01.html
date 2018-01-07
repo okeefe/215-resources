@@ -1,0 +1,1001 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
+   <title>Installing The Coroner's Toolkit and make use of the mactime utility</title>
+</head>
+
+
+<body bgcolor="#FFFFFF" link="#004A6B" vlink="#C7AA05" alink="#DDB30B">
+<table CELLSPACING=6 WIDTH="100%" >
+<tr>
+<td VALIGN=top WIDTH="120"> </td>
+
+
+<td VALIGN=TOP>
+<h2>
+<font face="Helvetica, Geneva, Arial">Installing The Coroner's Toolkit
+and using the mactime utility</font></h2>
+</td>
+</tr>
+
+
+<td WIDTH="120" valign="top"><b><font face="helvetica, geneva, arial"><font size=-1>Implementation
+Details</font></font></b></td>
+
+<td VALIGN=TOP>
+<table BORDER CELLSPACING=0 CELLPADDING=4 WIDTH="80%" >
+<tr>
+<td BGCOLOR="#CCDDFF"><font size=-1>Applies to the practice:</font>
+<br><font size=-1><a href="http://www.cert.org/security-improvement/practices/p046.html">Analyze
+all available information to characterize an intrusion</a></font>
+<p><font size=-1>Applicable technologies:</font>
+<br><font size=-1>Sun Solaris 2.x; UNIX operating systems and derivatives</font></td>
+</tr>
+</table>
+&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font color="#000000"><font face="helvetica, geneva, arial"><font size=-1>Introduction</font></font></b></td>
+
+<td VALIGN=TOP>In the aftermath of a network break-in, system administrators
+are often asked to explain what happened. The Coroner's Toolkit (TCT) is
+a collection of tools that gather and analyze data about a UNIX system
+and help the administrator answer that question. This implementation describes
+how to install TCT on the Sun Solaris operating system, version 2.x. It
+discusses the use of one TCT tool, <tt>mactime</tt>. You can use this approach
+with other UNIX operating systems and hosts.&nbsp;
+<p>As the TCT authors point out: "If there was a theme, it would be the
+reconstruction of the past - determining as much as possible what happened
+with a static snapshot of a system." Certainly such activities require
+an experienced and committed system administrator during the forensic investigation
+phase of an intrusion. No software can replace someone who knows the system
+well, but using TCT is a start.&nbsp;
+<p>In the emerging field of computer forensics, there are few tools that
+help identify an attacker's/intruder's activities. TCT contains two major
+parts that help to identify what happened after a break-in. They are&nbsp;
+<ol>
+<li>
+<tt>grave-robber</tt></li>
+
+<br>This program controls several other tools that function to capture
+as much information as possible about the system and its files.&nbsp;
+<br>&nbsp;
+<li>
+<tt>unrm</tt> and <tt>lazarus</tt></li>
+
+<br>These programs can be used together to recover destroyed or lost data.
+While <tt>unrm</tt> makes a copy of all unallocated (free) disk space accessible,
+<tt>lazarus</tt>
+analyzes this copy and tries to determine the type of data.</ol>
+Using these tools can require a great deal of time and effort. You need
+to review all documentation carefully and test both parts before use so
+that you can understand and take full advantage of their features.&nbsp;
+<p>In future updates and in other implementations, we will provide more
+information about the TCT toolkit. For this implementation, we selected
+a utility included in the TCT toolkit called <tt>mactime</tt> because it
+provides a limited but useful functionality without requiring detailed
+knowledge of the entire toolkit. <tt>mactime</tt> is used to access time
+stamps of file objects. Three values are available that show the last time
+the file was <b>M</b>odified, <b>A</b>ccessed or <b>C</b>reated, hence
+the name <tt>mactime</tt>. These values are properties of a file and stored
+in the directory entry of the file. Even though these values are destroyed
+with each new access or modification, they can provide insight to an analysis
+expert who is responding to an intrusion or performing forensic analysis.&nbsp;
+<br>&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="120"><b><font face="helvetica, geneva, arial"><font color="#000000"><font size=-1>Effort
+Estimates</font></font></font></b></td>
+
+<td>The time needed to retrieve the source code from the distribution site
+varies depending upon your connection speed. The source code is less than
+301 KB (version 1.06). Building and installing TCT depends upon machine
+performance but on average takes less than ten minutes.&nbsp;
+<p>The TCT tools are used primarily for gathering data; therefore, using
+these tools can take considerably more time depending on the system under
+examination. Statistical analysis can easily take hours.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="120"><b><font face="helvetica, geneva, arial"><font color="#000000"><font size=-1>System
+Prerequisites</font></font></font></b></td>
+
+<td>You can build and install TCT on many UNIX systems. Version 1.06 supports
+the following systems to some degree:&nbsp;
+<ul>
+<li>
+FreeBSD 2-4.*</li>
+
+<li>
+OpenBSD 2.*</li>
+
+<li>
+BSD/OS 2-4.*</li>
+
+<li>
+SunOS 4-5.*</li>
+
+<li>
+Linux 2.*</li>
+</ul>
+Some tools have limitations you should keep in mind. For example the <tt>unrm</tt>
+command is limited to <tt>ext2fs</tt> file systems when built on Linux
+and limited to <tt>ufs</tt> when built on Solaris and BSD systems.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="120"></td>
+
+<td ALIGN=LEFT>
+<h4>
+<font face="helvetica, geneva, arial"><font color="#008000">Software Prerequisites</font></font></h4>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="120"></td>
+
+<td ALIGN=LEFT>To build TCT on your system, you need Internet access to
+retrieve the following software tools:&nbsp;
+<ul>
+<li>
+An <a href="http://www.cert.org/security-improvement/implementations/i002.01.html">MD5</a>
+cryptographic checksum program&nbsp;</li>
+
+<li>
+<a href="http://www.pgp.com">PGP</a> to verify the authenticity of the
+software distribution&nbsp;</li>
+
+<li>
+<a href="http://www.gzip.org/">GZIP</a> to uncompress the downloaded file</li>
+
+<li>
+A C compiler; either the Sun C Computer or the free <a href="http://www.gnu.org/software/gcc/gcc.html">GNU
+C Compiler</a></li>
+
+<li>
+<a href="http://www.perl.com/">PERL</a> version 5.0004 or later will be
+needed to run some of the tools</li>
+
+<li>
+<a href="http://www.cert.org/security-improvement/implementations/i042.05.html">LSOF</a>
+is strongly recommended to improve the data gathering capability of the
+toolkit</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="helvetica, geneva, arial"><font size=-1>Downloading
+and Verifying</font></font></b></td>
+
+<td VALIGN=TOP>The latest release of TCT is available from <a href="http://www.fish.com/tct/">http://www.fish.com/tct/</a>.
+It is also available from <a href="http://www.porcupine.org/forensics/tct.html">http://www.porcupine.org/forensics/tct.html</a>.&nbsp;
+<p>Download the distribution package (at the time of this writing <tt>tct-1.06.tar.gz</tt>)
+into a directory (we assume the directory to be <tt>/tmp</tt> for any further
+use within this implementation).&nbsp;
+<p>To verify the authenticity with PGP, you also need to download the detached
+PGP signature file into the same directory from&nbsp;
+<p><a href="http://www.fish.com/tct/tct-1.06.tar.gz.sig">http://www.fish.com/tct/tct-1.06.tar.gz.sig</a>
+<br>&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000">Verify the authenticity
+of the TCT distribution using PGP.</font></font></b>
+<p>To do so, you need to get the PGP public key from "wietse venema &lt;wietse@wzv.win.tue.nl>"
+and put it on your own PGP public key ring. You can get a copy of his key
+from the public PGP key servers.&nbsp;
+<p>A match with his digital signature ensures that the software was downloaded
+successfully without modification. To verify the digital signature, the
+following commands are issued in the directory containing the downloaded
+files:&nbsp;
+<p><font face="Courier New"><font size=-1>$ pgp tct-1.06.tar.gz.sig</font></font>
+<p>If the signature doesn't match, verify that&nbsp;
+<ul>
+<li>
+your downloaded filenames match those listed above</li>
+
+<li>
+your have included the needed PGP key in your public key ring</li>
+</ul>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"></td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Verify the
+authenticity of the TCT distribution using MD5.</font></font></font></b>
+<p>You can also verify the TCT distribution by using MD5 checksums.
+<p><b>File to Download</b>
+<p>http://www.fish.com/tct/tct-1.06.tar.gz
+<p><b>MD5 Checksum</b>
+<p>fe46fe1e83bbb73beba2b477b24f8e81
+<p>If the computed cryptographic checksum of the download files does not
+correspond to the information above, verify that&nbsp;
+<ul>
+<li>
+your downloaded filenames match those listed above</li>
+
+<li>
+your checksum program computes MD5 message digests&nbsp;</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="helvetica, geneva, arial"><font size=-1>Building</font></font></b></td>
+
+<td VALIGN=TOP>TCT is distributed as a compressed source code package.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Choose
+a directory for installing the TCT distribution.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>TCT intends to execute from its own directory. By default
+all output of the tools are stored within a subdirectory of it's install
+directory. If you want to keep it like that make sure to allocate a large
+amount of disk space as the output of the tools can take hundreds of megabytes,
+depending on the system and its file systems. As an extreme example, the
+output of the <tt>unrm</tt> tool can consume <b>twice</b> as much space
+as the free space on a disk! Options are available to direct all output
+to other directories if you run out of disk space or you prefer to have
+it stored elsewhere.&nbsp;
+<p>For this implementation we assume that the TCT toolkit will be made
+available under <tt>/usr/local/</tt>. We will explain at the end of the
+implementation how to create a write-protectable floppy disk that will
+enable you to have an authentic copy available when you need it.&nbsp;
+<p><font face="Courier New"><font size=-1># cd /usr/local</font></font></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Unpack
+the TCT distribution.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>The compressed file can be uncompressed using the GNU <tt>gunzip</tt>
+utility and unpacked using the system <tt>tar</tt> command:&nbsp;
+<p><font face="Courier New"><font size=-1># gunzip /tmp/tct-1.06.tar.gz</font></font>
+<br><font face="Courier New"><font size=-1># tar xvf /tmp/tct-1.06.tar</font></font>
+<p>This command creates a subdirectory named <tt>tct-1.06</tt>. This subdirectory
+will then be renamed to <tt>tct</tt> to become the directory in which TCT
+is installed.&nbsp;
+<p><font face="Courier New"><font size=-1># mv tct-1.06 tct</font></font>
+<p>Change to this directory (<tt>/usr/local/tct/</tt>) now as all further
+operations are to be performed within this subdirectory.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Build
+the TCT programs.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>The <tt>Makefile </tt>contains the necessary configuration
+commands. Build the binaries by specifying the <tt>make</tt> command:&nbsp;
+<p><font face="Courier New,Courier"><font size=-1># make</font></font>
+<p>As the documentation points out: "Don't be too alarmed by any files
+that it says it can't find - unless it's something major, like perl (!)
+- it is attempting to find everything that it could possibly use for any
+operating system the package supports."</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="helvetica, geneva, arial"><font size=-1>Testing</font></font></b></td>
+
+<td VALIGN=TOP>No test suites are available for TCT.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="helvetica, geneva, arial"><font size=-1>Installation</font></font></b></td>
+
+<td VALIGN=TOP>No further installation steps are needed as the TCT toolkit
+is fully built in its installation directory. Simply provide the full path
+name to use any tool. As an alternative you can provide a symlink out of
+another directory (like <tt>/sbin</tt>) for frequently used commands.&nbsp;
+<p>All tools that are supported by this toolkit are accessible from the
+directory <tt>/usr/local/tct/bin/</tt> (if you followed the steps above).
+Some additional (but unsupported) tools not yet used by the toolkit are
+accessible from the directory <tt>/usr/local/tct/extras/</tt>.&nbsp;
+<p>To have the <tt>man</tt> pages available, copy them into the default
+locations. The toolkit contains implementations of the <tt>file</tt> and
+<tt>md5</tt>
+commands. Therefore their man pages <tt>file.1</tt> and <tt>md5.1</tt>
+might already exist:&nbsp;
+<p><font face="Courier New"><font size=-1># cp man/man1/* /usr/local/man/man1/</font></font>
+<br><font face="Courier New"><font size=-1># cp man/man5/* /usr/local/man/man5/</font></font></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font size=-1><font face="helvetica, geneva, arial">Using
+</font><tt>mactime</tt></font></b></td>
+
+<td VALIGN=TOP><tt>mactime</tt> is part of the TCT toolkit. The two basic
+options for its use (independently or in concert with <tt>grave-robber</tt>)
+are explained below.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font color="#005500"><font face="Helvetica, Geneva, Arial">Using
+</font><tt>mactime</tt><font face="Helvetica, Geneva, Arial">
+independently of </font><tt>grave-robber.</tt></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP><tt>mactime</tt> displays time stamp information for files
+within a user-specified time frame. You can provide either a start time
+or a start time/end time pair. Time is specified as "month/day/year". You
+need to specify a full four-digit year and a date after 1/1/1970. Specifying
+a second time value limits the processing to dates in the specified range.&nbsp;
+<p>The <tt>-d</tt> option is used to ignore any existing database&nbsp;
+Its argument is the name of a directory. <tt>mactime</tt> starts in the
+given directory. <tt>mactime</tt> continues processing all subdirectories
+recursively only if the <tt>-R</tt> option is given. You need to have read
+access rights on the desired files and directories to access time stamp
+values.&nbsp;
+<p>The following command displays all time stamps for the entire file system
+(we assume that all files were created after January 2, 1970). The <tt>-y</tt>
+option displays any date as "YY MM DD" instead of "MM DD YY". See <tt>mactime.1</tt>
+for a list of all available options.&nbsp;
+<p><font face="Courier New"><font size=-1># /usr/local/tct/bin/mactime
+-y -R -d / 1/2/1970</font></font>
+<p><tt>mactime</tt> has some limited capabilities to create HTML output
+and flag files, user ids or SUID/SGID bits.&nbsp;
+<p>Use the following command to archive the time stamp values of a specific
+subdirectory for files created or used in a fourteen day period:&nbsp;
+<p><font face="Courier New"><font size=-1># /usr/local/tct/bin/mactime
+-y -d bin 1/1/2001-1/14/2001</font></font>
+<p>The output will look similar to the output below:&nbsp;
+<pre><font face="Courier New"><font size=-1>01 Jan 04 20:03:28&nbsp;&nbsp;&nbsp;&nbsp; 1279 m.c -rwxr--r-- root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/strip_tct_home
+
+
+
+01 Jan 04 20:03:29&nbsp;&nbsp;&nbsp; 12300 m.c -rwxr--r-- root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/grave-robber
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 21639 m.c -rwxr--r-- root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/mactime
+
+
+
+01 Jan 04 20:03:32&nbsp;&nbsp;&nbsp; 15149 m.c -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/md5
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 15772 m.c -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/timeout
+
+
+
+01 Jan 04 20:03:37&nbsp;&nbsp;&nbsp; 62353 m.c -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/ils
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 60969 m.c -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/unrm
+
+
+
+01 Jan 04 20:03:38&nbsp;&nbsp;&nbsp; 64814 m.c -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/icat
+
+
+
+01 Jan 04 20:03:39&nbsp;&nbsp;&nbsp; 30640 m.c -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/pcat
+
+
+
+01 Jan 04 20:03:43&nbsp;&nbsp;&nbsp; 73830 m.c -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/file
+
+
+
+01 Jan 04 20:03:45&nbsp;&nbsp;&nbsp; 21698 m.c -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/lastcomm
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8455 m.c -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/major_minor
+
+
+
+01 Jan 13 23:04:34&nbsp;&nbsp;&nbsp; 64814 .a. -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/icat
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 62353 .a. -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/ils
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 21698 .a. -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/lastcomm
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8455 .a. -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/major_minor
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 15149 .a. -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/md5
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1279 .a. -rwxr--r-- root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/strip_tct_home
+
+
+
+01 Jan 13 23:04:38&nbsp;&nbsp;&nbsp; 30640 .a. -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/pcat
+
+
+
+01 Jan 13 23:04:39&nbsp;&nbsp;&nbsp; 12300 .a. -rwxr--r-- root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/grave-robber
+
+
+
+01 Jan 13 23:23:36&nbsp;&nbsp;&nbsp; 60969 .a. -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/unrm
+
+
+
+01 Jan 13 23:25:31&nbsp;&nbsp;&nbsp; 73830 .a. -rwxr-xr-x root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wheel&nbsp;&nbsp;&nbsp; bin/file</font></font></pre>
+All files (the file name is listed in the last column) are listed in order
+by date and time (first column). The second column lists the size of the
+file. The next column contains the action on the file: m for modification,
+a for access, and c for creation. This is followed by access rights, user
+name, and group names.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Using
+<tt>mactime</tt>
+with <tt>grave-robber</tt>.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP><tt>mactime</tt> can access time stamp values previously
+stored&nbsp; in a database created by <tt>grave-robber (</tt>as contrasted
+with displaying time stamp values "on the fly" described above). Access
+is performed using the same options described above; just omit the <tt>-d</tt>
+option and its argument. The database must be established before any access
+(accomplished by executing <tt>grave-robber</tt>). <tt>mactime</tt> and
+<tt>grave-robber</tt>
+use a common configuration file to establish the location of the database.&nbsp;
+<p><tt>grave-robber</tt> can collect much more data then the time stamp
+value, but a discussion of its extensive features is outside the scope
+of this implementation. To collect only time stamp values, use option <tt>-m</tt>.&nbsp;
+<p><font face="Courier New"><font size=-1># /usr/local/tct/bin/grave-robber
+-m /</font></font>
+<p>The results are stored in the default database directory <tt>/usr/local/tct/data/</tt>.
+For each run, a new subdirectory is created based on hostname and the time
+of the actual program execution (like: <tt>my-host_2001_01_15_01:32:23_+0100</tt>).
+This allows you to access prior results at a later time. There are options
+to change the name of the database directory and related files. See <tt>grave-robber.1</tt>
+for more information.&nbsp;
+<p><font face="Courier New"><font size=-1># /usr/local/tct/bin/mactime
+-d bin -y 1/1/2001-1/14/2001</font></font>
+<p>By assessing the database, <tt>mactime</tt> retrieves all files with
+time stamp values within the given range. The output will be the same as
+shown above.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="130"><b><font face="helvetica, geneva, arial"><font color="#000000"><font size=-1>Put
+it on a Floppy Disk</font></font></font></b></td>
+
+<td VALIGN=TOP>The Coroner's Toolkit is small enough to be put on a write-protected
+floppy disk for any real use in case of an actual investigation. You might
+use the online version, especially <tt>mactime</tt>, within day-to-day
+operation. But in case you want to do a detailed analysis of a compromised
+system you need to base your analysis on tools that are authentic and not
+compromised as well. Keeping them on an isolated and write-protected media
+which you have kept under your own control since its creation is the safest
+way to provide such tools.&nbsp;
+<p>We recognize that it is not enough to have the TCT tools an a write-protected
+floppy disk. Instead we recommend that you create a more complete CD-ROM
+containing copies of tools necessary for the TCT toolkit (including PERL)
+as well as tools that are called from the TCT toolkit (including LSOF,
+last, lastcomm, ps, etc.). To complicate things further, be aware that
+any media you create will work only under specific circumstances:&nbsp;
+<ul>
+<li>
+If you depend on other tools stored on the system, your TCT copy will only
+work if the tools are stored in the same directories as the system you
+used to create your copy.</li>
+
+<li>
+Your copy of TCT will only work on the same processor and operating system
+that it was originally built on because some of the tools are compiled
+binaries instead of scripts.</li>
+</ul>
+We will now explain how a floppy disk for TCT can be created.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Prepare
+a new floppy disk.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>To prepare a new floppy disk you have to insert a new, blank
+floppy into the floppy drive.&nbsp;
+<p>Add the following line to the file <tt>/etc/vfstab</tt>:&nbsp;
+<p><font face="Courier New"><font size=-1>/dev/diskette&nbsp;&nbsp; /dev/rdiskette&nbsp;
+/floppy/tct&nbsp;&nbsp;&nbsp;&nbsp; ufs&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+yes&nbsp;&nbsp;&nbsp;&nbsp; -</font></font>
+<p>This will automatically mount the floppy disk when the machine boots.
+Next you need to determine if Volume Management is running by issuing the
+following commands:&nbsp;
+<p><font face="Courier New"><font size=-1># ps -e | grep vold</font></font>
+<p>If there are any processes named <tt>vold </tt>(similar to the <tt>ps</tt>
+output below), then Volume Management is running.&nbsp;
+<p><font face="Courier New"><font size=-1>&nbsp; 1680 ?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0:00 vold</font></font>
+<p>Depending on your configuration, you have two choices:&nbsp;
+<p>1) If Volume Management is running issue the following commands:&nbsp;
+<p><font face="Courier New"><font size=-1># fdformat -U -H -b tct</font></font>
+<br><font face="Courier New"><font size=-1># newfs /vol/dev/rdiskette0/tct</font></font>
+<br><font face="Courier New"><font size=-1># eject floppy</font></font>
+<p>Remove and reinsert the floppy disk.&nbsp;
+<p><font face="Courier New"><font size=-1># volcheck</font></font>
+<p>2) If Volume Management is not running issue the following commands:&nbsp;
+<p><font face="Courier New"><font size=-1># fdformat -U -H -b tct</font></font>
+<br><font face="Courier New"><font size=-1># newfs /dev/rdiskete</font></font>
+<br><font face="Courier New"><font size=-1># mkdir -p /floppy/tct</font></font>
+<br><font face="Courier New"><font size=-1># mount /dev/diskette /floppy/tct</font></font>
+<p>&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Prepare
+a copy of TCT that is small enough to copy to a floppy disk.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>TCT as installed above is to large to be placed on a floppy
+disk. Therefore you need to prepare a small enough copy before you can
+place it on the floppy.&nbsp;
+<p><font face="Courier New"><font size=-1># mkdir /usr/local/tct-copy</font></font>
+<br><font face="Courier New"><font size=-1># cp -R /usr/local/tct/* /usr/local/tct-copy/</font></font>
+<br><font face="Courier New"><font size=-1># rm -rf /usr/local/tct-copy/data</font></font>
+<br><font face="Courier New"><font size=-1># rm -rf /usr/local/tct-copy/src</font></font>
+<br><font face="Courier New"><font size=-1># rm /usr/local/tct-copy/*.log</font></font>
+<p>After this step you are ready to copy the remaining files onto the floppy
+disk:&nbsp;
+<p><font face="Courier New"><font size=-1># cp -R /usr/local/tct-copy/*
+/floppy/tct/</font></font></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Initiate
+a reconfiguration of TCT.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>Because the copy still contains references to the directories
+it was previously installed in, all these references need to be changed.
+For this purpose the authors of TCT provided a reconfiguration script which
+makes this task very simple.&nbsp;
+<p><font face="Courier New"><font size=-1># cd /floppy/tct</font></font>
+<br><font face="Courier New"><font size=-1># perl reconfig</font></font>
+<p>After the script terminates just unmount the floppy and write protect
+it. Make sure to place this floppy in a safe place to avoid any tampering
+later on.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="130"><b><font face="helvetica, geneva, arial"><font size=-1>Tripwire
+Configuration</font></font></font></b></td>
+
+<td>The following is the <a href="http://www.cert.org/security-improvement/implementations/i002.02.html"><tt>Tripwire</tt></a>
+configuration for the TCT program following installation.&nbsp;
+<p>The following files should not change. Any changes are unexpected and
+should be analyzed. Keep in mind that most of the TCT tools create or are
+based on previously collected data. These files are not listed and no documentation
+files are listed. We recommended that you adjust the configuration below
+to reflect your needs:&nbsp;
+<pre><font size=-1>@@define BINARY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; E+pinugsamc1-023456789
+
+
+
+@@define DYNAMIC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; E+pinugc-sam0123456789
+
+
+
+/usr/local/man/man1/file.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/man/man1/lazarus.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/man/man1/grave-robber.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/man/man1/icat.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/man/man1/ils.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/man/man1/lastcomm.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/man/man1/major_minor.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/man/man1/md5.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/man/man1/pcat.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/man/man1/unrm.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/man/man1/mactime.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/man/man1/timeout.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/man/man5/magic.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/man/man5/tm-format.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/body_init.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/bsd.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/chk_binaries.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/command.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/crunch.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/date.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/datez.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/dig-sig.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/file_mode.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/getopts.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/hostname.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/is_able.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/linux.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/logger.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/maj_min_walk.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/major_minor.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/misc.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/ostype.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/pass.cache.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/print_table.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/proc.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/process_dirs.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/ps_spy.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/rawdev.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/realpath.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/save_the_files.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/savecore.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/solaris.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/stat.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/suck_free_inodes.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/suck_table.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/sunos.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/system_stubs.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/tm_misc.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/tree.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/trust.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lib/vault_cp.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/conf/coroner.cf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/conf/grave-robber.cf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/conf/lazarus.cf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/conf/look@first&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/conf/mac_file.headers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/conf/mac_file.lst&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/conf/paths.pl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/conf/paths.pl.old&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/conf/save_these_files&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/Date/Manip.pm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/etc/magic&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lazarus/lazarus&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/lazarus/post-processing/rip-mail&nbsp; @@BINARY
+
+
+
+/usr/local/tct/bin/file&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/bin/grave-robber&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/bin/icat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/bin/ils&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/bin/lastcomm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/bin/lazarus&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/bin/mactime&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/bin/major_minor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/bin/md5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/bin/pcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/bin/strip_tct_home&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/bin/timeout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+
+
+
+/usr/local/tct/bin/unrm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY</font>
+
+
+
+</pre>
+</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<br>&nbsp;
+</body>
+</html>

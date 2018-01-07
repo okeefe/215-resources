@@ -1,1 +1,0 @@
-../resources/sed1line.txt

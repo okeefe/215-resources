@@ -1,0 +1,343 @@
+<HTML>
+<HEAD>
+
+<TITLE>Inspecting your Solaris system and network logs for evidence of intrusions                                                                                                   </TITLE>
+</HEAD>
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+<font face="Helvetica, Geneva, Arial">
+<small>
+<table border="0" width="100%" cellspacing="6" cellpadding="4">
+  <tr>
+    <td width="110" align="LEFT" valign="TOP"><b><font face="Arial">Implementation 
+      Details</font></b></td>
+    <td width="10" align="LEFT" valign="TOP"> 
+      <p>
+    </td>
+    <td align="LEFT" valign="TOP"><b><font face="Arial" size=4> 
+      <p>Inspecting your Solaris system and network logs for evidence of intrusions</p>
+      </font></b> </td>
+  </tr>
+  <tr>
+    <td width="110">&nbsp;</td>
+    <td width="10">&nbsp;</td>
+    <td> 
+      <table border="1" width="75%" cellspacing="0" cellpadding="8">
+        <tr> 
+          <td bgcolor="#ccddff" align="LEFT"> 
+            <p>Applies to the practices: "<a 
+href="../practices/p094.html">Monitor and inspect network activities for unexpected behavior</a>", <a
+href="/security-improvement/practices/p095.html"> Monitor and inspect system activities for
+unexpected behavior</a>"</p>
+            <p>Applicable technologies: Solaris 2.x; UNIX operating system and 
+              derivatives </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="110">&nbsp;</td>
+    <td width="10">&nbsp;</td>
+    <td align="LEFT" valign="TOP"> 
+      <p>Solaris 2.x systems have a capability to log a variety of user, system, 
+        and process activities. Each log file available with Solaris 2.x is described 
+        below along with corresponding signs of intrusion that should be looked 
+        for in these files.</p>
+      <p>The information provided in this document is based on current knowledge 
+        (as of the date of this document) about intruder activities. </p>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr>
+    <td width="17%" align="LEFT" valign="TOP" height="46"><b><font face="Arial">How 
+      to do it </font></b> </td>
+    <td width="10" align="right" valign="TOP" height="46"> 
+      
+    </td>
+    <td align="LEFT" valign="TOP" height="46"> 
+      <p> <font color="#008000" face="Arial" size="3"><b>Inspect each type of 
+        log file at its predetermined time interval. We recommend that each file 
+        be inspected daily.</b></font></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="17%" align="LEFT" valign="TOP" height="76">&nbsp;</td>
+    <td width="10" align="right" valign="TOP" height="76"> 
+      
+    </td>
+    <td align="LEFT" valign="TOP" height="76"> 
+      <p> <font color="#008000"><font color="#008000" face="Arial" size="3"><b>Document 
+        any unusual entries that you discover. Remember to look at logging for 
+        regular users as well as privileged users (for multi-user operating systems 
+        that support different levels of privileges).</b></font> </font></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="17%" align="LEFT" valign="TOP" height="178">&nbsp;</td>
+    <td width="10" align="right" valign="TOP" height="178"> 
+      
+    </td>
+    <td align="LEFT" valign="TOP" height="178"> 
+      <h3> <font color="#008000" face="Arial" size="3"><b>Investigate each documented 
+        abnormality identified.</b></font></h3>
+      <ul>
+        <li>Can it be explained by an authorized user? (e.g., the user really 
+          was in Cairo last week and connected to the network.) </li>
+        <li>Can it be explained by known system activity? (e.g., there was a power 
+          outage that caused the system to reboot.) </li>
+        <li>Can it be explained by known changes to programs? (e.g., the mail 
+          log showed abnormal behavior because the system programmer made a mistake 
+          when the software was modified.) </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td width="17%" align="LEFT" valign="TOP" height="55">&nbsp;</td>
+    <td width="10" align="right" valign="TOP" height="55"> 
+      
+    </td>
+    <td align="LEFT" valign="TOP"> 
+      <h3> <font color="#008000" face="Arial" size="3"><b>Report all confirmed 
+        evidences of intrusion (or attempted intrusion) to your internal security 
+        point of conatact.</b> </font></h3>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr>
+    <td width="110" align="LEFT" valign="TOP"><b><font face="Arial">Specific log 
+      file contents</font></b></td>
+    <td width="10" align="right" valign="TOP"> 
+      <p></p>
+      <b><font face="Arial"> 
+      <p>&nbsp; </p>
+      </font></b></td>
+    <td align="LEFT" valign="TOP">The generic Solaris 2.x installation includes 
+      a <font face="Courier New" size=3>syslog</font> file that sends most logging 
+      information to the <font face="Courier New" size=3>/var/adm/messages file;</font> 
+      only <font face="Courier New" size=3>mail.debug</font> information is sent 
+      to the <font face="Courier New">/var/adm/syslog</font> file. One particular 
+      shortcoming is that <font face="Courier New" size=3>auth.notice</font> messages 
+      aren't logged anywhere. Your site may have configured <font face="Courier New" size=3>syslog</font> 
+      to log information to different files. However, the log strings provided 
+      below are still relevant and you should look for them in your site-specified 
+      file (based on your site's <font face="Courier New" size=3>syslog.conf</font> 
+      file). </td>
+  </tr>
+  <tr>
+    <td width="110" align="LEFT" valign="TOP" height="277">&nbsp;</td>
+    <td width="10" align="right" valign="TOP" height="277"> 
+      
+      
+    </td>
+    <td align="LEFT" valign="TOP" height="277"><b><font face="Arial" size=3> 
+      <p>/var/log/sulog</p>
+      </font></b> 
+      <p>This log records usage of the <font face="Courier New" size=3>su</font> 
+        command. Look for entries where an unauthorized user has used the command 
+        inappropriately. The following entry shows a successful (indicated by 
+        +) <font face="Courier New" size=3>su</font> from user <font face="Courier New" size=3>userid</font> 
+        to root.</p>
+      <font face="Courier New" size=2> 
+      <p>SU 03/31 12:52 + pts/0 &lt;userid&gt;-root</p>
+      </font> 
+      <p>Look for failed <font face="Courier New" size=3>su</font> attempts.</p>
+      <p><font face="Courier New" size=2> <font size="3">SU</font> 03/31 12:52 
+        - pts/0 &lt;userid&gt;-root</font> </p>
+      <p>Look for <font face="Courier New" size=3>su</font> occurring at unusual 
+        times during the day (e.g., after hours, very early in the morning).</p>
+      <p>SU 03/31 02:12 + pts/0 &lt;userid&gt;-root</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="110" align="LEFT" valign="TOP" height="170">&nbsp;</td>
+    <td width="10" align="right" valign="TOP" height="170"> 
+      
+      
+    </td>
+    <td align="LEFT" valign="TOP" height="170"><b><font face="Arial" size=3> 
+      <p>/var/log/utmp; /var/log/utmpx</p>
+      </font></b> 
+      <p>These logs keep track of users currently logged into the system. Using 
+        the <font face="Courier New" size=3>who</font> command, check the users 
+        logged in at the current time:</p>
+      <font face="Courier New" size=2> 
+      <p>&lt;userid&gt; pts/1 Mar 31 08:40 (origination hostname)</p>
+      </font> 
+      <p>Look for user logins that are unexpected (e.g., for staff on vacation), 
+        occur at unusual times during the day, or originate from unusual locations.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="110" align="LEFT" valign="TOP">&nbsp;</td>
+    <td width="10" align="right" valign="TOP"> 
+      
+      
+    </td>
+    <td align="LEFT" valign="TOP"> 
+      <p> </p>
+      <b><font face="Arial" size=3> 
+      <p>/var/log/wtmp; /var/log/wtmpx</p>
+      </font></b> 
+      <p>These logs keep track of logins and logouts. Using the last command, 
+        do the following:</p>
+      <p>Look for user logins occurring at unusual times. </p>
+      <font face="Courier New" size=2> 
+      <p>&lt;userid&gt; &#9;pts/4 &#9;&lt;hostname&gt; &#9;Sat Mar 22 03:14 - 
+        06:02 (02:47)</p>
+      </font> 
+      <p>Look for user logins originating from unusual places (locations, addresses, 
+        and devices). </p>
+      <font face="Courier New" size=2> 
+      <p>&lt;userid&gt; &#9;pts/12 &#9;&lt;strange hostname&gt; &#9;Fri Mar 21 
+        08:59 - 13:30 (04:31)</p>
+      </font> 
+      <p>Look for unusual reboots of the system.</p>
+      <p>reboot &#9;system boot Sun Mar 23 05:36 </p>
+    </td>
+  </tr>
+  <tr>
+    <td width="110" align="LEFT" valign="TOP">&nbsp;</td>
+    <td width="10" align="right" valign="TOP"> 
+      
+      
+    </td>
+    <td align="LEFT" valign="TOP"> 
+      <p></p>
+      <b><font face="Arial" size=3> 
+      <p>/var/log/syslog</p>
+      </font></b> 
+      <p>By default, the <font face="Courier New" size=3>syslog</font> file will 
+        contain only messages from mail (as defined in the <font face="Courier New" size=3>/etc/syslog.conf</font> 
+        file). Look for anything that looks unusual.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="110" align="LEFT" valign="TOP" height="350">&nbsp;</td>
+    <td width="10" align="right" valign="TOP" height="350"> 
+      
+      
+    </td>
+    <td align="LEFT" valign="TOP" height="350"> 
+      <p></p>
+      <p> </p>
+      <b><font face="Arial" size=3> 
+      <p>/var/adm/messages</p>
+      </font></b> 
+      <p>This log records system console output and <font face="Courier New" size=3>syslog</font> 
+        messages. Look for unexpected system halts.</p>
+      <font face="Courier New" size=2> 
+      <p>Mar 31 12:48:41 &lt;hostname&gt; unix: halted by &lt;userid&gt;</p>
+      </font> 
+      <p>Look for unexpected system reboots.</p>
+      <font face="Courier New" size=2> 
+      <p>Mar 31 12:48:41 ahost.domain.com unix: rebooting...</p>
+      </font> 
+      <p>Look for failed <font face="Courier New" size=3>su</font> and <font face="Courier New" size=3>login</font> 
+        commands. </p>
+      <font face="Courier New" size=2> 
+      <p>Mar 30 09:14:00 &lt;hostname&gt; login: 4 LOGIN FAILURES ON 0, &lt;userid&gt;</p>
+      <p>Mar 31 12:37:43 &lt;hostname&gt; su: 'su root' failed for &lt;userid&gt; 
+        on /dev/pts/??</p>
+      </font> 
+      <p>Look for unexpected successful <font face="Courier New" size=3>su</font> 
+        commands. </p>
+      <font face="Courier New" size=2> 
+      <p>Mar 28 14:31:11 &lt;hostname&gt; su: 'su root' succeeded for &lt;userid&gt; 
+        on /dev/console</p>
+      </font> </td>
+  </tr>
+  <tr>
+    <td width="110" align="LEFT" valign="TOP" height="138">&nbsp;</td>
+    <td width="10" align="right" valign="TOP" height="138"> 
+      
+      
+    </td>
+    <td width="83%" align="LEFT" valign="TOP" height="138"> 
+      <p><font face="Arial, Helvetica, sans-serif" size="3"><b>/var/adm/pacct</b></font></p>
+      <b><font face="Arial" size=3></font></b> 
+      <p>This log records the commands run by all users. Process accounting must 
+        be turned on before this file is generated. You may want to use the <font face="Courier New" size=3>lastcomm</font> 
+        command to audit commands run by a specific user during a specified time 
+        period.</p>
+      <font face="Courier New" size=2> 
+      <p>compile &lt;userid&gt; ttyp1 0.35 secs Mon Mar 31 12:59</p>
+      </font> </td>
+  </tr>
+  <tr>
+    <td width="110" align="LEFT" valign="TOP" height="87">&nbsp;</td>
+    <td width="10" align="right" valign="TOP" height="87"> 
+      <p align="RIGHT"></p>
+      
+      
+    </td>
+    <td align="LEFT" valign="TOP"> 
+      <p><b><font face="Arial" size=3>/var/adm/aculog</font></b></p>
+      <p>This log keeps track of dial-out modems. Look for records of dialing 
+        out that conflict with your policy for use of dial-out modems. Also look 
+        for unauthorized use of the dial-out modems</p>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr>
+    <td width="110" align="LEFT" valign="TOP"><b><font face="Arial">Other log 
+      files </font></b></td>
+    <td width="10" align="LEFT" valign="TOP">&nbsp;</td>
+    <td align="LEFT" valign="TOP"> 
+      <p>Solaris 2.x includes Basic Security Module (BSM), but it is not turned 
+        on by default. If you have configured this service, review all the files 
+        and reports associated with BSM for the various kinds of entries that 
+        have been described in the practice <a href="/security-improvement/practices/p003.html">"Inspect 
+        your system and network logs."</a></p>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3" width="110"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr>
+    <td width="110" align="LEFT" valign="TOP"><b><font face="Arial">Other information 
+      </font></b></td>
+    <td width="10" align="LEFT" valign="TOP"><b><font face="Arial"> </font></b></td>
+    <td align="LEFT" valign="TOP">If your site has large networks of systems with 
+      many log files to inspect, consider using tools that collect and collate 
+      log file information. As you learn what is normal and abnormal for your 
+      site, integrate that knowledge into your specific procedures for inspecting 
+      log files.</td>
+  </tr>
+  <tr> 
+    <td colspan="3"> 
+      <hr size="1">
+    </td>
+  </tr>
+</table>
+
+
+
+</BODY>
+</HTML>
+
+
+
+
+
+
+
+
+
+

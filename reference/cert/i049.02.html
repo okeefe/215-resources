@@ -1,0 +1,346 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
+   <title>Installing noshell to support the detection of access to disabled accounts on systems running Solaris 2.X 
+
+
+
+
+
+
+
+</title>
+</head>
+
+
+
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+
+
+
+<table CELLSPACING=6 WIDTH="100%" >
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="Times New Roman,Times"><font size=-1>Implementation
+Details</font></font></b></td>
+
+<td VALIGN=TOP>
+<h2>
+<font face="Helvetica, Geneva, Arial">Installing noshell to support the
+detection of access to disabled accounts on systems running Solaris 2.x.</font></h2>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="120"></td>
+
+<td VALIGN=TOP>
+<table BORDER CELLSPACING=0 CELLPADDING=4 WIDTH="80%" >
+<tr>
+<td BGCOLOR="#CCDDFF"><font size=-1>Applies to the practice:</font>
+<br><font size=-1><a href="http://www.cert.org/security-improvement/practices/p091.html">Identify
+data that characterize systems and aid in detecting signs of suspicious
+behavior.</a></font>
+<p><font size=-1>Applicable technologies:</font>
+<br><font size=-1>Sun Solaris 2.x; UNIX operating systems and derivatives</font></td>
+</tr>
+</table>
+&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td VALIGN=TOP>On each system, you typically have several accounts (such
+as <tt>bin</tt>) that need to be available but are never used for actual
+logins. You may disable these to improve the overall security. In addition
+other accounts typically need to be disabled in response to an event such
+as a compromised user password.&nbsp;
+<p>Historically, when an account was disabled, the login shell for the
+account was specified as an executable that would intercept the login and
+terminate with no further action. This, therefore, would prevent an attacker
+from using the account to gain further access. The usual choice for the
+login shell/executable was <tt>/bin/false</tt>. However,&nbsp; <tt>/bin/false</tt>
+is not always a program. It may, in fact, be a shell script and using such
+a script may place your system at risk. In addition, you as the administrator
+are not alerted about the attempted access.&nbsp;
+<p><tt>noshell</tt> was developed to provide administrators with the ability
+to monitor such attempts to access disabled accounts. <tt>noshell</tt>
+is part of a larger package called <tt><a href="http://www.fish.com/titan/">Titan</a></tt>
+that can be used to harden SunOS 4.x or Solaris 2.x .&nbsp;
+<p>This implementation describes how to install <tt>noshell</tt> as an
+executable on the Sun Solaris operating system, version 2.x. You can use
+this approach with other UNIX operating systems and hosts.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="120"><b><font face="Times New Roman,Times"><font color="#000000"><font
+size=-1>Effort
+Estimates</font></font></font></b></td>
+
+<td>The time needed to retrieve the source code from the distribution site
+varies depending upon your connection speed. The source code is less than
+2 KB (version 3.0.7). Building and installing <tt>noshell</tt> depends
+upon machine performance but on average will take less than five minutes.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="120"><b><font face="Times New Roman,Times"><font color="#000000"><font
+size=-1>System
+Prerequisites</font></font></font></b></td>
+
+<td>You can build and install <tt>noshell</tt> on many UNIX systems.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="120"></td>
+
+<td ALIGN=LEFT>
+<h4>
+<font face="helvetica, geneva, arial"><font color="#008000">Software Prerequisites</font></font></h4>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="120"></td>
+
+<td ALIGN=LEFT>To build <tt>noshell</tt> on your system, you need Internet
+access to retrieve the following software tools:&nbsp;
+<ul>
+<li>
+An <a href="http://www.cert.org/security-improvement/implementations/i002.01.html">MD5</a>
+cryptographic checksum program&nbsp;</li>
+
+<li>
+A C compiler; either the Sun C Computer or the free <a href="http://www.gnu.org/software/gcc/gcc.html">GNU
+C Compiler</a>&nbsp;</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="Times New Roman,Times"><font size=-1>Downloading
+and Verifying</font></font></b></td>
+
+<td VALIGN=TOP>The latest release of <tt>noshell</tt> is available via
+anonymous ftp from <a href="http://www.fish.com/titan/src1/noshell.c">http://www.fish.com/titan/src1/noshell.c</a>.
+You will also need to download the necessary <tt><a href="http://www.fish.com/titan/src1/Makefile">Makefile</a></tt>.&nbsp;
+<p>Download the files into a directory (e.g., <tt>/tmp</tt>) and verify
+their checksums using MD5.&nbsp;
+<br>&nbsp;
+<table BORDER CELLPADDING=10 >
+<tr>
+<td><b>File to Download</b></td>
+
+<td><b>MD5 Checksum</b></td>
+</tr>
+
+<tr>
+<td><a href="http://www.fish.com/titan/src1/noshell.c">http://www.fish.com/titan/src1/noshell.c</a></td>
+
+<td><font face="courier">0b862579954139cf5056056b000988e1</font></td>
+</tr>
+
+<tr>
+<td><a href="http://www.fish.com/titan/src1/Makefile.c">http://www.fish.com/titan/src1/Makefile.c</a></td>
+
+<td><font face="courier">a975198872bb98d6bd2f1c8bed5dbaa5</font></td>
+</tr>
+</table>
+
+<p>If the computed cryptographic checksum of the download files does not
+correspond to the information above, verify that&nbsp;
+<ul>
+<li>
+your downloaded filenames match those listed above</li>
+
+<li>
+your checksum program computes MD5 message digests&nbsp;</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="Times New Roman,Times"><font size=-1>Building</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Build
+the noshell program.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP><tt>noshell</tt> is distributed as source code as part of
+the Titan package. A <tt>Makefile</tt> is available which you can use to
+build several additional tools. You need to name the tool that you want
+to build.&nbsp;
+<p>Place both files, <tt>noshell.c</tt> and <tt>Makefile</tt>, in any newly
+created subdirectory and change to this subdirectory as all remaining operations
+are performed there. Start the <tt>make</tt> process. When the <tt>make</tt>
+is complete, <tt>noshell</tt> is ready to be installed.&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; $ make noshell</font></pre>
+If you have installed the GNU C compiler (gcc) on your system instead of
+the Sun C compiler (cc), you need to invoke the <tt>make</tt> command as
+follows:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; $ make noshell CC=gcc</font></pre>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"><b><font face="Times New Roman,Times"><font size=-1>Installation</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Copy
+the program into the correct system directory.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP>You can perform the installation manually to place the <tt>noshell</tt>
+program into the correct system directory. You need to use root privileges
+to do this:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; # cp -p noshell /usr/local/sbin</font></pre>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font color="#005500"><font face="Helvetica, Geneva, Arial">Register
+the </font><tt>noshell</tt><font face="Helvetica, Geneva, Arial"> program
+as the valid login shell.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120">&nbsp;</td>
+
+<td VALIGN=TOP><tt>noshell</tt> must be listed within the system file <tt>/etc/shells</tt>
+in order to be recognized as the valid login shell as follows:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; /usr/local/sbin/noshell</font></pre>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="130"><b><font face="Times New Roman,Times"><font color="#000000"><font
+size=-1>Noshell
+in use</font></font></font></b></td>
+
+<td VALIGN=TOP>If <tt>noshell</tt> is applied while the user password is
+still enabled, you can observe the following.&nbsp;
+<p>Note: Once you have disabled the password, <tt>noshell</tt> will not
+be executed whenever the user tries to login. However, if an attacker circumvents
+the disabled password and tricks the system into executing the user shell,
+<tt>noshell</tt> will execute and will terminate the user session with
+the log message shown below.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Changed
+behavior for user login.</font></font></b>
+<p>The connection is terminated and the user is unable to gain access to
+a specific host even having supplied the correct password. As a result,
+the user cannot execute programs or perform any other activity. Before
+the connection is closed, the <tt>login</tt> program displays the timestamp
+of the last login. The example shows a remote connection with <tt>telnet</tt>
+but results for local logins are similar.
+
+<pre><font size=-1><br> jdoe@host1% telnet rem-host
+
+<br> rem-host2 login: jdoe
+
+ password: ********
+
+<br><p>&nbsp;Last login: Wed Aug 30 23:13:41 from host1
+
+<br><p>&nbsp;Connection closed by foreign host!
+
+<br><p>&nbsp;jdoe@host1%&nbsp;</font></pre>
+
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="120"></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Resulting
+log message.</font></font></b>
+<p>If user access is denied as shown above, a log message is generated
+by log facility <tt>LOG_AUTH</tt>. The message indicates the user id (by
+referencing the numeric user id). No indication is included as to whether
+the login access results from a network connection or a local login prompt.
+You need other information such as that supplied by the <tt><a href="http://www.cert.org/security-improvement/implementations/i041.07.html">tcp
+wrapper</a></tt> program to log network connections. This allows you to
+subsequently identify denied login attempts via network connections.&nbsp;
+<pre><font size=-1>&nbsp;&nbsp; Aug 30 23:13:51 rem-host2 -noshell[7390]:
+&nbsp;&nbsp;&nbsp;Titan warning: user 515 login from a disabled shell</font></pre>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="130"><b><font face="Times New Roman,Times"><font color="#000000"><font
+size=-1>Tripwire
+Configuration</font></font></font></b></td>
+
+<td>The following is the <a href="http://www.cert.org/security-improvement/implementations/i002.02.html">T<tt>ripwire</tt></a>
+configuration for the <tt>noshell</tt> program once installed.&nbsp;
+<p>The following file should not change. Any changes are unexpected and
+should be analyzed:&nbsp;
+<pre>
+<font size=-1>@@define BINARY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; E+pinugsamc1-023456789
+
+/usr/local/sbin/noshell&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY</font>
+</pre>
+</td>
+</tr>
+</table>
+</body>
+</html>

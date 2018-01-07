@@ -1,0 +1,230 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>6.2. Pop-up menus</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="ChapterWork.html" title="Chapter 6. Working with captured packets"><link rel="prev" href="ChapterWork.html" title="Chapter 6. Working with captured packets"><link rel="next" href="ChWorkDisplayFilterSection.html" title="6.3. Filtering packets while viewing"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6.2. Pop-up menus</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChapterWork.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Working with captured packets</th><td width="20%" align="right"> <a accesskey="n" href="ChWorkDisplayFilterSection.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChWorkDisplayPopUpSection"></a>6.2. Pop-up menus</h2></div></div></div><p>
+      You can bring up a pop-up menu over either the "Packet List", 
+      "Packet Details" or "Packet Bytes" pane by clicking your right 
+	  mouse button at the corresponding pane.
+    </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ChWorkPacketListPanePopUpMenuSection"></a>6.2.1. Pop-up menu of the "Packet List" pane</h3></div></div></div><p>
+      </p><div class="figure"><a name="ChWorkPacketListPanePopUpMenu"></a><p class="title"><b>Figure 6.3. Pop-up menu of the "Packet List" pane</b></p><div><img src="wsug_graphics/ws-packet-pane-popup-menu.png" alt='Pop-up menu of the "Packet List" pane'></div></div><p>
+	</p><p>
+	  The following table gives an overview of which functions are available 
+	  in this pane, where to find the corresponding function in the main menu, 
+	  and a short description of each item.
+	  </p><div class="table"><a name="PacketListPopupMenuTable"></a><p class="title"><b>Table 6.1. The menu items of the "Packet List" pop-up menu</b></p><table summary='The menu items of the "Packet List" pop-up menu' border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Item</th><th>Identical to main menu's item:</th><th>Description</th></tr></thead><tbody><tr><td><span><strong class="command">Mark Packet (toggle)</strong></span></td><td>Edit</td><td>
+	    <p>
+	      Mark/unmark a packet.
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Set Time Reference (toggle)</strong></span></td><td>Edit</td><td>
+	    <p>
+	      Set/reset a time reference.
+	    </p>
+		</td></tr><tr><td>-----</td><td> </td><td> </td></tr><tr><td><span><strong class="command">Apply as Filter</strong></span></td><td>Analyze</td><td>
+	    <p>
+		  Prepare and apply a display filter based on the currently selected 
+		  item.
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Prepare a Filter</strong></span></td><td>Analyze</td><td>
+	    <p>
+		  Prepare a display filter based on the currently selected item.
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Conversation Filter</strong></span></td><td>-</td><td>
+	    <p>
+	      This menu item applies a display filter with the address information 
+		  from the selected packet. E.g. the IP menu entry will set a filter 
+		  to show the traffic between the two IP addresses of the current 
+		  packet.
+		  XXX - add a new section describing this better.
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Colorize Conversation</strong></span></td><td>-</td><td>
+	    <p>
+	      This menu item uses a display filter with the address information 
+		  from the selected packet to build a new colorizing rule.
+	    </p>
+		</td></tr><tr><td><span><strong class="command">SCTP</strong></span></td><td>-</td><td>
+	    <p>
+		  XXX - add an explanation of this.
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Follow TCP Stream</strong></span></td><td>Analyze</td><td>
+	    <p>
+		  Allows you to view all the data on a TCP 
+	      stream between a pair of nodes.
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Follow SSL Stream</strong></span></td><td>Analyze</td><td>
+	    <p>
+	      Same as "Follow TCP Stream" but for SSL.
+		  XXX - add a new section describing this better.
+	    </p>
+		</td></tr><tr><td>-----</td><td> </td><td> </td></tr><tr><td><span><strong class="command">Copy/ Summary (Text)</strong></span></td><td>-</td><td>
+		<p>
+		  Copy the summary fields as displayed to the clipboard, as tab-separated text.
+		</p>
+		</td></tr><tr><td><span><strong class="command">Copy/ Summary (CSV)</strong></span></td><td>-</td><td>
+		<p>
+		  Copy the summary fields as displayed to the clipboard, as comma-separated text.
+		</p>
+		</td></tr><tr><td><span><strong class="command">Copy/ As Filter</strong></span></td><td> </td><td>
+	            <p>
+	 	      Prepare a display filter based on the currently selected item
+		      and copy that filter to the clipboard.
+	            </p>
+	 	    </td></tr><tr><td><span><strong class="command">Copy/ Bytes (Offset Hex Text)</strong></span></td><td>-</td><td>
+		<p>
+		  Copy the packet bytes to the clipboard in hexdump-like format.
+		</p>
+		</td></tr><tr><td><span><strong class="command">Copy/ Bytes (Offset Hex)</strong></span></td><td>-</td><td>
+		<p>
+		  Copy the packet bytes to the clipboard in hexdump-like format, but without the text portion.
+		</p>
+		</td></tr><tr><td><span><strong class="command">Copy/ Bytes (Printable Text Only)</strong></span></td><td>-</td><td>
+		<p>
+		  Copy the packet bytes to the clipboard as ASCII text, excluding non-printable characters.
+		</p>
+		</td></tr><tr><td><span><strong class="command">Copy/ Bytes (Hex Stream)</strong></span></td><td>-</td><td>
+		<p>
+		  Copy the packet bytes to the clipboard as an unpunctuated list of hex digits.
+		</p>
+		</td></tr><tr><td><span><strong class="command">Copy/ Bytes (Binary Stream)</strong></span></td><td>-</td><td>
+		<p>
+		  Copy the packet bytes to the clipboard as raw binary. The data is stored in the
+		  clipboard as MIME-type "application/octet-stream".</p>
+		<p>This option is not available in versions of Wireshark built using GTK+ 1.x.</p>
+		</td></tr><tr><td><span><strong class="command">Export Selected Packet Bytes...</strong></span></td><td>File</td><td>
+	    <p>
+	      This menu item is the same as the File menu item of the same 
+	      name. It allows you to export raw packet bytes to a binary file.
+	    </p>
+		</td></tr><tr><td>-----</td><td> </td><td> </td></tr><tr><td><span><strong class="command">Decode As...</strong></span></td><td>Analyze</td><td>
+	    <p>
+		  Change or apply a new relation between two dissectors. 
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Print...</strong></span></td><td>File</td><td>
+	    <p>
+		  Print packets.
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Show Packet in New Window</strong></span></td><td>View</td><td>
+	    <p>
+		  Display the selected packet in a new window.
+	    </p>
+		</td></tr></tbody></table></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ChWorkPacketDetailsPanePopUpMenuSection"></a>6.2.2. Pop-up menu of the "Packet Details" pane</h3></div></div></div><p>
+      </p><div class="figure"><a name="ChWorkPacketDetailsPanePopUpMenu"></a><p class="title"><b>Figure 6.4. Pop-up menu of the "Packet Details" pane</b></p><div><img src="wsug_graphics/ws-details-pane-popup-menu.png" alt='Pop-up menu of the "Packet Details" pane'></div></div><p>
+	  </p><p>
+	  The following table gives an overview of which functions are available 
+	  in this pane, where to find the corresponding function in the main menu, 
+	  and a short description of each item.
+	  </p><div class="table"><a name="PacketDetailsPopupMenuTable"></a><p class="title"><b>Table 6.2. The menu items of the "Packet Details" pop-up menu</b></p><table summary='The menu items of the "Packet Details" pop-up menu' border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Item</th><th>Identical to main menu's item:</th><th>Description</th></tr></thead><tbody><tr><td><span><strong class="command">Expand Subtrees</strong></span></td><td>View</td><td>
+	    <p>
+	      Expand the currently selected subtree. 
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Expand All</strong></span></td><td>View</td><td>
+	    <p>
+	      Expand all subtrees in all packets in the capture. 
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Collapse All</strong></span></td><td>View</td><td>
+	    <p>
+	      Wireshark keeps a list of all the protocol subtrees that are 
+	      expanded, and uses it to ensure that the correct subtrees 
+	      are expanded when you display a packet. This menu item 
+	      collapses the tree view of all packets in the capture list.  
+	    </p>
+		</td></tr><tr><td>-----</td><td> </td><td> </td></tr><tr><td><span><strong class="command">Copy/ Description</strong></span></td><td>-</td><td>
+	    <p>
+	      Copy the displayed text of the selected field to the system 
+		  clipboard. 
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Copy/ As Filter</strong></span></td><td>Edit</td><td>
+	    <p>
+		  Prepare a display filter based on the currently selected item
+		  and copy it to the clipboard.
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Copy/ Bytes (Offset Hex Text)</strong></span></td><td>-</td><td>
+		<p>
+		  Copy the packet bytes to the clipboard in hexdump-like format; similar to the Packet List Pane 
+		  command, but copies only the bytes relevant to the selected part of the tree (the bytes selected
+		  in the Packet Bytes Pane).
+		</p>
+		</td></tr><tr><td><span><strong class="command">Copy/ Bytes (Offset Hex)</strong></span></td><td>-</td><td>
+		<p>
+		  Copy the packet bytes to the clipboard in hexdump-like format, but without the text portion; similar to the 		Packet List Pane 
+		  command, but copies only the bytes relevant to the selected part of the tree (the bytes selected
+		  in the Packet Bytes Pane).
+		</p>
+		</td></tr><tr><td><span><strong class="command">Copy/ Bytes (Printable Text Only)</strong></span></td><td>-</td><td>
+		<p>
+		  Copy the packet bytes to the clipboard as ASCII text, excluding non-printable characters; similar to the Packet List Pane 
+		  command, but copies only the bytes relevant to the selected part of the tree (the bytes selected
+		  in the Packet Bytes Pane).
+		</p>
+		</td></tr><tr><td><span><strong class="command">Copy/ Bytes (Hex Stream)</strong></span></td><td>-</td><td>
+		<p>
+		  Copy the packet bytes to the clipboard as an unpunctuated list of hex digits; similar to the Packet List Pane 
+		  command, but copies only the bytes relevant to the selected part of the tree (the bytes selected
+		  in the Packet Bytes Pane).
+		</p>
+		</td></tr><tr><td><span><strong class="command">Copy/ Bytes (Binary Stream)</strong></span></td><td>-</td><td>
+		<p>
+		  Copy the packet bytes to the clipboard as raw binary; similar to the Packet List Pane 
+		  command, but copies only the bytes relevant to the selected part of the tree (the bytes selected
+		  in the Packet Bytes Pane). The data is stored in the
+		  clipboard as MIME-type "application/octet-stream".</p>
+		<p>This option is not available in versions of Wireshark built using GTK+ 1.x.</p>
+		</td></tr><tr><td><span><strong class="command">Export Selected Packet Bytes...</strong></span></td><td>File</td><td>
+	    <p>
+	      This menu item is the same as the File menu item of the same 
+	      name. It allows you to export raw packet bytes to a binary file.
+	    </p>
+		</td></tr><tr><td>-----</td><td> </td><td> </td></tr><tr><td><span><strong class="command">Apply as Filter</strong></span></td><td>Analyze</td><td>
+	    <p>
+	      Prepare and apply a display filter based on the currently 
+			selected item. 
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Prepare a Filter</strong></span></td><td>Analyze</td><td>
+	    <p>
+		  Prepare a display filter based on the currently selected item. 
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Colorize with Filter</strong></span></td><td>-</td><td>
+	    <p>
+		  Prepare a display filter based on the currently selected item
+          and use it to prepare a new colorize rule.
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Follow TCP Stream</strong></span></td><td>Analyze</td><td>
+	    <p>
+		  Allows you to view all the data on a TCP stream between a pair 
+		  of nodes.
+		</p>
+		</td></tr><tr><td><span><strong class="command">Follow SSL Stream</strong></span></td><td>Analyze</td><td>
+	    <p>
+	      Same as "Follow TCP Stream" but for SSL.
+		  XXX - add a new section describing this better.
+	    </p>
+		</td></tr><tr><td>-----</td><td> </td><td> </td></tr><tr><td><span><strong class="command">Wiki Protocol Page</strong></span></td><td>-</td><td>
+	    <p>
+	      Show the wiki page corresponding to the currently selected protocol 
+		  in your web browser.
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Filter Field Reference</strong></span></td><td>-</td><td>
+	    <p>
+		  Show the filter field reference web page corresponding to the 
+		  currently selected protocol in your web browser.
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Protocol Preferences...</strong></span></td><td>-</td><td>
+	    <p>
+	      The menu item takes you to the properties dialog and selects the 
+		  page corresponding to the protocol if there are properties 
+		  associated with the highlighted field.  
+	      More information on preferences can be found in 
+	      <a href="ChCustPreferencesSection.html#ChCustGUIPrefPage" title="Figure 9.8. The preferences dialog box">Figure 9.8, &#8220;The preferences dialog box&#8221;</a>.
+	    </p>
+		</td></tr><tr><td>-----</td><td> </td><td> </td></tr><tr><td><span><strong class="command">Decode As...</strong></span></td><td>Analyze</td><td>
+	    <p>
+		  Change or apply a new relation between two dissectors. 
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Resolve Name</strong></span></td><td>View</td><td>
+	    <p>
+	      Causes a name resolution to be performed for 
+	      the selected packet, but NOT every packet in the capture. 
+	    </p>
+		</td></tr><tr><td><span><strong class="command">Go to Corresponding Packet</strong></span></td><td>Go</td><td>
+	    <p>
+	      If the selected field has a corresponding packet, go to it. 
+		  Corresponding packets will usually be a request/response packet pair 
+		  or such.
+	    </p>
+		</td></tr></tbody></table></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChapterWork.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ChapterWork.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ChWorkDisplayFilterSection.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 6. Working with captured packets </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 6.3. Filtering packets while viewing</td></tr></table></div></body></html>

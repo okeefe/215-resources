@@ -1,0 +1,144 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>5.2. Open capture files</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="ChapterIO.html" title="Chapter 5. File Input / Output and Printing"><link rel="prev" href="ChapterIO.html" title="Chapter 5. File Input / Output and Printing"><link rel="next" href="ChIOSaveSection.html" title="5.3. Saving captured packets"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">5.2. Open capture files</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChapterIO.html">Prev</a> </td><th width="60%" align="center">Chapter 5. File Input / Output and Printing</th><td width="20%" align="right"> <a accesskey="n" href="ChIOSaveSection.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChIOOpenSection"></a>5.2. Open capture files</h2></div></div></div><p>
+      Wireshark can read in previously saved capture files. 
+	  To read them, simply select the menu or toolbar item: "File/
+	  <img src="wsug_graphics/toolbar/stock_open_24.png">
+	  <span><strong class="command">Open</strong></span>".  
+      Wireshark will then pop up the File 
+      Open dialog box, which is discussed in more detail in 
+      <a href="ChIOOpenSection.html#ChIOOpen" title='5.2.1. The "Open Capture File" dialog box'>Section 5.2.1, &#8220;The "Open Capture File" dialog box&#8221;</a>. 
+    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: It's convenient to use drag-and-drop!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="wsug_graphics/tip.png"></td><th align="left">It's convenient to use drag-and-drop!</th></tr><tr><td align="left" valign="top"><p>
+	... to open a file, by simply dragging the desired file from your file 
+	manager and dropping it onto Wireshark's main window. 
+	However, drag-and-drop is not available/won't work in all desktop 
+	environments.
+    </p></td></tr></table></div><p>
+	  If you didn't save the current capture file before, you will be asked 
+	  to do so, to prevent data loss (this behaviour can be disabled in the 
+	  preferences).
+    </p><p>
+	  In addition to its native file format (libpcap format, also used by 
+	  tcpdump/WinDump and other libpcap/WinPcap-based programs), Wireshark can 
+	  read capture files from a large number of other packet capture programs 
+	  as well. See <a href="ChIOOpenSection.html#ChIOInputFormatsSection" title="5.2.2. Input File Formats">Section 5.2.2, &#8220;Input File Formats&#8221;</a> for the list of 
+	  capture formats Wireshark understands.
+    </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ChIOOpen"></a>5.2.1. The "Open Capture File" dialog box</h3></div></div></div><p>
+	The "Open Capture File" dialog box allows you to search for a 
+	capture file containing previously captured packets for display in 
+	Wireshark.  <a href="ChIOOpenSection.html#ChIOOpenFileTab" title='Table 5.1. The system specific "Open Capture File" dialog box'>Table 5.1, &#8220;The system specific "Open Capture File" dialog box&#8221;</a> shows some examples 
+	  of the Wireshark Open File Dialog box.
+      </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: The dialog appearance depends on your system!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="wsug_graphics/note.png"></td><th align="left">The dialog appearance depends on your system!</th></tr><tr><td align="left" valign="top"><p>
+		  The appearance of this dialog depends on the system and/or GTK+ 
+		  toolkit version used. However, the functionality remains basically 
+		  the same on any particular system.
+	      </p></td></tr></table></div><p>
+	<span><strong class="command">Common dialog behaviour</strong></span> on all systems:
+	</p><div class="itemizedlist"><ul type="disc"><li><p>
+	      Select files and directories.
+	    </p></li><li><p>
+	      Click the Open/Ok button to accept your selected file and open it. 
+	    </p></li><li><p>
+	      Click the Cancel button to go back to Wireshark and not load a capture 
+	      file.
+	    </p></li></ul></div><p>
+	<span><strong class="command">Wireshark extensions</strong></span> to the standard behaviour of 
+	these dialogs:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+	      View file preview information (like the filesize, the number of 
+		  packets, ...), if you've selected a capture file.
+	    </p></li><li><p>
+	      Specify a display filter with the "Filter:" button and filter 
+	      field. This filter will be used when opening the new file. 
+		  The text field background becomes green for a valid filter string 
+		  and red for an invalid one.
+		  Clicking on the Filter button causes Wireshark to pop up 
+	      the Filters dialog box (which is discussed further in 
+	      <a href="ChWorkDisplayFilterSection.html" title="6.3. Filtering packets while viewing">Section 6.3, &#8220;Filtering packets while viewing&#8221;</a>).
+	    </p><p>
+		  XXX - we need a better description of these read filters
+	    </p></li><li><p>
+	      Specify which name resolution is to be performed for all packets by 
+		  clicking on one of the "... name resolution" check buttons. 
+		  Details about name resolution can be found in 
+		  <a href="ChAdvNameResolutionSection.html" title="7.7. Name Resolution">Section 7.7, &#8220;Name Resolution&#8221;</a>.
+	    </p></li></ul></div><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: Save a lot of time loading huge capture files!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="wsug_graphics/tip.png"></td><th align="left">Save a lot of time loading huge capture files!</th></tr><tr><td align="left" valign="top"><p>
+	You can change the display filter and name resolution settings later 
+	while viewing the packets. 
+	However, loading huge capture files can take a significant amount of 
+	extra time if these settings are changed later, so in such situations it can 
+	be a good idea to set at least the filter in advance here.
+    </p></td></tr></table></div><div class="table"><a name="ChIOOpenFileTab"></a><p class="title"><b>Table 5.1. The system specific "Open Capture File" dialog box</b></p><table summary='The system specific "Open Capture File" dialog box' border="1"><colgroup><col><col></colgroup><tbody><tr><td valign="top">
+		<p>
+      </p><div class="figure"><a name="ChIOOpenFileDialogWin32"></a><p class="title"><b>Figure 5.1. "Open" on native Windows</b></p><div><img src="wsug_graphics/ws-open-win32.png" alt='"Open" on native Windows'></div></div><p>
+		</p>
+		</td><td valign="top">
+		<p><span><strong class="command">Microsoft Windows</strong></span></p>
+      <p>
+		This is the common Windows file open dialog - 
+		plus some Wireshark extensions.
+      </p>
+	    <p>
+		Specific for this dialog:
+      </p>
+	<div class="itemizedlist"><ul type="disc"><li><p>
+	      If available, the "Help" button will lead you to this section of 
+		  this "User's Guide".
+	    </p></li><li><p>
+ 		  XXX -  the "Filter:" button currently doesn't work on Windows!
+	    </p></li><li><p>
+		  XXX - missing feature:
+		  If Wireshark doesn't recognize the selected file as a capture file, 
+		  it should grey out the "Open" button.		  
+	    </p></li></ul></div>
+		</td></tr><tr><td valign="top">
+		<p>
+      </p><div class="figure"><a name="ChIOOpenFileDialog"></a><p class="title"><b>Figure 5.2. "Open" - new GTK version</b></p><div><img src="wsug_graphics/ws-open-gtk24.png" alt='"Open" - new GTK version'></div></div><p>
+		</p>
+	  </td><td valign="top">
+      <p><span><strong class="command">Unix/Linux: GTK version &gt;= 2.4</strong></span></p>
+      <p>
+		This is the common Gimp/GNOME file open dialog - 
+		plus some Wireshark extensions.
+      </p>
+	    <p>
+		Specific for this dialog:
+      </p>
+	<div class="itemizedlist"><ul type="disc"><li><p>
+		The "+ Add" button allows you to add a directory, selected in the 
+		right-hand pane, to the favorites list on the left. Those changes 
+		are persistent.
+	    </p></li><li><p>
+		The "- Remove" button allows you to remove a selected directory from 
+		that list again (the items like: "Home", "Desktop", and "Filesystem" 
+		cannot be removed).
+	    </p></li><li><p>
+		  If Wireshark doesn't recognize the selected file as a capture file, 
+		  it will grey out the "Open" button.
+	    </p></li></ul></div>
+	  </td></tr><tr><td valign="top">
+		<p>
+      </p><div class="figure"><a name="ChIOOpenFileDialog1"></a><p class="title"><b>Figure 5.3. "Open" - old GTK version</b></p><div><img src="wsug_graphics/ws-open-gtk20.png" alt='"Open" - old GTK version'></div></div><p>
+		</p>
+		</td><td valign="top">
+	    <p>
+		<span><strong class="command">Unix/Linux: GTK version &lt; 2.4</strong></span></p>
+		<p>
+		  This is the file open dialog of former Gimp/GNOME versions - 
+		  plus some Wireshark extensions.
+		</p>
+	    <p>
+		Specific for this dialog:
+      </p>
+	<div class="itemizedlist"><ul type="disc"><li><p>
+		  If Wireshark doesn't recognize the selected file as a capture file, 
+		  it will grey out the "Ok" button.
+	    </p></li></ul></div>
+		</td></tr></tbody></table></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ChIOInputFormatsSection"></a>5.2.2. Input File Formats</h3></div></div></div><p>
+	The following file formats from other capture tools can be opened by 
+	<span class="application">Wireshark</span>:
+	</p><div class="itemizedlist"><ul type="disc"><li><p>libpcap, tcpdump and various other tools using tcpdump's capture format</p></li><li><p>Sun snoop and atmsnoop</p></li><li><p>Shomiti/Finisar <span class="emphasis"><em>Surveyor</em></span> captures</p></li><li><p>Novell <span class="emphasis"><em>LANalyzer</em></span> captures</p></li><li><p>Microsoft Network Monitor captures</p></li><li><p>AIX's iptrace captures</p></li><li><p>Cinco Networks NetXray captures</p></li><li><p>Network Associates Windows-based Sniffer and Sniffer Pro captures</p></li><li><p>Network General/Network Associates DOS-based Sniffer (compressed or uncompressed) captures</p></li><li><p>AG Group/WildPackets EtherPeek/TokenPeek/AiroPeek/EtherHelp/PacketGrabber captures</p></li><li><p>RADCOM's WAN/LAN Analyzer captures</p></li><li><p>Network Instruments Observer version 9 captures</p></li><li><p>Lucent/Ascend router debug output</p></li><li><p>HP-UX's nettl</p></li><li><p>Toshiba's ISDN routers dump output</p></li><li><p>ISDN4BSD <span class="emphasis"><em>i4btrace</em></span> utility</p></li><li><p>traces from the EyeSDN USB S0</p></li><li><p>IPLog format from the Cisco Secure Intrusion Detection System</p></li><li><p>pppd logs (pppdump format)</p></li><li><p>the output from VMS's TCPIPtrace/TCPtrace/UCX$TRACE utilities</p></li><li><p>the text output from the DBS Etherwatch VMS utility</p></li><li><p>Visual Networks' Visual UpTime traffic capture</p></li><li><p>the output from CoSine L2 debug</p></li><li><p>the output from Accellent's 5Views LAN agents</p></li><li><p>Endace Measurement Systems' ERF format captures</p></li><li><p>Linux Bluez Bluetooth stack hcidump -w traces</p></li><li><p>Catapult DCT2000 .out files</p></li><li><p>... new file formats are added from time to time</p></li></ul></div><p>
+    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: Opening a file may fail due to invalid packet types!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="wsug_graphics/note.png"></td><th align="left">Opening a file may fail due to invalid packet types!</th></tr><tr><td align="left" valign="top"><p>
+	It may not be possible to read some formats dependent on the packet types 
+	captured. Ethernet captures are usually supported for most file formats, 
+	but other packet types (e.g. token ring packets) may not be possible to 
+	read from all file formats.
+	</p></td></tr></table></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChapterIO.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ChapterIO.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ChIOSaveSection.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 5. File Input / Output and Printing </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 5.3. Saving captured packets</td></tr></table></div></body></html>

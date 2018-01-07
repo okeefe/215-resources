@@ -1,0 +1,49 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>5.7. Printing packets</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="ChapterIO.html" title="Chapter 5. File Input / Output and Printing"><link rel="prev" href="ChIOExportSection.html" title="5.6. Exporting data"><link rel="next" href="ChIOPacketRangeSection.html" title="5.8. The Packet Range frame"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">5.7. Printing packets</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChIOExportSection.html">Prev</a> </td><th width="60%" align="center">Chapter 5. File Input / Output and Printing</th><td width="20%" align="right"> <a accesskey="n" href="ChIOPacketRangeSection.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChIOPrintSection"></a>5.7. Printing packets</h2></div></div></div><p>
+	    To print packets, select the "Print..." menu item from the File menu. 
+		When you do this, Wireshark pops up the Print dialog box as shown in 
+	    <a href="ChIOPrintSection.html#ChIOPrintDialogBox" title='Figure 5.17. The "Print" dialog box'>Figure 5.17, &#8220;The "Print" dialog box&#8221;</a>.
+    </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4757716"></a>5.7.1. The "Print" dialog box</h3></div></div></div><div class="figure"><a name="ChIOPrintDialogBox"></a><p class="title"><b>Figure 5.17. The "Print" dialog box</b></p><div><img src="wsug_graphics/ws-print.png" alt='The "Print" dialog box'></div></div><p>
+      The following fields are available in the Print dialog box:
+      </p><div class="variablelist"><dl><dt><span class="term"><span><strong class="command">Printer</strong></span></span></dt><dd><p>
+	      This field contains a pair of mutually exclusive radio buttons:
+	      </p><div class="itemizedlist"><ul type="disc"><li><p>
+		    <span><strong class="command">Plain Text</strong></span> specifies that 
+		    the packet print should be in plain text.
+		  </p></li><li><p>
+		    <span><strong class="command">PostScript</strong></span> specifies that 
+		    the packet print process should use PostScript to 
+		    generate a better print output on PostScript aware printers.
+		  </p></li><li><p>
+		    <span><strong class="command">Output to file:</strong></span> specifies that printing 
+		    be done to a file, using the filename entered in the field or selected 
+			with the browse button.
+		  </p><p>
+	      This field is where you enter the <span><strong class="command">file</strong></span> to 
+	      print to if you have selected Print to a file, or you can click the 
+		  button to browse the filesystem. It is greyed out if Print to a file 
+		  is not selected.
+	    </p></li><li><p>
+		    <span><strong class="command">Print command</strong></span> specifies that a 
+		    command be used for printing. 
+		  </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: Note!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="wsug_graphics/note.png"></td><th align="left">Note!</th></tr><tr><td align="left" valign="top"><p>
+		These <span><strong class="command">Print command</strong></span> fields are not available on 
+		windows platforms. 
+		</p></td></tr></table></div><p>
+	      This field specifies the command to use for printing. It 
+	      is typically <span><strong class="command">lpr</strong></span>. You would change it 
+	      to specify a particular queue if you need to print to a 
+	      queue other than the default.  An example might be:
+	      </p><pre class="programlisting">
+lpr -Pmypostscript
+	      </pre><p>
+	      This field is greyed out if <span><strong class="command">Output to file:</strong></span> is 
+	      checked above.
+	    </p></li></ul></div><p>
+	    </p></dd><dt><span class="term"><span><strong class="command">Packet Range</strong></span></span></dt><dd><p>
+		  Select the packets to be printed, see <a href="ChIOPacketRangeSection.html" title="5.8. The Packet Range frame">Section 5.8, &#8220;The Packet Range frame&#8221;</a>
+	    </p></dd><dt><span class="term"><span><strong class="command">Packet Format</strong></span></span></dt><dd><p>
+		  Select the output format of the packets to be printed. You can 
+		  choose, how each packet is printed, see 
+		  <a href="ChIOPacketFormatSection.html#ChIOPacketFormatFrame" title='Figure 5.19. The "Packet Format" frame'>Figure 5.19, &#8220;The "Packet Format" frame&#8221;</a>
+	    </p></dd></dl></div><p>
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChIOExportSection.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ChapterIO.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ChIOPacketRangeSection.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">5.6. Exporting data </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 5.8. The Packet Range frame</td></tr></table></div></body></html>

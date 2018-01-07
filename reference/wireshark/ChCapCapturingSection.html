@@ -1,0 +1,31 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>4.3. Start Capturing</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="ChapterCapture.html" title="Chapter 4. Capturing Live Network Data"><link rel="prev" href="ChCapPrerequisitesSection.html" title="4.2. Prerequisites"><link rel="next" href="ChCapInterfaceSection.html" title='4.4. The "Capture Interfaces" dialog box'></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.3. Start Capturing</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChCapPrerequisitesSection.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Capturing Live Network Data</th><td width="20%" align="right"> <a accesskey="n" href="ChCapInterfaceSection.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChCapCapturingSection"></a>4.3. Start Capturing</h2></div></div></div><p>
+      One of the following methods can be used to start capturing packets with 
+	  Wireshark:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+	    You can get an overview of the available local interfaces using the 
+		"<img src="wsug_graphics/toolbar/capture_interfaces_24.png">
+		Capture Interfaces" dialog box, see 
+		<a href="ChCapInterfaceSection.html#ChCapCaptureInterfacesDialogWin32" title='Figure 4.1. The "Capture Interfaces" dialog box on Microsoft Windows'>Figure 4.1, &#8220;The "Capture Interfaces" dialog box on Microsoft Windows&#8221;</a> or 
+		<a href="ChCapInterfaceSection.html#ChCapCaptureInterfacesDialog" title='Figure 4.2. The "Capture Interfaces" dialog box on Unix/Linux'>Figure 4.2, &#8220;The "Capture Interfaces" dialog box on Unix/Linux&#8221;</a>. You can start a 
+		capture from this dialog box, using (one of) the "Capture" button(s).
+	  </p></li><li><p>
+	    You can start capturing using the 
+		"<img src="wsug_graphics/toolbar/capture_options_24.png">
+		Capture Options" dialog box, see 
+		<a href="ChCapCaptureOptions.html#ChCapCaptureOptionsDialog" title='Figure 4.3. The "Capture Options" dialog box'>Figure 4.3, &#8220;The "Capture Options" dialog box&#8221;</a>.
+	  </p></li><li><p>
+	    If you have selected the right capture options before, you can 
+		immediately start a capture using the 
+		"<img src="wsug_graphics/toolbar/capture_start_24.png">
+		Capture Start" menu / toolbar item. The capture
+		process will start immediately.
+	  </p></li><li><p>
+	    If you already know the name of the capture interface, you can start 
+		Wireshark from the command line and use the following:
+	    </p><pre class="programlisting">
+wireshark -i eth0 -k
+	    </pre><p>
+		This will start Wireshark capturing on interface eth0, more details 
+		can be found at: <a href="ChCustCommandLine.html" title="9.2. Start Wireshark from the command line">Section 9.2, &#8220;Start Wireshark from the command line&#8221;</a>.
+	  </p></li></ul></div><p>
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChCapPrerequisitesSection.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ChapterCapture.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ChCapInterfaceSection.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.2. Prerequisites </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4.4. The "Capture Interfaces" dialog box</td></tr></table></div></body></html>

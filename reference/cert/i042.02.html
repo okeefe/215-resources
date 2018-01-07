@@ -1,0 +1,677 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.61 [en] (WinNT; U) [Netscape]">
+   <title>Installing, Configuring, and Using Logsurfer 1.5 To Analyze Log Messages on Systems Running Solaris 2.x</title>
+</head>
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+<p><font face="Helvetica, Geneva, Arial"> <small>
+
+<table BORDER=0 CELLSPACING=6 CELLPADDING=4 WIDTH="100%" >
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Implementation Details</font></b></td>
+
+<td><b><font face="Arial"><font size=+1>Installing, Configuring, and Using Logsurfer 1.5 To Analyze Log Messages on Systems Running Solaris 2.x</font></font></b></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130">&nbsp;</td>
+
+<td>
+<table BORDER CELLSPACING=0 CELLPADDING=8 WIDTH="75%" BGCOLOR="#CCDDFF" >
+<tr>
+<td>Applies to the practices: <a href="../practices/p095.html">"Monitor and inspect system activities for unexpected behavior"</a><br>
+<a href="../practices/p091.html">"Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior"</a><br>
+<a href="../practices/p077.html">"Identify and enable Web-server-specific logging mechanisms"</a>
+
+<p>Applicable technologies: Solaris 2.x; UNIX operating system and derivatives&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130">&nbsp;</td>
+
+<td>Many programs log messages that are of potential interest from a security and system administrative perspective. <font face="courier new"><small>syslogd</small></font> (as described in <a href="i041.08.html">"Configuring and using syslogd to collect logging messages on systems running Solaris 2.x"</a>) is the conventional method for capturing important messages from applications and servers. Typically no support tools are provided for online analysis of these messages; <a href="i042.01.html">swatch</a> or logsurfer can be used for this purpose.  
+
+<p>Logsurfer was developed to address many of the underlying problems of <a href="i042.01.html">swatch</a>. The following differences should be considered in your tool selection process:  
+<ul>
+<li>swatch pattern matching is restricted to single lines while logsurfer can collect sets of messages by defining expressions for so-called "contexts." A context is defined by all information belonging to it. Each line of a log file can become part of different contexts.  
+<li>swatch rules are static; with logsurfer new rules can be inserted as matches are made.  
+<li>logsurfer is written in C while <a href="i042.01.html">swatch</a> is a PERL script.  
+<li>logsurfer supports ease of administration for tasks such as re-opening log files or writing a process id into a file.  
+</ul>
+<p>This implementation describes how to download, install and configure the logsurfer tool, version 1.5, on the Sun Solaris operating system, version 2.x. 
+</td></tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1" width="100%" noshade></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Effort Estimates</font></b></td>
+<td>The time needed to retrieve the source code from the distribution site varies depending upon your connection speed. The source code is less than 646 KB (version 1.5). Building and installing logsurfer depends upon machine performance but on average will take less than ten minutes. 
+
+<p>To come up with a comprehensive configuration suitable for your environment and tailored to minimize any misleading or unnecessary message will usually require ongoing effort for several months. Especially messages that do not occur during "normal" business will show up now and then and will require further tailoring. 
+
+<p>If new software or new releases are deployed messages might change or new messages will be generated. This will also require further tailoring.
+</td></tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1" width="100%" noshade></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Prerequisites</font></b></td>
+<td>You can build and install logsurfer on many UNIX systems. To build logsurfer on your system, you need Internet access to retrieve the following software tools:  
+<ul>
+<li>An <a href="i002.01.html">MD5</a> cryptographic checksum program  
+<li>PGP<small><sup><a href="#1">1</a></sup></small> to verify the authenticity of the software distribution  
+<li>A C compiler; either the Sun C Computer or the free GNU C Compiler<small><sup><a href="#2">2</a></sup></small>
+</ul>
+</td></tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1" width="100%" noshade></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Downloading and Verifying</font></b></td>
+<td>The latest release of logsurfer is available via anonymous ftp from <a href="ftp://ftp.cert.dfn.de/pub/tools/audit/logsurfer/">ftp://ftp.cert.dfn.de/pub/tools/audit/logsurfer/</a>. Perform a file transfer from <a href="ftp://ftp.cert.dfn.de/pub/tools/audit/logsurfer/logsurfer-1.5.tar">ftp://ftp.cert.dfn.de/pub/tools/audit/logsurfer/logsurfer-1.5.tar</a>. 
+
+<p>To verify the authenticity of the logsurfer distribution using PGP, you also need the detached PGP signature file, available from <a href="ftp://ftp.cert.dfn.de/pub/tools/audit/logsurfer/logsurfer-1.5.tar.asc">ftp://ftp.cert.dfn.de/pub/tools/audit/logsurfer/logsurfer-1.5.tar.asc</a>. You need the PGP public key from "Ruediger Riediger, DFN-CERT &lt;riediger@cert.dfn.de&gt;" within your own PGP public key ring. You can get a copy of his key from the <a href="http://www.cert.dfn.de/">DFN-CERT web site</a>. A match with his digital signature ensures that the software was downloaded successfully without modification. To verify the digital signature, issue the following commands in the directory containing the downloaded files: 
+
+<p><font face="courier new"><small>$ pgp logsurfer-1.5.tar.asc</small></font> 
+
+<p>If the signature doesn't match, verify that  
+<ul>
+<li>your downloaded filenames match those listed above 
+<li>you have included the needed PGP key in your public key ring 
+</ul>
+<p>If you are unable to verify the authenticity using PGP, you can verify the distribution using an MD5 checksum as shown below:
+<p><table cellpadding=3 cellspacing=3 border=1>
+<tr>
+<td><b>File to Download</b></td>
+<td><b>MD5 Checksum</b></td></tr>
+<tr>
+<td><a href="ftp://ftp.cert.dfn.de/pub/tools/audit/logsurfer/logsurfer-1.5.tar">logsurfer-1.5.tar</a></td>
+<td><font face="courier new"><small>6e5b25f4a64368560e9452c3414c623d</small></font></td></tr>
+</table> 
+<p>If the computed cryptographic checksum of the download files does not correspond to the information above, verify that  
+<ul>
+<li>your downloaded filenames match those listed above 
+<li>your checksum program computes MD5 message digests
+</ul>
+</td></tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1" width="100%" noshade></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Install logsurfer</font></b></td>
+<td>To unpack the logsurfer distribution, use the system tar command: 
+ 
+<p><font face="courier new"><small>$ tar xvf logsurfer-1.5.tar</small></font> 
+
+<p>This command creates a subdirectory named <font face="courier new"><small>logsurfer-1.5</small></font>. All operations are to be performed within this subdirectory. 
+
+<p>A configuration script <font face="courier new"><small>configure</small></font>, provided with the distribution, generates a <font face="courier new"><small>Makefile</small></font> and the header file <font face="courier new"><small>config.h</small></font> that contains all of the information necessary to build and install the logsurfer binary file. You need to specify several options when executing this script: 
+ 
+<p><font face="courier new"><small>$ ./configure --prefix=/usr/local --with-etcdir=/etc</small></font>
+<p><table cellpadding=3 cellspacing=3 border=1>
+<tr>
+<td><b>Option</b></td>
+<td><b>Description</b></td></tr>
+<tr>
+<td><font face="courier new"><small>--prefix</small></font></td> 
+<td>path to subdirectory containing all locally installed programs, libraries, etc.</td></tr>
+<tr>
+<td><font face="courier new"><small>--with-etcdir</small></font></td> 
+<td>path to subdirectory containing the logsurfer configuration file</td></tr></table>
+
+<p>Logsurfer uses the GNU <font face="courier new"><small>regex</small></font> library, which is integrated into the configuration; no additional component needs to be installed. 
+
+<p>After the configuration is finished, you can build the binary logsurfer by specifying the <font face="courier new"><small>make</small></font> command: 
+
+<p><font face="courier new"><small>$ make</small></font> 
+
+<p>To place the logsurfer binary and the man pages into the correct system directories, start the installation using the make command as system administrator using the root account as follows:  
+<pre>
+# cp man/logsurfer.1 /usr/local/man/man1/
+# cp man/logsurfer.conf.4 /usr/local/man/man4/
+# cp src/logsurfer /usr/local/sbin/
+</pre>
+<p>To install the start-mail script, you need to execute the following commands. This script is normally used for delivery of email messages related to logsurfer actions:  
+<pre>
+# cp contrib/start-mail/start-mail /usr/local/sbin/
+# chmod 750 /usr/local/sbin/start-mail
+</pre>
+</td></tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1" width="100%" noshade></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Configure logsurfer</font></b></td>
+<td>The following sections provide the necessary background to be able to prepare the logsurfer configuration such that it reflects your log processing requirements.
+</td></tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"><p></td>
+<td><p><b><font face="Arial, Helvetica, sans-serif"><font color="#008000"><font size=+0>Understand limitations</font></font></font></b>
+<p>Logsurfer can start external programs. This may impact system performance. For example, logsurfer can directly send email to users (based on a configuration rule) or it can invoke sendmail to do this. The mailer can be called to deliver email immediately. You need to be careful to ensure that in the case of a message flood, logsurfer does not initiate a sendmail flood as well. Start the mailer specifying a "queue only" mode option (which stores the mail messages in a spool directory) to avoid the potential for this type of denial of service attack. However, in the event of a serious attack, this option may lead to a delayed report, giving the attacker greater opportunity to suppress reporting and, thereby, hide the attack.  
+
+<p>If using "queue only" mode causes long delays, the <font face="courier new"><small>README</small></font> file explains how to use a specific flag, set at compile time, that results in the spool queue being cleared at more frequent intervals.  
+
+<p>Check the use of regular expressions within each configuration before using the configuration in a production system. You may end up collecting more log messages than expected if you use submatches to build new regular expressions. Characters such as "." can cause problems. For example, if <font face="courier new"><small>some.host.name</small></font> is specified as a submatch, this matches itself but it also matches <font face="courier new"><small>some+host@name</small></font> and all other strings with arbitrary characters between some, host, and name.
+</td></tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"><p></td>
+<td><p><b><font face="Arial, Helvetica, sans-serif"><font color="#008000"><font size=+0>Understand the configuration file structure</font></font></font></b>
+<p>Each line starting with the character "#" is considered a comment and is not processed. Each line starting with a white space (TAB or space) is considered as a continuation of the previous line. All other lines are interpreted as the beginning of a new rule.  
+
+<p>Each configuration rule consists of six mandatory fields and one optional field. Fields are separated by white spaces. More details are explained in the man page <font face="courier new"><small>logsurfer(4)</small></font>: 
+ <p><table cellspacing=3 cellpadding=3 border=1>
+<tr>
+<td><b>Field</b></td>
+<td><b>Explanation</b></td></tr>
+<tr>
+<td><font face="courier new"><small>1. match_regex</small></font></td> 
+<td>This field determines what lines match the rule. Use POSIX regular expressions, as defined within <font face="courier new"><small>egrep</small></font> (1), to describe the pattern.</td></tr>
+<tr>
+<TD><font face="courier new"><small>2. not_match_regex</small></font></td> 
+<td>Unless this field is specified as "-", it is considered to be a regular expression that excludes any line matched by <font face="courier new"><small>match_regex</small></font>.</td></tr>
+<tr> 
+<td><font face="courier new"><small>3. stop_regex</small></font></td>
+<td>Unless this field is specified as "-", the rule is deleted from the list of active rules if the line matches this regular expression.</td></tr>
+<tr>
+<td><font face="courier new"><small>4. not_stop_regex</small></font></td>
+<td>If the line matches <font face="courier new"><small>stop_regex</small></font> and the fourth field is not specified as "-", the rule is not deleted.</td></tr>
+<tr> 
+<td><font face="courier new"><small>5. timeout</small></font></td> 
+<td>Time duration in seconds. The rule does not timeout if "0" is specified.</td></tr>
+<tr> 
+<td><font face="courier new"><small>6. continue</small></font> (optional)</td> 
+<td>If the keyword "continue" is specified, the remaining rules in the configuration files are considered instead of terminating the matching process with the current line (the default condition).</td></tr>
+<tr> 
+<td><font face="courier new"><small>7. action</small></font></td> 
+<td>This field specifies the action of a rule by one keyword (explained below) along with optional arguments.</td></tr>
+</table>
+</td></tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"><p></td>
+<td><p><b><font face="Arial, Helvetica, sans-serif"><font color="#008000"><font size=+0>Understand the use of quotes</font></font></font></b>
+<p>You can use submatches of regular expressions to define new contexts or to invoke other actions. These are defined in <font face="courier new"><small>egrep</small></font> (1). You need to use quotes correctly to ensure the action is executed as intended. There are three ways to use quotes: 
+ <p><table cellspacing=3 cellpadding=3 border=1>
+<tr>
+<td><b>Quotes</b></td>
+<td><b>Explanation</b></td></tr>
+<tr>
+<td>string</td> 
+<td>The string is terminated at the first whitespace (TAB or space).</td></tr>
+<tr> 
+<td>'string'</td> 
+<td>The string is terminated at the first single quote (') following the initial one. The content between opening and closing quotes is matched.</td></tr>
+<tr>
+<td>"string"</td> 
+<td>The string is terminated at the corresponding double quote ("). The backslash character \ is used as an escape character. \" specifies a double quote without ending the quoted string.</td></tr>
+</table>
+</td></tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"><p></td>
+<td><p><b><font face="Arial, Helvetica, sans-serif"><font color="#008000"><font size=+0>Understand the actions available for rules</font></font></font></b>
+<p>The following actions are available: 
+ <p><table cellpadding=3 cellspacing=3 border=1>
+<tr>
+<td><b>Action</b></td>
+<td><b>Explanation</b></td></tr>
+<tr>
+<td><font face="courier new"><small>ignore</small></font></td> 
+<td>No further processing is done. Matching lines are ignored from that rule on.</td></tr>
+<tr> 
+<td><font face="courier new"><small>exec</small></font></td> 
+<td>At least one argument must be specified that identifies the program to be called. More arguments can be passed. Variables describing submatches of the <font face="courier new"><small>match_regex</small></font> are also allowed.</td></tr>
+<tr>
+<td><font face="courier new"><small>pipe</small></font></td> 
+<td>Similar to the <font face="courier new"><small>exec</small></font> action, this calls an external program to process the matching lines but passes these lines via <font face="courier new"><small>stdin</small></font>.</td></tr>
+<tr>
+<td><font face="courier new"><small>open</small></font></td> 
+<td>This action opens a new context it already exists. See below for more information regarding the use of contexts.</td></tr>
+<tr>
+<td><font face="courier new"><small>delete</small></font></td> 
+<td>This deletes an existing context without forcing the action related to this context to be executing.</td></tr>
+<tr> 
+<td><font face="courier new"><small>report</small></font></td> 
+<td>The specified contexts are fed as standard input to the program specified by the first argument.</td></tr>
+<tr> 
+<td><font face="courier new"><small>rule</small></font></td> 
+<td>New rules can be created "on the fly." See below for more information about the concept of creating new rules.</td></tr></table> 
+
+<p>You must specify all external programs using a full pathname. Execution of external programs is started in the background so that the logsurfer process is not impacted.
+</td></tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"><p></td>
+<td><p><b><font face="Arial, Helvetica, sans-serif"><font color="#008000"><font size=+0>Understand contexts</font></font></font></b>
+<p>Single log messages and sets of log messages can relate to a single event or a set of related events. Sending single messages to an administrator by email is not efficient and makes it more difficult for the administrator to know what is happening. Most of the time, the administrator can only understand the situation by inspecting the log file and analyzing messages in context. With this being the case, logsurfer was developed to collect a set of log messages based on regular expressions. Default actions are associated with each context. These are executed after a specified time period or after a specified number of log messages are collected. The opening of a context ensures that there is a defined end to a context. The context is also available for further processing such as sending it as a report to an email address. The regular pattern that specifies the match pattern is used as the "name" for a context and is used to reference it within other rules.  
+
+<p>Each context consists of six mandatory fields. Fields are separated by white spaces. More details are explained in the man page <font face="courier new"><small>logsurfer(4)</small></font>: 
+ <p><table cellspacing=3 cellpadding=3 border=1>
+<tr>
+<td><b>Field</b></td>
+<td><b>Explanation</b></td></tr>
+<tr>
+<td><font face="courier new"><small>1. match_regex</small></font></td>      
+<td>This field determines what lines match the context.</td></tr> 
+<tr>
+<td><font face="courier new"><small>2. not_match_regex</small></font></td> 
+<td>Unless this field is specified as "-", it is considered to be a regular expression that excludes any line matched by <font face="courier new"><small>match_regex</small></font>.</td></tr>
+<tr>
+<td><font face="courier new"><small>3. line_limit</small></font></td> 
+<td>This value defines the maximum number of lines that are to be stored within the context. It is always useful to define a limit to avoid denial of service attacks.</td></tr>
+<tr> 
+<td><font face="courier new"><small>4. timeout_abs</small></font></td> 
+<td>This value in seconds defines how long the context is considered active before the default action is executed.</td></tr>
+<tr>
+<td><font face="courier new"><small>5. timeout_rel</small></font></td>
+<td>In addition to the absolute timeout, the default action is executed if a relative timeout (in seconds) is defined and no new log message is added to the context within that time period.</td></tr>
+<tr>
+<td><font face="courier new"><small>6. default_action</small></font></td> 
+<td>The specified action is carried out whenever the maximum number of lines, or the absolute or relative timeout is reached. All actions except open, delete, and rule are available.</td></tr></table>
+</td></tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"><p></td>
+<td><p><b><font face="Arial, Helvetica, sans-serif"><font color="#008000"><font size=+0>Understand the concept of dynamic rules</font></font></font></b>
+<p>One of the most powerful features of logsurfer is the ability to create new rules as needed. This is especially useful when a specific recurring message (such as "file system full") needs immediate attention but only requires an alert to be sent once per hour. This can be achieved by sending mail to the administrator and including a new rule to ignore the same message over a specified time period.  
+
+<p>The advantage of dynamic rules is that you can redefine at run-time which events are "of interest." For example, if a <font face="courier new"><small>telnet</small></font> connection from a given host is denied, you might want to review all other events related to this host.  
+
+<p>To initiate a new rule, use the following action syntax: 
+ <p><table cellpadding=3 cellspacing=3 border=1>
+<tr>
+<td><b>Field</b></font></td>
+<td><b>Explanation</b></font></td></tr>
+<tr>
+<td><font face="courier new"><small>1. rule_keyword</small></font></td> 
+<td>The keyword rule initiates the creation of a new rule.</td></tr>
+<tr> 
+<td><font face="courier new"><small>2. position</small></font></td> 
+<td>This specifies the position of a rule (see below).</td></tr>
+<tr> 
+<td><font face="courier new"><small>3. new_rule</small></font></td> 
+<td>This specifies the new rule in the same syntax as explained above for all rules.</td></tr></table>
+<p><table cellspacing=3 cellpadding=3 border=1>
+<tr> 
+<td><b>Position</b></td>
+<td><b>Explanation</b></td></tr>
+<tr>
+<td><font face="courier new"><small>before</small></font></td>
+<td>The new rule is added before the actual rule.</td></tr>
+<tr> 
+<td><font face="courier new"><small>behind</small></font></td>
+<td>The new rule is added behind the actual rule.</td></tr>
+<tr> 
+<td><font face="courier new"><small>top</small></font></td>
+<td>The new rule is added as the first rule.</td></tr>
+<tr> 
+<td><font face="courier new"><small>bottom</small></font></td>
+<td>The new rule is added as the last rule.</td></tr></table>
+</td></tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"><p></td>
+<td><p><b><font face="Arial, Helvetica, sans-serif"><font color="#008000"><font size=+0>Understand the handling of a single log message</font></font></font></b>
+<p>For each log message, a sequence of procedures are executed:  
+<ul>
+<li>the message is stored within each context when it matches <font face="courier new"><small>match_regex</small></font> unless it matches <font face="courier new"><small>not_match_regex</small></font>.  
+<li>the message is compared to the rules in their actual order. When the first rule matching the <font face="courier new"><SMALL>match_regex</small></font> line occurs, the given action is executed unless the message matches <font face="courier new"><small>not_match_regex</small></font>. No other rules are compared unless the keyword <font face="courier new"><small>continue</small></font> is specified. 
+<li>the message is compared to all rules. If the message matches the <font face="courier new"><small>stop_regex</small></font> rule but not the <font face="courier new"><small>not_stop_regex</small></font> rule, the rule is deleted.  
+<li>the timeout value of all rules is analyzed. If a timeout is reached, the rule is deleted.  
+<li>the relative and absolute timeout values of all contexts are analyzed. If a timeout is reached, the context is deleted and the default action is processed.  
+</ul>
+<p>By default, logsurfer stops searching for another matching rule after the first matching rule is found, so the order of rules is important. Rules that specify messages to ignore and rules that address frequently occurring messages should appear early in the configuration definition.
+</td></tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"><p></td>
+<td><p><b><font face="Arial, Helvetica, sans-serif"><font color="#008000"><font size=+0>Create the initial configuration</font></font></font></b>
+<p>The most difficult part of the logsurfer setup is in defining an acceptable, workable initial configuration that reflects your log processing interests. To do this effectively, you need to analyze messages of interest from operational log files. You then determine what actions you need to take based on this experience. Use the <font face="courier new"><small>egrep(1)</small></font> program to help define effective rule patterns and test each regular expression to ensure that it operates as intended.  
+
+<p>If you are using <a href="i042.01.html">swatch</a>, you can start with its configuration as a starting point for logsurfer. You can achieve the same results with <a href="i042.01.html">swatch</a> and logsurfer if you do not use dynamic rules and contexts. It takes some effort to change <a href="i042.01.html">swatch</a>'s regular expressions and the specification of rules but starting with this configuration allows for a smoother transition to logsurfer. New logsurfer features can be added as the need arises.
+</td></tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1" width="100%" noshade></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Example</font></b></td>
+<td>Several example rules are provided in this section to illustrate how you can use logsurfer. The volume and type of logged messages depend on the specifics of the installed software and the configuration of syslogd as described in <a href="i041.08.html">"Configuring and using syslogd to collect logging messages on systems running Solaris 2.x."</a> 
+
+<p>For this example, we assume that the following supporting tools are installed on your system. 
+<ul>
+<li><a href="i041.07.html">tcp wrapper</a>
+<li><a href="i041.11.html">rshd and rlogind from logdaemon</a>
+<li><a href="i041.10.html">login from logdaemon</a>
+<li><a href="i041.07.html">rpcbind from tcp wrapper</a>
+</ul>
+<p>The logsurfer configuration is stored in <font face="courier new"><small>/etc/logsurfer.conf</small></font>. The program <font face="courier new"><small>safe_finger</small></font> is part of the tcp wrapper distribution and is used in the example to determine what users are responsible for handling specific log messages. The program <font face="courier new"><small>start-mail</small></font> is part of the logsurfer distribution (subdirectory <font face="courier new"><small>contrib</small></font>) and allows you to specify the subject of and recipient for email messages.  
+<P><i>[Please note that the length of some of the following lines of code may cause printing problems. To remedy this, reduce the scaling in your print menu before you print the document.]</i>
+<p>
+<pre><font size="-2">
+
+
+#--------------------------------------------------------------------
+# /usr/local/etc/logsurfer.conf
+#--------------------------------------------------------------------
+
+# each tcp wrapper connect messages  will start a context
+#--------------------------------------------------------------------
+
+' .*\[[0-9][0-9]*\]: connect from (.*@|)(.*)' '.*: connect from (.*@|) ([^ ]*.local.net|localhost)' - - 0 
+      CONTINUE open "^.{19,}$3" - 4000 86400 0 ignore
+
+# tcp-wrapper refused messages
+#-------------------------------------------------------------------
+
+' .*\[[0-9][0-9]*\]: refused connect from (.*)' 'refused connect from 10\.0\.1\.' - - 0
+      CONTINUE open "^.{19,}$2" - 4000 86400 0 ignore
+
+' ([^ .]*)(.local.net|) .*\[[0-9][0-9]*\]: refused connect from (.*)'  - - - 0 
+      CONTINUE rule before " .*\\[[0-9][0-9]*\\]: refused connect from $4" - - - 300 ignore
+
+' ([^ .]*)(.local.net|) .*\[[0-9][0-9]*\]: refused connect from (.*)' - - - 0 
+      exec "/usr/sbin/safe_finger @$4 | /usr/local/sbin/start-mail logsurfer \"$2: tcpd: (backtrack for $0)\""
+
+# unverified hostnames...
+
+' (.*)\[([0-9][0-9]*)\]: warning: can.t verify hostname: gethostbyname\([^ ]*\) failed' - - - 0
+      open " ([^ .]*)(.local.net|) $2\\\[$3\\\]: " - 100 600 10
+      pipe "/usr/local/sbin/start-mail logsurfer \"$2: tcpd: unverified hostname\""
+
+# rpcbind
+#--------------------------------------------------------------------
+
+' rpcbind: refused connect from ([^          ]*)' ' connect from [^]*.local.net|localhost)' - - 0
+      CONTINUE open "^.{19,}$2" - 4000 86400 0 ignore
+
+' ([^ .]*)(.local.net|) rpcbind: refused connect from ([^ ]*) ' - - - 0
+      CONTINUE report "/usr/local/sbin/start-mail logsurfer \"$2: rpcbind: connection refused\"" "^.{19,}$4"
+
+' ([^ .]*)(.local.net|) rpcbind: refused connect from ([^ ]*) ' - - - 0 
+      CONTINUE rule before " rpcbind: refused connect from $4" - - - 300 ignore
+
+' ([^ .]*)(.local.net|) rpcbind: refused connect from ([^ ]*) ' - - - 0
+      exec "/usr/local/sbin/safe_finger @4 | /usr/local/sbin/start-mail logsurfer \"$2: rpcbind: (backtrack)\""
+
+# login
+#----------------------------------------------------------------------
+
+# report login failures on the modem line
+
+'modem.local.net login\[[0-9][0-9]*\]: .* LOGIN FAILURES ON term/a' - - - 0 
+      pipe "/usr/local/sbin/start-mail logsurfer \"MODEM: login: LOGIN FAILURES ON term/a\""
+
+# always report multiple login failures/refused on direct lines
+
+' ([^ .]*)(.local.net|) login\[[0-9][0-9]*\]: .* LOGIN FAILURES* ON' - - - 0 
+      pipe "/usr/local/sbin/start-mail logsurfer \"$2: login: LOGIN FAILURES\""
+
+' ([^ .]*)(.local.net|) login\[[0-9][0-9]*\]: LOGIN REFUSED ON' - - - 0 
+      pipe "/usr/local/sbin/start-mail logsurfer \"$2: login: LOGIN REFUSED\""
+
+# trace back login attempts over the network
+
+' ([^ .]*)(.local.net|) login\[[0-9][0-9]*\]: .* LOGIN (FAILURES*|REFUSED) FROM ([^ ]*)' - - - 0 
+      exec "/usr/sbin/safe_finger @5 | /usr/local/sbin/start-mail logsurfer \"$2: login: remote login errors\""
+
+# ignore regular logins
+
+' login\[[0-9][0-9]*\]: login on (console) as user1|user2|user3|user4|user5)$' - - - 0
+      ignore
+
+' login\[[0-9][0-9]*\]: ROOT LOGIN  ON console' - - - 0
+      ignore
+
+# report all other login stuff
+
+' ([^ .]*)(.local.net|) login\[[0-9][0-9]*\]: ' - - - 0 
+      pipe "/usr/local/sbin/start-mail logsurfer \"$2: login: unknown login message\""
+
+# ftpd
+#--------------------------------------------------------------------
+
+'ftpd\[([0-9][0-9]*)\]: connection from' - - - 0
+      open "ftpd\\[$2\\]:" - 4000 10800 1800 ignore
+
+'ftpd\[([0-9][0-9]*)\]: failed login from ([^ ]*) \[([0-9.]*)\]' - - - 0 
+      report "/usr/local/sbin/start-mail logsurfer \"ftpd: failed login\""
+      "ftpd\\[$2\\]:" "^.{19,}$3" "^.{19,}$4"
+
+'ftpd\[([0-9][0-9]*)\]: cmd failure - not logged in' - - - 0
+     rule before
+     "ftpd\\[$2\\]: FTP session closed" - '.*' - 1800
+           report "/usr/local/sbin/start-mail logsurfer \"ftpd: cmd failure\"" "ftpd\\[$2\\]:"
+
+'ftpd\[([0-9][0-9]*)\]: FTP session closed' - - - 0
+     delete "ftpd\\[$2\\]:"
+
+# ***** other messages
+#--------------------------------------------------------------------
+
+# ***** here more rules will be usually included to ignore unimportant
+# ***** messages or to handle the specific needs of other servers and
+# ***** applications.
+
+
+# default - everything else is of potential interest
+#--------------------------------------------------------------------
+
+'.*' - - - 0
+     pipe "/usr/local/sbin/start-mail logsurfer \"unknown message: $0\""
+
+# -------------------------------------------------------------------
+# End of file: logsurfer.conf
+# -------------------------------------------------------------------
+</font>
+</pre>
+</td></tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1" width="100%" noshade></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Complete the logsurfer setup</font></b></td>
+<td>After installing the logsurfer software and creating the initial configuration, you need to perform several additional administrative tasks and initiate automatic startup.
+</td></tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"><p></td>
+<td><p><b><font face="Arial, Helvetica, sans-serif"><font color="#008000"><font size=+0>Prepare a separate user id</font></font></font></b>
+<p>The logsurfer process does not require <font face="courier new"><small>root</small></font> privileges to read the relevant log files so do not use the <font face="courier new"><small>root</small></font> account. Create a separate user id for logsurfer execution (such as "logsurfer"). 
+ 
+<p>If read access to the log files is restricted to a group of system administrators (for example, SA), include logsurfer in this group. If the group has more privileges than necessary for logsurfer, create a new group that includes the SA group and logsurfer. Set the access privileges for the log files to the new group. 
+ 
+<p>Creating a separate user id is even more important if logsurfer is set up to write the process id into a file. The home directory of the user logsurfer can be used to store the error log or other data recorded by the program.
+</td></tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"><p></td>
+<td><p><b><font face="Arial, Helvetica, sans-serif"><font color="#008000"><font size=+0>Prepare the needed email addresses</font></font></font></b>
+<p>Include email aliases (not specific user ids) in the logsurfer configuration if email is used to alert system personnel. This makes it easier to maintain the configuration when users are added and removed.  
+
+<p>Set up aliases or mailing lists for each group that need to receive messages from logsurfer. All unknown messages should be sent to an administrative account for manual inspection and considered for inclusion in an updated logsurfer configuration.
+</td></tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"><p></td>
+<td><p><b><font face="Arial, Helvetica, sans-serif"><font color="#008000"><font size=+0>Create a specific startup file</font></font></font></b>
+<p>You can automatically start up logsurfer using the following script <font face="courier new"><small>/etc/init.d/logsurfer</small></font>. The script supports starting and stopping the logsurfer process. Keep in mind that hard links (see <font face="courier new"><small>init</small></font> (1M) and <font face="courier new"><small>init.d</small></font>) have to be created to control changes that occur whenever the system status changes.  
+
+<p>These scripts are executed with <font face="courier new"><small>root</small></font> privileges. Execute the <font face="courier new"><small>su</small></font> command to change the privileges to the previously created user id ("logsurfer"). This limits any exposure and potential damage if problems occur during logsurfer execution.  
+
+<p>
+<pre><font size="-2">
+#!/bin/sh 
+#
+
+pid=`/usr/bin/cat -s /users/logsurfer/logsurfer.pid` 
+user=`/usr/bin/id|/usr/bin/sed 's/.*(\(.*\)) .*/\1/'` 
+
+# test if listed process is still active 
+
+if [ "${pid}" != "" ]; then 
+   pid=`/usr/bin/ps -p ${pid} | /usr/bin/grep  -w logsurfer |\
+   /usr/bin/awk '{print $1}'` 
+fi 
+
+# handle the option specified 
+
+case "$1" in 
+      'start') 
+         # start the logsurfer process 
+
+         if [ "${pid}" != "" ]; then 
+            /usr/bin/echo '\nLogsurfer System is already initialized.' 
+            exit 0 
+         fi  
+
+         if [ -f /usr/local/sbin/logsurfer -a -f /etc/logsurfer.conf ]; 
+             then /bin/su - logsurfer -c "/usr/local/sbin/logsurfer \ 
+             -c /etc/logsurfer.conf \
+             -d /users/logsurfer/logsurfer.dump \
+             -f /var/adm/messages \ 
+             -l `/usr/bin/wc -l < /var/adm/messages` \
+             -p /users/logsurfer/logsurfer.pid  \ 
+               /users/logsurfer/logsurfer.error 2&1 &lt;/dev/null &" 
+         else 
+
+             /usr/bin/echo '\nNo Logsurfer program or configuration found.' 
+         fi 
+         ;; 
+
+     'newstart') 
+         # restart the logsurfer process 
+
+         if [ "${pid}" = "" ]; then
+             /usr/bin/echo '\nNo Logsurfer System initialized.'
+             exit 0 
+         fi 
+
+         # stop the actual process 
+
+         /etc/init.d/logsurfer stop 
+
+         # wait a while 
+
+         /usr/bin/sleep 5 
+
+         # start a new process
+
+         /etc/init.d/logsurfer start 
+
+         ;; 
+
+      'stop')
+      # stop all logsurfer processes 
+
+         if [ "${pid}" = "" ]; then 
+             /usr/bin/echo '\nNo Logsurfer System initialized.
+             exit 0 
+         fi 
+
+         /usr/bin/kill ${pid}
+         /usr/bin/rm /users/logsurfer/logsurfer.pid
+         ;; 
+
+      *) 
+         /usr/bin/echo "Usage: /etc/init.d/logsurfer { start | newstart | stop }" 
+         ;; 
+
+esac 
+</font></pre>
+<p>This script is executed during the next status change or at startup unless explicitly initiated.
+</td></tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="130"><p></td>
+<td><p><b><font face="Arial, Helvetica, sans-serif"><font color="#008000"><font size=+0>Restart logsurfer after rotation of log files</font></font></font></b>
+<p>Logsurfer opens a specific file to read every new line appended to this file. Logsurfer needs to be informed if the file is no longer used by <font face="courier new"><small>syslog</small></font> (occurs as a result of log file rotation using <a href="i041.09.html">newsyslog</a>). The running process must receive a signal <font face="courier new"><small>SIGHUP</small></font> as shown below to initiate logsurfer's re-opening of the file. Make the current process id available within a specific file using the <font face="courier new"><small>-p &lt;pidfile&gt;</small></font> option.  
+<pre><small>
+#!/bin/sh
+#
+# /usr/lib/newsyslog - rotate log files (loghost)
+#
+
+[...]
+ 
+/bin/kill -HUP `/usr/bin/cat /etc/syslogd.pid`
+
+# ensure a restart of logsurfer
+
+/bin/kill -HUP `/usr/bin/cat /users/logsurfer/logsurfer.pid`
+
+# end of file /usr/lib/newsyslog
+</small></pre>
+</td></tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1" width="100%" noshade></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Tripwire Configuration</font></b></td>
+<td>The following is the Tripwire configuration for the installed logsurfer files:
+<pre>
+@@define BINARY                        E+pinugsamc1-023456789
+
+/etc/logsurfer.conf                    @@BINARY
+/etc/init.d/logsurfer                  @@BINARY
+/usr/local/man/logsurfer.1             @@BINARY
+/usr/local/man/logsurfer.conf.4        @@BINARY
+/usr/local/sbin/start-mail             @@BINARY
+/usr/local/sbin/logsurfer              @@BINARY
+</pre>
+</td></tr>
+
+<tr>
+<td COLSPAN="2">
+<hr size="1" width="100%" noshade></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="130"><b><font face="Arial">Footnotes</font></b></td>
+<td>
+<ol>
+<li><a name="1"></a>Available at <a href="http://www.pgp.com">http://www.pgp.com</a>.
+<li><a name="2"></a>Available at <a href="ftp://prep.ai.mit.edu/gnu/gcc/gcc-core-2.95.2.tar.gz">ftp://prep.ai.mit.edu/gnu/gcc/gcc-core-2.95.2.tar.gz</a>.
+
+</ol>
+</td></tr>
+
+
+
+</table>
+
+</body>
+</html>
+

@@ -1,0 +1,277 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
+   <title>Installing libpcap to support network packet tools on systems running Solaris 2.X 
+
+</title>
+</head>
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+<table CELLSPACING=2 CELLPADDING="2" WIDTH="100%" >
+<tr>
+<td VALIGN=TOP WIDTH="105"><b><font face="Helvetica, Geneva, Arial">Implementation
+Details</font></b></td>
+
+<td VALIGN=TOP>
+<h2>
+<font face="Helvetica, Geneva, Arial">Installing libpcap to support network
+packet capturing tools on systems running Solaris 2.X.</font></h2>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="105"></td>
+
+<td VALIGN=TOP>
+<table BORDER CELLSPACING=0 CELLPADDING=0 WIDTH="80%" >
+<tr>
+<td BGCOLOR="#CCDDFF">Applies to the practices:
+<br><a 
+href="../practices/p094.html">"Monitor and inspect network activities for unexpected behavior"</a> <br><a
+href="../practices/p091.html">"Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior"</a>
+
+<p>Applicable technologies:
+<br>argus; Sun Solaris 2.X; UNIX operating systems and derivatives</td>
+</tr>
+</table>
+&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"></td>
+
+<td VALIGN=TOP>As the demand for user-level network monitoring tools grew,
+<tt>libpcap</tt> was developed as a portable, system-independent interface
+for user-level network packet capture. Since then, various tools have been
+developed based on this interface, most notably <tt><a href="http://www.cert.org/security-improvement/implementations/i042.13.html">tcpdump</a>
+</tt>and <tt><a href="/security-improvement/implementations/i042.09.html">argus</a></tt>.&nbsp;
+<p>This section describes how to install <tt>libpcap</tt> as a library
+on the Sun Solaris operating system, version 2.X. This approach also works
+with many other UNIX operating systems and hosts.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="105"><b><font face="Helvetica, Geneva, 
+
+Arial"><font color="#000000">Effort
+Estimates</font></font></b></td>
+
+<td>The time needed to retrieve the source code from the distribution site
+will vary depending upon your connection speed. The source code is approximately
+204 KB (version 0.4). Building and installing <tt>libpcap</tt> also depends
+upon machine performance, but on average will take between five and ten
+minutes.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="105"><b><font face="Helvetica, Geneva, 
+
+Arial"><font color="#000000">System
+Prerequisites</font></font></b></td>
+
+<td><tt>libpcap</tt> can be built and installed on many UNIX systems. Because
+there are known problems for some of them, please refer to the documentation
+(file <tt>INSTALL</tt>) to learn about potential problems on your
+systems.&nbsp;<P>&nbsp;<br></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=RIGHT WIDTH="105"></td>
+width=11></td>
+
+<td ALIGN=LEFT>
+<h4>
+<font face="helvetica, geneva, arial"><font color="#008000">Software Prerequisites</font></font></h4>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td WIDTH="105"></td>
+
+<td ALIGN=LEFT>To build <small><tt>libpcap</tt></small> on your
+system, you need Internet access to retrieve the following software tools:&nbsp;
+<ul>
+<li>
+an MD5 cryptographic checksum program (refer to <a href="/security-improvement/implementations/i002.01.html">Using
+MD5 to verify the integrity of file contents</a>)&nbsp;</li>
+
+<li>
+a C compiler; either the Sun C Computer or the free GNU C compiler (<a href="ftp://prep.ai.mit.edu/gnu/gcc/gcc-core-2.95.2.tar.gz">ftp://prep.ai.mit.edu/gnu/gcc/gcc-core-2.95.2.tar.gz</a>)&nbsp;</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"><b><font face="Helvetica, Geneva, Arial">Downloading
+and Verifying</font></b></td>
+
+<td VALIGN=TOP>The latest release of <tt>libpcap</tt> is available via
+anonymous ftp from <a href="ftp://ftp.ee.lbl.gov/libpcap.tar.Z">ftp://ftp.ee.lbl.gov/libpcap.tar.Z</a>.&nbsp;
+<p>Download this file into a directory (i.e. <i>/tmp</i>) and verify its
+checksum with an MD5 checksum program.&nbsp;
+<table BORDER CELLPADDING=4>
+<tr>
+<td><b>File to Download</b></td>
+
+<td><b>MD5 Checksum</b></td>
+</tr>
+
+<tr>
+<td><a href="ftp://ftp.ee.lbl.gov/libpcap-0.4.tar.Z">ftp://ftp.ee.lbl.gov/libpcap-0.4.tar.Z</a></td>
+
+<td><pre><font size="-1">3e0025a24218d327b152075c70a578e9</font></pre></td>
+</tr> </table>
+<p>If the computed cryptographic checksum of the download files does not
+correspond to the information above, verify that&nbsp;
+<ul>
+<li>
+your downloaded filenames match those listed above</li>
+
+<li>
+your checksum program computes MD5 message digests&nbsp;</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"><b><font face="Helvetica, Geneva,
+Arial">Building</font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"></td>
+align=RIGHT></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Unpack
+the distribution.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105">&nbsp;</td>
+
+<td VALIGN=TOP>After the compressed file is downloaded, you need to uncompress
+the distribution using the system <tt>uncompress</tt> program and unpack
+the file using the system <tt>tar</tt> program.&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; $ uncompress -c libpcap.tar.Z | tar xvf -</font></pre>
+This creates a subdirectory named <tt>libpcap-0.4</tt>. Change to this
+subdirectory because all remaining operations are performed there.&nbsp;<p>&nbsp;<br></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"></td>
+align=RIGHT></td>
+
+<td><b><font face="Helvetica, Geneva, Arial"><font color="#005500">Build
+the <tt>libpcap</tt> library.</font></font></b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105">&nbsp;</td>
+
+<td VALIGN=TOP><tt>libpcap</tt> is distributed as source code. The <tt>configure</tt>
+script provided as part of the package can be used in most environments.&nbsp;
+<p>Execute the <tt>configure</tt> script provided as part of the distribution
+to create the system-specific <tt>Makefile</tt>.&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; $ sh configure</font></pre>
+You may need to update the <tt>configure</tt> script as explained in the
+documentation:&nbsp;
+<ol>
+<li>
+If only <tt>flex</tt> (a replacement for <tt>lex</tt>) or <tt>bison</tt>
+(a replacement for <tt>yacc</tt>) is available without the other, disable
+them:&nbsp;</li>
+
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; $ sh configure --without-flex --without-bison</font></pre>
+
+<li>
+If the SPARCompiler is used, do not use the <tt>/usr/ucb/cc</tt> interface.
+Instead, set the environment variable <tt>CC</tt> before running <tt>configure</tt>:&nbsp;</li>
+
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; $ setenv CC /opt/SUNWspro/bin/cc
+&nbsp;&nbsp;&nbsp; $ sh configure</font></pre>
+</ol>
+If <tt>libpcap</tt> does not support the available packet capture mechanism,
+the <tt>configure</tt> script gives an error message:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp; configure: warning: cannot determine packet capture interface</font></pre>
+If this happens to you, you will need to move to another operating system
+to make use of <tt>libpcap</tt>.&nbsp;
+<p>After completing any configuration changes, you can build the <tt>libpcap</tt>
+library with the following:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; $ make</font></pre>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="2" HEIGHT="10">
+<hr SIZE="1"></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="105"><b><font face="Helvetica, Geneva,
+Arial">Installation</font></b></td>
+<td VALIGN=TOP>The installation can be performed automatically to place
+the <tt>libpcap</tt> library, the three include files, and the man pages
+into the correct system directories. This is manually done with root privileges:&nbsp;
+<pre><font size=-1>&nbsp;&nbsp;&nbsp; # cp libpcap.a /usr/local/lib/
+&nbsp;&nbsp;&nbsp; # cp pcap.h /usr/local/include/
+&nbsp;&nbsp;&nbsp; # cp pcap-namedb.h /usr/local/include/
+&nbsp;&nbsp;&nbsp; # mkdir /usr/local/include/net
+&nbsp;&nbsp;&nbsp; # cp net/bpf.h /usr/local/include/net/
+&nbsp;&nbsp;&nbsp; # cp pcap.3 /usr/local/man/man3/</font></pre>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td COLSPAN="2">
+<hr size="1"></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td ALIGN=LEFT WIDTH="105"><b><font face="Helvetica, Geneva, Arial"><font
+color="#000000">Tripwire
+Configuration</font></font></b></td>
+
+<td>The following is the <tt>tripwire</tt> configuration for the <tt>libpcap</tt>
+library and its accompanying files once installed.&nbsp;
+<p>The following files should not change, and any changes are unexpected:&nbsp;
+<pre>
+
+<font size=-1>@@define BINARY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; E+pinugsamc1-023456789
+
+
+/usr/local/lib/libpcap.a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/include/pcap.h&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/include/pcap-namedb.h&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/include/net/bpf.h&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY
+/usr/local/man/man3/pcap.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @@BINARY</font>
+</pre>
+</td>
+</tr>
+</table>
+</body>
+</html>

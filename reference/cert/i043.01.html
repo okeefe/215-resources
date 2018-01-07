@@ -1,0 +1,389 @@
+<html>
+<head>
+<title>Characterizing Files and Directories with Native Tools on Solaris 2.X</title>
+</head>
+
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+
+<font face="Helvetica, Geneva, Arial">
+<small>
+
+
+<table border="0" width="100%" cellspacing="6" cellpadding="4">
+<tr>
+<td width="130" align="left" valign="top"><font face="helvetica, geneva, arial">
+<h3>Implementation Details<h3></td>
+<td align="left" valign="top"><font face="helvetica, geneva, arial">
+<h2>Characterizing Files and Directories with Native Tools on Solaris 2.X</h2></td></tr>
+
+<tr>
+<td width="130"></td>
+
+<td align="left" valign="top">
+<table border="1" width="75%" cellspacing="0" cellpadding="8" bgcolor="#ccddff">
+<tr>
+<td align="left" valign="top">
+<p>Applies to the practice: <a href="../practices/p091.html">"Identify data 
+that characterize systems and aid in detecting signs of suspicious behavior"</a>
+
+<p>Applicable technologies: Solaris 2.x
+<p>Applicable scripts: <a href="/security-improvement/downloads/version1_char">capture</a>, <a href="/security-improvement/downloads/version2_char">ignore</a>, <a href="/security-improvement/downloads/version3a_char">attributes</a>, <a href="/security-improvement/downloads/version3b_char">contents</a>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td width="130"></td>
+<td align="left" valign="top">
+<p>Unexpected changes to files or directories on a Solaris 2.X system are a clue that an intrusion may have taken place. To discover which files and directories have changed as a system runs, you, the systems administrator, must first produce a list of files and directories. Then you must record their attributes (e.g. size, modification times, checksum of contents) and describe the set of allowable changes to entries on the list. Any deviation from this list is a candidate for an in-depth analysis that yields either new acceptable behavior or an indication that there may have been an intrusion.
+
+<p>One tool that produces this list and has a language for defining the set of allowable changes is <a href="/security-improvement/implementations/i002.02.html">Tripwire</a>. Tripwire is a public-domain program that can be compiled and tailored for Solaris 2.X and other UNIX systems. It is also a commercial product available from <a href="http://www.Tripwiresecurity.com">Tripwire Security, Inc.</a>
+
+<p>There are many other tools with similar functionality. A list available from <a href="http://www.whitehats.com">www.whitehats.com</a> contains several tools that can be used to characterize and detect changes to files and directories.
+
+<p>Some of you cannot use externally developed tools because of your company's security policies or because purchasing commercially available tools takes too long. If those two avenues are not available to you, fear not! Using tools native to Solaris 2.X, it is possible to characterize your computer system's files and directories and to inspect files and directories for unexpected changes. This implementation describes how to characterize your system's files and directories using those tools. A companion implementation, <a href="/security-improvement/implementations/i002.03.html">"Detecting changes in files and directories with native tools on Solaris 2.x,"</a> describes how to examine a system's files and directories for changes once the system has been characterized.
+
+<p>The native tool implementation is not a replacement for using Tripwire or other similar tools. This implementation is not foolproof &#151; a knowledgeable intruder can defeat it.  However, it is a good first step towards discovering changes in files and directories to learn more about how your systems operate and to discovering intrusions.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>System Prerequisites</h3>
+</td>
+<td>
+To use this implementation, Solaris 2.X must be installed on the system being characterized. We recommend that you use this document when you install Solaris 2.X on your machines. All of the tools used in this implementation are from the Solaris Core and Extended Utilities packages. You may also choose to install the Online Manual Pages package. Documentation for Solaris is available from <a href="http://docs.sun.com/">http://docs.sun.com/</a>.
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Hardware Prerequisites</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">This implementation requires the use of a floppy drive to contain the read-only file, directory, and attribute list that characterize the system under review. (Other read-only storage mechanisms are also acceptable, but a discussion of this is beyond the scope of this document.)
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Software Prerequisites</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">There are no specific software requirements beyond installing the Solaris Core and Extended Utilities packages, and the optional Online Manual Pages package.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Dependencies</h3>
+</td>
+<td>
+You will need to be root on your system so that you can read files and traverse privileged directories.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Downloading and Verifying</h3>
+</td>
+<td>
+There is no additional software or packages to download. Links to the scripts used in this implementation are available in the navigation box at the top of the page.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Building</h3>
+</td>
+<td>
+There is nothing to build for this implementation. The scripts used in this implementation need to be installed.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Testing before Installation</h3>
+</td>
+<td>
+There is nothing to test for this implementation before installation.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Installation</h3>
+</td>
+<td>
+The following sections describe four scripts that you can use to characterize the files and directories found on a Solaris 2.X system. They are to be used during the <a href="/security-improvement/modules/m05.html">Preparing to Detect Signs of Intrusion</a> phase of administering a system.
+
+<p>Your goal is to create lists of files and directories and, optionally, some of their attributes. These lists will be used in the detecting phase to uncover any unexpected changes. The files created by and for these scripts should reside on media that is unchangeable by an intruder. One example is a floppy disk, marked read-only by sliding the tab on the floppy disk and mounted read-only by the operating system. Throughout this section, we assume that the floppy is mounted at <i>/floppy/native</i> and is mounted read-write.
+
+<p>Beware that the scripts shown in the sections below can be misled by changes made to your system by intruders. When using these scripts or their variations, you need to recognize their limitations and identify those system aspects that you trust.
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Version 1 - Capture Files Without Attributes</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">The first version of the characterizing script finds all files on a file system and ignores their attributes. This is a simple but powerful script that builds the data necessary to show which files have been created and removed as the system operates. Here is the script:<br>
+<pre><font face="courier" size="2">
+find / -xdev -print |
+sort |
+compress > /floppy/native/root/files-v1.Z
+</font></pre>
+<p>The script first lists all files on the specified file system (<font face="courier">find</font>), sorts that list (<font face="courier">sort</font>), and then compresses (<font face="courier">compress</font>) the resulting data and stores it in a file. Compressing the data makes the script more tolerant to file systems with many files, as the space available on a floppy is fairly limited.
+
+<p>Note that the script stores the list of files for a file system in a subdirectory on the floppy disk. The path to this subdirectory contains the name of the file system, <font face="courier">root</font> in this case. This becomes important in the next section when files which we don't need (for example files stored in <i>/tmp</i>) are removed from the raw list of files and directories. That task is usually specific to each file system, hence the use of a subdirectory.
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Version 2 - Add An Ignore List</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">Next, add the functionality that defines the set of changes to files that you consider acceptable. First, define the list of files to ignore. Then apply this list to the raw set of files so that they are not subjected to any further processing.
+
+<p>One way to build this ignore list is with a script file to be used by the <b>sed</b> stream editor.  <b>sed</b> has regular expression-matching capabilities and operates on the input stream to produce the output stream. Below is an example of a <b>sed</b> script file that removes all lines naming files in the <i>/tmp</i> and the <i>/var/tmp</i> directories. By adding the trailing slash to the regular expression, executing the script file preserves references to the <i>/tmp</i> and <i>/var/tmp</i> directories. It is important to keep them because those directories could be removed as part of the intrusion activity.<br>
+<pre><font face="courier" size="2">
+/^\/tmp\//d
+/^\/var\/tmp\//d
+</font></pre>
+<p>By applying the <b>sed</b> script file to the script from the section "Version 1 - Capture files without attributes," we get the following. Note that the ignore file is also stored on the floppy disk for security purposes.<br>
+<pre><font face="courier" size="2">
+find / -xdev -print |
+sed -f /floppy/native/root/ignore |
+sort | 
+compress > /floppy/native/root/files-v2.Z
+</font></pre>
+<p>The list of files and directories on the file system is found (<font face="courier">find</font>), those which we don't care about are removed (<font face="courier">sed</font>), and the list is sorted (<font face="courier">sort</font>) and compressed (<font face="courier">compress</font>).
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Version 3a - Add Attributes</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">The next version adds file attributes to the characterization. The attributes are those that can be delivered by the <b>ls</b> program. Specifically, we add the i-node number, the user and group identification, size, and last access time.  The script now becomes the following:<br>
+<pre><font face="courier" size="2">
+find / -xdev -print |
+sed -f /floppy/native/root/ignore |
+xargs -n 100 ls -ldi |
+sort -n |
+compress > /floppy/native/root/files-v3a.Z
+</font></pre>
+<p>This produces a list of all files (<font face="courier">find</font>) except those we don't care about (<font face="courier">sed</font>). The list contains all of the attributes we can easily generate (<font face="courier">ls -ldi</font>, while <font face="courier">xargs</font> is an efficiency measure) and is sorted in ascending numerical order by i-node number (<font face="courier">sort -n</font>), compressed (<font face="courier">compress</font>), and then stored on the floppy disk.
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="right"></td>
+<td align="left"><font face="helvetica, geneva, arial" color="#008000">
+<h4>Version 3b - Check File Contents</h4>
+</font></td></tr>
+<tr valign="top">
+<td width="130"></td>
+<td align="left">You can also check file contents with programs available with Solaris 2.X. Another variation of the checking script from the versions in the sections "Add an Ignore List" and "Add Attributes"  is the following:<br>
+<pre><font face="courier" size="2">
+find / -xdev -type f -print |
+sed -f /floppy/native/root/ignore |
+sort |
+xargs -n 100 sum |
+compress > /floppy/native/root/files-v3b.Z
+</font></pre>
+<p>This version of the script finds all regular files (<font face="courier">find</font> ... <font face="courier">-type f</font>), ignores those of no concern (<font face="courier">sed</font>), sorts the list (<font face="courier">sort</font>), computes a checksum of each file (<font face="courier">sum</font>, with <font face="courier">xargs</font> for efficiency), and compresses the result (<font face="courier">compress</font>). It is an alternate check that can be done for all regular files in a file system.
+
+<p>Intruders can spoof this checksum information. There are widely available tools that alter a file to match a selected checksum. This means that intruders can install a changed version of a program and then alter it so that it appears to be unchanged when checked with <font face="courier">sum</font>. The solution is a stronger cryptographic checksum, such as the <a href="/security-improvement/implementations/i002.01.html">md5sum</a> program that is part of the GNU text utilities, but there are no stronger tools native to Solaris 2.X.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Testing After Installation</h3>
+</td>
+<td>
+The script from the section "Add Attributes"  produces a file that contains one line for each file found in the file system. Each line is prefaced by its i-node number. Because of hard links in the UNIX file system, the same i-node may be referred to more than once. To determine the number of unique i-nodes found by this script, do the following. (Note, you need to select the file from the floppy based on the version of the script that you selected. This example uses version 1.)<br>
+<pre><font face="courier" size="2">
+zcat /floppy/native/root/files-v1.Z | awk '{print $1}' | uniq | wc -l
+</font></pre>
+<p>This command uncompresses the stored file (<font face="courier">zcat</font>), extracts just the i-node number (<font face="courier">awk</font>), eliminates duplicate i-node numbers (<font face="courier">uniq</font>), and produces a count (<font face="courier">wc</font>). This count should be approximately equal to the number of i-nodes presently in use on the system as reported with:<br>
+<pre><font face="courier" size="2">
+df -o i /
+</font></pre>
+<p>In developing this implementation, we were never able to get the counts to agree exactly. We've yet to explain the difference, but we do note here that the counts differed by about 40 i-nodes out of approximately 69,000 i-nodes, or less than .1%. We feel that this is close enough to have a high degree of confidence in the data produced by the scripts.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Maintenance</h3>
+</td>
+<td>
+There are a few maintenance activities that you need to do on a routine basis. They are:
+<ol>
+<li>Adding file systems to or removing file systems from a production machine. Added file systems need to be characterized and floppies need to be generated to contain the characterization data and the ignore list. Removed file systems need to have their checking scripts disabled.<p>
+<li>Adding, changing, and removing files from a production machine. You will likely patch systems and add, change, and remove other files as a system matures. We recommend that you characterize the appropriate file systems using this implementation after doing any of these operations.<p>
+<li>Learning more about existing files. As your systems continue to run, you learn more about what files are routinely created and destroyed and which are changed. We recommend that you filter out reports of these changes so that you can concentrate on those files with unexpected changes. This means that you need to change their characterization by updating the ignore file. You need to mount the read-only media so that it can be written upon and then change the appropriate <b>sed</b>-based ignore file.
+</ol>
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Interpreting Logs</h3>
+</td>
+<td>
+There are no logs produced by these scripts.
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Effort Estimates</h3>
+</td>
+<td>
+Installing the scripts takes virtually no time. However, the time it takes to run them to generate the characterization information is highly variable. The times given below are for a Solaris 2.X system with 2.4Gb of file space containing 69,000 i-nodes. The system runs on an Intel processor clocked at 300Mhz and has 128Mb of memory.<br>
+<p>
+<table border="0" width="75 ellpadding="8" cellspacing="8" align="center">
+<tr>
+<td><b>Script Section</b></td>
+<td><b>Elapsed Time (seconds)</b></td></tr>
+<tr>
+<td>Capture Files Without Attributes, Add an Ignore List</td>
+<td>11</td></tr>
+<tr><td>Add Attributes</td>
+<td>33</td></tr>
+<tr><td>Check File Contents</td>
+<td>118</td></tr>
+</table>
+</td>
+</tr>
+
+<tr valign="top">
+<td colspan="2">
+<hr size="1">
+</td>
+</tr>
+
+<tr valign="top">
+<td width="130" align="left"><font face="helvetica, geneva, arial">
+<h3>Tripwire Configuration</h3>
+</td>
+<td>
+Because this implementation assumes that Tripwire is not available, no Tripwire configuration is given.
+</td>
+</tr>
+
+
+</table>
+
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

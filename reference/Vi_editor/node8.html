@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Moving About in a File</TITLE>
+<META NAME="description" CONTENT="Moving About in a File">
+<META NAME="keywords" CONTENT="501">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="501.css">
+
+<LINK REL="previous" HREF="node7.html">
+<LINK REL="up" HREF="node4.html">
+<LINK REL="next" HREF="node9.html">
+</HEAD>
+
+<BODY  BGCOLOR="#FFFFFF">
+<!--Navigation Panel-->
+<A NAME="tex2html124"
+  HREF="node9.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="icons/next.png"></A> 
+<A NAME="tex2html120"
+  HREF="node4.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="icons/up.png"></A> 
+<A NAME="tex2html116"
+  HREF="node7.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="icons/prev.png"></A> 
+<A NAME="tex2html122"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="icons/contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html125"
+  HREF="node9.html">Ex Commands</A>
+<B> Up:</B> <A NAME="tex2html121"
+  HREF="node4.html">Editing a New File</A>
+<B> Previous:</B> <A NAME="tex2html117"
+  HREF="node7.html">Correcting Mistakes</A>
+ &nbsp <B>  <A NAME="tex2html123"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00044000000000000000">
+Moving About in a File</A>
+</H2>
+
+<P>
+The arrow keys on the keyboard
+<TABLE CELLPADDING=3 BORDER="1">
+<TR><TD ALIGN="CENTER"><IMG
+ WIDTH="11" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img6.png"
+ ALT="$\uparrow$"></TD>
+</TR>
+</TABLE>,
+<TABLE CELLPADDING=3 BORDER="1">
+<TR><TD ALIGN="CENTER"><IMG
+ WIDTH="20" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img7.png"
+ ALT="$\leftarrow$"></TD>
+</TR>
+</TABLE>,
+<TABLE CELLPADDING=3 BORDER="1">
+<TR><TD ALIGN="CENTER"><IMG
+ WIDTH="19" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img8.png"
+ ALT="$\rightarrow$"></TD>
+</TR>
+</TABLE>
+and
+<TABLE CELLPADDING=3 BORDER="1">
+<TR><TD ALIGN="CENTER"><IMG
+ WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img9.png"
+ ALT="$\downarrow$"></TD>
+</TR>
+</TABLE>,
+can be
+used to move the cursor up, left, right or down
+when
+<TT>vi</TT>
+is in editing mode.
+If you try to move above or
+below the lines in the terminal window, the lines in the screen terminal
+are rolled down or up to
+reposition the <I>window</I> on the file.
+
+<P>
+You can also locate the cursor by <I>context</I>.  The command:
+<BLOCKQUOTE>
+<TT>/string</TT> <IMG
+ WIDTH="80" HEIGHT="41" ALIGN="MIDDLE" BORDER="0"
+ SRC="img2.png"
+ ALT="\fbox{RETURN}">
+</BLOCKQUOTE>
+
+<P>
+will move the cursor to the next occurrence of <TT>string</TT>.
+Similarly,
+<BLOCKQUOTE>
+<TT>?string</TT> <IMG
+ WIDTH="80" HEIGHT="41" ALIGN="MIDDLE" BORDER="0"
+ SRC="img2.png"
+ ALT="\fbox{RETURN}">
+</BLOCKQUOTE>
+will move the cursor to the previous occurrence of <TT>string</TT>.
+There are also ``go to line <I>n</I>'' commands.  The command
+<BLOCKQUOTE>
+<TT>:<EM>n</EM></TT> <IMG
+ WIDTH="80" HEIGHT="41" ALIGN="MIDDLE" BORDER="0"
+ SRC="img2.png"
+ ALT="\fbox{RETURN}">
+</BLOCKQUOTE>
+moves the cursor to line <I>n</I> in the file.  In particular,
+<BLOCKQUOTE>
+<TT>:1</TT> <IMG
+ WIDTH="80" HEIGHT="41" ALIGN="MIDDLE" BORDER="0"
+ SRC="img2.png"
+ ALT="\fbox{RETURN}">
+</BLOCKQUOTE>
+moves the cursor to the start of the file and
+<BLOCKQUOTE>
+<TT>:$</TT> <IMG
+ WIDTH="80" HEIGHT="41" ALIGN="MIDDLE" BORDER="0"
+ SRC="img2.png"
+ ALT="\fbox{RETURN}">
+</BLOCKQUOTE>
+moves it to the last line in the file.
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html124"
+  HREF="node9.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="icons/next.png"></A> 
+<A NAME="tex2html120"
+  HREF="node4.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="icons/up.png"></A> 
+<A NAME="tex2html116"
+  HREF="node7.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="icons/prev.png"></A> 
+<A NAME="tex2html122"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="icons/contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html125"
+  HREF="node9.html">Ex Commands</A>
+<B> Up:</B> <A NAME="tex2html121"
+  HREF="node4.html">Editing a New File</A>
+<B> Previous:</B> <A NAME="tex2html117"
+  HREF="node7.html">Correcting Mistakes</A>
+ &nbsp <B>  <A NAME="tex2html123"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+&#169 Robert Evans, <a href=http://www.cs.cf.ac.uk/>Cardiff School of Computer Science</a>, <a href=http://www.cf.ac.uk/>Cardiff University</a>, 2003-09-18
+</ADDRESS>
+</BODY>
+</HTML>

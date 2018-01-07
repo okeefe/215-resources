@@ -1,0 +1,58 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>D.4. dumpcap: Capturing with dumpcap for viewing
+	with Wireshark</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="AppTools.html" title="Appendix D. Related command line tools"><link rel="prev" href="AppToolstcpdump.html" title="D.3. tcpdump: Capturing with tcpdump for viewing
+	with Wireshark"><link rel="next" href="AppToolscapinfos.html" title="D.5. capinfos: Print information about capture files
+	"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">D.4. <span><strong class="command">dumpcap</strong></span>: Capturing with dumpcap for viewing
+	with Wireshark</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="AppToolstcpdump.html">Prev</a> </td><th width="60%" align="center">Appendix D. Related command line tools</th><td width="20%" align="right"> <a accesskey="n" href="AppToolscapinfos.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="AppToolsdumpcap"></a>D.4. <span><strong class="command">dumpcap</strong></span>: Capturing with dumpcap for viewing
+	with Wireshark</h2></div></div></div><p>
+	<span class="application">Dumpcap</span> is a network traffic dump tool.
+	It captures packet data from a live network and writes the
+	packets to a file.
+	Dumpcap's native capture file format is libpcap format, which is also
+	the format used by Wireshark, tcpdump and various other tools.
+    </p><p>
+	Without any options set it will use the pcap library to capture traffic
+	from the first available network interface and write the received raw
+	packet data, along with the packets' time stamps into a libpcap file.
+    </p><p>
+	Packet capturing is performed with the pcap library.
+	The capture filter syntax follows the rules of the pcap library.
+    </p><p>
+    </p><div class="example"><a name="AppToolsdumpcapEx"></a><p class="title"><b>Example D.1. Help information available from dumpcap</b></p><pre class="programlisting">
+Dumpcap 0.99.6
+Capture network packets and dump them into a libpcap file.
+See http://www.wireshark.org for more information.
+
+Usage: dumpcap [options] ...
+
+Capture interface:
+  -i &lt;interface&gt;           name or idx of interface (def: first none loopback)
+  -f &lt;capture filter&gt;      packet filter in libpcap filter syntax
+  -s &lt;snaplen&gt;             packet snapshot length (def: 65535)
+  -p                       don't capture in promiscuous mode
+  -B &lt;buffer size&gt;         size of kernel buffer (def: 1MB)
+  -y &lt;link type&gt;           link layer type (def: first appropriate)
+  -D                       print list of interfaces and exit
+  -L                       print list of link-layer types of iface and exit
+
+Stop conditions:
+  -c &lt;packet count&gt;        stop after n packets (def: infinite)
+  -a &lt;autostop cond.&gt; ...  duration:NUM - stop after NUM seconds
+                           filesize:NUM - stop this file after NUM KB
+                              files:NUM - stop after NUM files
+Output (files):
+  -w &lt;filename&gt;            name of file to save (def: tempfile)
+  -b &lt;ringbuffer opt.&gt; ... duration:NUM - switch to next file after NUM secs
+                           filesize:NUM - switch to next file after NUM KB
+                              files:NUM - ringbuffer: replace after NUM files
+Miscellaneous:
+  -v                       print version information and exit
+  -h                       display this help and exit
+
+Example: dumpcap -i eth0 -a duration:60 -w output.pcap
+"Capture network packets from interface eth0 until 60s passed into output.pcap"
+
+Use Ctrl-C to stop capturing at any time.
+      </pre></div><p>
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="AppToolstcpdump.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="AppTools.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="AppToolscapinfos.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">D.3. <span><strong class="command">tcpdump</strong></span>: Capturing with tcpdump for viewing
+	with Wireshark </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> D.5. <span><strong class="command">capinfos</strong></span>: Print information about capture files
+	</td></tr></table></div></body></html>

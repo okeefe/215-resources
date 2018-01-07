@@ -1,0 +1,193 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>2.8. Installing Wireshark under Windows</title><link rel="stylesheet" href="ws.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="Wireshark User's Guide"><link rel="up" href="ChapterBuildInstall.html" title="Chapter 2. Building and Installing Wireshark"><link rel="prev" href="ChBuildInstallWinBuild.html" title="2.7. Building from source under Windows"><link rel="next" href="ChapterUsing.html" title="Chapter 3. User Interface"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.8. Installing Wireshark under Windows</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ChBuildInstallWinBuild.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Building and Installing Wireshark</th><td width="20%" align="right"> <a accesskey="n" href="ChapterUsing.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChBuildInstallWinInstall"></a>2.8. Installing Wireshark under Windows</h2></div></div></div><p>
+      In this section we explore installing Wireshark under Windows from the 
+      binary packages.  
+	</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ChBuildInstallWireshark"></a>2.8.1. Install Wireshark</h3></div></div></div><p>
+	You may acquire a binary installer of Wireshark named something like: 
+	<code class="filename">wireshark-setup-x.y.z.exe</code>.
+	The Wireshark installer includes WinPcap, so you don't need to download 
+	and install two separate packages.
+	</p><p>
+    Simply download the Wireshark installer from:
+    <a href="http://www.wireshark.org/download.html" target="_top">http://www.wireshark.org/download.html</a> 
+	and execute it.
+	Beside the usual installer options like where to install the program, 
+	there are several optional components.
+    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: Tip: Just keep the defaults!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="wsug_graphics/tip.png"></td><th align="left">Tip: Just keep the defaults!</th></tr><tr><td align="left" valign="top"><p>
+	If you are unsure which settings to select, just keep the defaults.
+    </p></td></tr></table></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="ChBuildInstallComponents"></a>2.8.1.1. "Choose Components" page</h4></div></div></div><p>
+	<span><strong class="command">Wireshark</strong></span>
+	</p><div class="itemizedlist"><ul type="disc"><li><p>
+	<span><strong class="command">Wireshark GTK</strong></span> - Wireshark is a GUI network protocol 
+	analyzer.
+	</p></li><li><p>
+	<span><strong class="command">GTK MS Windows Engine</strong></span> - GTK MS Windows Engine
+	(native Win32 look and feel, recommended).
+	</p></li></ul></div><p>
+	</p><p>
+	<span><strong class="command">TShark</strong></span> - TShark is a command-line based network 
+	protocol analyzer.
+	</p><p>
+	<span><strong class="command">Plugins / Extensions</strong></span> (for the Wireshark and TShark 
+	dissection engines):
+	</p><div class="itemizedlist"><ul type="disc"><li><p>
+	<span><strong class="command">Dissector Plugins</strong></span> - Plugins with some extended dissections.
+	</p></li><li><p>
+	<span><strong class="command">Tree Statistics Plugins</strong></span> - Plugins with some extended statistics.
+	</p></li><li><p>
+	<span><strong class="command">Mate - Meta Analysis and Tracing Engine (experimental)</strong></span> 
+	- user configurable extension(s) of the display filter engine, see 
+	<a href="http://wiki.wireshark.org/Mate" target="_top">http://wiki.wireshark.org/Mate</a>
+	for details.
+	</p></li><li><p>
+	<span><strong class="command">SNMP MIBs</strong></span> - SNMP MIBs for a more detailed SNMP 
+	dissection.
+	</p></li></ul></div><p>
+	<span><strong class="command">Tools</strong></span> (additional commnand line tools to work with 
+	capture files):
+	</p><div class="itemizedlist"><ul type="disc"><li><p>
+	<span><strong class="command">Editcap</strong></span> - Editcap is a program that reads a capture 
+	file and writes some or all of the packets into another capture file.
+	</p></li><li><p>
+	<span><strong class="command">Text2Pcap</strong></span> - Text2pcap is a program that reads in an 
+	ASCII hex dump and writes the data into a libpcap-style capture file.
+	</p></li><li><p>
+	<span><strong class="command">Mergecap</strong></span> - Mergecap is a program that combines multiple 
+	saved capture files into a single output file.
+	</p></li><li><p>
+	<span><strong class="command">Capinfos</strong></span> - Capinfos is a program that provides 
+	information on capture files.
+	</p></li></ul></div><p>
+    </p><p>
+	<span><strong class="command">User's Guide</strong></span> -
+	Local installation of the User's Guide. The Help buttons on most dialogs 
+	will require an internet connection to show help pages if the User's Guide 
+	is not installed locally.
+	</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="ChBuildInstallAdditionalTasks"></a>2.8.1.2. "Additional Tasks" page</h4></div></div></div><p>
+	</p><div class="itemizedlist"><ul type="disc"><li><p>
+	<span><strong class="command">Start Menu Shortcuts</strong></span> - add some start menu shortcuts.
+	</p></li><li><p>
+	<span><strong class="command">Desktop Icon</strong></span> - add a Wireshark icon to the desktop.
+	</p></li><li><p>
+	<span><strong class="command">Quick Launch Icon</strong></span> - add a Wireshark icon to the 
+	Explorer quick launch toolbar.
+	</p></li><li><p>
+	<span><strong class="command">Associate file extensions to Wireshark</strong></span> - Associate 
+	standard network trace files to Wireshark.
+	</p></li></ul></div><p>
+    </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="ChBuildInstallWinPcap"></a>2.8.1.3. "Install WinPcap?" page</h4></div></div></div><p>
+	The Wireshark installer contains the latest released WinPcap installer.
+    </p><p>
+	If you don't have WinPcap installed, you won't be able to capture live 
+	network traffic, but you will still be able to open saved capture files.
+    </p><p>
+	</p><div class="itemizedlist"><ul type="disc"><li><p>
+	<span><strong class="command">Currently installed WinPcap version</strong></span> - the Wireshark 
+	installer detects the currently installed WinPcap version. 
+	</p></li><li><p>
+	<span><strong class="command">Install WinPcap x.x</strong></span> - if the currently installed 
+	version is older than the one which comes with the Wireshark installer 
+	(or WinPcap is not installed at all), this will be selected by default.
+	</p></li><li><p>
+	<span><strong class="command">Start WinPcap service "NPF" at startup</strong></span> - so users 
+	without administrative privileges can capture.
+	</p></li></ul></div><p>
+	
+    </p><p>
+	More WinPcap info:
+	</p><div class="itemizedlist"><ul type="disc"><li><p>
+	Wireshark related:
+	<a href="http://wiki.wireshark.org/WinPcap" target="_top">http://wiki.wireshark.org/WinPcap</a>
+	</p></li><li><p>
+	General WinPcap info: 
+	<a href="http://www.winpcap.org" target="_top">http://www.winpcap.org</a>
+	</p></li></ul></div><p>
+	</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="ChBuildInstallWiresharkCommandLine"></a>2.8.1.4. Command line options</h4></div></div></div><p>
+	You can simply start the Wireshark installer without any command line 
+	parameters, it will show you the usual interactive installer.
+    </p><p>
+	For special cases, there are some command line parameters available:
+    </p><div class="itemizedlist"><ul type="disc"><li><p>
+		<span><strong class="command">/NCRC</strong></span> disables the CRC check
+		</p></li><li><p>
+		<span><strong class="command">/S</strong></span> runs the installer or uninstaller silently with 
+		default values. Please note: The silent installer won't install WinPCap!
+		</p></li><li><p>
+		<span><strong class="command">/desktopicon</strong></span> installation of the desktop icon, 
+		<span><strong class="command">=yes</strong></span> - force installation, <span><strong class="command">=no</strong></span> - 
+		don't install, otherwise use defaults / user settings.
+		This option can be useful for a silent installer. 
+		</p></li><li><p>
+		<span><strong class="command">/quicklaunchicon</strong></span> installation of the quick launch icon, 
+		<span><strong class="command">=yes</strong></span> - force installation, <span><strong class="command">=no</strong></span> - 
+		don't install, otherwise use defaults / user settings.
+		</p></li><li><p>
+		<span><strong class="command">/D</strong></span> sets the default installation directory 
+		($INSTDIR), overriding 
+		InstallDir and InstallDirRegKey. It must be the last parameter used in 
+		the command line and must not contain any quotes, even if the path 
+		contains spaces.
+		</p></li></ul></div><p> Example:
+    </p><pre class="programlisting">
+wireshark-setup-1.0.0.exe /NCRC /S /desktopicon=yes 
+  /quicklaunchicon=no /D=C:\Program Files\Foo
+	</pre><p>
+	</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ChBuildInstallWinPcapManually"></a>2.8.2. Manual WinPcap Installation</h3></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: Note!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="wsug_graphics/note.png"></td><th align="left">Note!</th></tr><tr><td align="left" valign="top"><p>
+	<span><strong class="command">As mentioned above, the Wireshark installer 
+	takes care of the installation of WinPcap, 
+	so usually you don't have to worry about WinPcap at all!</strong></span> 
+    </p></td></tr></table></div><p>
+	The following is only necessary if you want to 
+	try a different version than the one included in the Wireshark installer, 
+	e.g. because a new WinPcap (beta) version was released.
+    </p><p>
+	Additional WinPcap versions (including newer alpha or beta releases)
+	can be downloaded from the following locations:
+	</p><div class="itemizedlist"><ul type="disc"><li><p>
+    The main WinPcap site: 
+	<a href="http://www.winpcap.org" target="_top">http://www.winpcap.org</a>
+	</p></li><li><p>
+    The Wiretapped.net mirror:
+	<a href="http://www.mirrors.wiretapped.net/security/packet-capture/winpcap" target="_top">
+	http://www.mirrors.wiretapped.net/security/packet-capture/winpcap</a>
+	</p></li></ul></div><p>
+    </p><p>
+	At the download page you will find a single installer exe called something 
+	like "auto-installer", which can be installed under various Windows 
+	systems, including NT4.0/2000/XP/Vista.
+	</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ChBuildInstallWinWiresharkUpdate"></a>2.8.3. Update Wireshark</h3></div></div></div><p>
+	From time to time you may want to update your installed Wireshark to a more
+	recent version. If you join Wireshark's announce mailing list, you will be 
+	informed about new Wireshark versions, see <a href="ChIntroHelp.html#ChIntroMailingLists" title="1.6.4. Mailing Lists">Section 1.6.4, &#8220;Mailing Lists&#8221;</a> for details how to subscribe to this list.
+    </p><p>
+	New versions of Wireshark usually become available every 4 to 8 months.
+	Updating Wireshark is done the same way as installing it, you simply 
+	download and start the installer exe. A reboot is usually not required and
+	all your personal settings remain unchanged.
+    </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ChBuildInstallWinPcapUpdate"></a>2.8.4. Update WinPcap</h3></div></div></div><p>
+	New versions of WinPcap are less frequently available, maybe only once in a 
+	year. You will find WinPcap update instructions where you can download new 
+	WinPcap versions. Usually you have to reboot the machine after installing 
+	a new WinPcap version.
+    </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning: Warning!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="wsug_graphics/warning.png"></td><th align="left">Warning!</th></tr><tr><td align="left" valign="top"><p>
+	If you have an older version of WinPcap installed, you must uninstall it 
+	before installing the current version. Recent versions of the WinPcap 
+	installer will take care of this.
+	</p></td></tr></table></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ChBuildInstallWinUninstall"></a>2.8.5. Uninstall Wireshark</h3></div></div></div><p>
+	You can uninstall Wireshark the usual way, using the "Add or Remove 
+	Programs" option inside the Control Panel. Select the "Wireshark" entry to 
+	start the uninstallation procedure.
+    </p><p>
+	The Wireshark uninstaller will provide several options as to which things are to be 
+	uninstalled; the default is to remove the core components but keep the personal 
+	settings, WinPcap and alike.
+    </p><p>
+	WinPcap won't be uninstalled by default, as other programs than Wireshark 
+	may use it as well.
+    </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ChBuildInstallWinPcapUninstall"></a>2.8.6. Uninstall WinPcap</h3></div></div></div><p>
+	You can uninstall WinPcap independently of Wireshark, using the "WinPcap" 
+	entry in the "Add or Remove Programs" of the Control Panel.
+    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: Note!"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="wsug_graphics/note.png"></td><th align="left">Note!</th></tr><tr><td align="left" valign="top"><p>
+	After uninstallation of WinPcap you can't capture anything with Wireshark.
+    </p></td></tr></table></div><p>
+	It might be a good idea to reboot Windows afterwards.
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ChBuildInstallWinBuild.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ChapterBuildInstall.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ChapterUsing.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.7. Building from source under Windows </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 3. User Interface</td></tr></table></div></body></html>

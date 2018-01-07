@@ -1,0 +1,148 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+
+<TITLE>Enabling process accounting on systems running Solaris 2</TITLE>
+</HEAD>
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+
+
+<font face="Helvetica, Geneva, Arial">
+<small>
+<table border="0" width="100%" cellspacing="6" cellpadding="4">
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP" colspan="2"> 
+      <p><b><font size="3" face="Arial, Helvetica, sans-serif">Implementation 
+        Details</font></b></p>
+    </td>
+    <td align="LEFT" valign="TOP"><b><font face="Arial" size=4> 
+      <p>Enabling process accounting on systems running Solaris 2.x</p>
+      </font></b></td>
+  </tr>
+  <tr> 
+    <td width="130" colspan="2">&nbsp;</td>
+    <td> 
+      <table border=1 width="75%" bgcolor="#ccddff" cellspacing="0" cellpadding="8">
+        <tr> 
+          <td align="LEFT" bgcolor="#ccddff"> 
+            <p>Applies to the practices: <br><a href="../practices/p095.html">"Monitor and inspect system activities for unexpected behavior"</a>
+<br><a href="../practices/p091.html">"Identify data that characterize systems and aid in detecting signs of suspicious behavior"</a> 
+<br><a href="../practices/p092.html">"Manage logging and other data collection mechanisms"</a><br>
+ 
+            <p>Applicable technologies: Solaris 2.x; UNIX operating system and 
+              derivatives</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" colspan="2">&nbsp;</td>
+    <td align="LEFT" valign="TOP">This implementation describes the information 
+      necessary to enable process accounting on the Sun Solaris operating system, 
+      version 2.x.</td>
+  </tr>
+  <tr> 
+    <td width="13%" colspan="3"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="115" align="LEFT" valign="TOP"> 
+      <div align="LEFT"> 
+        <p align="left"><b><font face="Arial">Turning on </font></b><b><font face="Arial" size=3> 
+          p</font><font face="Arial">rocess accounting</font></b> </p>
+      </div>
+    </td>
+    <td width="10" align="LEFT" valign="TOP"><b><font face="Arial" size=3></font></b></td>
+    <td align="LEFT" valign="TOP"><b><font face="Arial" size=3> 
+      <p> <font color="#008000">Starting and stopping process accounting.</font> 
+      </p>
+      </font></b> 
+      <p>The process accounting mechanism is started with the <font face="Courier New" size=3>accton</font> 
+        command. To start process accounting from the command prompt, enter the 
+        following command, which can be run as root: </p>
+      <font face="Courier New" size=3> 
+      <p>/usr/lib/acct/accton /var/adm/pacct</p>
+      </font> 
+      <p>This enables process accounting with data being written to the file /var/adm/pacct. 
+        You should notice an immediate change to the size of the process accounting 
+        file once accounting has been enabled. Executing the <font face="Courier New" size=3>accton 
+        </font>command provides a history of processes executed since process 
+        accounting was started, along with a number of other fields related to 
+        the execution of each process. </p>
+      <p>To turn off process accounting from the command line, issue the above 
+        command without the file parameter, as follows: </p>
+      <font face="Courier New" size=3> 
+      <p> <font size="2">/usr/lib/acct/accton</font></p>
+      </font></td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP" colspan="2"> 
+      <div align="RIGHT"> <b><font face="Arial" size=3></font></b> 
+      </div>
+    </td>
+    <td align="LEFT" valign="TOP"><b><font face="Arial" size=3> 
+      <p><font color="#008000">Initiating process accounting at boot time. </font></p>
+      </font></b> 
+      <p>The command that started process accounting runs until it is turned off 
+        or until the machine has rebooted. To have the process accounting continue 
+        after a reboot, you need to add the <font face="Courier New" size=3>accton 
+        </font>command with the file parameter to one of the boot scripts. </p>
+      <p>To add the command, create a new file in the /etc/rc3.d directory with 
+        a name of the form SNNacct.sh where NN is a number greater than 25 but 
+        less than 99 that does not conflict with any other numbers in that directory. 
+        Then add the first command line above to the new file, save it, and exit. 
+        This enables process accounting following a reboot of the system.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="130" align="LEFT" valign="TOP" colspan="2"> 
+      <div align="RIGHT"> <b><font face="Arial" size=3> 
+        <font color="#008000"></font></font></b> </div>
+    </td>
+    <td align="LEFT" valign="TOP"> 
+      <p><b><font face="Arial" size=3><font color="#008000">Rotating process accounting 
+        files. </font>&nbsp; </font></b></p>
+      <p>Process accounting files can become very large, very quickly. You need 
+        to rotate these files, allowing you to keep a certain number of days' 
+        worth of information while in turn limiting the amount of space consumed 
+        by the accounting file. </p>
+      <p>For information on rotating log files on Solaris using newsyslog, see 
+        the implementation <a href="i041.09.html">&quot;Using newsyslog to rotate 
+        files containing logging messages on systems running Solaris 2.x.&quot;</a></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="13%" colspan="3"> 
+      <hr size="1">
+    </td>
+  </tr>
+  <tr> 
+    <td width="115" align="LEFT" valign="TOP"> 
+      <div align="left"><b><font face="Arial">Related <br>
+        Information</font></b> </div>
+    </td>
+    <td width="10" align="LEFT" valign="TOP"><b><font face="Arial"></font></b></td>
+    <td  align="LEFT" valign="TOP"><b> 
+      <p><font size="3" color="#008000" face="Arial, Helvetica, sans-serif">Using 
+        process accounting information.</font> </p>
+      <font face="Arial" size=3></font></b> 
+      <p>Process accounting can create a great deal of information. As a result, 
+        the logs can be difficult to process effectively. For information on one 
+        of the tools that can help to filter and reduce the amount of information 
+        to a more manageable size, see the implementation <a href="i042.04.html">&quot;Installing 
+        and configuring spar 1.2 on systems running Solaris 2.x.&quot;</a> </p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="13%" colspan="3"> 
+      <hr size="1">
+    </td>
+  </tr>
+</table>
+
+</BODY>
+</HTML>

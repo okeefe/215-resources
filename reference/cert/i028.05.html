@@ -1,0 +1,861 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.51 [en] (WinNT; U) [Netscape]">
+   <title>Installing, configuring, and using npasswd </title>
+</head>
+<body bgcolor="#ffffff" link="#990000" vlink="#b77e7e" alink="#DDB30B" leftmargin="0" topmargin="0"
+marginwidth="0" marginheight="0" align="left" rightmargin="0">
+
+<table BORDER=0 CELLSPACING=4 CELLPADDING=4 WIDTH="100%" >
+<tr>
+<td VALIGN=TOP WIDTH="130"><b><font face="Arial">Implementation Details</font></b></td>
+
+<td><b><font face="Arial"><font size=+1>Installing, configuring, and using
+npasswd to improve password quality on systems running Solaris 2.x</font></font></b></td>
+</tr>
+
+<tr>
+<td WIDTH="130">&nbsp;</td>
+
+<td>
+<table BORDER CELLSPACING=0 CELLPADDING=8 WIDTH="75%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP BGCOLOR="#CCDDFF">Applies to the practices:<br> 
+<a href="http://www.cert.org/security-improvement/practices/p091.html">"Identify
+data that characterize systems and aid in detecting signs of suspicious behavior"</a>
+<br><a href="http://www.cert.org/security-improvement/practices/p069.html">"Configure
+computers for user authentication."</a>
+<p>Applicable technologies: Solaris 2.x UNIX operating system and derivatives&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="130">&nbsp;</td>
+
+<td ALIGN=LEFT>Intruders commonly gain access to a computer system by logging
+into an account on that system. They frequently begin this attack by first
+obtaining a copy of the password file and then decrypting passwords through
+brute-force techniques such as those contained in <font face="courier">crack</font>
+(Refer to <a href="ftp://ftp.cerias.purdue.edu/pub/tools/unix/pwdutils/crack">ftp://ftp.cerias.purdue.edu/pub/tools/unix/pwdutils/crack</a>).
+Once a password has been discovered, the intruder logs into the account
+and uses that system's resources for their own purposes.&nbsp;
+<p>To combat this specific type of intrusion, system managers should use
+one of the many tools written to improve the quality of the passwords selected
+by a computer system's users. These tools render brute-force techniques
+largely ineffective.&nbsp;
+<p><font face="Courier New"><font size=+0>npasswd </font></font>(refer
+to <a href="http://www.utexas.edu/cc/unix/software/npasswd">http://www.utexas.edu/cc/unix/software/npasswd</a>)
+is one such tool. Its purpose is to improve the quality of passwords selected
+by your users. This means - and in fact only means - that if your encrypted
+password information is stolen by an intruder, the process of determining
+the clear text equivalents of those encrypted passwords is made substantially
+harder.&nbsp;
+<p><font face="Courier New"><font size=+0>npasswd</font></font> subjects
+each password candidate to the following series of tests:&nbsp;</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130" HEIGHT="583">&nbsp;</td>
+
+<td ALIGN=LEFT VALIGN=TOP>
+<table BORDER CELLPADDING=7 WIDTH="75%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="17%" BGCOLOR="#CCDDFF"><b>Test&nbsp;</b></td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="83%" BGCOLOR="#CCDDFF"><b>Description&nbsp;</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="17%">History&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="83%">This optional test defines how many previous
+passwords are remembered so that used passwords are not reused too quickly.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="17%">Lexical&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="83%">This mandatory test verifies that a password
+meets the minimum size and character composition requirements, checks for
+excessive adjacent repeated characters, encourages character diversity,
+and looks for easily guessed patterns such as US Social Security and telephone
+numbers.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="17%">Local&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="83%">This optional test provides a framework for
+site-specific tests.&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="17%">Passwd&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="83%">This mandatory test checks the candidate password
+against variations of the information contained in the rest of the password
+file entry (full name, login name, location information, etc.).&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="17%" HEIGHT="131">Dictionary&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="83%" HEIGHT="131">This mandatory test checks the
+candidate password against words in the configured dictionaries. <font face="Courier New"><font size=+0>npasswd</font></font>
+applies crack's permutation rules to the candidate to see if the candidate
+could be derived from a word in a dictionary.&nbsp;</td>
+</tr>
+</table>
+<p>
+Please note that <font face="Courier New"><font size=+0>npasswd</font></font>
+or any other password quality improvement tool does not deter passwords
+discovered through network sniffing. The only ways to mitigate the sniffing
+problem are to use one-time passwords, a scheme where passwords do not
+traverse the network (e.g. <a href="%20http://web.mit.edu/kerberos/www/">Kerberos</a>
+), or insure that all network traffic is encrypted.&nbsp;
+<p>This implementation describes the information necessary to download,
+configure, and use <font face="Courier New"><font size=+0>npasswd </font></font>version
+2.05 on Solaris, version 2.x.&nbsp;</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2" WIDTH="14%">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130" HEIGHT="340"><b><font face="Arial">Preparation</font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP HEIGHT="340">The latest release of <font face="Courier New"><font size=+0>npasswd</font></font>
+is available from:
+<p><a href="http://www.utexas.edu/cc/unix/software/npasswd/dist/npasswd-2.05.tar.gz">http://www.utexas.edu/cc/unix/software/npasswd/dist/npasswd-2.05.tar.gz</a>
+<p>A set of dictionaries is also available from:&nbsp;
+<p><a href="http://www.utexas.edu/cc/unix/software/npasswd/dist/npasswd-words.tar.gz">http://www.utexas.edu/cc/unix/software/npasswd/dist/npasswd-words.tar.gz</a>
+<p>Optionally, if you wish to port <font face="Courier New"><font size=+0>npasswd</font></font>
+to other software architectures, you also need&nbsp;
+<p><a href="http://www.utexas.edu/cc/unix/software/npasswd/dist/npasswd-2.05-developer.tar.gz">http://www.utexas.edu/cc/unix/software/npasswd/dist/npasswd-2.05-developer.tar.gz&nbsp;</a>
+<p>Finally, if you do not have the BSD compatibility package installed,
+you need the GNU file utilities suite, available from:&nbsp;
+<p><a href="ftp://gnu.mit.edu/pub/gnu/fileutils/fileutils-4.0.tar.gz">ftp://gnu.mi
+t.edu/pub/gnu/fileutils/fileutils-4.0.tar.gz&nbsp;</a></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+
+<td><b><font face="Arial"><font color="#008000"><font size=+0>Ensure that
+you can meet installation requirements.</font></font></font></b>
+<p>To build the <font face="Courier New"><font size=+0>npasswd</font></font>,
+you need:&nbsp;
+<ul>
+<li>
+Internet access to retrieve the software&nbsp;</li>
+
+<li>
+An MD5 checksum program (refer to <a href="i002.01.html">"Using MD5 to
+verify the integrity of file contents."</a>)</li>
+
+<li>
+GZIP to uncompress the downloaded files (optional)&nbsp;</li>
+
+<li>
+A C compiler; either the Sun C Compiler or the free GNU C Compiler&nbsp;</li>
+
+<li>
+A Perl interpreter, but only if you are porting <font face="Courier New">npasswd</font>
+to other software architectures&nbsp;</li>
+
+<li>
+BSD compatibility package from Sun or alternatively the GNU file utilities
+package</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2" WIDTH="14%">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font size=+0><font face="Arial">Download
+the </font><font face="Courier New">npasswd</font><font face="Arial"> distribution</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>The latest release of <font face="courier new">npasswd</font> is available from
+<br><a href="http://www.utexas.edu/cc/unix/software/npasswd/dist/">http://www.utexas.edu/cc/unix/software/npasswd/dist/</a>
+
+<p>Be certain to download the distribution onto a machine that is free
+from threat so that you do not introduce any vulnerabilities into your
+version of <font face="Courier New"><font size=+0>npasswd.</font></font></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130" HEIGHT="71">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP HEIGHT="71"><b><font face="Arial"><font color="#008000"><font size=+0>Verify
+the authenticity of the npasswd distribution.</font></font></font></b>
+<p>Verify the files you have just downloaded with the MD5 checksums listed
+below.</td>
+</tr>
+
+<tr>
+<td WIDTH="130" HEIGHT="134">&nbsp;</td>
+
+<td ALIGN=LEFT VALIGN=TOP HEIGHT="134">
+<table BORDER CELLPADDING=7 WIDTH="75%" >
+<tr>
+<td BGCOLOR="#CCDDFF"><b>File to Download</b></td>
+<td BGCOLOR="#CCDDFF"><b>MD5 Checksum</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%"><a href="http://www.utexas.edu/cc/unix/software/npasswd/dist/npasswd-2.05.tar.gz">npasswd-2.05.tar.gz</a>&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="50%"><font face="courier new"><small>7537c609be2c87149affdf77e2ca377f&nbsp;</small></font></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%"><a href="http://www.utexas.edu/cc/unix/software/npasswd/dist/npasswd-words.tar.gz">npasswd-words.tar.gz</a>&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="50%"><font face="courier new"><small>50f1a9f5e30950187415099b9aae0652&nbsp;</small></font></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%"><a href="http://www.utexas.edu/cc/unix/software/npasswd/dist/npasswd-2.05-developer.tar.gz">npasswd-2.05-developer.tar.gz</a>&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="50%"><font face="courier new"><small>c7d789e5f0f49686a36916c9618a9dbb&nbsp;</small></font></td>
+</tr>
+
+
+</table>
+<p>If the computed cryptographic checksum of the download files does not correspond to the information given above, verify that&nbsp;
+<ul>
+<li>
+your downloaded filenames match those listed</li>
+
+<li>
+your checksum program computes MD5 message digests&nbsp;</li>
+</ul>
+
+</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+
+<td><b><font color="#008000"><font size=+0><font face="Arial">Unpack the
+</font><font face="Courier New">npasswd</font><font face="Arial">
+distribution.</font></font></font></b>
+<p>To prepare the distribution for building and installation, uncompress
+these files using GNU <font face="Courier New"><font size=+0>gunzip</font></font>
+and the system <font face="Courier New"><font size=+0>tar</font></font>
+command as follows:&nbsp;
+<pre>&nbsp;&nbsp;&nbsp;&nbsp; <font face="Courier New, Courier, mono"><font size=-1>$ gunzip -c npasswd-2.05.tar.gz |
+
+&nbsp;&nbsp;&nbsp;&nbsp; tar xf -
+
+&nbsp;&nbsp;&nbsp;&nbsp; $ gunzip -c npasswd-words.tar.gz |&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp; tar xf -&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp; $ mv npasswd-2.00/dict/* npasswd-2.05/dict&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp; $ rm -rf npasswd-2.00</font></font>
+
+</pre>
+This creates a sub-directory named npasswd-2.05. The entire distribution,
+which includes the compressed tar files and their uncompressed, untarred
+counterparts, requires 13.6Mb. If you include the developer information,
+16.5Mb are required.</td>
+</tr>
+
+<tr>
+<td COLSPAN="2" WIDTH="14%">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial">Build the </font><font face="Courier New,Courier">npasswd</font><font face="Arial">
+software</font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>The build process begins by running the <font face="Courier New"><font size=+0>Configure</font></font>
+script. For most of the questions asked by the <font face="Courier New"><font size=+0>configure</font></font>
+program, using the defaults is sufficient. Some of the questions require
+your attention. These are shown below. Responses are <u>underlined</u>.
+For a complete description of the build process, see the <a href="http://www.utexas.edu/cc/unix/software/npasswd/doc/BuildInstall.html">Build
+and Install</a> documentation.
+<pre><font face="Courier New, Courier, mono"><font size=-1>Use which C compiler? [cc] <u>gcc</u>&nbsp;
+
+Do you expect to run these scripts and binaries
+
+on multiple machines? [n] <u>n</u>&nbsp;
+
+
+
+Where will private files be installed? (~name ok)/usr/lib/passwd]&nbsp;
+
+<u>/usr/lib/passwd</u>&nbsp;
+
+Directory /usr/lib/passwd&nbsp; doesn't exist. Use that name anyway? [n] <u>y</u>&nbsp;
+
+
+
+
+
+### Found passwd files "/etc/passwd"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+Change passwd file list? [n] <u>n</u>&nbsp;
+
+
+
+### Found shadow files "/etc/shadow"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+Change shadow file list? [n] <u>n</u>&nbsp;
+
+
+
+Replace system programs? [y] <u>y</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+Activate the "paranoid" open [n] <u>y</u>&nbsp;
+
+
+
+Password history file [/usr/lib/passwd/history]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+&nbsp;<u>/usr/lib/passwd/history</u>&nbsp;</font></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</pre>
+Once the building process has been configured, the software needs to be
+built with <font face="Courier New"><font size=+0>make</font></font>. This
+task need not be done as the user <font face="Courier New"><font size=+0>root</font></font>.&nbsp;
+<p><font face="Courier New"><font size=-1>$ make</font></font></td>
+</tr>
+
+<tr>
+<td COLSPAN="2" WIDTH="14%">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial">Install the
+</font><font face="Courier New,Courier">npasswd
+</font><font face="Arial">software</font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>The next step is installing npasswd. Note that
+this must be done as the user <font face="Courier New"><font size=+0>root</font></font>.
+<pre><font face="Courier New"><font size=-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $ /bin/su
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Password:
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # make install
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # /usr/lib/passwd/history_admin load &lt; /dev/null
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; make clean</font></font>
+
+</pre>
+This process installs the following files and directories:</td>
+</tr>
+
+<tr>
+<td WIDTH="130" HEIGHT="492">&nbsp;</td>
+
+<td ALIGN=LEFT VALIGN=TOP HEIGHT="492">
+<table BORDER CELLPADDING=4 WIDTH="75%" 0 >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="50%" BGCOLOR="#CCDDFF"><b>Files&nbsp;</b></td>
+
+<td ALIGN=LEFT VALIGN=TOP WIDTH="50%" BGCOLOR="#CCDDFF"><b>Contents&nbsp;</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">/usr/lib/passwd&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="50%">Main directory where most files are installed&nbsp;</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="50%">/usr/lib/passwd/*.help&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="50%">Customizable help files for installed commands&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">/usr/lib/passwd.*.motd</td>
+
+<td VALIGN=TOP WIDTH="50%">Customizable message-of-the-day for installed
+commands&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">/usr/lib/passwd/checkpassword&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="50%">Password quality checking program&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">/usr/lib/passwd/history_admin&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="50%">Manage password history database&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">/usr/lib/passwd/history.*&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="50%">History database&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">/usr/lib/passwd/npasswd&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="50%">The password quality and changing program&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">/usr/lib/passwd/libcheckpassword.a&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="50%">Subroutine archive for development&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">/usr/lib/passwd/passwd.conf&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="50%">Configuration file for <font face="Courier New"><font size=+0>npasswd
+</font></font>suite&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">/usr/lib/passwd/bin&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="50%">Tools for dictionary administration and install/removal
+of <font face="Courier New"><font size=+0>npasswd</font></font> suite&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">/usr/lib/passwd/dictionaries&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="50%">Processed dictionaries&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">/usr/lib/passwd/doc&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="50%">All documentation, including manual pages, management
+guides, and motivation for <font face="Courier New"><font size=+0>npasswd</font></font></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">/usr/lib/passwd/system&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="50%">Vendor provided programs replaced by the npasswd
+suite&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="130" HEIGHT="288">&nbsp;</td>
+
+<td ALIGN=LEFT VALIGN=TOP HEIGHT="288">In addition, the standard password
+changing programs <font face="Courier New"><font size=+0>- /usr/bin/passwd</font></font>,
+<font face="Courier New"><font size=+0>/usr/bin/nispasswd</font></font>,
+and <font face="Courier New"><font size=+0>/usr/bin/yppasswd</font></font>
+- are all replaced by<font face="Courier New"><font size=+0> npasswd</font></font>.
+Note that <font face="Courier New"><font size=+0>npasswd</font></font>
+does not support NIS+.
+<p>We recommend that the interactive password checking program, <font face="Courier New"><font size=+0>checkpassword</font></font>,
+and its <a href="http://www.utexas.edu/cc/unix/software/npasswd/doc/checkpassword_1.html">corresponding
+documentation </a>be installed in a directory where your users can easily
+find them and use them. <font face="Courier New"><font size=+0>checkpassword
+</font></font>is
+a useful program that allows your users to check out their password selections
+before using <font face="Courier New"><font size=+0>npasswd</font></font>
+to activate them. For example, the following achieves this goal. Note that
+this must be done as <font face="Courier New"><font size=+0>root</font></font>.
+<font face="Courier New"><font size=+0>catman
+</font></font>updates
+the files used by the <font face="Courier New"><font size=+0>whatis</font></font>
+program.
+<pre><font face="Courier New"><font size=-1># ln -s&nbsp;
+
+/usr/lib/passwd/checkpassword&nbsp; /usr/bin&nbsp;
+
+ln -s /usr/lib/passwd/doc/checkpassword.1 /usr/man/man1&nbsp;
+
+catman -w /usr/man</font></font></pre>
+&nbsp;</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font color="#008000"><font face="Arial">Configure
+</font><font face="Courier New,Courier">npasswd</font></font></b>
+<p>After <font face="Courier New"><font size=+0>npasswd</font></font> has
+been installed, you need to configure it. The configuration information
+is stored in the file:
+<p><font face="Courier New"><font size=-1>/usr/lib/passwd/passwd.conf</font></font></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font face="Arial"><font color="#008000"><font size=+0>Structure
+of the configuration file</font></font></font></b>
+<p>The configuration file consists of two types of directives: those that
+apply to all sub-programs provided by <font face="Courier New"><font size=+0>npasswd</font></font>,
+namely <font face="Courier New"><font size=+0>passwd</font></font>, <font face="Courier New"><font size=+0>chfn</font></font>
+(CHange Finger Name), and <font face="Courier New"><font size=+0>chsh </font></font>(CHange
+user SHell), and those that apply to each individual sub-program. This
+implementation is confined to the directives that apply to <font face="Courier New"><font size=+0>passwd.</font></font>
+<p>The format of each directive is:
+<p><font face="Courier New"><font size=-1>subprogram.option <i>whitespace</i>
+value</font></font>
+<p>where <font face="Courier New"><font size=+0>subprogram</font></font>
+is always <font face="Courier New"><font size=+0>passwd </font></font>for
+this implementation, <font face="Courier New"><font size=+0>option </font></font>is
+the specific datum being configured, and <font face="Courier New"><font size=+0>value</font></font>
+is of type number, path, boolean, or string. See <font face="Courier New"><font size=+0>checkpassword(3)</font></font>for
+an explanation of the format&nbsp;</td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130">
+<div align=right></div>
+</td>
+
+<td ALIGN=LEFT VALIGN=TOP><b><font face="Arial"><font color="#008000"><font size=+0>Create
+the initial configuration</font></font></font></b>
+<p>The configuration file shown below is the recommended way to configure
+<font face="Courier New"><font size=+0>npasswd</font></font>.
+See the<a href="http://www.utexas.edu/cc/unix/software/npasswd/doc/Reference_index.html">
+reference manual </a>and <font face="Courier New"><font size=+0>checkpassword(3)</font></font>
+for a complete explanation. Note that the <font face="Courier New"><font size=+0>passwd.config</font></font>
+file must be owned by <font face="Courier New"><font size=+0>root</font></font>,
+a regular file (that is, not a <font face="Courier New"><font size=+0>symlink</font></font>),
+and not be world writable.
+<pre><font face="Courier New, Courier, mono"><font size=-1>MatchTries&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;
+
+MatchWait&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;
+
+PasswdTolerance&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8&nbsp;
+
+ShadowTolerance&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 32&nbsp;
+
+passwd.AlphaOnly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; no&nbsp;
+
+passwd.CharClasses&nbsp;&nbsp;&nbsp;&nbsp; 4&nbsp;
+
+passwd.Dictionaries&nbsp;&nbsp;&nbsp; usr/lib/passwd/dictionaries&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+passwd.DisallowedChars '^C^S^Q^D^H^J^M^O^R^Y^Z^]\033^\\0177'&nbsp;
+
+passwd.Help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/lib/passwd/passwd.help&nbsp;
+
+passwd.History&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; age&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 180&nbsp;
+
+passwd.History&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; depth&nbsp;&nbsp;&nbsp;&nbsp; 4&nbsp;
+
+passwd.History&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; database&nbsp; dbm /usr/lib/passwd/history&nbsp;
+
+passwd.LengthWarn&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yes&nbsp;
+
+passwd.MaxPassword&nbsp;&nbsp;&nbsp;&nbsp; 8&nbsp;
+
+passwd.MaxRepeat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;
+
+passwd.Message&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/lib/passwd/passwd.motd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+passwd.MinPassword&nbsp;&nbsp;&nbsp;&nbsp; 6&nbsp;
+
+passwd.PasswordChecks&nbsp; lexical passwd local history dictionary
+
+passwd.PrintableOnly&nbsp;&nbsp; no&nbsp;
+
+passwd.SingleCase&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; no&nbsp;
+
+passwd.WhiteSpace&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; no&nbsp;</font></font></pre>
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="2" WIDTH="14%">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial">Test </font><font face="Courier New,Courier">npasswd</font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>The next task is to check the installation and
+configuration of <font face="Courier New"><font size=+0>npasswd</font></font>.
+To do this, first run the <font face="Courier New"><font size=+0>checkpassword
+</font></font>program
+to see if it disallows some obvious passwords. Here is an example:
+<pre><font face="Courier New"><font size=-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; % /usr/lib/passwd/checkpassword
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Password to check: testing
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Password bad: it can be derived from the word 'testing'.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Password to check: Testing
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Password bad: it can be derived from the word 'testing'.
+
+
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Password to check: t3st1ng
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Password bad: it can be derived from the word 'testing'.
+
+
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Password to check: unix
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Password bad: it is too short (minimum length is 6 characters).
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Password to check: grelnob
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Password ok.
+
+
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Password to check: ^D
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %&nbsp;</font></font>
+
+</pre>
+Another way to test the installation is to run <font face="Courier New"><font size=+0>checkpassword
+-XDall</font></font> and carefully inspect the output. Look to see if <font face="Courier New"><font size=+0>checkpassword</font></font>
+is reading your configuration file and reflecting your selections in its
+output.</td>
+</tr>
+
+<tr>
+<td COLSPAN="2" WIDTH="14%">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial">Maintenance
+activities</font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP><font face="Courier New"><font size=+0>npasswd
+</font></font>benefits
+from periodic maintenance. We recommend the following activities:
+<ul>
+<li>
+History database cleaning</li>
+
+<li>
+Adding local dictionaries</li>
+
+<li>
+Other local checks</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="2" WIDTH="14%">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial"><font size=+0>History
+database cleaning</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>The <a href="http://www.utexas.edu/cc/unix/software/npasswd/doc/AdminGuide.html">Npasswd
+Administration Guide</a> describes a procedure for maintaining the history
+database. The goal is to remove old and excess passwords and entries for
+users no longer in the password file. They suggest doing this from <font face="Courier New"><font size=+0>cron</font></font>
+once a month as follows:
+<p><font face="Courier New"><font size=-1>0 2 1 * * /usr/lib/passwd/history_admin
+purge</font></font>
+<p>This means that at 2AM on the first of each month, the <font face="Courier New"><font size=+0>npasswd</font></font>
+history database is purged as described above.</td>
+</tr>
+
+<tr>
+<td COLSPAN="2" WIDTH="14%">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial"><font size=+0>Adding
+local dictionaries</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>We recommend that you add dictionaries of words
+that are specific to your installation. For example, if you are installing
+<font face="Courier New"><font size=+0>npasswd</font></font>
+at a university, we recommend that you add a dictionary that contains the
+following at a minimum:
+<ul>
+<li>
+names of campus buildings&nbsp;</li>
+
+<li>
+names of streets on campus&nbsp;</li>
+
+<li>
+faculty member surnames&nbsp;</li>
+
+<li>
+names of surrounding towns&nbsp;</li>
+</ul>
+The procedure to do this is described in the <a href="http://www.utexas.edu/cc/unix/software/npasswd/doc/AdminGuide.html">Npasswd
+Administration Guide</a>. This guide discusses how to:
+<ul>
+<li>
+Convert a dictionary from <font face="Courier New"><font size=+0>crack</font></font>
+into <font face="Courier New"><font size=+0>npasswd</font></font></li>
+
+<li>
+Make new dictionaries&nbsp;</li>
+
+<li>
+Add words to an existing dictionary&nbsp;</li>
+
+<li>
+Remove a dictionary&nbsp;</li>
+
+<li>
+View the contents of a dictionary&nbsp;</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="2" WIDTH="14%">
+<hr size="1"></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP WIDTH="130"><b><font face="Arial"><font size=+0>Other
+local checks</font></font></b></td>
+
+<td ALIGN=LEFT VALIGN=TOP>The <font face="Courier New"><font size=+0>npasswd</font></font>
+source provides a method for adding additional checks. These checks must
+be compiled into <font face="Courier New"><font size=+0>npasswd </font></font>through
+changes to the <font face="Courier New"><font size=+0>src/PasswordCheck/pwck_local.c</font></font>
+file. Presently, candidate passwords are checked for:
+<ul>
+<li>
+the name of the host and its aliases where <font face="Courier New"><font size=+0>npasswd</font></font>
+is running&nbsp;</li>
+
+<li>
+information contained in the user's .<font face="Courier New"><font size=+0>rhosts</font></font>
+file&nbsp;</li>
+</ul>
+Extending these checks requires adding code to the <font face="Courier New"><font size=+0>pwck_local
+</font></font>subroutine,
+which is contained in the <font face="Courier New"><font size=+0>pwck_local.c</font></font>
+file, rebuilding, and reinstalling <font face="Courier New"><font size=+0>npasswd</font></font>.
+The key subroutine referenced in <font face="Courier New"><font size=+0>pwck_local</font></font>
+is <font face="Courier New"><font size=+0>GTry</font></font>. <font face="Courier New"><font size=+0>GTry</font></font>
+is a subroutine that takes a string and a candidate password. It decides
+if the candidate password is a permutation of the information in the specified
+string. If it is a permutation, then the password should be disallowed.
+This is indicated by returning the value <font face="Courier New"><font size=+0>PWCK_OBVIOUS</font></font>
+from the <font face="Courier New"><font size=+0>pwck_local</font></font>
+subroutine.
+<p>Here is an excerpt from <font face="Courier New"><font size=+0>pwck_local</font></font>
+where candidate passwords are checked against the contents of the user's
+.<font face="Courier New"><font size=+0>rhosts</font></font> file:
+<pre><font face="Courier New"><font size=-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public char *
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pwck_local(password, user)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char *password;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* Password to check */
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; struct passwd *user;&nbsp;&nbsp; /* Passwd info for user */
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char&nbsp;&nbsp;&nbsp; myname[MAXHOSTNAMLEN],
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; temp[MAXPATHLEN];
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; struct hostent *h;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FILE *rh;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /*
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Check against the users' .rhosts file
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (void) sprintf(temp, "/.rhosts", user->pw_dir);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (rh = fopen(temp, "r")) {
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while (fgets(temp, sizeof(temp), rh))&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (GTry(temp, password))&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (void) fclose(rh);&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return(PWCK_OBVIOUS);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (void) fclose(rh);
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return(PWCK_OK);
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</font></font>
+
+</pre>
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="2" WIDTH="14%">
+<hr size="1"></td>
+</tr>
+</table>
+</body>
+</html>
